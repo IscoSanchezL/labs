@@ -236,7 +236,7 @@ var DEF={version:2,
   {id:'planner',nombre:'Planner Gi',grupo:'apps',url:'https://planner.iscosanchez.com'}
 ]};
 var BKEY='labs-borrador';
-var datos=null, admin=false, filtro='todos', consulta='', editId=null, grpEdit=null;
+var datos=null, pub=null, admin=false, filtro='todos', consulta='', editId=null, grpEdit=null;
 var $=function(id){return document.getElementById(id)};
 
 function lsGet(){try{return localStorage.getItem(BKEY)}catch(e){return null}}
@@ -258,7 +258,13 @@ function limpiar(d){
   ps.forEach(function(p){if(p.grupo&&!gs.some(function(g){return g.id===p.grupo}))p.grupo=''});
   return {version:2,grupos:gs,proyectos:ps};
 }
-function guardarBorrador(){lsSet(JSON.stringify(datos))}
+function clonar(o){return limpiar(JSON.parse(JSON.stringify(o)))}
+function guardarBorrador(){lsSet(JSON.stringify({base:JSON.stringify(pub),data:datos}))}
+function leerBorrador(){
+  var raw=lsGet();if(!raw)return null;
+  try{var o=JSON.parse(raw);if(o&&o.base===JSON.stringify(pub)&&o.data&&Array.isArray(o.data.grupos))return limpiar(o.data)}catch(e){}
+  lsDel();return null;
+}
 function colorDe(id){var i=datos.grupos.findIndex(function(g){return g.id===id});return i<0?GRIS:PALETA[i%PALETA.length]}
 function nombreDe(id){var g=datos.grupos.filter(function(x){return x.id===id})[0];return g?g.nombre:'Sin asignar'}
 function haySinAsignar(){return datos.proyectos.some(function(p){return p.grupo===''})}
@@ -424,8 +430,8 @@ $('bBajar').onclick=function(){
   aviso('Descargado: súbelo al repo labs como proyectos.json');
 };
 $('bNuevo').onclick=function(){abrir(null)};
-$('bReset').onclick=function(){if(confirm('¿Descartar el borrador y volver a la lista publicada?')){lsDel();cargar(function(){pintar();aviso('Borrador descartado')})}};
-$('bSalir').onclick=function(){admin=false;try{sessionStorage.removeItem('labs-adm')}catch(e){}pintar()};
+$('bReset').onclick=function(){if(confirm('¿Descartar el borrador y volver a la lista publicada?')){lsDel();datos=clonar(pub);pintar();aviso('Borrador descartado')}};
+$('bSalir').onclick=function(){admin=false;try{sessionStorage.removeItem('labs-adm')}catch(e){}datos=clonar(pub);pintar()};
 $('q').addEventListener('input',function(){consulta=this.value;pintar()});
 
 /* Contraseña */
@@ -437,7 +443,9 @@ function sha256(t){
 }
 function entrarAdmin(){
   admin=true;try{sessionStorage.setItem('labs-adm','1')}catch(e){}
-  var b=lsGet();if(b){try{datos=limpiar(JSON.parse(b))}catch(e){}}
+  var raw=lsGet(),b=leerBorrador();
+  if(raw&&!b)aviso('Se descartó un borrador antiguo: ya hay una versión nueva publicada');
+  datos=b||clonar(pub);
   pintar();$('proyectos').scrollIntoView({block:'start'});
 }
 function pedirPin(){
@@ -459,8 +467,7 @@ function cargar(cb){
   fetch('proyectos.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){datos=limpiar(d)})
   .catch(function(){datos=limpiar(DEF)}).then(function(){
     if(!datos.proyectos.length)datos=limpiar(DEF);
-    var b=lsGet();
-    if(admin&&b){try{datos=limpiar(JSON.parse(b))}catch(e){}}
+    pub=clonar(datos);
     cb();
   });
 }
