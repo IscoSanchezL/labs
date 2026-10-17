@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratorio de circuitos · Labs</title>
+<meta name="description" content="Arma circuitos con pila, resistencias, LED e interruptores. Misiones hasta construir un semáforo. Grado 6°.">
+<link rel="icon" type="image/png" href="../../favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/lab.css">
+<style>
+.zona{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start;padding-bottom:30px}
+.lienzo{padding:10px;position:relative}
+.lienzo canvas{display:block;width:100%;height:auto;border-radius:16px;touch-action:none;background:#0a1626;cursor:default}
+.paleta{display:flex;flex-wrap:wrap;gap:8px;margin:10px 4px 2px;align-items:center}
+.paleta .sep{width:1px;align-self:stretch;background:var(--edge);margin:0 4px}
+.comp{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:14px;border:1px solid var(--edge);background:var(--glass);font-size:14px}
+.comp:hover{border-color:rgba(127,240,228,.6)}
+.comp[aria-pressed="true"]{border-color:rgba(127,240,228,.9);box-shadow:0 0 18px -4px rgba(79,209,197,.8);background:rgba(127,240,228,.12)}
+.comp[disabled]{opacity:.4;cursor:not-allowed}
+.pt{width:12px;height:12px;border-radius:50%;display:inline-block}
+.pasos{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.pasos .tab{padding:7px 12px;font-size:13.5px}
+.pasos .tab.hecha::after{content:' ✓';color:var(--ok)}
+.lista{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:6px;font-size:14px;color:var(--muted)}
+.lista li{display:flex;gap:8px;align-items:center}
+.lista .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--dim);flex:0 0 auto}
+.lista .si .dot{background:var(--ok);border-color:var(--ok)}
+.lista .si{color:var(--text)}
+.quiz button.op{display:block;width:100%;text-align:left;margin-top:8px;padding:10px 14px;border-radius:14px;border:1px solid var(--edge);background:var(--glass);font-size:14.5px;line-height:1.4}
+.quiz button.op:hover{border-color:rgba(127,240,228,.6)}
+.quiz button.op.bien{border-color:var(--ok);background:rgba(139,232,174,.14)}
+.quiz button.op.mal{border-color:var(--bad);background:rgba(255,107,125,.12)}
+.semaforo{display:flex;gap:10px;align-items:center;margin-top:12px}
+.semaforo .luz{width:26px;height:26px;border-radius:50%;background:#1a2a3d;border:2px solid #0b1a2c;transition:box-shadow .2s,background .2s}
+.semaforo .luz.r.on{background:#ff5a6b;box-shadow:0 0 22px 4px rgba(255,90,107,.8)}
+.semaforo .luz.a.on{background:#ffd36b;box-shadow:0 0 22px 4px rgba(255,211,107,.8)}
+.semaforo .luz.v.on{background:#5ef0a0;box-shadow:0 0 22px 4px rgba(94,240,160,.8)}
+.alerta{position:absolute;left:50%;top:18px;transform:translateX(-50%);padding:10px 18px;border-radius:999px;background:rgba(40,10,18,.92);border:1px solid var(--bad);font-size:14.5px;display:none;z-index:3;text-align:center;max-width:92%}
+.alerta.v{display:block}
+.mini{font-size:12.5px;color:var(--dim)}
+.aprende dt{font-weight:700;margin-top:8px}
+.aprende dd{margin:2px 0 0;color:var(--muted);font-size:14px;line-height:1.45}
+kbd{padding:1px 6px;border-radius:6px;border:1px solid var(--edge);font-size:12px}
+@media (max-width:980px){.zona{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="piso" aria-hidden="true"></div>
+
+<header class="top"><div class="wrap">
+  <a class="logo" href="../../"><img src="../../logo.png" alt="Isco Sánchez" width="40" height="40"><div>labs<span>.iscosanchez.com</span></div></a>
+  <a class="volver" href="../../">← Volver a labs</a>
+</div></header>
+
+<main class="wrap">
+  <section class="titulo">
+    <span class="eyebrow">// grado 6° · circuitos eléctricos</span>
+    <h1>Laboratorio de <em>circuitos</em></h1>
+    <p class="sub">Arma circuitos con <b>pila</b>, <b>resistencias</b>, <b>LED</b> e <b>interruptores</b>. Cinco misiones te preparan para construir el <b>semáforo</b> en TinkerCAD.</p>
+  </section>
+
+  <section class="zona">
+    <div>
+      <div class="glass lienzo">
+        <div class="alerta" id="alerta" role="alert"></div>
+        <canvas id="cv" width="1600" height="1000" aria-label="Tablero de circuitos"></canvas>
+        <div class="paleta" id="paleta" role="group" aria-label="Piezas"></div>
+        <div class="paleta">
+          <button class="tab" id="tMover" type="button" aria-pressed="true">Cables y mover</button>
+          <button class="tab" id="tBorrar" type="button" aria-pressed="false">Borrar</button>
+          <button class="tab" id="bRotar" type="button">Rotar (R)</button>
+          <span class="sep"></span>
+          <button class="btn sec" id="bLimpiar" type="button">Tablero vacío</button>
+          <button class="btn sec" id="bReparar" type="button">Cambiar LED quemados</button>
+        </div>
+        <p class="mini" style="margin:8px 6px 4px">Arrastra desde un <b>punto</b> de una pieza hasta otro para tender un cable. Arrastra la pieza para moverla. Haz clic en el interruptor para abrirlo o cerrarlo, y en la resistencia para cambiar su valor.</p>
+      </div>
+    </div>
+
+    <aside>
+      <div class="glass panel">
+        <h2>Misión</h2>
+        <div class="pasos" id="pasos"></div>
+        <div class="msg" id="texto"></div>
+        <ul class="lista" id="check"></ul>
+        <div class="fila" style="margin-top:12px">
+          <button class="btn sec" id="bPista" type="button">Pista</button>
+          <button class="btn sec" id="bSol" type="button">Ver una solución</button>
+        </div>
+        <div class="msg" id="pista" style="display:none;margin-top:10px"></div>
+      </div>
+
+      <div class="glass panel quiz" id="quiz" style="display:none">
+        <h2>Pregunta</h2>
+        <div id="qTxt" style="font-size:15px;line-height:1.45"></div>
+        <div id="qOps"></div>
+        <div class="msg" id="qExp" style="display:none;margin-top:10px"></div>
+      </div>
+
+      <div class="glass panel" id="autoPanel" style="display:none">
+        <h2>Semáforo automático</h2>
+        <p class="mini" style="margin:0 0 10px">Como lo hará el Arduino: abre y cierra tus interruptores en secuencia.</p>
+        <div class="fila"><button class="btn" id="bAuto" type="button">▶ Iniciar</button></div>
+        <div class="semaforo"><span class="luz r" id="lR"></span><span class="luz a" id="lA"></span><span class="luz v" id="lV"></span></div>
+      </div>
+
+      <div class="glass panel aprende">
+        <h2>Aprende</h2>
+        <dl style="margin:0">
+          <dt>LED</dt><dd>Solo deja pasar la corriente en un sentido. El lado del triángulo es el <b>ánodo (+)</b>.</dd>
+          <dt>Resistencia</dt><dd>Frena la corriente. Un LED necesita entre 5 y 25 mA; más de 30 mA lo quema.</dd>
+          <dt>Interruptor</dt><dd>Abre o cierra el camino. Sin camino cerrado, no hay corriente.</dd>
+          <dt>Serie y paralelo</dt><dd>Serie: un solo camino. Paralelo: varios caminos a la vez.</dd>
+          <dt>Jumper y protoboard</dt><dd>En TinkerCAD usarás cables <b>jumper</b> sobre una <b>protoboard</b>. Aquí, tus cables hacen el mismo trabajo.</dd>
+        </dl>
+      </div>
+
+      <div class="glass panel">
+        <h2>Entrega</h2>
+        <label class="et" for="nombre">Tu nombre</label>
+        <input type="text" id="nombre" maxlength="40" placeholder="Escribe tu nombre" autocomplete="off">
+        <div class="fila" style="margin-top:10px"><button class="btn sec" id="bImg" type="button">Guardar imagen de mi circuito</button></div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<footer><div class="wrap"><div>Hecho para el aula · Gi School</div><div>iscosanchez.com</div></div></footer>
+
+<script src="motor.js"></script>
+<script>
+(function(){
+'use strict';
+var M=window.MotorCircuitos;
+var COLS=16,FILAS=10;
+var $=function(id){return document.getElementById(id)};
+var cv=$('cv'),ctx=cv.getContext('2d');
+var S={comps:[],cables:[],herr:'mover',colocar:null,cur:null,arr:null,cable:null,sel:null,sim:null,val:null,mision:0,auto:null,alertaT:0,n:0};
+var AV;try{AV=JSON.parse(localStorage.getItem('labs-circuitos')||'{}')}catch(e){AV={}}
+AV.hechas=AV.hechas||{};
+function guardar(){try{localStorage.setItem('labs-circuitos',JSON.stringify(AV))}catch(e){}}
+var COLORES={rojo:'#ff5a6b',amarillo:'#ffd36b',verde:'#5ef0a0'};
+
+/* ---------- geometría de las piezas ---------- */
+function termPos(c,t){
+  if(c.tipo==='empalme')return {x:c.x,y:c.y};
+  var v=c.or===1,s=t==='a'?-1:1;
+  return v?{x:c.x,y:c.y+s}:{x:c.x+s,y:c.y};
+}
+function terminales(c){return M.TERMINALES[c.tipo].map(function(t){var p=termPos(c,t);return {id:c.id+':'+t,x:p.x,y:p.y,comp:c,t:t}})}
+function todasTerminales(){var a=[];S.comps.forEach(function(c){a=a.concat(terminales(c))});return a}
+function terminalPorId(id){var i=id.split(':'),c=compPorId(i[0]);return c?termPos(c,i[1]):null}
+function compPorId(id){return S.comps.filter(function(c){return c.id===id})[0]}
+function cuerpo(c){ // rectángulo del símbolo
+  if(c.tipo==='empalme')return {x0:c.x-.2,y0:c.y-.2,x1:c.x+.2,y1:c.y+.2};
+  return c.or===1?{x0:c.x-.42,y0:c.y-.62,x1:c.x+.42,y1:c.y+.62}:{x0:c.x-.62,y0:c.y-.42,x1:c.x+.62,y1:c.y+.42};
+}
+function cs(){return cv.width/COLS}
+function nuevoId(tipo){S.n++;var p={pila:'P',resistencia:'R',led:'L',interruptor:'S',empalme:'E'}[tipo];var id;do{id=p+S.n;S.n++}while(compPorId(id));return id}
+function hayChoque(c,ignorar){
+  var mis=terminales(c);
+  return S.comps.some(function(o){
+    if(o===ignorar||o===c)return false;
+    if(o.x===c.x&&o.y===c.y)return true;
+    return terminales(o).some(function(t){return mis.some(function(m){return m.x===t.x&&m.y===t.y})});
+  });
+}
+function dentro(c){return terminales(c).every(function(t){return t.x>=0&&t.x<=COLS&&t.y>=1&&t.y<=FILAS-1})}
+
+/* ---------- ruta de los cables ---------- */
+function ruta(a,b){
+  var hv=[a,{x:b.x,y:a.y},b],vh=[a,{x:a.x,y:b.y},b];
+  if(a.x===b.x||a.y===b.y)return [a,b];
+  function pena(r){
+    var n=0;
+    for(var s=0;s<r.length-1;s++){
+      var p=r[s],q=r[s+1],L=Math.max(Math.abs(q.x-p.x),Math.abs(q.y-p.y))*8;
+      for(var i=1;i<L;i++){
+        var x=p.x+(q.x-p.x)*i/L,y=p.y+(q.y-p.y)*i/L;
+        S.comps.forEach(function(c){var r2=cuerpo(c);if(c.tipo!=='empalme'&&x>r2.x0&&x<r2.x1&&y>r2.y0&&y<r2.y1)n++});
+      }
+    }
+    return n;
+  }
+  return pena(vh)<=pena(hv)?vh:hv;
+}
+
+/* ---------- simulación y misión ---------- */
+function circuito(){
+  return {comps:S.comps.map(function(c){return {id:c.id,tipo:c.tipo,valor:c.valor,color:c.color,abierto:!!c.abierto,quemado:!!c.quemado}}),cables:S.cables.map(function(w){return [w[0],w[1]]})};
+}
+function recalcular(){
+  var circ=circuito();
+  S.sim=M.simular(circ);
+  // los LED que se queman se quedan quemados hasta que el alumno los cambie
+  S.sim.quemados.forEach(function(id){var c=compPorId(id);if(c&&!c.quemado){c.quemado=true;avisar('¡Se quemó un LED! Le faltó una resistencia, o tenía poca.')}});
+  if(S.sim.quemados.length)S.sim=M.simular(circuito());
+  if(S.sim.corto)avisar('¡Cortocircuito! Un cable une la pila consigo misma. La pila se protegió.');
+  S.val=M.MISIONES[S.mision].validar(circuito());
+  S.comps.forEach(function(c){if(c.tipo==='led'){/* nada */}});
+  actualizarMision();
+}
+function avisar(t){var a=$('alerta');a.textContent=t;a.classList.add('v');clearTimeout(S.alertaT);S.alertaT=setTimeout(function(){a.classList.remove('v')},3600)}
+
+function criterios(){
+  var n=S.mision,c=circuito(),sim=S.sim,leds=S.comps.filter(function(x){return x.tipo==='led'});
+  var tiene=function(t){return S.comps.some(function(x){return x.tipo===t})};
+  var enc=function(l){var r=sim.comps[l.id];return r&&r.lit};
+  var L=[];
+  L.push(['Hay una pila',tiene('pila')]);
+  if(n===0){L.push(['Hay una resistencia',tiene('resistencia')]);L.push(['Hay un LED',tiene('led')]);L.push(['El LED brilla sin quemarse',S.val&&S.val.ok]);}
+  if(n===1){L.push(['Hay un interruptor',tiene('interruptor')]);L.push(['Cerrado, el LED brilla; abierto, se apaga',S.val&&S.val.ok]);}
+  if(n===2){L.push(['Hay dos LED',leds.length>=2]);L.push(['Los dos brillan a la vez',leds.filter(enc).length>=2]);L.push(['Están en serie (si uno falla, el otro se apaga)',S.val&&S.val.ok]);}
+  if(n===3){L.push(['Hay dos LED',leds.length>=2]);L.push(['Los dos brillan a la vez',leds.filter(enc).length>=2]);L.push(['Están en paralelo, cada uno con su resistencia',S.val&&S.val.ok]);}
+  if(n===4){['rojo','amarillo','verde'].forEach(function(col){L.push(['LED '+col,leds.some(function(l){return l.color===col})])});
+    L.push(['Tres interruptores',S.comps.filter(function(x){return x.tipo==='interruptor'}).length>=3]);
+    L.push(['Cada color se enciende solo, sin quemarse',S.val&&S.val.ok]);}
+  return L;
+}
+function actualizarMision(){
+  var m=M.MISIONES[S.mision];
+  $('texto').innerHTML=m.texto;
+  var ul=$('check');ul.textContent='';
+  criterios().forEach(function(k){var li=document.createElement('li');if(k[1])li.className='si';li.innerHTML='<span class="dot"></span><span>'+k[0]+'</span>';ul.appendChild(li)});
+  document.querySelectorAll('#pasos .tab').forEach(function(b,i){b.setAttribute('aria-pressed',String(i===S.mision));b.classList.toggle('hecha',!!AV.hechas[i+1])});
+  var ok=S.val&&S.val.ok;
+  $('quiz').style.display=ok?'block':'none';
+  if(ok&&!S.quizMostrado!==false){}
+  $('autoPanel').style.display=(S.mision===4&&ok)?'block':'none';
+  if(ok&&!AV.hechas[S.mision+1]){AV.hechas[S.mision+1]=true;guardar();document.querySelectorAll('#pasos .tab')[S.mision].classList.add('hecha')}
+  if(ok&&S.quizDe!==S.mision){armarQuiz()}
+  if(!ok){S.quizDe=null}
+  // paleta: pila única
+  document.querySelectorAll('#paleta .comp').forEach(function(b){if(b.dataset.tipo==='pila')b.disabled=S.comps.some(function(c){return c.tipo==='pila'})});
+}
+function armarQuiz(){
+  var m=M.MISIONES[S.mision];S.quizDe=S.mision;
+  $('qTxt').textContent=m.pregunta;var box=$('qOps');box.textContent='';$('qExp').style.display='none';
+  m.opciones.forEach(function(o,i){
+    var b=document.createElement('button');b.type='button';b.className='op';b.textContent=o;
+    b.onclick=function(){
+      box.querySelectorAll('button').forEach(function(x){x.disabled=true});
+      b.classList.add(i===m.correcta?'bien':'mal');
+      if(i!==m.correcta)box.querySelectorAll('button')[m.correcta].classList.add('bien');
+      var e=$('qExp');e.style.display='block';e.className='msg '+(i===m.correcta?'ok':'mal');
+      e.innerHTML=(i===m.correcta?'<b>¡Correcto!</b> ':'<b>Casi.</b> ')+m.explica;
+    };
+    box.appendChild(b);
+  });
+}
+
+/* ---------- acciones ---------- */
+function colocarPieza(tipo,color,x,y){
+  var c={id:nuevoId(tipo),tipo:tipo,x:x,y:y,or:0};
+  if(tipo==='resistencia')c.valor=220;
+  if(tipo==='led'){c.color=color||'rojo'}
+  if(tipo==='interruptor')c.abierto=false;
+  if(!dentro(c)){c.or=1;if(!dentro(c)){avisar('No cabe ahí.');return null}}
+  if(hayChoque(c)){avisar('Ahí ya hay otra pieza. Elige un lugar libre.');return null}
+  if(tipo==='pila'&&S.comps.some(function(k){return k.tipo==='pila'})){avisar('Solo hay una pila.');return null}
+  S.comps.push(c);recalcular();return c;
+}
+function cablear(t1,t2){
+  if(t1===t2)return false;
+  if(S.cables.some(function(w){return (w[0]===t1&&w[1]===t2)||(w[0]===t2&&w[1]===t1)}))return false;
+  S.cables.push([t1,t2]);recalcular();return true;
+}
+function borrarComp(c){
+  S.comps=S.comps.filter(function(x){return x!==c});
+  S.cables=S.cables.filter(function(w){return w[0].split(':')[0]!==c.id&&w[1].split(':')[0]!==c.id});
+  if(S.sel===c)S.sel=null;recalcular();
+}
+function vaciar(){S.comps=[];S.cables=[];S.sel=null;detenerAuto();recalcular()}
+function rotar(){
+  var c=S.sel;if(!c||c.tipo==='empalme')return;
+  var old=c.or;c.or=old===1?0:1;
+  if(!dentro(c)||hayChoque(c)){c.or=old;avisar('No hay espacio para girarla.');return}
+  recalcular();
+}
+
+/* ---------- puntero ---------- */
+function aGrid(e){
+  var r=cv.getBoundingClientRect(),k=cv.width/r.width,c=cs();
+  var px=(e.clientX-r.left)*k/c,py=(e.clientY-r.top)*k/c;
+  return {px:px,py:py,x:Math.round(px),y:Math.round(py)};
+}
+function terminalCerca(p,rad){
+  var mejor=null,md=rad||0.42;
+  todasTerminales().forEach(function(t){var d=Math.hypot(t.x-p.px,t.y-p.py);if(d<md){md=d;mejor=t}});
+  return mejor;
+}
+function compEn(p){
+  for(var i=S.comps.length-1;i>=0;i--){var c=S.comps[i],r=cuerpo(c);
+    if(p.px>=r.x0-.08&&p.px<=r.x1+.08&&p.py>=r.y0-.08&&p.py<=r.y1+.08)return c}
+  return null;
+}
+function cableCerca(p){
+  var mejor=-1,md=0.28;
+  S.cables.forEach(function(w,i){
+    var a=terminalPorId(w[0]),b=terminalPorId(w[1]);if(!a||!b)return;
+    var r=ruta(a,b);
+    for(var s=0;s<r.length-1;s++){
+      var P=r[s],Q=r[s+1],dx=Q.x-P.x,dy=Q.y-P.y,L2=dx*dx+dy*dy||1;
+      var t=Math.max(0,Math.min(1,((p.px-P.x)*dx+(p.py-P.y)*dy)/L2));
+      var d=Math.hypot(p.px-(P.x+t*dx),p.py-(P.y+t*dy));
+      if(d<md){md=d;mejor=i}
+    }
+  });
+  return mejor;
+}
+cv.addEventListener('pointerdown',function(e){
+  var p=aGrid(e);S.cur=p;
+  try{cv.setPointerCapture(e.pointerId)}catch(_){}
+  if(S.colocar){var q=S.colocar;S.colocar=null;refrescarPaleta();var c=colocarPieza(q.tipo,q.color,p.x,p.y);if(c)S.sel=c;return}
+  if(S.herr==='borrar'){
+    var c2=compEn(p);if(c2){borrarComp(c2);return}
+    var wi=cableCerca(p);if(wi>=0){S.cables.splice(wi,1);recalcular()}
+    return;
+  }
+  if(S.auto)return;
+  var t=terminalCerca(p);
+  if(S.cable){ // segundo toque de un cable
+    var a=S.cable;S.cable=null;if(t&&t.id!==a.id)cablear(a.id,t.id);return;
+  }
+  if(t){S.cable={id:t.id,x:t.x,y:t.y,abajo:true};return}
+  var c3=compEn(p);
+  if(c3){S.sel=c3;S.arr={c:c3,x0:p.px,y0:p.py,ox:c3.x,oy:c3.y,mov:false};return}
+  var wi2=cableCerca(p);S.selCable=wi2>=0?wi2:null;S.sel=null;
+});
+cv.addEventListener('pointermove',function(e){
+  var p=aGrid(e);S.cur=p;
+  if(S.arr){
+    var a=S.arr,dx=Math.round(p.px-a.x0),dy=Math.round(p.py-a.y0);
+    if(dx||dy||a.mov){
+      var nx=a.ox+dx,ny=a.oy+dy;
+      if(nx!==a.c.x||ny!==a.c.y){
+        var ox=a.c.x,oy=a.c.y;a.c.x=nx;a.c.y=ny;
+        if(!dentro(a.c)||hayChoque(a.c)){a.c.x=ox;a.c.y=oy}else a.mov=true;
+      }
+    }
+  }
+});
+cv.addEventListener('pointerup',function(e){
+  var p=aGrid(e);
+  if(S.cable&&S.cable.abajo){
+    var t=terminalCerca(p);
+    if(t&&t.id!==S.cable.id){cablear(S.cable.id,t.id);S.cable=null}
+    else if(t&&t.id===S.cable.id){S.cable.abajo=false}      // un toque: espera el segundo
+    else S.cable=null;
+  }
+  if(S.arr){
+    var a=S.arr;S.arr=null;
+    if(!a.mov){ // clic sin mover: acción de la pieza
+      var c=a.c;
+      if(c.tipo==='interruptor'&&!S.auto){c.abierto=!c.abierto;recalcular()}
+      else if(c.tipo==='resistencia'){var i=M.RESISTENCIAS.indexOf(c.valor);c.valor=M.RESISTENCIAS[(i+1)%M.RESISTENCIAS.length];recalcular()}
+    }else recalcular();
+  }
+});
+cv.addEventListener('pointerleave',function(){S.cur=null});
+window.addEventListener('keydown',function(e){
+  if(e.target&&/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
+  if(e.key==='Escape'){S.cable=null;S.colocar=null;refrescarPaleta()}
+  if((e.key==='r'||e.key==='R'))rotar();
+  if((e.key==='Delete'||e.key==='Backspace')){
+    if(S.sel){borrarComp(S.sel);e.preventDefault()}
+    else if(S.selCable!=null&&S.cables[S.selCable]){S.cables.splice(S.selCable,1);S.selCable=null;recalcular()}
+  }
+});
+
+/* ---------- interfaz ---------- */
+function refrescarPaleta(){
+  document.querySelectorAll('#paleta .comp').forEach(function(b){
+    b.setAttribute('aria-pressed',String(!!S.colocar&&S.colocar.tipo===b.dataset.tipo&&(S.colocar.color||'')===(b.dataset.color||'')));
+  });
+  $('tMover').setAttribute('aria-pressed',String(S.herr==='mover'));
+  $('tBorrar').setAttribute('aria-pressed',String(S.herr==='borrar'));
+  cv.style.cursor=S.colocar?'copy':(S.herr==='borrar'?'not-allowed':'default');
+}
+function armarUI(){
+  var P=$('paleta');
+  var defs=[['pila','','Pila 5 V','#ffd36b'],['resistencia','','Resistencia','#e0a96d'],['led','rojo','LED rojo',COLORES.rojo],['led','amarillo','LED amarillo',COLORES.amarillo],['led','verde','LED verde',COLORES.verde],['interruptor','','Interruptor','#bcd0ff'],['empalme','','Empalme','#ffffff']];
+  defs.forEach(function(d){
+    var b=document.createElement('button');b.type='button';b.className='comp';b.dataset.tipo=d[0];b.dataset.color=d[1];
+    b.innerHTML='<span class="pt" style="background:'+d[3]+'"></span>'+d[2];
+    b.onclick=function(){S.herr='mover';S.colocar=(S.colocar&&S.colocar.tipo===d[0]&&(S.colocar.color||'')===d[1])?null:{tipo:d[0],color:d[1]};refrescarPaleta()};
+    P.appendChild(b);
+  });
+  var pa=$('pasos');M.MISIONES.forEach(function(m,i){
+    var b=document.createElement('button');b.type='button';b.className='tab';b.textContent=(i+1)+'. '+m.nombre.split(' ').slice(0,2).join(' ');b.title=m.nombre;
+    b.onclick=function(){cambiarMision(i)};pa.appendChild(b);
+  });
+  $('tMover').onclick=function(){S.herr='mover';S.colocar=null;refrescarPaleta()};
+  $('tBorrar').onclick=function(){S.herr='borrar';S.colocar=null;S.cable=null;refrescarPaleta()};
+  $('bRotar').onclick=rotar;
+  $('bLimpiar').onclick=function(){if((S.comps.length)&&!confirm('¿Vaciar el tablero?'))return;vaciar()};
+  $('bReparar').onclick=function(){var n=0;S.comps.forEach(function(c){if(c.quemado){c.quemado=false;n++}});if(n){recalcular();avisar('Cambiaste '+n+' LED. ¡Revisa la resistencia!')}else avisar('No hay LED quemados.')};
+  $('bPista').onclick=function(){var e=$('pista');e.style.display=e.style.display==='none'?'block':'none';e.textContent=M.MISIONES[S.mision].pista};
+  $('bSol').onclick=function(){if(S.comps.length&&!confirm('Esto reemplaza tu tablero con una solución. ¿Continuar?'))return;solucion(S.mision)};
+  $('bAuto').onclick=function(){S.auto?detenerAuto():iniciarAuto()};
+  $('bImg').onclick=guardarImagen;
+  $('nombre').value=AV.nombre||'';
+  $('nombre').addEventListener('input',function(){AV.nombre=this.value;guardar()});
+}
+function cambiarMision(i){
+  S.mision=i;$('pista').style.display='none';S.quizDe=null;detenerAuto();recalcular();
+}
+
+/* ---------- soluciones de referencia ---------- */
+function C(id,tipo,x,y,extra){var c={id:id,tipo:tipo,x:x,y:y,or:0};for(var k in extra||{})c[k]=extra[k];return c}
+function solucion(n){
+  var comps,cab;
+  var pila=C('P1','pila',2,5,{or:1});
+  if(n===0){
+    comps=[pila,C('R1','resistencia',6,4,{valor:220}),C('L1','led',10,4,{color:'rojo'})];
+    cab=[['P1:a','R1:a'],['R1:b','L1:a'],['L1:b','P1:b']];
+  }else if(n===1){
+    comps=[pila,C('S1','interruptor',5,4,{abierto:false}),C('R1','resistencia',9,4,{valor:220}),C('L1','led',13,4,{color:'verde'})];
+    cab=[['P1:a','S1:a'],['S1:b','R1:a'],['R1:b','L1:a'],['L1:b','P1:b']];
+  }else if(n===2){
+    comps=[pila,C('R1','resistencia',5,4,{valor:100}),C('L1','led',9,4,{color:'rojo'}),C('L2','led',13,4,{color:'verde'})];
+    cab=[['P1:a','R1:a'],['R1:b','L1:a'],['L1:b','L2:a'],['L2:b','P1:b']];
+  }else if(n===3){
+    comps=[pila,C('E1','empalme',2,3),C('E2','empalme',2,7),C('R1','resistencia',6,3,{valor:220}),C('L1','led',10,3,{color:'rojo'}),C('R2','resistencia',6,5,{valor:220}),C('L2','led',10,5,{color:'verde'})];
+    cab=[['P1:a','E1:j'],['P1:b','E2:j'],['E1:j','R1:a'],['R1:b','L1:a'],['L1:b','E2:j'],['E1:j','R2:a'],['R2:b','L2:a'],['L2:b','E2:j']];
+  }else{
+    var b1=C('P1','pila',1,5,{or:1});
+    comps=[b1,C('E1','empalme',2,3),C('E2','empalme',2,5),C('E3','empalme',2,7),C('F1','empalme',15,3),C('F2','empalme',15,5),C('F3','empalme',15,7),C('F4','empalme',15,9),C('Eb','empalme',1,9)];
+    cab=[['P1:a','E1:j'],['E1:j','E2:j'],['E2:j','E3:j'],['F1:j','F2:j'],['F2:j','F3:j'],['F3:j','F4:j'],['F4:j','Eb:j'],['Eb:j','P1:b']];
+    [['rojo',3,1],['amarillo',5,2],['verde',7,3]].forEach(function(r){
+      var y=r[1],i=r[2];
+      comps.push(C('S'+i,'interruptor',5,y,{abierto:true}),C('R'+i,'resistencia',9,y,{valor:220}),C('L'+i,'led',13,y,{color:r[0]}));
+      cab.push(['E'+i+':j','S'+i+':a'],['S'+i+':b','R'+i+':a'],['R'+i+':b','L'+i+':a'],['L'+i+':b','F'+i+':j']);
+    });
+  }
+  detenerAuto();S.comps=comps;S.cables=cab;S.sel=null;S.n=50;recalcular();
+}
+
+/* ---------- semáforo automático ---------- */
+var SECUENCIA=[['rojo',3000],['verde',3000],['amarillo',1400]];
+function iniciarAuto(){
+  var combos=S.val&&S.val.combos,sw=S.val&&S.val.switches;if(!combos)return;
+  S.auto={t0:performance.now(),paso:-1,combos:combos,sw:sw};
+  $('bAuto').textContent='■ Detener';
+}
+function detenerAuto(){
+  if(S.auto){S.auto=null;S.comps.forEach(function(c){if(c.tipo==='interruptor')c.abierto=true});recalcular()}
+  $('bAuto').textContent='▶ Iniciar';['lR','lA','lV'].forEach(function(i){$(i).classList.remove('on')});
+}
+function tickAuto(now){
+  var A=S.auto;if(!A)return;
+  var total=SECUENCIA.reduce(function(s,x){return s+x[1]},0),t=(now-A.t0)%total,acc=0,paso=0;
+  for(var i=0;i<SECUENCIA.length;i++){if(t<acc+SECUENCIA[i][1]){paso=i;break}acc+=SECUENCIA[i][1]}
+  if(paso!==A.paso){
+    A.paso=paso;var col=SECUENCIA[paso][0],cmb=A.combos[col];
+    A.sw.forEach(function(id,i){var c=compPorId(id);if(c)c.abierto=!cmb[i]});
+    S.sim=M.simular(circuito());
+    $('lR').classList.toggle('on',col==='rojo');$('lA').classList.toggle('on',col==='amarillo');$('lV').classList.toggle('on',col==='verde');
+  }
+}
+
+/* ---------- dibujo ---------- */
+function dibujar(now){
+  var c=cs(),W=cv.width,H=cv.height,t=now/1000;
+  tickAuto(now);
+  ctx.clearRect(0,0,W,H);
+  var g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#0b1d31');g.addColorStop(1,'#08121f');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // rejilla de la protoboard
+  ctx.fillStyle='rgba(127,240,228,.22)';
+  for(var gx=0;gx<=COLS;gx++)for(var gy=1;gy<FILAS;gy++)ctx.fillRect(gx*c-1.5,gy*c-1.5,3,3);
+  var sim=S.sim;
+  // cables
+  S.cables.forEach(function(w,i){
+    var a=terminalPorId(w[0]),b=terminalPorId(w[1]);if(!a||!b)return;
+    var r=ruta(a,b),I=0;
+    if(sim&&sim.cablesValidos){for(var k=0;k<sim.cablesValidos.length;k++){var v=sim.cablesValidos[k];if((v[0]===w[0]&&v[1]===w[1])){I=sim.cables[k];break}}}
+    var activo=Math.abs(I)>1e-4,sel=S.selCable===i;
+    ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.strokeStyle=sel?'#ffd36b':'rgba(7,15,28,.9)';ctx.lineWidth=9;trazoRuta(r,c);
+    ctx.strokeStyle=activo?'#6fe3d6':'#5d7893';ctx.lineWidth=5;trazoRuta(r,c);
+    if(activo)flujo(r,c,I,t);
+  });
+  // cable en construcción
+  if(S.cable&&S.cur){
+    var a0={x:S.cable.x,y:S.cable.y},tt=terminalCerca(S.cur),dest=tt&&tt.id!==S.cable.id?{x:tt.x,y:tt.y}:{x:S.cur.px,y:S.cur.py};
+    ctx.setLineDash([10,8]);ctx.strokeStyle=tt&&tt.id!==S.cable.id?'#8be8ae':'rgba(234,242,251,.8)';ctx.lineWidth=4;
+    trazoRuta(ruta(a0,dest),c);ctx.setLineDash([]);
+  }
+  // piezas
+  S.comps.forEach(function(k){dibujarPieza(k,c,t,sim)});
+  // terminales
+  todasTerminales().forEach(function(tm){
+    var cerca=S.cur&&Math.hypot(tm.x-S.cur.px,tm.y-S.cur.py)<0.42;
+    ctx.beginPath();ctx.arc(tm.x*c,tm.y*c,c*(cerca?0.2:0.13),0,6.283);
+    ctx.fillStyle=cerca?'#4fd1c5':(tm.comp.tipo==='empalme'?'#eaf2fb':'#9db8ff');ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#0b1a2c';ctx.stroke();
+  });
+  // fantasma al colocar
+  if(S.colocar&&S.cur){
+    var f={tipo:S.colocar.tipo,color:S.colocar.color,x:S.cur.x,y:S.cur.y,or:0,valor:220,abierto:false,id:'__'};
+    ctx.globalAlpha=0.55;dibujarPieza(f,c,t,null);ctx.globalAlpha=1;
+  }
+  // marca de pila apagada (corto)
+  if(sim&&sim.corto){ctx.fillStyle='rgba(255,107,125,.12)';ctx.fillRect(0,0,W,H)}
+}
+function trazoRuta(r,c){ctx.beginPath();ctx.moveTo(r[0].x*c,r[0].y*c);for(var i=1;i<r.length;i++)ctx.lineTo(r[i].x*c,r[i].y*c);ctx.stroke()}
+function flujo(r,c,I,t){
+  var L=0,seg=[];for(var i=0;i<r.length-1;i++){var d=Math.hypot(r[i+1].x-r[i].x,r[i+1].y-r[i].y);seg.push(d);L+=d}
+  if(!L)return;
+  var vel=Math.min(3.2,0.8+Math.log10(Math.abs(I)*1000+1)*1.6)*(I>0?1:-1),sp=0.7,n=Math.max(1,Math.floor(L/sp));
+  ctx.fillStyle='#fff7c2';
+  for(var k=0;k<n;k++){
+    var s=(((t*vel+k*sp)%L)+L)%L,acc=0;
+    for(var j=0;j<seg.length;j++){
+      if(s<=acc+seg[j]){var u=(s-acc)/seg[j];ctx.beginPath();ctx.arc((r[j].x+(r[j+1].x-r[j].x)*u)*c,(r[j].y+(r[j+1].y-r[j].y)*u)*c,c*0.075,0,6.283);ctx.fill();break}
+      acc+=seg[j];
+    }
+  }
+}
+function dibujarPieza(k,c,t,sim){
+  var cx=k.x*c,cy=k.y*c,v=k.or===1,res=sim&&sim.comps[k.id],sel=S.sel===k;
+  ctx.save();ctx.translate(cx,cy);if(v)ctx.rotate(Math.PI/2);
+  ctx.lineCap='round';ctx.lineJoin='round';
+  var col='#eaf2fb';
+  // hilos hacia los terminales (de -1 a 1 en el eje x local)
+  if(k.tipo!=='empalme'){ctx.strokeStyle='#5d7893';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-c,0);ctx.lineTo(c,0);ctx.stroke()}
+  if(sel){ctx.strokeStyle='rgba(255,211,107,.9)';ctx.lineWidth=2;ctx.setLineDash([6,5]);ctx.strokeRect(-c*0.7,-c*0.5,c*1.4,c);ctx.setLineDash([])}
+  if(k.tipo==='pila'){
+    ctx.fillStyle='#0b1a2c';ctx.fillRect(-c*0.5,-c*0.42,c,c*0.84);
+    ctx.strokeStyle='#ffd36b';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-c*0.2,-c*0.38);ctx.lineTo(-c*0.2,c*0.38);ctx.stroke();      // placa larga (+)
+    ctx.strokeStyle='#bcd0ff';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(c*0.2,-c*0.2);ctx.lineTo(c*0.2,c*0.2);ctx.stroke();            // placa corta (-)
+    ctx.restore();ctx.save();ctx.translate(cx,cy);
+    ctx.fillStyle='#ffd36b';ctx.font='700 '+Math.round(c*0.34)+'px "JetBrains Mono",monospace';ctx.textAlign='center';
+    ctx.fillText('+',v?-c*0.55:-c*0.42,v?-c*0.72:-c*0.5);ctx.fillStyle='#bcd0ff';ctx.fillText('−',v?-c*0.55:c*0.42,v?c*0.92:-c*0.5);
+    ctx.fillStyle='#eaf2fb';ctx.font='700 '+Math.round(c*0.3)+'px "Space Grotesk",sans-serif';ctx.textAlign=v?'right':'center';ctx.fillText('5 V',v?-c*0.62:0,v?c*0.1:c*0.92);ctx.textAlign='center';
+    if(res&&Math.abs(res.I)>1e-4){ctx.fillStyle='rgba(234,242,251,.85)';ctx.font='500 '+Math.round(c*0.24)+'px "JetBrains Mono",monospace';ctx.textAlign=v?'right':'center';ctx.fillText(Math.abs(res.I*1000).toFixed(0)+' mA',v?-c*0.62:0,v?c*0.42:c*1.22);ctx.textAlign='center'}
+    ctx.restore();return;
+  }
+  if(k.tipo==='resistencia'){
+    ctx.fillStyle='#d9b38c';ctx.strokeStyle='#0b1a2c';ctx.lineWidth=2;
+    if(ctx.roundRect){ctx.beginPath();ctx.roundRect(-c*0.6,-c*0.2,c*1.2,c*0.4,8);ctx.fill();ctx.stroke()}else{ctx.fillRect(-c*0.6,-c*0.2,c*1.2,c*0.4)}
+    var bandas={100:['#7a4a1a','#0b1a2c','#7a4a1a'],220:['#d23a3a','#d23a3a','#7a4a1a'],330:['#ff9a3d','#ff9a3d','#7a4a1a'],470:['#ffd36b','#a05bd0','#7a4a1a'],1000:['#7a4a1a','#0b1a2c','#d23a3a']}[k.valor]||['#7a4a1a','#0b1a2c','#7a4a1a'];
+    bandas.forEach(function(b,i){ctx.fillStyle=b;ctx.fillRect(-c*0.34+i*c*0.2,-c*0.2,c*0.1,c*0.4)});
+    ctx.restore();ctx.save();ctx.translate(cx,cy);
+    ctx.fillStyle='#eaf2fb';ctx.font='600 '+Math.round(c*0.27)+'px "JetBrains Mono",monospace';ctx.textAlign='center';
+    ctx.fillText((k.valor>=1000?'1k':k.valor)+' Ω',v?c*0.9:0,v?c*0.1:-c*0.34);
+    if(res&&Math.abs(res.I)>1e-4){ctx.fillStyle='rgba(234,242,251,.8)';ctx.font='500 '+Math.round(c*0.22)+'px "JetBrains Mono",monospace';ctx.fillText(Math.abs(res.I*1000).toFixed(1)+' mA',v?c*0.9:0,v?c*0.42:c*0.62)}
+    ctx.restore();return;
+  }
+  if(k.tipo==='interruptor'){
+    ctx.fillStyle='#0b1a2c';ctx.fillRect(-c*0.6,-c*0.3,c*1.2,c*0.6);
+    ctx.fillStyle='#bcd0ff';ctx.beginPath();ctx.arc(-c*0.4,0,c*0.09,0,6.283);ctx.arc(c*0.4,0,c*0.09,0,6.283);ctx.fill();
+    ctx.strokeStyle=k.abierto?'#ff9f9f':'#8be8ae';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(-c*0.4,0);
+    if(k.abierto)ctx.lineTo(c*0.25,-c*0.32);else ctx.lineTo(c*0.4,0);ctx.stroke();
+    ctx.restore();ctx.save();ctx.translate(cx,cy);
+    ctx.fillStyle=k.abierto?'#ffb3b3':'#9af0bb';ctx.font='600 '+Math.round(c*0.22)+'px "JetBrains Mono",monospace';ctx.textAlign='center';
+    ctx.fillText(k.abierto?'abierto':'cerrado',v?c*0.95:0,v?c*0.08:-c*0.42);
+    ctx.restore();return;
+  }
+  if(k.tipo==='led'){
+    var color=COLORES[k.color]||'#ff5a6b',brillo=res?res.brillo:0,q=res&&res.quemado||k.quemado;
+    if(brillo>0.02&&!q){
+      var rg=ctx.createRadialGradient(0,0,0,0,0,c*(0.7+brillo*1.1));rg.addColorStop(0,color+'cc');rg.addColorStop(1,color+'00');
+      ctx.fillStyle=rg;ctx.beginPath();ctx.arc(0,0,c*(0.7+brillo*1.1),0,6.283);ctx.fill();
+    }
+    ctx.fillStyle=q?'#2b2b33':(brillo>0.02?color:shade(color));ctx.strokeStyle=brillo>0.02?'#fff':'#0b1a2c';ctx.lineWidth=3;
+    ctx.beginPath();ctx.moveTo(-c*0.3,-c*0.36);ctx.lineTo(-c*0.3,c*0.36);ctx.lineTo(c*0.3,0);ctx.closePath();ctx.fill();ctx.stroke();
+    ctx.strokeStyle=q?'#555':'#eaf2fb';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(c*0.3,-c*0.38);ctx.lineTo(c*0.3,c*0.38);ctx.stroke();
+    ctx.strokeStyle=q?'#555':color;ctx.lineWidth=2.5;
+    [[-0.05,-0.42],[0.2,-0.5]].forEach(function(o){ctx.beginPath();ctx.moveTo(c*o[0],c*o[1]);ctx.lineTo(c*(o[0]+0.22),c*(o[1]-0.2));ctx.stroke()});
+    ctx.restore();ctx.save();ctx.translate(cx,cy);
+    ctx.textAlign='center';
+    if(q){ctx.fillStyle='#ff9f9f';ctx.font='700 '+Math.round(c*0.26)+'px "JetBrains Mono",monospace';ctx.fillText('✖ quemado',v?c*1.2:0,v?c*0.1:c*0.72)}
+    else if(res&&res.I>1e-4){ctx.fillStyle='rgba(234,242,251,.9)';ctx.font='600 '+Math.round(c*0.24)+'px "JetBrains Mono",monospace';ctx.fillText((res.I*1000).toFixed(1)+' mA',v?c*1.0:0,v?c*0.1:c*0.72)}
+    ctx.fillStyle='rgba(234,242,251,.6)';ctx.font='500 '+Math.round(c*0.2)+'px "JetBrains Mono",monospace';
+    ctx.fillText('+',v?-c*0.5:-c*0.62,v?-c*0.7:-c*0.5);
+    ctx.restore();return;
+  }
+  ctx.restore();
+}
+function shade(h){return h+'55'}
+
+/* ---------- imagen para entregar ---------- */
+function guardarImagen(){
+  var W=cv.width,H=cv.height,off=document.createElement('canvas');off.width=W;off.height=H+130;
+  var x=off.getContext('2d');x.fillStyle='#070f1c';x.fillRect(0,0,W,off.height);x.drawImage(cv,0,0);
+  x.fillStyle='#0b1a2c';x.fillRect(0,H,W,130);x.fillStyle='#4fd1c5';x.fillRect(0,H,W,3);
+  var m=M.MISIONES[S.mision],ok=S.val&&S.val.ok;
+  x.fillStyle='#eaf2fb';x.font='700 34px "Space Grotesk",system-ui,sans-serif';x.textAlign='left';
+  x.fillText('Laboratorio de circuitos · Misión '+m.id+': '+m.nombre,30,H+48);
+  x.font='400 26px "Space Grotesk",system-ui,sans-serif';x.fillStyle='#b3c4d6';
+  x.fillText((($('nombre').value||'').trim()||'Sin nombre')+'  ·  labs.iscosanchez.com',30,H+92);
+  x.textAlign='right';x.font='700 38px "Space Grotesk",system-ui,sans-serif';x.fillStyle=ok?'#8be8ae':'#ffc27a';x.fillText(ok?'¡Misión cumplida!':'En progreso',W-30,H+60);
+  off.toBlob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='circuito-mision-'+m.id+'.png';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)});
+}
+
+/* ---------- tamaño y bucle ---------- */
+function ajustar(){
+  var w=Math.max(320,Math.min(1600,cv.parentElement.clientWidth-20)),d=Math.min(2,window.devicePixelRatio||1);
+  var px=Math.round(w*d);cv.width=px-(px%COLS);cv.height=cv.width/COLS*FILAS;
+}
+window.addEventListener('resize',ajustar);
+armarUI();ajustar();refrescarPaleta();recalcular();
+(function bucle(now){dibujar(now||0);requestAnimationFrame(bucle)})();
+window.__circ={S:S,solucion:solucion,colocar:colocarPieza,cablear:cablear,cambiarMision:cambiarMision,recalcular:recalcular,iniciarAuto:iniciarAuto};
+})();
+</script>
+</body>
+</html>

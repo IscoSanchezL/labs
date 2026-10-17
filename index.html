@@ -228,7 +228,7 @@ header.top{position:absolute;top:0;left:0;right:0;z-index:5;background:linear-gr
   <form method="dialog" id="frm">
     <h4 id="dTit">Proyecto</h4>
     <label for="fNom">Nombre</label><input id="fNom" required maxlength="60">
-    <label for="fUrl">Enlace</label><input id="fUrl" type="url" required placeholder="https://…">
+    <label for="fUrl">Enlace</label><input id="fUrl" type="text" required placeholder="https://… o actividades/nombre/">
     <label>Tarjetas donde aparece</label><div id="fGra" class="checks"></div>
     <div class="acc"><button class="btn sec" value="cancel" type="button" id="dCan">Cancelar</button><button class="btn" value="ok" id="dOk">Guardar</button></div>
   </form>
@@ -270,6 +270,8 @@ var DEF={version:2,
   {id:'correos',nombre:'Correos',grupos:['4'],url:'https://iscosanchezl.github.io/Correos4to/'},
   {id:'hardware',nombre:'Hardware y software',grupos:['6'],url:'https://iscosanchezl.github.io/Hardware_Software/'},
   {id:'detectives',nombre:'Detectives de carpetas',grupos:['6'],url:'https://iscosanchezl.github.io/Detectives-de-Carpetas/'},
+  {id:'estructuras',nombre:'Ingeniero de estructuras',grupos:['5'],url:'actividades/estructuras/'},
+  {id:'circuitos',nombre:'Laboratorio de circuitos',grupos:['6'],url:'actividades/circuitos/'},
   {id:'phishing',nombre:'Laboratorio anti-phishing',grupos:['6'],url:'https://iscosanchezl.github.io/Laboratorio-anti-phishing/'},
   {id:'puzzles',nombre:'Puzzles',grupos:['general'],url:'https://iscosanchezl.github.io/Puzzles/'},
   {id:'classdrive',nombre:'ClassDrive',grupos:['apps'],url:'https://classdrive.iscosanchez.com'},
@@ -287,7 +289,7 @@ function lsDel(){try{localStorage.removeItem(BKEY)}catch(e){}}
 function aviso(t){var a=$('aviso');a.textContent=t;a.classList.add('v');clearTimeout(aviso.t);aviso.t=setTimeout(function(){a.classList.remove('v')},2200)}
 function slug(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'item'}
 function unico(base,lista){var id=base,k=2;while(lista.some(function(x){return x.id===id}))id=base+'-'+(k++);return id}
-function urlSegura(u){return /^https?:\/\//i.test(u)}
+function urlSegura(u){return /^(https?:\/\/|\.{0,2}\/|[a-z0-9_-]+\/)/i.test(u)}
 
 function limpiar(d){
   var gs=d&&Array.isArray(d.grupos)&&d.grupos.length?d.grupos:DEF.grupos;
@@ -483,7 +485,7 @@ function gruposMarcados(){
 $('dCan').onclick=function(){$('dlg').close()};
 $('frm').addEventListener('submit',function(e){
   var nom=$('fNom').value.trim(),url=$('fUrl').value.trim();
-  if(!nom||!urlSegura(url)){e.preventDefault();aviso('Escribe un nombre y un enlace que empiece por http');return}
+  if(!nom||!urlSegura(url)){e.preventDefault();aviso('Escribe un nombre y un enlace (https://… o una ruta como actividades/nombre/)');return}
   if(editId){
     var p=datos.proyectos.filter(function(x){return x.id===editId})[0];
     if(p){p.nombre=nom;p.url=url;ponerGrupos(p,gruposMarcados())}

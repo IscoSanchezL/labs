@@ -124,6 +124,18 @@
       "nombre": "Planner Gi",
       "grupo": "apps",
       "url": "https://planner.iscosanchez.com"
+    },
+    {
+      "id": "estructuras",
+      "nombre": "Ingeniero de estructuras",
+      "grupo": "5",
+      "url": "actividades/estructuras/"
+    },
+    {
+      "id": "circuitos",
+      "nombre": "Laboratorio de circuitos",
+      "grupo": "6",
+      "url": "actividades/circuitos/"
     }
   ]
 }
