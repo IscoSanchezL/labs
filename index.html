@@ -70,7 +70,7 @@ h1{margin:0;font-size:clamp(32px,5.6vw,52px);line-height:1.06;max-width:760px}
 .grado h3{margin:0 0 14px;display:flex;align-items:center;justify-content:space-between;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .grado h3 .n{display:flex;align-items:center;gap:10px}
 .grado h3 .dot{width:10px;height:10px;border-radius:50%}
-.grado h3 .c{font-size:12px;color:var(--dim);letter-spacing:0;text-transform:none}
+.grado h3 .c{white-space:nowrap;margin-left:8px;font-size:12px;color:var(--dim);letter-spacing:0;text-transform:none}
 .lista{display:flex;flex-direction:column;gap:8px}
 .proy{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:14px;background:linear-gradient(145deg,var(--glass2),var(--glass));border:1px solid var(--edge);box-shadow:inset 0 1px 0 rgba(255,255,255,.2);transition:transform .15s,border-color .15s}
 .proy:hover{border-color:rgba(127,240,228,.6);transform:translateX(3px)}
@@ -78,6 +78,8 @@ h1{margin:0;font-size:clamp(32px,5.6vw,52px);line-height:1.06;max-width:760px}
 .proy .nom{flex:1;min-width:0;font-size:15px;line-height:1.25}
 .proy .fl{flex:0 0 auto;color:var(--accent);font-size:14px}
 .vacio{font-size:14px;color:var(--dim);padding:6px 2px}
+.grado .gctl{display:none;flex-wrap:wrap;gap:6px;margin:-4px 0 12px}
+.adm .grado .gctl{display:flex}
 .sinres{display:none;color:var(--muted);padding:12px 4px}
 
 /* Administración */
@@ -141,7 +143,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
 
 <header><div class="wrap">
   <div class="logo"><svg role="img" aria-label="Isco Sánchez"><use href="#logoIS"/></svg><div>labs<span>.iscosanchez.com</span></div></div>
-  <nav><a href="#proyectos">Proyectos</a><a href="#apps">Aplicaciones</a></nav>
+  <nav><a href="#proyectos">Proyectos</a></nav>
 </div></header>
 
 <main class="wrap">
@@ -162,8 +164,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
     </div>
 
     <div class="barra" id="barra">
-      <div class="est" id="est"><b>Modo administración.</b> Arrastra un proyecto a otro grado, o usa su selector. Los cambios son un borrador en este navegador hasta que los publiques.</div>
+      <div class="est" id="est"><b>Modo administración.</b> Arrastra un proyecto a otra tarjeta, o usa su selector. Cada tarjeta se puede renombrar, mover o quitar. Los cambios son un borrador en este navegador hasta que los publiques.</div>
       <button class="btn" id="bNuevo" type="button">Agregar proyecto</button>
+      <button class="btn" id="bGrupo" type="button">Agregar tarjeta</button>
       <button class="btn sec" id="bCopiar" type="button">Copiar JSON</button>
       <button class="btn sec" id="bBajar" type="button">Descargar JSON</button>
       <button class="btn sec" id="bReset" type="button">Descartar borrador</button>
@@ -175,10 +178,6 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
     <div class="sinres" id="sinres">No encontré proyectos con esa búsqueda.</div>
   </section>
 
-  <section id="apps">
-    <div class="label">Aplicaciones completas</div>
-    <div class="apps" id="listaApps"></div>
-  </section>
 </main>
 
 <footer><div class="wrap"><div>Hecho para el aula · Gi School</div><div>iscosanchez.com <button class="entrar" id="bAdm" type="button">Administrar</button></div></div></footer>
@@ -188,8 +187,15 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
     <h4 id="dTit">Proyecto</h4>
     <label for="fNom">Nombre</label><input id="fNom" required maxlength="60">
     <label for="fUrl">Enlace</label><input id="fUrl" type="url" required placeholder="https://…">
-    <label for="fGra">Grado</label><select id="fGra"></select>
+    <label for="fGra">Tarjeta</label><select id="fGra"></select>
     <div class="acc"><button class="btn sec" value="cancel" type="button" id="dCan">Cancelar</button><button class="btn" value="ok" id="dOk">Guardar</button></div>
+  </form>
+</dialog>
+<dialog id="dgrp">
+  <form id="fgrp" autocomplete="off">
+    <h4 id="gTit">Nombre de la tarjeta</h4>
+    <label for="gNom">Nombre</label><input id="gNom" required maxlength="40" placeholder="Ej.: General, Grado 7°, Para todos los grados">
+    <div class="acc"><button class="btn sec" type="button" id="gCan">Cancelar</button><button class="btn" type="submit">Guardar</button></div>
   </form>
 </dialog>
 <dialog id="dpin">
@@ -204,62 +210,78 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
 <div class="aviso" id="aviso" role="status"></div>
 
 <script>
-var GRADOS=[
-  {k:'1',n:'Grado 1°',c:'#7ff0e4'},{k:'2',n:'Grado 2°',c:'#ffc27a'},{k:'3',n:'Grado 3°',c:'#c3a6ff'},
-  {k:'4',n:'Grado 4°',c:'#8cc5ff'},{k:'5',n:'Grado 5°',c:'#ff9f9f'},{k:'6',n:'Grado 6°',c:'#8be8ae'},
-  {k:'',n:'Sin asignar',c:'#9aa9b8'}
-];
-var DEF={version:1,proyectos:[
-  {id:'typing',nombre:'Typing (El teclado)',grado:'1',url:'https://iscosanchezl.github.io/Typing/'},
-  {id:'partes',nombre:'Partes del computador',grado:'1',url:'https://iscosanchezl.github.io/partes-del-computador/'},
-  {id:'algoritmos',nombre:'Algoritmos',grado:'1',url:'https://iscosanchezl.github.io/beto-algoritmos/'},
-  {id:'paint',nombre:'Proyecto Paint',grado:'2',url:'https://iscosanchezl.github.io/Proyecto_Paint_2do/'},
-  {id:'goldberg',nombre:'Máquina de Goldberg',grado:'3',url:'https://iscosanchezl.github.io/Goldberg-Machine/'},
-  {id:'kody',nombre:'Kody',grado:'4',url:'https://kody.iscosanchez.com'},
-  {id:'correos',nombre:'Correos',grado:'4',url:'https://iscosanchezl.github.io/Correos4to/'},
-  {id:'hardware',nombre:'Hardware y software',grado:'6',url:'https://iscosanchezl.github.io/Hardware_Software/'},
-  {id:'detectives',nombre:'Detectives de carpetas',grado:'6',url:'https://iscosanchezl.github.io/Detectives-de-Carpetas/'},
-  {id:'phishing',nombre:'Laboratorio anti-phishing',grado:'6',url:'https://iscosanchezl.github.io/Laboratorio-anti-phishing/'},
-  {id:'puzzles',nombre:'Puzzles',grado:'',url:'https://iscosanchezl.github.io/Puzzles/'}
+var PALETA=['#7ff0e4','#ffc27a','#c3a6ff','#8cc5ff','#ff9f9f','#8be8ae','#f5d97a','#f59ad6'];
+var GRIS='#9aa9b8';
+var DEF={version:2,
+  grupos:[
+    {id:'1',nombre:'Grado 1°'},{id:'2',nombre:'Grado 2°'},{id:'3',nombre:'Grado 3°'},
+    {id:'4',nombre:'Grado 4°'},{id:'5',nombre:'Grado 5°'},{id:'6',nombre:'Grado 6°'},
+    {id:'general',nombre:'General (varios grados)'},{id:'apps',nombre:'Aplicaciones completas'}
+  ],
+  proyectos:[
+  {id:'typing',nombre:'Typing (El teclado)',grupo:'1',url:'https://iscosanchezl.github.io/Typing/'},
+  {id:'partes',nombre:'Partes del computador',grupo:'1',url:'https://iscosanchezl.github.io/partes-del-computador/'},
+  {id:'algoritmos',nombre:'Algoritmos',grupo:'1',url:'https://iscosanchezl.github.io/beto-algoritmos/'},
+  {id:'paint',nombre:'Proyecto Paint',grupo:'2',url:'https://iscosanchezl.github.io/Proyecto_Paint_2do/'},
+  {id:'goldberg',nombre:'Máquina de Goldberg',grupo:'3',url:'https://iscosanchezl.github.io/Goldberg-Machine/'},
+  {id:'kody',nombre:'Kody',grupo:'4',url:'https://kody.iscosanchez.com'},
+  {id:'correos',nombre:'Correos',grupo:'4',url:'https://iscosanchezl.github.io/Correos4to/'},
+  {id:'hardware',nombre:'Hardware y software',grupo:'6',url:'https://iscosanchezl.github.io/Hardware_Software/'},
+  {id:'detectives',nombre:'Detectives de carpetas',grupo:'6',url:'https://iscosanchezl.github.io/Detectives-de-Carpetas/'},
+  {id:'phishing',nombre:'Laboratorio anti-phishing',grupo:'6',url:'https://iscosanchezl.github.io/Laboratorio-anti-phishing/'},
+  {id:'puzzles',nombre:'Puzzles',grupo:'general',url:'https://iscosanchezl.github.io/Puzzles/'},
+  {id:'classdrive',nombre:'ClassDrive',grupo:'apps',url:'https://classdrive.iscosanchez.com'},
+  {id:'teclea',nombre:'Teclea',grupo:'apps',url:'https://teclea.iscosanchez.com'},
+  {id:'codekid',nombre:'CodeKid',grupo:'apps',url:'https://codekid.iscosanchez.com'},
+  {id:'planner',nombre:'Planner Gi',grupo:'apps',url:'https://planner.iscosanchez.com'}
 ]};
-var APPS=[['ClassDrive','classdrive'],['Teclea','teclea'],['CodeKid','codekid'],['Planner Gi','planner'],['Kody','kody']];
 var BKEY='labs-borrador';
-var datos=null, admin=false, filtro='todos', consulta='', editId=null;
+var datos=null, admin=false, filtro='todos', consulta='', editId=null, grpEdit=null;
 var $=function(id){return document.getElementById(id)};
 
 function lsGet(){try{return localStorage.getItem(BKEY)}catch(e){return null}}
 function lsSet(v){try{localStorage.setItem(BKEY,v)}catch(e){}}
 function lsDel(){try{localStorage.removeItem(BKEY)}catch(e){}}
-
 function aviso(t){var a=$('aviso');a.textContent=t;a.classList.add('v');clearTimeout(aviso.t);aviso.t=setTimeout(function(){a.classList.remove('v')},2200)}
-function slug(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'proyecto'}
-function limpiar(d){
-  var ok=d&&Array.isArray(d.proyectos)?d.proyectos:[];
-  return {version:1,proyectos:ok.filter(function(p){return p&&p.nombre&&p.url}).map(function(p){
-    return {id:String(p.id||slug(p.nombre)),nombre:String(p.nombre),grado:String(p.grado||''),url:String(p.url)};
-  })};
-}
+function slug(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'item'}
+function unico(base,lista){var id=base,k=2;while(lista.some(function(x){return x.id===id}))id=base+'-'+(k++);return id}
 function urlSegura(u){return /^https?:\/\//i.test(u)}
 
+function limpiar(d){
+  var gs=d&&Array.isArray(d.grupos)&&d.grupos.length?d.grupos:DEF.grupos;
+  gs=gs.filter(function(g){return g&&g.nombre}).map(function(g){return {id:String(g.id||slug(g.nombre)),nombre:String(g.nombre)}});
+  var ok=d&&Array.isArray(d.proyectos)?d.proyectos:[];
+  var ps=ok.filter(function(p){return p&&p.nombre&&p.url}).map(function(p){
+    var g=p.grupo!==undefined?p.grupo:p.grado;
+    return {id:String(p.id||slug(p.nombre)),nombre:String(p.nombre),grupo:String(g||''),url:String(p.url)};
+  });
+  ps.forEach(function(p){if(p.grupo&&!gs.some(function(g){return g.id===p.grupo}))p.grupo=''});
+  return {version:2,grupos:gs,proyectos:ps};
+}
 function guardarBorrador(){lsSet(JSON.stringify(datos))}
+function colorDe(id){var i=datos.grupos.findIndex(function(g){return g.id===id});return i<0?GRIS:PALETA[i%PALETA.length]}
+function nombreDe(id){var g=datos.grupos.filter(function(x){return x.id===id})[0];return g?g.nombre:'Sin asignar'}
+function haySinAsignar(){return datos.proyectos.some(function(p){return p.grupo===''})}
 
 function pintarTabs(){
   var t=$('tabs');t.textContent='';
-  var items=[{k:'todos'}].concat(GRADOS.filter(function(g){return g.k!==''||admin||datos.proyectos.some(function(p){return p.grado===''})}).map(function(g){return {k:g.k===''?'sin':g.k}}));
+  var items=[{k:'todos',n:'Todos'}];
+  datos.grupos.forEach(function(g){items.push({k:g.id,n:g.nombre})});
+  if(admin||haySinAsignar())items.push({k:'sin',n:'Sin asignar'});
+  if(!items.some(function(x){return x.k===filtro}))filtro='todos';
   items.forEach(function(it){
-    var b=document.createElement('button');b.type='button';b.className='tab';
-    b.textContent=it.k==='todos'?'Todos':(it.k==='sin'?'Sin asignar':'Grado '+it.k+'°');
+    var b=document.createElement('button');b.type='button';b.className='tab';b.textContent=it.n;
     b.setAttribute('aria-pressed',String(filtro===it.k));
     b.onclick=function(){filtro=it.k;pintar()};
     t.appendChild(b);
   });
 }
 
-function pintarProyecto(p,g){
+function pintarProyecto(p,color){
   var a=document.createElement(admin?'div':'a');
   a.className='proy';a.dataset.id=p.id;
   if(!admin){a.href=p.url;a.target='_blank';a.rel='noopener'}
-  var i=document.createElement('div');i.className='i';i.textContent=p.nombre.charAt(0).toUpperCase();i.style.background=g.c;
+  var i=document.createElement('div');i.className='i';i.textContent=p.nombre.charAt(0).toUpperCase();i.style.background=color;
   var n=document.createElement('div');n.className='nom';n.textContent=p.nombre;
   var f=document.createElement('div');f.className='fl';f.textContent='→';
   a.appendChild(i);a.appendChild(n);a.appendChild(f);
@@ -268,65 +290,112 @@ function pintarProyecto(p,g){
     a.addEventListener('dragstart',function(e){e.dataTransfer.setData('text/plain',p.id);e.dataTransfer.effectAllowed='move'});
     var c=document.createElement('div');c.className='ctl';
     var s=document.createElement('select');s.setAttribute('aria-label','Mover '+p.nombre);
-    GRADOS.forEach(function(x){var o=document.createElement('option');o.value=x.k;o.textContent=x.n;if(x.k===p.grado)o.selected=true;s.appendChild(o)});
-    s.onchange=function(){p.grado=s.value;guardarBorrador();pintar();aviso('Movido a '+nombreGrado(p.grado))};
+    datos.grupos.concat([{id:'',nombre:'Sin asignar'}]).forEach(function(x){var o=document.createElement('option');o.value=x.id;o.textContent=x.nombre;if(x.id===p.grupo)o.selected=true;s.appendChild(o)});
+    s.onchange=function(){p.grupo=s.value;guardarBorrador();pintar();aviso('Movido a '+nombreDe(p.grupo))};
     var e=document.createElement('button');e.type='button';e.className='mini';e.textContent='Editar';e.onclick=function(){abrir(p)};
+    var v=document.createElement('a');v.className='mini';v.href=p.url;v.target='_blank';v.rel='noopener';v.textContent='Abrir';
     var d=document.createElement('button');d.type='button';d.className='mini rojo';d.textContent='Quitar';d.onclick=function(){
       if(confirm('¿Quitar "'+p.nombre+'" de la lista?')){datos.proyectos=datos.proyectos.filter(function(x){return x!==p});guardarBorrador();pintar()}};
-    var v=document.createElement('a');v.className='mini';v.href=p.url;v.target='_blank';v.rel='noopener';v.textContent='Abrir';
     c.appendChild(s);c.appendChild(e);c.appendChild(v);c.appendChild(d);a.appendChild(c);
   }
   return a;
 }
-function nombreGrado(k){var g=GRADOS.filter(function(x){return x.k===k})[0];return g?g.n:'Sin asignar'}
+
+function pintarGrupo(g,idx,lista,q){
+  var color=g.id===''?GRIS:colorDe(g.id);
+  var s=document.createElement('section');s.className='grado';s.dataset.k=g.id;
+  var h=document.createElement('h3');
+  var n=document.createElement('span');n.className='n';
+  var dot=document.createElement('span');dot.className='dot';dot.style.background=color;
+  var tx=document.createElement('span');tx.textContent=g.nombre;
+  n.appendChild(dot);n.appendChild(tx);
+  var c=document.createElement('span');c.className='c';c.textContent=lista.length+(lista.length===1?' proyecto':' proyectos');
+  h.appendChild(n);h.appendChild(c);s.appendChild(h);
+  if(admin&&g.id!==''){
+    var gc=document.createElement('div');gc.className='gctl';
+    var mk=function(t,fn,cls){var b=document.createElement('button');b.type='button';b.className='mini'+(cls?' '+cls:'');b.textContent=t;b.onclick=fn;gc.appendChild(b)};
+    mk('Renombrar',function(){abrirGrupo(g)});
+    mk('Antes',function(){mover(idx,-1)});
+    mk('Después',function(){mover(idx,1)});
+    mk('Quitar tarjeta',function(){quitarGrupo(g)},'rojo');
+    s.appendChild(gc);
+  }
+  var l=document.createElement('div');l.className='lista';
+  lista.forEach(function(p){l.appendChild(pintarProyecto(p,color))});
+  if(!lista.length){var v=document.createElement('div');v.className='vacio';v.textContent=admin?'Suelta aquí un proyecto.':'Pronto habrá proyectos.';l.appendChild(v)}
+  s.appendChild(l);
+  if(admin){
+    s.addEventListener('dragover',function(e){e.preventDefault();s.classList.add('sobre')});
+    s.addEventListener('dragleave',function(){s.classList.remove('sobre')});
+    s.addEventListener('drop',function(e){
+      e.preventDefault();s.classList.remove('sobre');
+      var id=e.dataTransfer.getData('text/plain');
+      var p=datos.proyectos.filter(function(x){return x.id===id})[0];
+      if(p&&p.grupo!==g.id){p.grupo=g.id;guardarBorrador();pintar();aviso('Movido a '+nombreDe(g.id))}
+    });
+  }
+  return s;
+}
 
 function pintar(){
   document.body.classList.toggle('adm',admin);
   pintarTabs();
   var cont=$('grados');cont.textContent='';
   var q=consulta.trim().toLowerCase(),total=0;
-  GRADOS.forEach(function(g){
-    var key=g.k===''?'sin':g.k;
+  var grupos=datos.grupos.map(function(g,i){return {g:g,i:i}});
+  if(admin||haySinAsignar())grupos.push({g:{id:'',nombre:'Sin asignar'},i:-1});
+  grupos.forEach(function(x){
+    var g=x.g,key=g.id===''?'sin':g.id;
     if(filtro!=='todos'&&filtro!==key)return;
-    var lista=datos.proyectos.filter(function(p){return p.grado===g.k&&(!q||p.nombre.toLowerCase().indexOf(q)>-1)});
-    if(g.k===''&&!lista.length&&!admin)return;
-    if(!lista.length&&(q||filtro==='todos'&&!admin))return;
+    var lista=datos.proyectos.filter(function(p){return p.grupo===g.id&&(!q||p.nombre.toLowerCase().indexOf(q)>-1)});
+    if(!lista.length&&(q||!admin))return;
     total+=lista.length;
-    var s=document.createElement('section');s.className='grado';s.dataset.k=g.k;
-    var h=document.createElement('h3');
-    var n=document.createElement('span');n.className='n';
-    var dot=document.createElement('span');dot.className='dot';dot.style.background=g.c;
-    var tx=document.createElement('span');tx.textContent=g.n;
-    n.appendChild(dot);n.appendChild(tx);
-    var c=document.createElement('span');c.className='c';c.textContent=lista.length+(lista.length===1?' proyecto':' proyectos');
-    h.appendChild(n);h.appendChild(c);s.appendChild(h);
-    var l=document.createElement('div');l.className='lista';
-    lista.forEach(function(p){l.appendChild(pintarProyecto(p,g))});
-    if(!lista.length){var v=document.createElement('div');v.className='vacio';v.textContent=admin?'Suelta aquí un proyecto.':'Pronto habrá proyectos.';l.appendChild(v)}
-    s.appendChild(l);
-    if(admin){
-      s.addEventListener('dragover',function(e){e.preventDefault();s.classList.add('sobre')});
-      s.addEventListener('dragleave',function(){s.classList.remove('sobre')});
-      s.addEventListener('drop',function(e){
-        e.preventDefault();s.classList.remove('sobre');
-        var id=e.dataTransfer.getData('text/plain');
-        var p=datos.proyectos.filter(function(x){return x.id===id})[0];
-        if(p&&p.grado!==g.k){p.grado=g.k;guardarBorrador();pintar();aviso('Movido a '+g.n)}
-      });
-    }
-    cont.appendChild(s);
+    cont.appendChild(pintarGrupo(g,x.i,lista,q));
   });
   $('sinres').style.display=(q&&!total)?'block':'none';
 }
 
+function mover(i,d){
+  var j=i+d;if(j<0||j>=datos.grupos.length)return;
+  var t=datos.grupos[i];datos.grupos[i]=datos.grupos[j];datos.grupos[j]=t;
+  guardarBorrador();pintar();
+}
+function quitarGrupo(g){
+  var n=datos.proyectos.filter(function(p){return p.grupo===g.id}).length;
+  var m='¿Quitar la tarjeta "'+g.nombre+'"?'+(n?' Sus '+n+' proyecto(s) pasarán a "Sin asignar".':'');
+  if(!confirm(m))return;
+  datos.proyectos.forEach(function(p){if(p.grupo===g.id)p.grupo=''});
+  datos.grupos=datos.grupos.filter(function(x){return x!==g});
+  guardarBorrador();pintar();aviso('Tarjeta quitada');
+}
+
+/* Diálogo de tarjeta */
+function abrirGrupo(g){
+  grpEdit=g||null;
+  $('gTit').textContent=g?'Renombrar tarjeta':'Agregar tarjeta';
+  $('gNom').value=g?g.nombre:'';
+  $('dgrp').showModal();$('gNom').focus();
+}
+$('gCan').onclick=function(){$('dgrp').close()};
+$('fgrp').addEventListener('submit',function(e){
+  e.preventDefault();
+  var nom=$('gNom').value.trim();if(!nom)return;
+  if(grpEdit){grpEdit.nombre=nom}
+  else{var id=unico(slug(nom),datos.grupos);datos.grupos.push({id:id,nombre:nom});filtro='todos'}
+  guardarBorrador();$('dgrp').close();pintar();aviso('Guardado en el borrador');
+});
+$('bGrupo').onclick=function(){abrirGrupo(null)};
+
+/* Diálogo de proyecto */
 function abrir(p){
   editId=p?p.id:null;
   $('dTit').textContent=p?'Editar proyecto':'Agregar proyecto';
   $('fNom').value=p?p.nombre:'';
   $('fUrl').value=p?p.url:'https://';
   var s=$('fGra');s.textContent='';
-  GRADOS.forEach(function(x){var o=document.createElement('option');o.value=x.k;o.textContent=x.n;s.appendChild(o)});
-  s.value=p?p.grado:(filtro!=='todos'&&filtro!=='sin'?filtro:'');
+  datos.grupos.concat([{id:'',nombre:'Sin asignar'}]).forEach(function(x){var o=document.createElement('option');o.value=x.id;o.textContent=x.nombre;s.appendChild(o)});
+  var def=filtro!=='todos'&&filtro!=='sin'?filtro:'';
+  s.value=p?p.grupo:def;
   $('dlg').showModal();
 }
 $('dCan').onclick=function(){$('dlg').close()};
@@ -335,15 +404,14 @@ $('frm').addEventListener('submit',function(e){
   if(!nom||!urlSegura(url)){e.preventDefault();aviso('Escribe un nombre y un enlace que empiece por http');return}
   if(editId){
     var p=datos.proyectos.filter(function(x){return x.id===editId})[0];
-    if(p){p.nombre=nom;p.url=url;p.grado=$('fGra').value}
+    if(p){p.nombre=nom;p.url=url;p.grupo=$('fGra').value}
   }else{
-    var id=slug(nom),base=id,k=2;
-    while(datos.proyectos.some(function(x){return x.id===id}))id=base+'-'+(k++);
-    datos.proyectos.push({id:id,nombre:nom,grado:$('fGra').value,url:url});
+    datos.proyectos.push({id:unico(slug(nom),datos.proyectos),nombre:nom,grupo:$('fGra').value,url:url});
   }
   guardarBorrador();pintar();aviso('Guardado en el borrador');
 });
 
+/* Exportar */
 function json(){return JSON.stringify(datos,null,2)+'\n'}
 $('bCopiar').onclick=function(){
   var t=json();
@@ -358,6 +426,9 @@ $('bBajar').onclick=function(){
 $('bNuevo').onclick=function(){abrir(null)};
 $('bReset').onclick=function(){if(confirm('¿Descartar el borrador y volver a la lista publicada?')){lsDel();cargar(function(){pintar();aviso('Borrador descartado')})}};
 $('bSalir').onclick=function(){admin=false;try{sessionStorage.removeItem('labs-adm')}catch(e){}pintar()};
+$('q').addEventListener('input',function(){consulta=this.value;pintar()});
+
+/* Contraseña */
 var PIN_HASH='de9409f559a1f66ac105b8ae412c0b7b343187fee898ccf3ad4b19b7e736b043';
 function sha256(t){
   return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){
@@ -383,7 +454,6 @@ $('fpin').addEventListener('submit',function(e){
   });
 });
 $('bAdm').onclick=pedirPin;
-$('q').addEventListener('input',function(){consulta=this.value;pintar()});
 
 function cargar(cb){
   fetch('proyectos.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){datos=limpiar(d)})
@@ -394,15 +464,6 @@ function cargar(cb){
     cb();
   });
 }
-
-var la=$('listaApps');
-APPS.forEach(function(x){
-  var a=document.createElement('a');a.href='https://'+x[1]+'.iscosanchez.com';
-  a.appendChild(document.createTextNode(x[0]));
-  var s=document.createElement('span');s.textContent=' · '+x[1];a.appendChild(s);
-  la.appendChild(a);
-});
-
 admin=false;
 cargar(function(){pintar();if(location.hash==='#admin')pedirPin()});
 </script>
