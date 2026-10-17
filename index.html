@@ -192,6 +192,15 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
     <div class="acc"><button class="btn sec" value="cancel" type="button" id="dCan">Cancelar</button><button class="btn" value="ok" id="dOk">Guardar</button></div>
   </form>
 </dialog>
+<dialog id="dpin">
+  <form id="fpin" autocomplete="off">
+    <h4>Modo administración</h4>
+    <label for="pin">Contraseña</label>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="20" aria-describedby="pinErr">
+    <div id="pinErr" style="min-height:20px;margin-top:8px;font-size:13px;color:#ffb4b4"></div>
+    <div class="acc"><button class="btn sec" type="button" id="pCan">Cancelar</button><button class="btn" type="submit">Entrar</button></div>
+  </form>
+</dialog>
 <div class="aviso" id="aviso" role="status"></div>
 
 <script>
@@ -348,8 +357,32 @@ $('bBajar').onclick=function(){
 };
 $('bNuevo').onclick=function(){abrir(null)};
 $('bReset').onclick=function(){if(confirm('¿Descartar el borrador y volver a la lista publicada?')){lsDel();cargar(function(){pintar();aviso('Borrador descartado')})}};
-$('bSalir').onclick=function(){admin=false;pintar()};
-$('bAdm').onclick=function(){admin=true;var b=lsGet();if(b){try{datos=limpiar(JSON.parse(b))}catch(e){}}pintar();$('proyectos').scrollIntoView({block:'start'})};
+$('bSalir').onclick=function(){admin=false;try{sessionStorage.removeItem('labs-adm')}catch(e){}pintar()};
+var PIN_HASH='de9409f559a1f66ac105b8ae412c0b7b343187fee898ccf3ad4b19b7e736b043';
+function sha256(t){
+  return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){
+    return Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+  });
+}
+function entrarAdmin(){
+  admin=true;try{sessionStorage.setItem('labs-adm','1')}catch(e){}
+  var b=lsGet();if(b){try{datos=limpiar(JSON.parse(b))}catch(e){}}
+  pintar();$('proyectos').scrollIntoView({block:'start'});
+}
+function pedirPin(){
+  try{if(sessionStorage.getItem('labs-adm')==='1'){entrarAdmin();return}}catch(e){}
+  $('pin').value='';$('pinErr').textContent='';$('dpin').showModal();$('pin').focus();
+}
+$('pCan').onclick=function(){$('dpin').close();if(location.hash==='#admin')history.replaceState(null,'',location.pathname)};
+$('fpin').addEventListener('submit',function(e){
+  e.preventDefault();
+  if(!(window.crypto&&crypto.subtle)){$('pinErr').textContent='Abre la página con https para usar esta función.';return}
+  sha256('labs-isco:'+$('pin').value.trim()).then(function(h){
+    if(h===PIN_HASH){$('dpin').close();entrarAdmin()}
+    else{$('pinErr').textContent='Contraseña incorrecta.';$('pin').select()}
+  });
+});
+$('bAdm').onclick=pedirPin;
 $('q').addEventListener('input',function(){consulta=this.value;pintar()});
 
 function cargar(cb){
@@ -370,8 +403,8 @@ APPS.forEach(function(x){
   la.appendChild(a);
 });
 
-admin=location.hash==='#admin';
-cargar(function(){pintar();if(admin)$('proyectos').scrollIntoView()});
+admin=false;
+cargar(function(){pintar();if(location.hash==='#admin')pedirPin()});
 </script>
 </body>
 </html>
