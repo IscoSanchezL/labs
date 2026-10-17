@@ -328,7 +328,7 @@ function pintarGrupo(g,idx,lista,q){
   }
   var l=document.createElement('div');l.className='lista';
   lista.forEach(function(p){l.appendChild(pintarProyecto(p,color))});
-  if(!lista.length){var v=document.createElement('div');v.className='vacio';v.textContent=admin?'Suelta aquí un proyecto.':'Pronto habrá proyectos.';l.appendChild(v)}
+  if(!lista.length){var v=document.createElement('div');v.className='vacio';v.textContent=admin?'Suelta aquí un proyecto.':'Pronto habrá proyectos aquí.';l.appendChild(v)}
   s.appendChild(l);
   if(admin){
     s.addEventListener('dragover',function(e){e.preventDefault();s.classList.add('sobre')});
@@ -354,7 +354,7 @@ function pintar(){
     var g=x.g,key=g.id===''?'sin':g.id;
     if(filtro!=='todos'&&filtro!==key)return;
     var lista=datos.proyectos.filter(function(p){return p.grupo===g.id&&(!q||p.nombre.toLowerCase().indexOf(q)>-1)});
-    if(!lista.length&&(q||!admin))return;
+    if(!lista.length&&(q||(g.id===''&&!admin)))return;
     total+=lista.length;
     cont.appendChild(pintarGrupo(g,x.i,lista,q));
   });
