@@ -12,7 +12,7 @@
 <style>
 .zona{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start;padding-bottom:30px}
 .lienzo{padding:10px}
-.lienzo canvas{display:block;width:100%;height:auto;border-radius:16px;touch-action:none;cursor:crosshair;background:#0b1a2c}
+.lienzo canvas{display:block;width:100%;height:auto;border-radius:16px;touch-action:none;cursor:crosshair;background:#cfeaff}
 .lienzo canvas.borrar{cursor:not-allowed}
 .barra{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin:10px 4px 2px}
 .nivel{display:flex;align-items:center;gap:10px}
@@ -98,6 +98,7 @@ kbd{padding:1px 6px;border-radius:6px;border:1px solid var(--edge);font-size:12p
           <button class="btn grande" id="bProbar" type="button" data-i18n="e.probar"></button>
           <button class="btn sec" id="bDeshacer" type="button" data-i18n="e.deshacer"></button>
           <button class="btn sec" id="bLimpiar" type="button" data-i18n="e.limpiar"></button>
+          <button class="btn sec" id="bEjemplo" type="button" data-i18n="e.ejemplo"></button>
         </div>
         <p class="mini" style="margin:10px 0 0" data-i18n="e.ayuda"></p>
       </div>
@@ -144,20 +145,20 @@ kbd{padding:1px 6px;border-radius:6px;border:1px solid var(--edge);font-size:12p
 <script src="../../assets/i18n.js"></script>
 <script src="motor.js"></script>
 <script>
-I18N.add({"titulo": "Ingeniero de estructuras · Labs", "descripcion": "Construye puentes y torres con vigas, columnas y travesaños, y pruébalos con carga real. Grado 5°.", "e.volver": "← Volver a labs", "e.eyebrow": "// grado 5° · diseño estructural", "e.h1": "Ingeniero de <em>estructuras</em>", "e.sub": "Construye puentes y torres con <b>vigas</b>, <b>columnas</b> y <b>travesaños</b>. Pruébalos con una carga de verdad y descubre por qué los ingenieros aman los triángulos.", "e.canvas": "Zona de construcción: haz clic en un punto y arrastra hasta otro para crear una pieza", "e.nivel": "Nivel", "e.reto": "Reto", "e.presupuesto": "Presupuesto", "e.gastado": "Gastado", "e.disponible": "Disponible", "e.material": "Material", "e.herramientas": "Herramientas", "e.construir": "Construir", "e.borrar": "Borrar pieza", "e.probar": "▶ Probar", "e.deshacer": "Deshacer", "e.limpiar": "Empezar de nuevo", "e.ayuda": "Haz clic en un punto y arrastra hasta otro. También sirve tocar un punto y luego el otro. <kbd>Esc</kbd> cancela.", "e.resultado": "Resultado", "e.siguiente": "Siguiente nivel →", "e.mejorar": "Seguir mejorando", "e.piezas": "Mis piezas", "e.leyEstira": "se estira", "e.leyComprime": "se comprime", "e.leyRompe": "se rompe", "e.aprende": "Aprende", "e.dtViga": "Viga", "e.ddViga": "Pieza horizontal. Sostiene lo que pasa por encima.", "e.dtColumna": "Columna", "e.ddColumna": "Pieza vertical. Aguanta el peso hacia abajo.", "e.dtTrav": "Travesaño", "e.ddTrav": "Pieza inclinada que une las demás. Sin ella, todo se mueve.", "e.dtTri": "¿Por qué triángulos?", "e.ddTri": "Es la única figura que no se deforma al empujarla. Un cuadrado se aplasta; un triángulo no.", "e.entrega": "Entrega", "e.tuNombre": "Tu nombre", "e.phNombre": "Escribe tu nombre", "e.guardarImg": "Guardar imagen de mi diseño", "e.notaImg": "La imagen sale con tu nombre y tus estrellas. Súbela a Classroom.", "e.pie": "Hecho para el aula · Gi School", "e.nivelN": "Nivel {n} · {nombre}", "e.tabNivel": "Nivel {n}", "e.n1.nombre": "Puente pequeño", "e.n1.reto": "Une las dos orillas para que el carro de <b>3 toneladas</b> cruce el río. Empieza probando una viga recta… y mira qué pasa.", "e.n2.nombre": "Torre contra el viento", "e.n2.reto": "Sostén la antena de <b>1.5 toneladas</b> en la punta, aunque sople el viento. Cuidado: las piezas muy largas se doblan.", "e.n3.nombre": "Puente largo", "e.n3.reto": "Dos camiones de <b>1.2 toneladas</b> cruzan a la vez. Piensa en triángulos pequeños: cuestan menos que piezas largas.", "e.mat.madera": "Madera", "e.mat.acero": "Acero", "e.matInfo": "${p} por metro · resiste {t} t estirada", "e.cViga": "vigas", "e.cColumna": "columnas", "e.cTrav": "travesaños", "e.err.mismo": "Elige otro punto.", "e.err.bloq": "Ese punto está dentro del suelo o del río.", "e.err.max": "Cada pieza mide máximo {m} m. Usa más nodos.", "e.err.dup": "Esa pieza ya existe.", "e.err.nodo": "La pieza pasa por un nodo. Únelo en dos piezas.", "e.err.cruce": "Las piezas no se pueden cruzar sin un nodo.", "e.err.sobre": "Ese punto cae sobre otra pieza.", "e.err.presu": "Te pasas del presupuesto. Usa menos piezas o material más barato.", "e.err.vacio": "Primero construye algo.", "e.r.sinCon": "<b>La carga no está conectada.</b> Une el punto de la carga a tu estructura con al menos una pieza.", "e.r.mec": "<b>¡Se cayó!</b> Tu estructura se mueve como un mecanismo: le faltan <b>triángulos</b>. Es la única figura que no se deforma. Añade travesaños en diagonal.", "e.r.rompio": "<b>¡Se rompió!</b> ", "e.r.pandeo": "{n} pieza(s) se <b>pandearon</b>: las piezas largas que se comprimen se doblan. Acórtalas con más nodos o usa acero. ", "e.r.rotura": "{n} pieza(s) se <b>rompieron estiradas</b>: refuerza con otra pieza o cambia el material. ", "e.r.rojas": "Las piezas en rojo son las que fallaron.", "e.r.ok": "<b>¡Aguantó!</b> Tu diseño soporta la carga y costó <b>${c}</b> de ${b}. ", "e.r.e3": "¡Eficiencia de ingeniero! Tres estrellas.", "e.r.e2": "Muy bien. Para tres estrellas gasta menos: quita piezas que no trabajan (las más apagadas) o usa madera donde se pueda.", "e.r.e1": "Funciona. Intenta gastar menos quitando piezas que casi no trabajan.", "e.conf": "¿Empezar de nuevo este nivel?", "e.viento": "viento {f} t", "e.img.tit": "Ingeniero de estructuras · Nivel {n}: {nombre}", "e.img.sin": "Sin nombre", "e.img.costo": "Costo ${c} de ${b}"},{"titulo": "Structural Engineer · Labs", "descripcion": "Build bridges and towers with beams, columns and braces, and test them with a real load. Grade 5.", "e.volver": "← Back to labs", "e.eyebrow": "// grade 5 · structural design", "e.h1": "Structural <em>Engineer</em>", "e.sub": "Build bridges and towers with <b>beams</b>, <b>columns</b> and <b>braces</b>. Test them with a real load and find out why engineers love triangles.", "e.canvas": "Building area: click a point and drag to another to create a piece", "e.nivel": "Level", "e.reto": "Challenge", "e.presupuesto": "Budget", "e.gastado": "Spent", "e.disponible": "Available", "e.material": "Material", "e.herramientas": "Tools", "e.construir": "Build", "e.borrar": "Erase piece", "e.probar": "▶ Test", "e.deshacer": "Undo", "e.limpiar": "Start over", "e.ayuda": "Click a point and drag to another. You can also tap one point, then the other. <kbd>Esc</kbd> cancels.", "e.resultado": "Result", "e.siguiente": "Next level →", "e.mejorar": "Keep improving", "e.piezas": "My pieces", "e.leyEstira": "stretches", "e.leyComprime": "compresses", "e.leyRompe": "breaks", "e.aprende": "Learn", "e.dtViga": "Beam", "e.ddViga": "Horizontal piece. It supports what passes over it.", "e.dtColumna": "Column", "e.ddColumna": "Vertical piece. It carries the weight downward.", "e.dtTrav": "Brace", "e.ddTrav": "Slanted piece that ties the others together. Without it, everything moves.", "e.dtTri": "Why triangles?", "e.ddTri": "It is the only shape that does not deform when pushed. A square collapses; a triangle does not.", "e.entrega": "Hand-in", "e.tuNombre": "Your name", "e.phNombre": "Write your name", "e.guardarImg": "Save an image of my design", "e.notaImg": "The image includes your name and your stars. Upload it to Classroom.", "e.pie": "Made for the classroom · Gi School", "e.nivelN": "Level {n} · {nombre}", "e.tabNivel": "Level {n}", "e.n1.nombre": "Small bridge", "e.n1.reto": "Join the two river banks so the <b>3-ton</b> truck can cross. Start by testing a straight beam… and see what happens.", "e.n2.nombre": "Tower against the wind", "e.n2.reto": "Hold the <b>1.5-ton</b> antenna at the top, even when the wind blows. Careful: very long pieces bend.", "e.n3.nombre": "Long bridge", "e.n3.reto": "Two <b>1.2-ton</b> trucks cross at the same time. Think small triangles: they cost less than long pieces.", "e.mat.madera": "Wood", "e.mat.acero": "Steel", "e.matInfo": "${p} per meter · holds {t} t when stretched", "e.cViga": "beams", "e.cColumna": "columns", "e.cTrav": "braces", "e.err.mismo": "Pick another point.", "e.err.bloq": "That point is inside the ground or the river.", "e.err.max": "Each piece can be {m} m long at most. Use more nodes.", "e.err.dup": "That piece already exists.", "e.err.nodo": "The piece goes through a node. Join it as two pieces.", "e.err.cruce": "Pieces cannot cross without a node.", "e.err.sobre": "That point lies on another piece.", "e.err.presu": "You are over budget. Use fewer pieces or a cheaper material.", "e.err.vacio": "Build something first.", "e.r.sinCon": "<b>The load is not connected.</b> Join the load point to your structure with at least one piece.", "e.r.mec": "<b>It collapsed!</b> Your structure moves like a mechanism: it needs <b>triangles</b>. They are the only shape that does not deform. Add diagonal braces.", "e.r.rompio": "<b>It broke!</b> ", "e.r.pandeo": "{n} piece(s) <b>buckled</b>: long pieces under compression bend. Shorten them with more nodes or use steel. ", "e.r.rotura": "{n} piece(s) <b>snapped when stretched</b>: reinforce with another piece or change the material. ", "e.r.rojas": "The red pieces are the ones that failed.", "e.r.ok": "<b>It held!</b> Your design carries the load and cost <b>${c}</b> of ${b}. ", "e.r.e3": "Engineer-level efficiency! Three stars.", "e.r.e2": "Very good. For three stars, spend less: remove pieces that do little work (the dimmest ones) or use wood where you can.", "e.r.e1": "It works. Try to spend less by removing pieces that hardly work.", "e.conf": "Start this level over?", "e.viento": "wind {f} t", "e.img.tit": "Structural Engineer · Level {n}: {nombre}", "e.img.sin": "No name", "e.img.costo": "Cost ${c} of ${b}"});
+I18N.add({"titulo": "Ingeniero de estructuras · Labs", "descripcion": "Construye puentes y torres con vigas, columnas y travesaños, y pruébalos con carga real. Grado 5°.", "e.volver": "← Volver a labs", "e.eyebrow": "// grado 5° · diseño estructural", "e.h1": "Ingeniero de <em>estructuras</em>", "e.sub": "Construye puentes y torres con <b>vigas</b>, <b>columnas</b> y <b>travesaños</b>. Pruébalos con una carga de verdad y descubre por qué los ingenieros aman los triángulos.", "e.canvas": "Zona de construcción: haz clic en un punto y arrastra hasta otro para crear una pieza", "e.nivel": "Nivel", "e.reto": "Reto", "e.presupuesto": "Presupuesto", "e.gastado": "Gastado", "e.disponible": "Disponible", "e.material": "Material", "e.herramientas": "Herramientas", "e.construir": "Construir", "e.borrar": "Borrar pieza", "e.probar": "▶ Probar", "e.deshacer": "Deshacer", "e.limpiar": "Empezar de nuevo", "e.ejemplo": "Ver un ejemplo", "e.confEj": "Esto reemplaza lo que construiste con un ejemplo que funciona. ¿Continuar?", "e.ejCargado": "Ejemplo cargado: pruébalo y luego intenta gastar menos.", "e.ayuda": "Haz clic en un punto y arrastra hasta otro. También sirve tocar un punto y luego el otro. <kbd>Esc</kbd> cancela.", "e.resultado": "Resultado", "e.siguiente": "Siguiente nivel →", "e.mejorar": "Seguir mejorando", "e.piezas": "Mis piezas", "e.leyEstira": "se estira", "e.leyComprime": "se comprime", "e.leyRompe": "se rompe", "e.aprende": "Aprende", "e.dtViga": "Viga", "e.ddViga": "Pieza horizontal. Sostiene lo que pasa por encima.", "e.dtColumna": "Columna", "e.ddColumna": "Pieza vertical. Aguanta el peso hacia abajo.", "e.dtTrav": "Travesaño", "e.ddTrav": "Pieza inclinada que une las demás. Sin ella, todo se mueve.", "e.dtTri": "¿Por qué triángulos?", "e.ddTri": "Es la única figura que no se deforma al empujarla. Un cuadrado se aplasta; un triángulo no.", "e.entrega": "Entrega", "e.tuNombre": "Tu nombre", "e.phNombre": "Escribe tu nombre", "e.guardarImg": "Guardar imagen de mi diseño", "e.notaImg": "La imagen sale con tu nombre y tus estrellas. Súbela a Classroom.", "e.pie": "Hecho para el aula · Gi School", "e.nivelN": "Nivel {n} · {nombre}", "e.tabNivel": "Nivel {n}", "e.n1.nombre": "Puente pequeño", "e.n1.reto": "Une las dos orillas para que el carro de <b>3 toneladas</b> cruce el río. Empieza probando una viga recta… y mira qué pasa.", "e.n2.nombre": "Torre contra el viento", "e.n2.reto": "Sostén la antena de <b>1.5 toneladas</b> en la punta, aunque sople el viento. Cuidado: las piezas muy largas se doblan.", "e.n3.nombre": "Puente largo", "e.n3.reto": "Dos camiones de <b>1.2 toneladas</b> cruzan a la vez. Piensa en triángulos pequeños: cuestan menos que piezas largas.", "e.mat.madera": "Madera", "e.mat.acero": "Acero", "e.matInfo": "${p} por metro · resiste {t} t estirada", "e.cViga": "vigas", "e.cColumna": "columnas", "e.cTrav": "travesaños", "e.err.mismo": "Elige otro punto.", "e.err.bloq": "Ese punto está dentro del suelo o del río.", "e.err.max": "Cada pieza mide máximo {m} m. Usa más nodos.", "e.err.dup": "Esa pieza ya existe.", "e.err.nodo": "La pieza pasa por un nodo. Únelo en dos piezas.", "e.err.cruce": "Las piezas no se pueden cruzar sin un nodo.", "e.err.sobre": "Ese punto cae sobre otra pieza.", "e.err.presu": "Te pasas del presupuesto. Usa menos piezas o material más barato.", "e.err.vacio": "Primero construye algo.", "e.r.sinCon": "<b>La carga no está conectada.</b> Une el punto de la carga a tu estructura con al menos una pieza.", "e.r.mec": "<b>¡Se cayó!</b> Tu estructura se mueve como un mecanismo: le faltan <b>triángulos</b>. Es la única figura que no se deforma. Añade travesaños en diagonal.", "e.r.rompio": "<b>¡Se rompió!</b> ", "e.r.pandeo": "{n} pieza(s) se <b>pandearon</b>: las piezas largas que se comprimen se doblan. Acórtalas con más nodos o usa acero. ", "e.r.rotura": "{n} pieza(s) se <b>rompieron estiradas</b>: refuerza con otra pieza o cambia el material. ", "e.r.rojas": "Las piezas en rojo son las que fallaron.", "e.r.ok": "<b>¡Aguantó!</b> Tu diseño soporta la carga y costó <b>${c}</b> de ${b}. ", "e.r.e3": "¡Eficiencia de ingeniero! Tres estrellas.", "e.r.e2": "Muy bien. Para tres estrellas gasta menos: quita piezas que no trabajan (las más apagadas) o usa madera donde se pueda.", "e.r.e1": "Funciona. Intenta gastar menos quitando piezas que casi no trabajan.", "e.conf": "¿Empezar de nuevo este nivel?", "e.viento": "viento {f} t", "e.img.tit": "Ingeniero de estructuras · Nivel {n}: {nombre}", "e.img.sin": "Sin nombre", "e.img.costo": "Costo ${c} de ${b}"},{"titulo": "Structural Engineer · Labs", "descripcion": "Build bridges and towers with beams, columns and braces, and test them with a real load. Grade 5.", "e.volver": "← Back to labs", "e.eyebrow": "// grade 5 · structural design", "e.h1": "Structural <em>Engineer</em>", "e.sub": "Build bridges and towers with <b>beams</b>, <b>columns</b> and <b>braces</b>. Test them with a real load and find out why engineers love triangles.", "e.canvas": "Building area: click a point and drag to another to create a piece", "e.nivel": "Level", "e.reto": "Challenge", "e.presupuesto": "Budget", "e.gastado": "Spent", "e.disponible": "Available", "e.material": "Material", "e.herramientas": "Tools", "e.construir": "Build", "e.borrar": "Erase piece", "e.probar": "▶ Test", "e.deshacer": "Undo", "e.limpiar": "Start over", "e.ejemplo": "See an example", "e.confEj": "This replaces what you built with an example that works. Continue?", "e.ejCargado": "Example loaded: test it, then try to spend less.", "e.ayuda": "Click a point and drag to another. You can also tap one point, then the other. <kbd>Esc</kbd> cancels.", "e.resultado": "Result", "e.siguiente": "Next level →", "e.mejorar": "Keep improving", "e.piezas": "My pieces", "e.leyEstira": "stretches", "e.leyComprime": "compresses", "e.leyRompe": "breaks", "e.aprende": "Learn", "e.dtViga": "Beam", "e.ddViga": "Horizontal piece. It supports what passes over it.", "e.dtColumna": "Column", "e.ddColumna": "Vertical piece. It carries the weight downward.", "e.dtTrav": "Brace", "e.ddTrav": "Slanted piece that ties the others together. Without it, everything moves.", "e.dtTri": "Why triangles?", "e.ddTri": "It is the only shape that does not deform when pushed. A square collapses; a triangle does not.", "e.entrega": "Hand-in", "e.tuNombre": "Your name", "e.phNombre": "Write your name", "e.guardarImg": "Save an image of my design", "e.notaImg": "The image includes your name and your stars. Upload it to Classroom.", "e.pie": "Made for the classroom · Gi School", "e.nivelN": "Level {n} · {nombre}", "e.tabNivel": "Level {n}", "e.n1.nombre": "Small bridge", "e.n1.reto": "Join the two river banks so the <b>3-ton</b> truck can cross. Start by testing a straight beam… and see what happens.", "e.n2.nombre": "Tower against the wind", "e.n2.reto": "Hold the <b>1.5-ton</b> antenna at the top, even when the wind blows. Careful: very long pieces bend.", "e.n3.nombre": "Long bridge", "e.n3.reto": "Two <b>1.2-ton</b> trucks cross at the same time. Think small triangles: they cost less than long pieces.", "e.mat.madera": "Wood", "e.mat.acero": "Steel", "e.matInfo": "${p} per meter · holds {t} t when stretched", "e.cViga": "beams", "e.cColumna": "columns", "e.cTrav": "braces", "e.err.mismo": "Pick another point.", "e.err.bloq": "That point is inside the ground or the river.", "e.err.max": "Each piece can be {m} m long at most. Use more nodes.", "e.err.dup": "That piece already exists.", "e.err.nodo": "The piece goes through a node. Join it as two pieces.", "e.err.cruce": "Pieces cannot cross without a node.", "e.err.sobre": "That point lies on another piece.", "e.err.presu": "You are over budget. Use fewer pieces or a cheaper material.", "e.err.vacio": "Build something first.", "e.r.sinCon": "<b>The load is not connected.</b> Join the load point to your structure with at least one piece.", "e.r.mec": "<b>It collapsed!</b> Your structure moves like a mechanism: it needs <b>triangles</b>. They are the only shape that does not deform. Add diagonal braces.", "e.r.rompio": "<b>It broke!</b> ", "e.r.pandeo": "{n} piece(s) <b>buckled</b>: long pieces under compression bend. Shorten them with more nodes or use steel. ", "e.r.rotura": "{n} piece(s) <b>snapped when stretched</b>: reinforce with another piece or change the material. ", "e.r.rojas": "The red pieces are the ones that failed.", "e.r.ok": "<b>It held!</b> Your design carries the load and cost <b>${c}</b> of ${b}. ", "e.r.e3": "Engineer-level efficiency! Three stars.", "e.r.e2": "Very good. For three stars, spend less: remove pieces that do little work (the dimmest ones) or use wood where you can.", "e.r.e1": "It works. Try to spend less by removing pieces that hardly work.", "e.conf": "Start this level over?", "e.viento": "wind {f} t", "e.img.tit": "Structural Engineer · Level {n}: {nombre}", "e.img.sin": "No name", "e.img.costo": "Cost ${c} of ${b}"});
 (function(){
 'use strict';
 var M=window.Motor;
 var T=I18N.t;
 var COLS=14,FILAS=9;
 var NIVELES=[
-  {id:1,tipo:'puente',presupuesto:260,
+  {id:1,tipo:'puente',presupuesto:420,ref:161,ejemplo:[[2,6,5,6],[5,6,8,6],[2,6,3,4],[3,4,5,4],[5,4,7,4],[7,4,8,6],[3,4,5,6],[5,6,7,4]],
    apoyos:[{x:2,y:6,t:'fijo'},{x:8,y:6,t:'rodillo'}],
    cargas:[{x:5,y:6,fy:3,fx:0,etq:'3 t'}]},
-  {id:2,tipo:'torre',presupuesto:300,
+  {id:2,tipo:'torre',presupuesto:450,ref:165,ejemplo:[[6,7,6,5],[8,7,8,5],[6,7,8,5],[6,5,8,5],[6,5,7,3],[8,5,7,3],[6,5,7,2],[8,5,7,2],[7,3,7,2]],
    apoyos:[{x:6,y:7,t:'fijo'},{x:8,y:7,t:'fijo'}],
    cargas:[{x:7,y:2,fy:1.5,fx:0.8,etq:'1.5 t'}]},
-  {id:3,tipo:'puente',presupuesto:420,
+  {id:3,tipo:'puente',presupuesto:650,ref:254,ejemplo:[[1,6,4,6],[4,6,8,6],[8,6,11,6],[1,6,3,4],[3,4,4,6],[3,4,6,4],[4,6,6,4],[6,4,8,6],[6,4,9,4],[8,6,9,4],[9,4,11,6]],
    apoyos:[{x:1,y:6,t:'fijo'},{x:11,y:6,t:'rodillo'}],
    cargas:[{x:4,y:6,fy:1.2,fx:0,etq:'1.2 t'},{x:8,y:6,fy:1.2,fx:0,etq:'1.2 t'}]}
 ];
@@ -249,8 +250,8 @@ function borrarEn(px,py){
   if(mejor>=0){snapshot();S.piezas.splice(mejor,1);limpiarPrueba();actualizarUI()}
 }
 function nivelEstrellas(costo){
-  var B=nv().presupuesto;
-  return costo<=B*0.63?3:(costo<=B*0.82?2:1);
+  var R=nv().ref;
+  return costo<=R*1.12?3:(costo<=R*1.55?2:1);
 }
 function construirModelo(){
   var nodos=[],idx={};
@@ -334,6 +335,12 @@ function armarUI(){
   $('bProbar').onclick=probar;
   $('bDeshacer').onclick=function(){if(S.undo.length){S.piezas=JSON.parse(S.undo.pop());limpiarPrueba();actualizarUI()}};
   $('bLimpiar').onclick=function(){if(S.piezas.length&&confirm(T('e.conf'))){snapshot();S.piezas=[];limpiarPrueba();actualizarUI()}};
+  $('bEjemplo').onclick=function(){
+    if(S.piezas.length&&!confirm(T('e.confEj')))return;
+    snapshot();S.piezas=[];S.mat='madera';
+    nv().ejemplo.forEach(function(q){S.piezas.push({x1:q[0],y1:q[1],x2:q[2],y2:q[3],mat:'madera'})});
+    limpiarPrueba();actualizarUI();toast(T('e.ejCargado'));
+  };
   $('bReint').onclick=function(){limpiarPrueba();actualizarUI()};
   $('bSig').onclick=function(){cambiarNivel(S.nivel+1)};
   $('bImg').onclick=guardarImagen;
@@ -370,210 +377,165 @@ cv.addEventListener('pointerup',function(e){
 cv.addEventListener('pointerleave',function(){S.cur=null});
 window.addEventListener('keydown',function(e){if(e.key==='Escape'){S.inicio=null}});
 
-/* ---------- dibujo (aspecto realista) ---------- */
-var COL={tension:'#4fd1c5',compresion:'#c9a8ff',falla:'#ff6b7d'};
+/* ---------- dibujo (estilo limpio y actual, de día) ---------- */
+var COL={tension:'#19b3a2',compresion:'#8a6bff',falla:'#ff4d5e'};
+var PAL={cielo1:'#9bd8ff',cielo2:'#eef9ff',sol:'#fff1b8',loma1:'#c4e6d6',loma2:'#a6d9c0',loma3:'#86c9a6',pasto:'#5cbd6e',pastoO:'#46a55a',tierra:'#c79a6b',tierraO:'#b5865a',tierraC:'#d8b184',roca:'#98a4b3',agua1:'#6cc3ee',agua2:'#3f9fd6',asfalto:'#4b5262',concreto:'#cfd6e0',concretoO:'#aab4c3'};
 function rnd(n){var x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x)}
+function rr(x,y,w,h,r){ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x,y,w,h,r);else ctx.rect(x,y,w,h)}
 var fondo=null,fondoKey='';
 
-/* fondo: cielo, montañas, nubes, terreno y rocas (se dibuja una sola vez y se guarda) */
+/* fondo: cielo, sol, lomas y terreno (se dibuja una vez y se guarda) */
 function construirFondo(){
   var W=cv.width,H=cv.height,c=cs(),n=nv(),o=document.createElement('canvas');o.width=W;o.height=H;
-  var x=o.getContext('2d'),i,j;
-  var g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#10304f');g.addColorStop(.5,'#0d2238');g.addColorStop(1,'#08121f');
-  x.fillStyle=g;x.fillRect(0,0,W,H);
-  // luna y estrellas
-  for(i=0;i<70;i++){x.fillStyle='rgba(200,230,255,'+(0.12+rnd(i)*0.4)+')';x.fillRect(rnd(i*3)*W,rnd(i*5)*H*0.5,1+rnd(i*7)*1.6,1+rnd(i*7)*1.6)}
-  var lg=x.createRadialGradient(W*.82,H*.16,0,W*.82,H*.16,c*1.3);lg.addColorStop(0,'rgba(220,240,255,.9)');lg.addColorStop(.12,'rgba(200,225,255,.55)');lg.addColorStop(1,'rgba(200,225,255,0)');
-  x.fillStyle=lg;x.beginPath();x.arc(W*.82,H*.16,c*1.3,0,6.283);x.fill();
-  x.fillStyle='#e9f3ff';x.beginPath();x.arc(W*.82,H*.16,c*.32,0,6.283);x.fill();
-  // nubes suaves
-  for(i=0;i<6;i++){var cx=rnd(i*11)*W,cy=H*(.12+rnd(i*13)*.3),rg=x.createRadialGradient(cx,cy,0,cx,cy,c*(1.6+rnd(i)*1.4));rg.addColorStop(0,'rgba(120,170,220,.16)');rg.addColorStop(1,'rgba(120,170,220,0)');x.fillStyle=rg;x.beginPath();x.ellipse(cx,cy,c*(2.4+rnd(i)*1.6),c*.7,0,0,6.283);x.fill()}
-  // montañas lejanas (3 capas)
-  [['#12304c',.62,.20,1],['#0f2840',.70,.16,2.3],['#0c1f33',.78,.12,3.7]].forEach(function(l){
+  var x=o.getContext('2d'),i;
+  var g=x.createLinearGradient(0,0,0,H*.75);g.addColorStop(0,PAL.cielo1);g.addColorStop(1,PAL.cielo2);x.fillStyle=g;x.fillRect(0,0,W,H);
+  var sg=x.createRadialGradient(W*.84,H*.17,c*.2,W*.84,H*.17,c*1.6);sg.addColorStop(0,'rgba(255,241,184,.9)');sg.addColorStop(1,'rgba(255,241,184,0)');x.fillStyle=sg;x.beginPath();x.arc(W*.84,H*.17,c*1.6,0,6.283);x.fill();
+  x.fillStyle=PAL.sol;x.beginPath();x.arc(W*.84,H*.17,c*.42,0,6.283);x.fill();
+  [[PAL.loma1,.60,.13,1.0],[PAL.loma2,.67,.11,2.1],[PAL.loma3,.74,.09,3.3]].forEach(function(l){
     x.fillStyle=l[0];x.beginPath();x.moveTo(0,H);
-    for(var px=0;px<=W;px+=6){var yy=H*l[1]-(Math.sin(px/W*6.3*l[3]+l[3])*0.5+Math.sin(px/W*17*l[3]+2)*0.25+Math.sin(px/W*41+l[3])*0.08+0.6)*H*l[2]*.8;x.lineTo(px,yy)}
+    for(var px=0;px<=W;px+=8){var yy=H*l[1]-(Math.sin(px/W*5.2*l[3]+l[3])*.5+Math.sin(px/W*11*l[3]+1.7)*.22+.6)*H*l[2];x.lineTo(px,yy)}
     x.lineTo(W,H);x.closePath();x.fill();
   });
-  var bruma=x.createLinearGradient(0,H*.5,0,H*.85);bruma.addColorStop(0,'rgba(60,110,150,0)');bruma.addColorStop(1,'rgba(60,110,150,.22)');x.fillStyle=bruma;x.fillRect(0,H*.5,W,H*.4);
-
-  function roca(x0,x1,yTop){
-    // cara de roca con estratos, grietas y pasto
-    var alto=H-yTop,gr=x.createLinearGradient(0,yTop,0,H);gr.addColorStop(0,'#4a5a5e');gr.addColorStop(.35,'#36444c');gr.addColorStop(1,'#1b242d');
-    x.fillStyle=gr;x.beginPath();x.moveTo(x0,H);x.lineTo(x0,yTop);
-    for(var px=x0;px<=x1;px+=c*.25)x.lineTo(px,yTop+(rnd(px*.07)-.5)*c*.10);
-    x.lineTo(x1,yTop);x.lineTo(x1,H);x.closePath();x.fill();
-    x.save();x.beginPath();x.rect(x0,yTop,x1-x0,alto);x.clip();
-    for(var k=0;k<9;k++){var yy=yTop+c*(.45+k*.55)+rnd(k+x0)*c*.2;x.strokeStyle='rgba('+(k%2?'255,255,255':'0,0,0')+','+(0.07+rnd(k)*0.08)+')';x.lineWidth=c*(.04+rnd(k*3)*.07);
-      x.beginPath();x.moveTo(x0,yy);for(var qx=x0;qx<=x1;qx+=c*.5)x.lineTo(qx,yy+Math.sin(qx*.02+k)*c*.08+(rnd(qx+k)-.5)*c*.06);x.stroke()}
-    for(k=0;k<14;k++){var gx=x0+rnd(k*5+x0)*(x1-x0),gy=yTop+rnd(k*9)*alto*.8;x.strokeStyle='rgba(0,0,0,.35)';x.lineWidth=1.4;x.beginPath();x.moveTo(gx,gy);x.lineTo(gx+(rnd(k)-.5)*c*.5,gy+c*(.3+rnd(k*2)*.5));x.lineTo(gx+(rnd(k+4)-.5)*c*.6,gy+c*(.8+rnd(k*3)*.6));x.stroke()}
-    for(k=0;k<26;k++){x.fillStyle='rgba(255,255,255,'+(0.03+rnd(k*7)*.05)+')';x.beginPath();x.ellipse(x0+rnd(k*3)*(x1-x0),yTop+c*.3+rnd(k*5)*alto*.75,c*(.15+rnd(k)*.3),c*(.08+rnd(k*2)*.12),0,0,6.283);x.fill()}
-    x.restore();
-    // tierra y pasto
-    var tg=x.createLinearGradient(0,yTop-c*.05,0,yTop+c*.35);tg.addColorStop(0,'#3d7a52');tg.addColorStop(.45,'#2d5c40');tg.addColorStop(1,'rgba(45,92,64,0)');
-    x.fillStyle=tg;x.fillRect(x0,yTop-c*.05,x1-x0,c*.4);
-    x.strokeStyle='#5fb07a';x.lineWidth=1.4;
-    for(var bx=x0;bx<x1;bx+=c*.08){var h=c*(.05+rnd(bx*.3)*.12);x.beginPath();x.moveTo(bx,yTop);x.lineTo(bx+(rnd(bx)-.5)*c*.07,yTop-h);x.stroke()}
+  function suelo(x0,x1,yTop){
+    x.fillStyle=PAL.tierra;x.fillRect(x0,yTop,x1-x0,H-yTop);
+    x.fillStyle=PAL.tierraC;
+    for(var k=0;k<5;k++){var yy=yTop+c*(.55+k*.62);x.fillRect(x0,yy,x1-x0,c*.16)}
+    x.fillStyle=PAL.tierraO;for(k=0;k<5;k++){var y2=yTop+c*(.71+k*.62);x.fillRect(x0,y2,x1-x0,c*.05)}
+    x.fillStyle=PAL.roca;
+    for(k=0;k<9;k++){var rx=x0+rnd(k*7+x0)*(x1-x0),ry=yTop+c*(.5+rnd(k*3)*3.2),rw=c*(.22+rnd(k)*.3);x.beginPath();x.ellipse(rx,ry,rw,rw*.62,0,0,6.283);x.fill()}
+    x.fillStyle=PAL.pastoO;x.fillRect(x0,yTop,x1-x0,c*.3);
+    x.fillStyle=PAL.pasto;x.fillRect(x0,yTop,x1-x0,c*.2);
   }
   function carretera(x0,x1,yTop){
-    var h=c*.16,gr=x.createLinearGradient(0,yTop-h,0,yTop);gr.addColorStop(0,'#3a424f');gr.addColorStop(1,'#232a35');
-    x.fillStyle=gr;x.fillRect(x0,yTop-h,x1-x0,h);
-    x.fillStyle='rgba(255,255,255,.25)';x.fillRect(x0,yTop-h,x1-x0,2);
-    x.fillStyle='#ffd36b';for(var px=x0+c*.2;px<x1-c*.3;px+=c*.7)x.fillRect(px,yTop-h*.55,c*.38,Math.max(2,h*.12));
+    var h=c*.2;x.fillStyle=PAL.asfalto;x.fillRect(x0,yTop-h,x1-x0,h);
+    x.fillStyle='rgba(255,255,255,.9)';for(var px=x0+c*.25;px<x1-c*.4;px+=c*.75)x.fillRect(px,yTop-h*.55,c*.4,Math.max(2,h*.13));
+    x.fillStyle='rgba(255,255,255,.35)';x.fillRect(x0,yTop-h,x1-x0,2);
   }
   if(n.tipo==='puente'){
     var izq=Math.min(n.apoyos[0].x,n.apoyos[1].x)*c,der=Math.max(n.apoyos[0].x,n.apoyos[1].x)*c,yb=n.apoyos[0].y*c;
-    roca(-4,izq,yb);roca(der,W+4,yb);
-    carretera(0,izq,yb);carretera(der,W,yb);
-    // barandas
-    x.strokeStyle='rgba(190,210,235,.55)';x.lineWidth=2;
-    [[0,izq],[der,W]].forEach(function(r){x.beginPath();x.moveTo(r[0],yb-c*.42);x.lineTo(r[1],yb-c*.42);x.stroke();for(var px=r[0]+c*.2;px<r[1];px+=c*.6){x.beginPath();x.moveTo(px,yb-c*.42);x.lineTo(px,yb-c*.16);x.stroke()}});
+    suelo(-4,izq,yb);suelo(der,W+4,yb);carretera(0,izq,yb);carretera(der,W,yb);
+    x.strokeStyle='rgba(255,255,255,.95)';x.lineWidth=3;
+    [[0,izq],[der,W]].forEach(function(r){x.beginPath();x.moveTo(r[0],yb-c*.5);x.lineTo(r[1],yb-c*.5);x.stroke();x.lineWidth=2;for(var px=r[0]+c*.25;px<r[1];px+=c*.7){x.beginPath();x.moveTo(px,yb-c*.5);x.lineTo(px,yb-c*.2);x.stroke()}x.lineWidth=3});
   }else{
-    roca(-4,W+4,7*c);
-    // piedras y arbustos
-    for(i=0;i<14;i++){var sx=rnd(i*4)*W,sy=7*c+c*.02;if(Math.abs(sx-7*c)<c*1.6)continue;x.fillStyle='rgba(30,70,50,.9)';x.beginPath();x.ellipse(sx,sy,c*(.18+rnd(i)*.2),c*(.12+rnd(i*2)*.08),0,Math.PI,0);x.fill()}
+    suelo(-4,W+4,7*c);
+    for(i=0;i<9;i++){var sx=rnd(i*4+1)*W;if(Math.abs(sx-7*c)<c*1.7)continue;x.fillStyle=PAL.pastoO;x.beginPath();x.ellipse(sx,7*c+2,c*(.2+rnd(i)*.15),c*(.18+rnd(i*2)*.1),0,Math.PI,0);x.fill()}
   }
   return o;
 }
+function nubes(c,t){
+  var W=cv.width;ctx.fillStyle='rgba(255,255,255,.92)';
+  [[.12,.10,1.0,9],[.45,.17,.8,13],[.7,.08,1.1,7],[.28,.25,.7,11]].forEach(function(n,i){
+    var x=((n[0]*W+t*c*n[3]*.04)%(W+c*5))-c*2.5,y=cv.height*n[1],s=c*n[2];
+    ctx.beginPath();ctx.ellipse(x,y,s*1.1,s*.42,0,0,6.283);ctx.ellipse(x-s*.7,y+s*.1,s*.7,s*.32,0,0,6.283);ctx.ellipse(x+s*.75,y+s*.12,s*.8,s*.34,0,0,6.283);ctx.ellipse(x+s*.1,y-s*.28,s*.65,s*.4,0,0,6.283);ctx.fill();
+  });
+}
 function dibujarAgua(n,c,t){
   var W=cv.width,H=cv.height;
-  var izq=Math.min(n.apoyos[0].x,n.apoyos[1].x)*c,der=Math.max(n.apoyos[0].x,n.apoyos[1].x)*c,yb=n.apoyos[0].y;
-  var ya=(yb+2)*c;
+  var izq=Math.min(n.apoyos[0].x,n.apoyos[1].x)*c,der=Math.max(n.apoyos[0].x,n.apoyos[1].x)*c,yb=n.apoyos[0].y,ya=(yb+2)*c;
   ctx.save();ctx.beginPath();ctx.rect(izq,ya-c*.1,der-izq,H-ya+c*.1);ctx.clip();
-  var ga=ctx.createLinearGradient(0,ya,0,H);ga.addColorStop(0,'#2f7fd1');ga.addColorStop(.35,'#1d5aa6');ga.addColorStop(1,'#0c2a57');
-  ctx.fillStyle=ga;ctx.fillRect(izq,ya-c*.1,der-izq,H-ya+c*.1);
-  // reflejos de la luna y destellos
-  for(var k=0;k<4;k++){
-    ctx.strokeStyle='rgba(170,235,255,'+(0.55-k*0.1)+')';ctx.lineWidth=2.2;ctx.beginPath();
-    for(var x=izq;x<=der;x+=5){var yy=ya+c*(.12+k*.2)+Math.sin(x/(26+k*8)+t*(1.4+k*.3)+k)*c*.045;if(x===izq)ctx.moveTo(x,yy);else ctx.lineTo(x,yy)}
-    ctx.stroke();
-  }
-  for(k=0;k<30;k++){var sx=izq+((k*73+t*14*(1+k%3*.3))%(der-izq)),sy=ya+c*.1+(k*37%100)/100*(H-ya-c*.2);ctx.fillStyle='rgba(220,245,255,'+(0.08+0.1*Math.sin(t*3+k))+')';ctx.fillRect(sx,sy,c*.18,2)}
-  // espuma al pie de las rocas
-  ctx.fillStyle='rgba(235,250,255,.5)';
-  for(k=0;k<14;k++){ctx.beginPath();ctx.ellipse(izq+3+Math.sin(t*2+k)*2,ya+c*.05+k*c*.1,c*.12,c*.05,0,0,6.283);ctx.fill();ctx.beginPath();ctx.ellipse(der-3+Math.sin(t*2+k)*2,ya+c*.05+k*c*.1,c*.12,c*.05,0,0,6.283);ctx.fill()}
+  var ga=ctx.createLinearGradient(0,ya,0,H);ga.addColorStop(0,PAL.agua1);ga.addColorStop(1,PAL.agua2);ctx.fillStyle=ga;ctx.fillRect(izq,ya-c*.1,der-izq,H-ya+c*.1);
+  ctx.strokeStyle='rgba(255,255,255,.75)';ctx.lineWidth=2.4;ctx.lineCap='round';
+  for(var k=0;k<3;k++){ctx.beginPath();for(var x=izq;x<=der;x+=6){var yy=ya+c*(.14+k*.22)+Math.sin(x/(30+k*10)+t*(1.2+k*.25)+k)*c*.04;if(x===izq)ctx.moveTo(x,yy);else ctx.lineTo(x,yy)}ctx.stroke()}
   ctx.restore();
 }
 
-/* viga realista: madera con vetas y nudos, acero con brillo y remaches */
-function jirones(x,w,L,lado){ // puntos del borde quebrado
-  var p=[],n=7,i;for(i=0;i<=n;i++){p.push([L+(rnd(x+i*3)-.5)*w*.55*lado,-w/2+(w*i/n)])}return p;
-}
+/* piezas: tablones de madera y perfiles de acero, planos y con volumen suave */
 function cuerpoViga(L,w,mat,idx,roto,lado){
-  var g=ctx.createLinearGradient(0,-w/2,0,w/2);
-  if(mat==='madera'){g.addColorStop(0,'#a86a30');g.addColorStop(.2,'#e6b27c');g.addColorStop(.5,'#d89a5c');g.addColorStop(.8,'#b9783a');g.addColorStop(1,'#7c4a1f')}
-  else{g.addColorStop(0,'#5a7099');g.addColorStop(.18,'#e8f0ff');g.addColorStop(.45,'#aebfe3');g.addColorStop(.8,'#7e93bd');g.addColorStop(1,'#46587a')}
-  ctx.fillStyle=g;ctx.beginPath();
-  if(roto){var pts=jirones(idx*10,w,L,lado);ctx.moveTo(0,-w/2);ctx.lineTo(pts[0][0],pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.lineTo(0,w/2)}
-  else{ctx.rect(0,-w/2,L,w)}
-  ctx.closePath();ctx.fill();
+  var base,luz,som,borde;
+  if(mat==='madera'){base='#e0a561';luz='#f1c48c';som='#c4854a';borde='#a86d38'}else{base='#b6c3d6';luz='#e6edf7';som='#8798b2';borde='#6f819c'}
+  ctx.beginPath();
+  if(roto){var m=7,pts=[],i;for(i=0;i<=m;i++)pts.push([L+(rnd(idx*10+i*3)-.5)*w*.6*lado,-w/2+w*i/m]);ctx.moveTo(0,-w/2);for(i=0;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.lineTo(0,w/2);ctx.closePath()}
+  else{if(ctx.roundRect)ctx.roundRect(0,-w/2,L,w,w*.22);else ctx.rect(0,-w/2,L,w)}
+  ctx.fillStyle=base;ctx.fill();
+  ctx.save();ctx.clip();
+  ctx.fillStyle=luz;ctx.fillRect(0,-w/2,L+w,w*.3);
+  ctx.fillStyle=som;ctx.fillRect(0,w*.2,L+w,w*.3);
   if(mat==='madera'){
-    ctx.save();ctx.clip();
-    for(var k=0;k<7;k++){var y=-w/2+(k+.5)*w/7+(rnd(idx*7+k)-.5)*w*.1;ctx.strokeStyle='rgba(70,35,8,'+(0.18+rnd(idx+k)*0.25)+')';ctx.lineWidth=.9+rnd(k)*.8;ctx.beginPath();ctx.moveTo(0,y);ctx.bezierCurveTo(L*.3,y+(rnd(idx+k*3)-.5)*w*.25,L*.6,y+(rnd(idx+k*5)-.5)*w*.25,L,y);ctx.stroke()}
-    if(rnd(idx*3)>.45){var kx=L*(.25+rnd(idx)*.5),ky=(rnd(idx*9)-.5)*w*.3;ctx.strokeStyle='rgba(60,28,6,.55)';ctx.lineWidth=1.6;for(var r=1;r<=3;r++){ctx.beginPath();ctx.ellipse(kx,ky,w*.07*r,w*.045*r,0,0,6.283);ctx.stroke()}}
-    ctx.restore();
+    ctx.strokeStyle='rgba(120,70,25,.28)';ctx.lineWidth=1.2;
+    for(var k=0;k<3;k++){var y=-w*.18+k*w*.2;ctx.beginPath();ctx.moveTo(w*.15,y);ctx.lineTo(L-w*.15,y+(rnd(idx+k)-.5)*w*.08);ctx.stroke()}
+    ctx.fillStyle='rgba(120,70,25,.35)';ctx.beginPath();ctx.ellipse(L*(.3+rnd(idx)*.4),(rnd(idx*5)-.5)*w*.3,w*.1,w*.06,0,0,6.283);ctx.fill();
   }else{
-    ctx.save();ctx.clip();
-    ctx.fillStyle='rgba(255,255,255,.55)';ctx.fillRect(0,-w*.3,L,w*.07);
-    ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(0,-w*.5,L,w*.09);ctx.fillRect(0,w*.41,L,w*.09);
-    ctx.restore();
+    ctx.fillStyle='rgba(255,255,255,.55)';ctx.fillRect(0,-w*.28,L,w*.07);
   }
+  ctx.restore();
+  ctx.strokeStyle=borde;ctx.lineWidth=1.3;ctx.stroke();
 }
 function viga(ax,ay,bx,by,mat,idx,tinte,razon,frac,c,roto,lado,giro){
-  var L=Math.hypot(bx-ax,by-ay)*frac,ang=Math.atan2(by-ay,bx-ax),w=mat==='madera'?c*.2:c*.15;
+  var L=Math.hypot(bx-ax,by-ay)*frac,ang=Math.atan2(by-ay,bx-ax),w=mat==='madera'?c*.19:c*.14;
   if(L<1)return;
   ctx.save();ctx.translate(ax,ay);ctx.rotate(ang+(giro||0));
-  ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=c*.14;ctx.shadowOffsetY=c*.06;
+  ctx.shadowColor='rgba(25,50,80,.28)';ctx.shadowBlur=c*.12;ctx.shadowOffsetY=c*.07;
   cuerpoViga(L,w,mat,idx,roto,lado);
   ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.shadowOffsetY=0;
-  if(mat==='acero'){ctx.fillStyle='#d3def5';ctx.strokeStyle='#33425e';ctx.lineWidth=1.2;[w*.75,L-w*.75].forEach(function(rx){if(rx>0&&rx<L){ctx.beginPath();ctx.arc(rx,0,w*.13,0,6.283);ctx.fill();ctx.stroke()}})}
-  else{ctx.fillStyle='rgba(255,226,180,.45)';ctx.fillRect(0,-w/2,w*.12,w)}
+  if(mat==='acero'){ctx.fillStyle='#f5f8fd';ctx.strokeStyle='#6f819c';ctx.lineWidth=1;[w*.8,L-w*.8].forEach(function(rx){if(rx>0&&rx<L){ctx.beginPath();ctx.arc(rx,0,w*.1,0,6.283);ctx.fill();ctx.stroke()}})}
   if(tinte){
-    ctx.globalAlpha=0.28+0.42*Math.min(1,razon);ctx.fillStyle=tinte;
-    ctx.beginPath();ctx.rect(0,-w/2,L,w);ctx.fill();ctx.globalAlpha=1;
-    ctx.strokeStyle=tinte;ctx.lineWidth=2.2;ctx.shadowColor=tinte;ctx.shadowBlur=c*.22;ctx.strokeRect(0,-w/2,L,w);ctx.shadowBlur=0;
+    ctx.globalAlpha=0.5+0.4*Math.min(1,razon);ctx.fillStyle=tinte;
+    ctx.beginPath();if(ctx.roundRect)ctx.roundRect(0,-w/2,L,w,w*.22);else ctx.rect(0,-w/2,L,w);ctx.fill();ctx.globalAlpha=1;
+    ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=1.6;ctx.stroke();
   }
   ctx.restore();
 }
 function nodoReal(x,y,c,especial,tipo){
-  var r=c*(especial?0.21:0.165);
-  var g=ctx.createRadialGradient(x-r*.35,y-r*.35,r*.1,x,y,r);g.addColorStop(0,'#f1f6ff');g.addColorStop(.55,'#9fb1cf');g.addColorStop(1,'#4a5a78');
-  ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=c*.1;ctx.shadowOffsetY=c*.04;
-  ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,6.283);ctx.fill();
+  var r=c*(especial?0.19:0.15);
+  ctx.shadowColor='rgba(25,50,80,.3)';ctx.shadowBlur=c*.08;ctx.shadowOffsetY=c*.04;
+  ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(x,y,r,0,6.283);ctx.fill();
   ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.shadowOffsetY=0;
-  ctx.strokeStyle='#26324a';ctx.lineWidth=1.6;ctx.stroke();
-  ctx.fillStyle='#2d3a55';ctx.beginPath();ctx.arc(x,y,r*.28,0,6.283);ctx.fill();
-  ctx.fillStyle='rgba(255,255,255,.55)';ctx.beginPath();ctx.arc(x-r*.12,y-r*.12,r*.1,0,6.283);ctx.fill();
-  if(tipo==='carga'){ctx.strokeStyle='#ffd36b';ctx.lineWidth=2.4;ctx.beginPath();ctx.arc(x,y,r+3,0,6.283);ctx.stroke()}
+  ctx.strokeStyle=tipo==='carga'?'#f2a900':'#33465f';ctx.lineWidth=c*.045;ctx.stroke();
+  ctx.fillStyle=tipo==='carga'?'#f2a900':'#33465f';ctx.beginPath();ctx.arc(x,y,r*.32,0,6.283);ctx.fill();
 }
 function dibujarApoyo(a,c){
-  var x=a.x*c,y=a.y*c,s=c*.46,h=c*.9;
-  // pedestal de concreto
-  var g=ctx.createLinearGradient(x-s*1.3,0,x+s*1.3,0);g.addColorStop(0,'#7b8793');g.addColorStop(.5,'#b7c1cc');g.addColorStop(1,'#6a7682');
-  ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=c*.12;ctx.fillStyle=g;ctx.fillRect(x-s*1.3,y+s*.95,s*2.6,h*.6);ctx.shadowBlur=0;ctx.shadowColor='transparent';
-  ctx.strokeStyle='rgba(30,40,52,.5)';ctx.lineWidth=1;ctx.strokeRect(x-s*1.3,y+s*.95,s*2.6,h*.6);
-  ctx.fillStyle='rgba(0,0,0,.12)';for(var k=0;k<6;k++){ctx.fillRect(x-s*1.25+rnd(k+a.x)*s*2.4,y+s*1.05+rnd(k*3)*h*.45,3,3)}
-  // placa y cuña de acero
-  var tg=ctx.createLinearGradient(0,y,0,y+s*1.1);tg.addColorStop(0,'#dbe5fb');tg.addColorStop(1,'#6f86b3');
-  ctx.fillStyle=tg;ctx.strokeStyle='#26324a';ctx.lineWidth=1.8;
-  ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-s,y+s*1.05);ctx.lineTo(x+s,y+s*1.05);ctx.closePath();ctx.fill();ctx.stroke();
-  if(a.t==='rodillo'){
-    for(var i=-1;i<=1;i++){var rx=x+i*s*.55,ry=y+s*1.18,rg=ctx.createRadialGradient(rx-2,ry-2,1,rx,ry,s*.22);rg.addColorStop(0,'#f2f7ff');rg.addColorStop(1,'#5a6d92');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(rx,ry,s*.22,0,6.283);ctx.fill();ctx.stroke()}
-  }else{
-    ctx.fillStyle='#8da0c4';ctx.fillRect(x-s*1.15,y+s*1.05,s*2.3,s*.2);ctx.strokeRect(x-s*1.15,y+s*1.05,s*2.3,s*.2);
-    ctx.fillStyle='#e3ebfb';[-.8,.8].forEach(function(o){ctx.beginPath();ctx.arc(x+o*s,y+s*1.15,s*.07,0,6.283);ctx.fill()});
-  }
+  var x=a.x*c,y=a.y*c,s=c*.44;
+  ctx.shadowColor='rgba(25,50,80,.25)';ctx.shadowBlur=c*.1;ctx.shadowOffsetY=c*.05;
+  ctx.fillStyle=PAL.concreto;rr(x-s*1.3,y+s*.95,s*2.6,c*.55,5);ctx.fill();
+  ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+  ctx.fillStyle=PAL.concretoO;ctx.fillRect(x-s*1.3,y+s*.95+c*.4,s*2.6,c*.15);
+  ctx.fillStyle='#6f84a3';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-s,y+s*1.05);ctx.lineTo(x+s,y+s*1.05);ctx.closePath();ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.28)';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-s,y+s*1.05);ctx.lineTo(x-s*.35,y+s*1.05);ctx.closePath();ctx.fill();
+  if(a.t==='rodillo'){ctx.fillStyle='#4e6280';for(var i=-1;i<=1;i++){ctx.beginPath();ctx.arc(x+i*s*.55,y+s*1.2,s*.2,0,6.283);ctx.fill()}}
+  else{ctx.fillStyle='#4e6280';ctx.fillRect(x-s*1.1,y+s*1.05,s*2.2,s*.16)}
 }
-function dibujarCamion(x,y,c,etq,estrella){
-  var w=c*1.5,h=c*.62,x0=x-w/2,yb=y-c*.2;     // yb = línea de la carretera
-  ctx.save();ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=c*.1;ctx.shadowOffsetY=c*.05;
-  // caja de carga
-  var gc=ctx.createLinearGradient(0,yb-h,0,yb-c*.12);gc.addColorStop(0,'#ffd9a0');gc.addColorStop(.5,'#ffc27a');gc.addColorStop(1,'#c98a45');
-  ctx.fillStyle=gc;ctx.strokeStyle='#4a2f12';ctx.lineWidth=1.6;
-  ctx.beginPath();ctx.roundRect?ctx.roundRect(x0,yb-h,w*.68,h-c*.12,4):ctx.rect(x0,yb-h,w*.68,h-c*.12);ctx.fill();ctx.stroke();
-  // cabina
-  var gk=ctx.createLinearGradient(0,yb-h*.85,0,yb-c*.1);gk.addColorStop(0,'#7fd0f5');gk.addColorStop(1,'#2c6fa8');
-  ctx.fillStyle=gk;ctx.beginPath();ctx.moveTo(x0+w*.7,yb-h*.78);ctx.lineTo(x0+w*.88,yb-h*.78);ctx.lineTo(x0+w,yb-h*.4);ctx.lineTo(x0+w,yb-c*.12);ctx.lineTo(x0+w*.7,yb-c*.12);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.shadowColor='transparent';
-  ctx.fillStyle='rgba(190,235,255,.9)';ctx.beginPath();ctx.moveTo(x0+w*.74,yb-h*.7);ctx.lineTo(x0+w*.86,yb-h*.7);ctx.lineTo(x0+w*.94,yb-h*.42);ctx.lineTo(x0+w*.74,yb-h*.42);ctx.closePath();ctx.fill();
-  ctx.fillStyle='#fff3b0';ctx.beginPath();ctx.arc(x0+w*.985,yb-h*.3,c*.045,0,6.283);ctx.fill();
-  // ruedas
-  [.18,.5,.86].forEach(function(o){var rx=x0+w*o,ry=yb-c*.06,rr=c*.12,g=ctx.createRadialGradient(rx,ry,1,rx,ry,rr);g.addColorStop(0,'#aab4c6');g.addColorStop(.35,'#1b212c');g.addColorStop(1,'#07090d');
-    ctx.fillStyle=g;ctx.beginPath();ctx.arc(rx,ry,rr,0,6.283);ctx.fill()});
-  ctx.restore();
-  ctx.fillStyle='#4a2f12';ctx.font='700 '+Math.round(c*.25)+'px "JetBrains Mono",monospace';ctx.textAlign='center';
-  ctx.fillText(etq,x0+w*.34,yb-h*.4);
+function dibujarCamion(x,y,c,etq){
+  var w=c*1.55,h=c*.62,x0=x-w/2,yb=y-c*.2;
+  ctx.shadowColor='rgba(25,50,80,.28)';ctx.shadowBlur=c*.1;ctx.shadowOffsetY=c*.05;
+  ctx.fillStyle='#ffb347';rr(x0,yb-h,w*.68,h-c*.1,5);ctx.fill();
+  ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+  ctx.fillStyle='#f29a1f';ctx.fillRect(x0,yb-c*.2,w*.68,c*.1);
+  ctx.fillStyle='#ff7f3f';ctx.beginPath();ctx.moveTo(x0+w*.7,yb-h*.8);ctx.lineTo(x0+w*.88,yb-h*.8);ctx.lineTo(x0+w,yb-h*.42);ctx.lineTo(x0+w,yb-c*.1);ctx.lineTo(x0+w*.7,yb-c*.1);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#d9f0ff';ctx.beginPath();ctx.moveTo(x0+w*.74,yb-h*.7);ctx.lineTo(x0+w*.86,yb-h*.7);ctx.lineTo(x0+w*.94,yb-h*.44);ctx.lineTo(x0+w*.74,yb-h*.44);ctx.closePath();ctx.fill();
+  [.2,.5,.86].forEach(function(o){var rx=x0+w*o,ry=yb-c*.04;ctx.fillStyle='#2b3240';ctx.beginPath();ctx.arc(rx,ry,c*.12,0,6.283);ctx.fill();ctx.fillStyle='#cbd5e1';ctx.beginPath();ctx.arc(rx,ry,c*.05,0,6.283);ctx.fill()});
+  ctx.fillStyle='#ffffff';ctx.font='700 '+Math.round(c*.25)+'px "Space Grotesk",system-ui,sans-serif';ctx.textAlign='center';ctx.fillText(etq,x0+w*.34,yb-h*.38);
 }
 function dibujarAntena(x,y,c,etq,t){
-  // contrapeso de concreto con la carga
-  var g=ctx.createLinearGradient(0,y-c*.7,0,y-c*.1);g.addColorStop(0,'#cfd6df');g.addColorStop(1,'#7f8b98');
-  ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=c*.1;ctx.fillStyle=g;ctx.strokeStyle='#2a3340';ctx.lineWidth=1.6;
-  ctx.fillRect(x-c*.5,y-c*.7,c,c*.58);ctx.strokeRect(x-c*.5,y-c*.7,c,c*.58);ctx.shadowBlur=0;ctx.shadowColor='transparent';
-  ctx.fillStyle='#2a3340';ctx.font='700 '+Math.round(c*.24)+'px "JetBrains Mono",monospace';ctx.textAlign='center';ctx.fillText(etq,x,y-c*.3);
-  // mástil con travesaños, antena parabólica y baliza
-  ctx.strokeStyle='#dbe5f5';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y-c*.7);ctx.lineTo(x,y-c*1.55);ctx.stroke();
-  ctx.lineWidth=1.6;for(var k=0;k<4;k++){var yy=y-c*(.82+k*.18);ctx.beginPath();ctx.moveTo(x-c*.09,yy);ctx.lineTo(x+c*.09,yy-c*.09);ctx.stroke()}
-  ctx.fillStyle='#e9f1ff';ctx.beginPath();ctx.ellipse(x+c*.16,y-c*1.2,c*.1,c*.2,-.5,0,6.283);ctx.fill();ctx.strokeStyle='#33425e';ctx.lineWidth=1.4;ctx.stroke();
-  var on=Math.sin(t*4)>0;ctx.fillStyle=on?'#ff4d63':'#6b2a35';ctx.beginPath();ctx.arc(x,y-c*1.58,c*.07,0,6.283);ctx.fill();
-  if(on){var rg=ctx.createRadialGradient(x,y-c*1.58,0,x,y-c*1.58,c*.5);rg.addColorStop(0,'rgba(255,77,99,.55)');rg.addColorStop(1,'rgba(255,77,99,0)');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(x,y-c*1.58,c*.5,0,6.283);ctx.fill()}
+  ctx.shadowColor='rgba(25,50,80,.28)';ctx.shadowBlur=c*.1;ctx.shadowOffsetY=c*.05;
+  ctx.fillStyle='#d3dae4';rr(x-c*.5,y-c*.7,c,c*.58,6);ctx.fill();
+  ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+  ctx.fillStyle='#b4bfcd';ctx.fillRect(x-c*.5,y-c*.3,c,c*.18);
+  ctx.fillStyle='#33465f';ctx.font='700 '+Math.round(c*.24)+'px "Space Grotesk",system-ui,sans-serif';ctx.textAlign='center';ctx.fillText(etq,x,y-c*.34);
+  ctx.strokeStyle='#6f84a3';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y-c*.7);ctx.lineTo(x,y-c*1.5);ctx.stroke();
+  ctx.lineWidth=1.6;for(var k=0;k<4;k++){var yy=y-c*(.8+k*.17);ctx.beginPath();ctx.moveTo(x-c*.1,yy);ctx.lineTo(x+c*.1,yy-c*.1);ctx.stroke()}
+  ctx.fillStyle='#fff';ctx.strokeStyle='#6f84a3';ctx.lineWidth=1.6;ctx.beginPath();ctx.ellipse(x+c*.16,y-c*1.17,c*.09,c*.19,-.5,0,6.283);ctx.fill();ctx.stroke();
+  var on=Math.sin(t*4)>0;ctx.fillStyle=on?'#ff4d5e':'#f3a3aa';ctx.beginPath();ctx.arc(x,y-c*1.54,c*.07,0,6.283);ctx.fill();
 }
 function dibujarViento(x,y,fx,c,t){
   ctx.lineCap='round';
-  for(var k=0;k<7;k++){
-    var yy=y-c*.5+k*c*.17,ph=((t*(1.1+k*.07)+k*.37)%1),x0=x-c*3.6+ph*c*3.2;
-    ctx.strokeStyle='rgba(180,240,250,'+(0.7*(1-Math.abs(ph-.5)*1.6))+')';ctx.lineWidth=2.2;
-    ctx.beginPath();for(var i=0;i<=16;i++){var px=x0+i*c*.1,py=yy+Math.sin(i*.55+t*5+k)*c*.05;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.stroke();
+  for(var k=0;k<6;k++){
+    var yy=y-c*.45+k*c*.17,ph=((t*(1.0+k*.06)+k*.37)%1),x0=x-c*3.5+ph*c*3.1;
+    ctx.strokeStyle='rgba(255,255,255,'+(0.95*(1-Math.abs(ph-.5)*1.7))+')';ctx.lineWidth=3;
+    ctx.beginPath();for(var i=0;i<=14;i++){var px=x0+i*c*.1,py=yy+Math.sin(i*.55+t*5+k)*c*.045;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.stroke();
   }
-  ctx.fillStyle='rgba(180,240,250,.95)';ctx.font='600 '+Math.round(c*.22)+'px "JetBrains Mono",monospace';ctx.textAlign='left';ctx.fillText(T('e.viento',{f:fx}),x-c*3.6,y-c*.62);
+  var tx=T('e.viento',{f:fx});ctx.font='700 '+Math.round(c*.22)+'px "Space Grotesk",system-ui,sans-serif';
+  var tw=ctx.measureText(tx).width+16;ctx.fillStyle='rgba(255,255,255,.95)';rr(x-c*3.5,y-c*.82,tw,c*.32,c*.16);ctx.fill();
+  ctx.fillStyle='#2d5f86';ctx.textAlign='left';ctx.fillText(tx,x-c*3.5+8,y-c*.6);
 }
 
 function dibujar(now){
   var c=cs(),W=cv.width,H=cv.height,n=nv(),t=now/1000;
   var kf=S.nivel+'|'+W;if(kf!==fondoKey||!fondo){fondo=construirFondo();fondoKey=kf}
   ctx.clearRect(0,0,W,H);ctx.drawImage(fondo,0,0);
+  nubes(c,t);
   if(n.tipo==='puente')dibujarAgua(n,c,t);
-  // puntos de la cuadrícula (guía discreta)
-  ctx.fillStyle='rgba(127,240,228,.22)';
-  for(var gx=0;gx<=COLS;gx++)for(var gy=1;gy<FILAS;gy++){if(!bloqueado(gx,gy))ctx.fillRect(gx*c-1.2,gy*c-1.2,2.4,2.4)}
+  ctx.fillStyle='rgba(30,60,100,.18)';
+  for(var gx=0;gx<=COLS;gx++)for(var gy=1;gy<FILAS;gy++){if(!bloqueado(gx,gy))ctx.fillRect(gx*c-1.3,gy*c-1.3,2.6,2.6)}
   var P=S.prueba,ramp=0,col=-1;
   if(P){var e=(now-P.t0)/1000;ramp=Math.min(1,e/1.2);col=e-1.4}
   var cae=P&&col>0&&(P.res.falla||P.res.mecanismo||P.sinConexion);
@@ -583,25 +545,19 @@ function dibujar(now){
       var u=P.res.desp[ix],mx=Math.hypot(u.ux,u.uy)*40*ramp,f=mx>0.8?0.8/mx:1;
       d.x+=u.ux*40*ramp*f;d.y+=u.uy*40*ramp*f;
     }
-    if(P&&P.res.mecanismo&&ix!==undefined){
-      var amp=Math.min(1,ramp)*0.25;d.x+=Math.sin(t*14+x*3)*amp*0.4;d.y+=Math.sin(t*11+y*2)*amp*0.4+ramp*0.3;
-    }
+    if(P&&P.res.mecanismo&&ix!==undefined){var amp=Math.min(1,ramp)*0.25;d.x+=Math.sin(t*14+x*3)*amp*0.4;d.y+=Math.sin(t*11+y*2)*amp*0.4+ramp*0.3}
     if(cae&&!esApoyo(x,y)){d.y+=0.5*9*col*col;d.x+=Math.sin(x*7+y*3)*0.5*col}
     return d;
   };
   var alfa=cae?Math.max(0.05,1-col*0.55):1;
-  // apoyos primero (quedan detrás de las vigas)
   n.apoyos.forEach(function(a){dibujarApoyo(a,c)});
-  // tablero de carretera sobre las vigas horizontales a nivel del puente
   if(n.tipo==='puente'){
     S.piezas.forEach(function(p){
       if(p.y1===p.y2&&p.y1===n.apoyos[0].y){
-        var a=desp(p.x1,p.y1),b=desp(p.x2,p.y2);
-        ctx.globalAlpha=alfa;
-        ctx.save();ctx.translate(Math.min(a.x,b.x)*c,(a.y+b.y)/2*c);
-        var L=Math.abs(b.x-a.x)*c;
-        var g=ctx.createLinearGradient(0,-c*.34,0,-c*.1);g.addColorStop(0,'#3a424f');g.addColorStop(1,'#232a35');
-        ctx.fillStyle=g;ctx.fillRect(0,-c*.34,L,c*.2);ctx.fillStyle='#ffd36b';for(var q=c*.15;q<L-c*.2;q+=c*.6)ctx.fillRect(q,-c*.26,c*.3,2.5);
+        var a=desp(p.x1,p.y1),b=desp(p.x2,p.y2);ctx.globalAlpha=alfa;
+        ctx.save();ctx.translate(Math.min(a.x,b.x)*c,(a.y+b.y)/2*c);var L=Math.abs(b.x-a.x)*c;
+        ctx.fillStyle=PAL.asfalto;ctx.fillRect(0,-c*.32,L,c*.2);
+        ctx.fillStyle='rgba(255,255,255,.9)';for(var q=c*.18;q<L-c*.2;q+=c*.6)ctx.fillRect(q,-c*.24,c*.3,2.5);
         ctx.restore();ctx.globalAlpha=1;
       }
     });
@@ -617,40 +573,30 @@ function dibujar(now){
       viga(b.x*c,b.y*c,a.x*c,a.y*c,p.mat,i+50,tinte,razon,0.5-sep,c,true,1,-giro);
     }else viga(a.x*c,a.y*c,b.x*c,b.y*c,p.mat,i,tinte,razon,1,c,false,1,0);
     if(P&&info&&ramp>=1&&!P.sinConexion&&!cae){
-      var w=p.mat==='madera'?c*.2:c*.15,mx=(a.x+b.x)/2*c,my=(a.y+b.y)/2*c;
-      ctx.fillStyle='rgba(7,15,28,.78)';var tx=Math.abs(info.N).toFixed(1)+' t';ctx.font='700 '+Math.round(c*.24)+'px "JetBrains Mono",monospace';
-      var tw=ctx.measureText(tx).width+10;ctx.beginPath();ctx.roundRect?ctx.roundRect(mx-tw/2,my-w-c*.28,tw,c*.3,6):ctx.rect(mx-tw/2,my-w-c*.28,tw,c*.3);ctx.fill();
-      ctx.fillStyle='#eaf2fb';ctx.textAlign='center';ctx.fillText(tx,mx,my-w-c*.06);
+      var w=p.mat==='madera'?c*.19:c*.14,mx=(a.x+b.x)/2*c,my=(a.y+b.y)/2*c,tx=Math.abs(info.N).toFixed(1)+' t';
+      ctx.font='700 '+Math.round(c*.23)+'px "Space Grotesk",system-ui,sans-serif';var tw=ctx.measureText(tx).width+14;
+      ctx.shadowColor='rgba(25,50,80,.25)';ctx.shadowBlur=c*.08;ctx.fillStyle='#ffffff';rr(mx-tw/2,my-w-c*.34,tw,c*.3,c*.15);ctx.fill();ctx.shadowColor='transparent';ctx.shadowBlur=0;
+      ctx.fillStyle=falla?'#d62839':'#23405e';ctx.textAlign='center';ctx.fillText(tx,mx,my-w-c*.12);
     }
   });
-  // nodos (placas con tornillos)
-  nodosActuales().forEach(function(nd){
-    var d=desp(nd.x,nd.y);nodoReal(d.x*c,d.y*c,c,esApoyo(nd.x,nd.y)||esCarga(nd.x,nd.y),esCarga(nd.x,nd.y)?'carga':'');
-  });
+  nodosActuales().forEach(function(nd){var d=desp(nd.x,nd.y);nodoReal(d.x*c,d.y*c,c,esApoyo(nd.x,nd.y)||esCarga(nd.x,nd.y),esCarga(nd.x,nd.y)?'carga':'')});
   ctx.globalAlpha=1;
-  // cargas
   n.cargas.forEach(function(cg){
-    var d=desp(cg.x,cg.y);
-    if(cae)ctx.globalAlpha=alfa;
+    var d=desp(cg.x,cg.y);if(cae)ctx.globalAlpha=alfa;
     if(n.tipo==='puente')dibujarCamion(d.x*c,d.y*c,c,cg.etq);else dibujarAntena(d.x*c,d.y*c,c,cg.etq,t);
-    ctx.globalAlpha=1;
-    if(cg.fx)dibujarViento(d.x*c,d.y*c-c*.3,cg.fx,c,t);
+    ctx.globalAlpha=1;if(cg.fx)dibujarViento(d.x*c,d.y*c-c*.3,cg.fx,c,t);
   });
-  // vista previa de la pieza que se está dibujando
   if(S.herr==='construir'&&S.inicio&&S.cur&&!P){
     var cu=S.cur,okp=!validar(S.inicio.x,S.inicio.y,cu.x,cu.y,S.mat);
-    ctx.setLineDash([10,8]);ctx.lineWidth=5;ctx.strokeStyle=okp?'rgba(139,232,174,.95)':'rgba(255,107,125,.9)';ctx.beginPath();ctx.moveTo(S.inicio.x*c,S.inicio.y*c);ctx.lineTo(cu.x*c,cu.y*c);ctx.stroke();ctx.setLineDash([]);
-    var L=Math.hypot(cu.x-S.inicio.x,cu.y-S.inicio.y);
-    ctx.fillStyle='rgba(7,15,28,.8)';var tx2=L.toFixed(1)+' m · $'+Math.round(L*M.MATERIALES[S.mat].precio);ctx.font='600 '+Math.round(c*.27)+'px "JetBrains Mono",monospace';var tw2=ctx.measureText(tx2).width+14;
-    var mx2=(S.inicio.x+cu.x)/2*c,my2=(S.inicio.y+cu.y)/2*c-c*.45;ctx.beginPath();ctx.roundRect?ctx.roundRect(mx2-tw2/2,my2-c*.24,tw2,c*.34,8):ctx.rect(mx2-tw2/2,my2-c*.24,tw2,c*.34);ctx.fill();
-    ctx.fillStyle='#eaf2fb';ctx.textAlign='center';ctx.fillText(tx2,mx2,my2);
-    ctx.beginPath();ctx.arc(S.inicio.x*c,S.inicio.y*c,c*0.2,0,6.283);ctx.strokeStyle='#4fd1c5';ctx.lineWidth=3;ctx.stroke();
+    ctx.setLineDash([10,8]);ctx.lineWidth=5;ctx.lineCap='round';ctx.strokeStyle=okp?'#19b37a':'#ff4d5e';ctx.beginPath();ctx.moveTo(S.inicio.x*c,S.inicio.y*c);ctx.lineTo(cu.x*c,cu.y*c);ctx.stroke();ctx.setLineDash([]);
+    var L2=Math.hypot(cu.x-S.inicio.x,cu.y-S.inicio.y),tx2=L2.toFixed(1)+' m · $'+Math.round(L2*M.MATERIALES[S.mat].precio);
+    ctx.font='700 '+Math.round(c*.25)+'px "Space Grotesk",system-ui,sans-serif';var tw2=ctx.measureText(tx2).width+16,mx2=(S.inicio.x+cu.x)/2*c,my2=(S.inicio.y+cu.y)/2*c-c*.5;
+    ctx.shadowColor='rgba(25,50,80,.25)';ctx.shadowBlur=c*.08;ctx.fillStyle='#fff';rr(mx2-tw2/2,my2-c*.24,tw2,c*.34,c*.17);ctx.fill();ctx.shadowColor='transparent';ctx.shadowBlur=0;
+    ctx.fillStyle=okp?'#13795a':'#c2263a';ctx.textAlign='center';ctx.fillText(tx2,mx2,my2);
+    ctx.beginPath();ctx.arc(S.inicio.x*c,S.inicio.y*c,c*0.2,0,6.283);ctx.strokeStyle='#1f9bd1';ctx.lineWidth=3;ctx.stroke();
   }else if(S.cur&&!P&&S.herr==='construir'&&!bloqueado(S.cur.x,S.cur.y)){
-    ctx.beginPath();ctx.arc(S.cur.x*c,S.cur.y*c,c*0.17,0,6.283);ctx.strokeStyle='rgba(79,209,197,.9)';ctx.lineWidth=2.4;ctx.stroke();
+    ctx.beginPath();ctx.arc(S.cur.x*c,S.cur.y*c,c*0.17,0,6.283);ctx.strokeStyle='#1f9bd1';ctx.lineWidth=2.6;ctx.stroke();
   }
-  // viñeta
-  var vg=ctx.createRadialGradient(W/2,H/2,H*.45,W/2,H/2,H*.95);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.35)');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
-  // fin de la prueba
   if(P&&!P.final){
     var e2=(now-P.t0)/1000,ok=P.res.estable&&!P.sinConexion;
     if((ok&&e2>1.5)||(!ok&&e2>3.4)||(P.sinConexion&&e2>1.4)){P.final=true;terminarPrueba()}
