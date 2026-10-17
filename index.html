@@ -155,6 +155,12 @@ header.top{position:absolute;top:0;left:0;right:0;z-index:5;background:linear-gr
     mask-image:linear-gradient(to right,transparent 0,#000 16%,#000 84%,transparent 100%),linear-gradient(#000 58%,transparent 100%);
     mask-composite:intersect}
 }
+.multi{margin-top:2px;font-size:11px;color:var(--accent)}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:2px}
+.chk{display:flex;align-items:center;gap:8px;margin:0!important;font-size:14px!important;color:var(--text)!important;cursor:pointer}
+.chk input{width:auto!important;accent-color:#4fd1c5}
+.adm .barra .est kbd{padding:1px 6px;border-radius:5px;border:1px solid var(--edge);font-size:11px}
+.zoom{position:absolute;inset:0;transform-origin:50% 36%;will-change:transform,opacity}
 </style>
 </head>
 <body>
@@ -176,7 +182,7 @@ header.top{position:absolute;top:0;left:0;right:0;z-index:5;background:linear-gr
   </defs>
 </svg>
 
-<div class="banner"><img src="hero.jpg" alt="LABS: un portal de cristal que se abre hacia un mundo digital" fetchpriority="high"></div>
+<div class="banner"><div class="zoom" id="zoom"><img src="hero.jpg" alt="LABS: un portal de cristal que se abre hacia un mundo digital" fetchpriority="high"></div></div>
 <header class="top"><div class="wrap">
   <div class="logo"><img src="logo.png" alt="Isco Sánchez" width="44" height="44"><div>labs<span>.iscosanchez.com</span></div></div>
   <nav><a href="#proyectos">Proyectos</a></nav>
@@ -200,7 +206,7 @@ header.top{position:absolute;top:0;left:0;right:0;z-index:5;background:linear-gr
     </div>
 
     <div class="barra" id="barra">
-      <div class="est" id="est"><b>Modo administración.</b> Arrastra un proyecto a otra tarjeta, o usa su selector. Cada tarjeta se puede renombrar, mover o quitar. Los cambios son un borrador en este navegador hasta que los publiques.</div>
+      <div class="est" id="est"><b>Modo administración.</b> Arrastra un proyecto a otra tarjeta (con <kbd>Alt</kbd> lo copias, para que esté en varias), o usa «Mover a» y «También en…». Cada tarjeta se puede renombrar, mover o quitar. Los cambios son un borrador en este navegador hasta que los publiques.</div>
       <button class="btn" id="bNuevo" type="button">Agregar proyecto</button>
       <button class="btn" id="bGrupo" type="button">Agregar tarjeta</button>
       <button class="btn sec" id="bCopiar" type="button">Copiar JSON</button>
@@ -223,7 +229,7 @@ header.top{position:absolute;top:0;left:0;right:0;z-index:5;background:linear-gr
     <h4 id="dTit">Proyecto</h4>
     <label for="fNom">Nombre</label><input id="fNom" required maxlength="60">
     <label for="fUrl">Enlace</label><input id="fUrl" type="url" required placeholder="https://…">
-    <label for="fGra">Tarjeta</label><select id="fGra"></select>
+    <label>Tarjetas donde aparece</label><div id="fGra" class="checks"></div>
     <div class="acc"><button class="btn sec" value="cancel" type="button" id="dCan">Cancelar</button><button class="btn" value="ok" id="dOk">Guardar</button></div>
   </form>
 </dialog>
@@ -255,21 +261,21 @@ var DEF={version:2,
     {id:'general',nombre:'General (varios grados)'},{id:'apps',nombre:'Aplicaciones completas'}
   ],
   proyectos:[
-  {id:'typing',nombre:'Typing (El teclado)',grupo:'1',url:'https://iscosanchezl.github.io/Typing/'},
-  {id:'partes',nombre:'Partes del computador',grupo:'1',url:'https://iscosanchezl.github.io/partes-del-computador/'},
-  {id:'algoritmos',nombre:'Algoritmos',grupo:'1',url:'https://iscosanchezl.github.io/beto-algoritmos/'},
-  {id:'paint',nombre:'Proyecto Paint',grupo:'2',url:'https://iscosanchezl.github.io/Proyecto_Paint_2do/'},
-  {id:'goldberg',nombre:'Máquina de Goldberg',grupo:'3',url:'https://iscosanchezl.github.io/Goldberg-Machine/'},
-  {id:'kody',nombre:'Kody',grupo:'4',url:'https://kody.iscosanchez.com'},
-  {id:'correos',nombre:'Correos',grupo:'4',url:'https://iscosanchezl.github.io/Correos4to/'},
-  {id:'hardware',nombre:'Hardware y software',grupo:'6',url:'https://iscosanchezl.github.io/Hardware_Software/'},
-  {id:'detectives',nombre:'Detectives de carpetas',grupo:'6',url:'https://iscosanchezl.github.io/Detectives-de-Carpetas/'},
-  {id:'phishing',nombre:'Laboratorio anti-phishing',grupo:'6',url:'https://iscosanchezl.github.io/Laboratorio-anti-phishing/'},
-  {id:'puzzles',nombre:'Puzzles',grupo:'general',url:'https://iscosanchezl.github.io/Puzzles/'},
-  {id:'classdrive',nombre:'ClassDrive',grupo:'apps',url:'https://classdrive.iscosanchez.com'},
-  {id:'teclea',nombre:'Teclea',grupo:'apps',url:'https://teclea.iscosanchez.com'},
-  {id:'codekid',nombre:'CodeKid',grupo:'apps',url:'https://codekid.iscosanchez.com'},
-  {id:'planner',nombre:'Planner Gi',grupo:'apps',url:'https://planner.iscosanchez.com'}
+  {id:'typing',nombre:'Typing (El teclado)',grupos:['1'],url:'https://iscosanchezl.github.io/Typing/'},
+  {id:'partes',nombre:'Partes del computador',grupos:['1'],url:'https://iscosanchezl.github.io/partes-del-computador/'},
+  {id:'algoritmos',nombre:'Algoritmos',grupos:['1'],url:'https://iscosanchezl.github.io/beto-algoritmos/'},
+  {id:'paint',nombre:'Proyecto Paint',grupos:['2'],url:'https://iscosanchezl.github.io/Proyecto_Paint_2do/'},
+  {id:'goldberg',nombre:'Máquina de Goldberg',grupos:['3'],url:'https://iscosanchezl.github.io/Goldberg-Machine/'},
+  {id:'kody',nombre:'Kody',grupos:['4'],url:'https://kody.iscosanchez.com'},
+  {id:'correos',nombre:'Correos',grupos:['4'],url:'https://iscosanchezl.github.io/Correos4to/'},
+  {id:'hardware',nombre:'Hardware y software',grupos:['6'],url:'https://iscosanchezl.github.io/Hardware_Software/'},
+  {id:'detectives',nombre:'Detectives de carpetas',grupos:['6'],url:'https://iscosanchezl.github.io/Detectives-de-Carpetas/'},
+  {id:'phishing',nombre:'Laboratorio anti-phishing',grupos:['6'],url:'https://iscosanchezl.github.io/Laboratorio-anti-phishing/'},
+  {id:'puzzles',nombre:'Puzzles',grupos:['general'],url:'https://iscosanchezl.github.io/Puzzles/'},
+  {id:'classdrive',nombre:'ClassDrive',grupos:['apps'],url:'https://classdrive.iscosanchez.com'},
+  {id:'teclea',nombre:'Teclea',grupos:['apps'],url:'https://teclea.iscosanchez.com'},
+  {id:'codekid',nombre:'CodeKid',grupos:['apps'],url:'https://codekid.iscosanchez.com'},
+  {id:'planner',nombre:'Planner Gi',grupos:['apps'],url:'https://planner.iscosanchez.com'}
 ]};
 var BKEY='labs-borrador';
 var datos=null, pub=null, admin=false, filtro='todos', consulta='', editId=null, grpEdit=null;
@@ -288,11 +294,16 @@ function limpiar(d){
   gs=gs.filter(function(g){return g&&g.nombre}).map(function(g){return {id:String(g.id||slug(g.nombre)),nombre:String(g.nombre)}});
   var ok=d&&Array.isArray(d.proyectos)?d.proyectos:[];
   var ps=ok.filter(function(p){return p&&p.nombre&&p.url}).map(function(p){
-    var g=p.grupo!==undefined?p.grupo:p.grado;
-    return {id:String(p.id||slug(p.nombre)),nombre:String(p.nombre),grupo:String(g||''),url:String(p.url)};
+    var g=Array.isArray(p.grupos)?p.grupos:[p.grupo!==undefined?p.grupo:p.grado];
+    return {id:String(p.id||slug(p.nombre)),nombre:String(p.nombre),grupos:g.map(function(x){return String(x||'')}),url:String(p.url)};
   });
-  ps.forEach(function(p){if(p.grupo&&!gs.some(function(g){return g.id===p.grupo}))p.grupo=''});
-  return {version:2,grupos:gs,proyectos:ps};
+  ps.forEach(function(p){
+    var ids=p.grupos.filter(function(x){return x===''||gs.some(function(g){return g.id===x})});
+    ids=ids.filter(function(x,i){return ids.indexOf(x)===i});
+    if(ids.length>1)ids=ids.filter(function(x){return x!==''});
+    p.grupos=ids.length?ids:[''];
+  });
+  return {version:3,grupos:gs,proyectos:ps};
 }
 function clonar(o){return limpiar(JSON.parse(JSON.stringify(o)))}
 function guardarBorrador(){lsSet(JSON.stringify({base:JSON.stringify(pub),data:datos}))}
@@ -303,7 +314,9 @@ function leerBorrador(){
 }
 function colorDe(id){var i=datos.grupos.findIndex(function(g){return g.id===id});return i<0?GRIS:PALETA[i%PALETA.length]}
 function nombreDe(id){var g=datos.grupos.filter(function(x){return x.id===id})[0];return g?g.nombre:'Sin asignar'}
-function haySinAsignar(){return datos.proyectos.some(function(p){return p.grupo===''})}
+function enGrupo(p,id){return p.grupos.indexOf(id)>-1}
+function haySinAsignar(){return datos.proyectos.some(function(p){return enGrupo(p,'')})}
+function ponerGrupos(p,ids){ids=ids.filter(function(x,i){return ids.indexOf(x)===i});if(ids.length>1)ids=ids.filter(function(x){return x!==''});p.grupos=ids.length?ids:['']}
 
 function pintarTabs(){
   var t=$('tabs');t.textContent='';
@@ -319,7 +332,7 @@ function pintarTabs(){
   });
 }
 
-function pintarProyecto(p,color){
+function pintarProyecto(p,color,gid){
   var a=document.createElement(admin?'div':'a');
   a.className='proy';a.dataset.id=p.id;
   if(!admin){a.href=p.url;a.target='_blank';a.rel='noopener'}
@@ -328,17 +341,33 @@ function pintarProyecto(p,color){
   var f=document.createElement('div');f.className='fl';f.textContent='→';
   a.appendChild(i);a.appendChild(n);a.appendChild(f);
   if(admin){
+    if(p.grupos.length>1){var m=document.createElement('div');m.className='multi';m.textContent='en '+p.grupos.length+' tarjetas';n.appendChild(m)}
     a.draggable=true;
-    a.addEventListener('dragstart',function(e){e.dataTransfer.setData('text/plain',p.id);e.dataTransfer.effectAllowed='move'});
+    a.addEventListener('dragstart',function(e){e.dataTransfer.setData('text/plain',p.id+'|'+gid);e.dataTransfer.effectAllowed='copyMove'});
     var c=document.createElement('div');c.className='ctl';
-    var s=document.createElement('select');s.setAttribute('aria-label','Mover '+p.nombre);
-    datos.grupos.concat([{id:'',nombre:'Sin asignar'}]).forEach(function(x){var o=document.createElement('option');o.value=x.id;o.textContent=x.nombre;if(x.id===p.grupo)o.selected=true;s.appendChild(o)});
-    s.onchange=function(){p.grupo=s.value;guardarBorrador();pintar();aviso('Movido a '+nombreDe(p.grupo))};
+    var todas=datos.grupos.concat([{id:'',nombre:'Sin asignar'}]);
+    var s=document.createElement('select');s.setAttribute('aria-label','Mover '+p.nombre+' a otra tarjeta');
+    todas.forEach(function(x){var o=document.createElement('option');o.value=x.id;o.textContent='Mover a: '+x.nombre;if(x.id===gid)o.selected=true;s.appendChild(o)});
+    s.onchange=function(){
+      var ids=p.grupos.map(function(x){return x===gid?s.value:x});
+      ponerGrupos(p,ids);guardarBorrador();pintar();aviso('Movido a '+nombreDe(s.value));
+    };
+    var s2=document.createElement('select');s2.setAttribute('aria-label','Agregar '+p.nombre+' a otra tarjeta');
+    var o0=document.createElement('option');o0.value='__';o0.textContent='También en…';s2.appendChild(o0);
+    datos.grupos.forEach(function(x){if(!enGrupo(p,x.id)){var o=document.createElement('option');o.value=x.id;o.textContent=x.nombre;s2.appendChild(o)}});
+    s2.onchange=function(){
+      if(s2.value==='__')return;
+      ponerGrupos(p,p.grupos.concat([s2.value]));guardarBorrador();pintar();aviso('También aparece en '+nombreDe(s2.value));
+    };
     var e=document.createElement('button');e.type='button';e.className='mini';e.textContent='Editar';e.onclick=function(){abrir(p)};
     var v=document.createElement('a');v.className='mini';v.href=p.url;v.target='_blank';v.rel='noopener';v.textContent='Abrir';
-    var d=document.createElement('button');d.type='button';d.className='mini rojo';d.textContent='Quitar';d.onclick=function(){
-      if(confirm('¿Quitar "'+p.nombre+'" de la lista?')){datos.proyectos=datos.proyectos.filter(function(x){return x!==p});guardarBorrador();pintar()}};
-    c.appendChild(s);c.appendChild(e);c.appendChild(v);c.appendChild(d);a.appendChild(c);
+    var d=document.createElement('button');d.type='button';d.className='mini rojo';
+    d.textContent=p.grupos.length>1?'Quitar de esta tarjeta':'Quitar';
+    d.onclick=function(){
+      if(p.grupos.length>1){ponerGrupos(p,p.grupos.filter(function(x){return x!==gid}));guardarBorrador();pintar();aviso('Quitado de esta tarjeta')}
+      else if(confirm('¿Quitar "'+p.nombre+'" de la lista?')){datos.proyectos=datos.proyectos.filter(function(x){return x!==p});guardarBorrador();pintar()}
+    };
+    c.appendChild(s);c.appendChild(s2);c.appendChild(e);c.appendChild(v);c.appendChild(d);a.appendChild(c);
   }
   return a;
 }
@@ -363,7 +392,7 @@ function pintarGrupo(g,idx,lista,q){
     s.appendChild(gc);
   }
   var l=document.createElement('div');l.className='lista';
-  lista.forEach(function(p){l.appendChild(pintarProyecto(p,color))});
+  lista.forEach(function(p){l.appendChild(pintarProyecto(p,color,g.id))});
   if(!lista.length){var v=document.createElement('div');v.className='vacio';v.textContent=admin?'Suelta aquí un proyecto.':'Pronto habrá proyectos aquí.';l.appendChild(v)}
   s.appendChild(l);
   if(admin){
@@ -371,9 +400,12 @@ function pintarGrupo(g,idx,lista,q){
     s.addEventListener('dragleave',function(){s.classList.remove('sobre')});
     s.addEventListener('drop',function(e){
       e.preventDefault();s.classList.remove('sobre');
-      var id=e.dataTransfer.getData('text/plain');
-      var p=datos.proyectos.filter(function(x){return x.id===id})[0];
-      if(p&&p.grupo!==g.id){p.grupo=g.id;guardarBorrador();pintar();aviso('Movido a '+nombreDe(g.id))}
+      var dato=e.dataTransfer.getData('text/plain').split('|');
+      var p=datos.proyectos.filter(function(x){return x.id===dato[0]})[0];
+      if(p&&!enGrupo(p,g.id)){
+        var ids=e.altKey?p.grupos.concat([g.id]):p.grupos.map(function(x){return x===dato[1]?g.id:x});
+        ponerGrupos(p,ids);guardarBorrador();pintar();aviso(e.altKey?'También aparece en '+nombreDe(g.id):'Movido a '+nombreDe(g.id));
+      }
     });
   }
   return s;
@@ -389,7 +421,7 @@ function pintar(){
   grupos.forEach(function(x){
     var g=x.g,key=g.id===''?'sin':g.id;
     if(filtro!=='todos'&&filtro!==key)return;
-    var lista=datos.proyectos.filter(function(p){return p.grupo===g.id&&(!q||p.nombre.toLowerCase().indexOf(q)>-1)});
+    var lista=datos.proyectos.filter(function(p){return enGrupo(p,g.id)&&(!q||p.nombre.toLowerCase().indexOf(q)>-1)});
     if(!lista.length&&(q||(g.id===''&&!admin)))return;
     total+=lista.length;
     cont.appendChild(pintarGrupo(g,x.i,lista,q));
@@ -403,10 +435,10 @@ function mover(i,d){
   guardarBorrador();pintar();
 }
 function quitarGrupo(g){
-  var n=datos.proyectos.filter(function(p){return p.grupo===g.id}).length;
-  var m='¿Quitar la tarjeta "'+g.nombre+'"?'+(n?' Sus '+n+' proyecto(s) pasarán a "Sin asignar".':'');
+  var n=datos.proyectos.filter(function(p){return enGrupo(p,g.id)}).length;
+  var m='¿Quitar la tarjeta "'+g.nombre+'"?'+(n?' Sus proyectos que no estén en otra tarjeta pasarán a "Sin asignar".':'');
   if(!confirm(m))return;
-  datos.proyectos.forEach(function(p){if(p.grupo===g.id)p.grupo=''});
+  datos.proyectos.forEach(function(p){if(enGrupo(p,g.id))ponerGrupos(p,p.grupos.filter(function(x){return x!==g.id}))});
   datos.grupos=datos.grupos.filter(function(x){return x!==g});
   guardarBorrador();pintar();aviso('Tarjeta quitada');
 }
@@ -434,11 +466,19 @@ function abrir(p){
   $('dTit').textContent=p?'Editar proyecto':'Agregar proyecto';
   $('fNom').value=p?p.nombre:'';
   $('fUrl').value=p?p.url:'https://';
-  var s=$('fGra');s.textContent='';
-  datos.grupos.concat([{id:'',nombre:'Sin asignar'}]).forEach(function(x){var o=document.createElement('option');o.value=x.id;o.textContent=x.nombre;s.appendChild(o)});
+  var box=$('fGra');box.textContent='';
   var def=filtro!=='todos'&&filtro!=='sin'?filtro:'';
-  s.value=p?p.grupo:def;
+  var marcadas=p?p.grupos:(def?[def]:[]);
+  datos.grupos.forEach(function(x){
+    var l=document.createElement('label');l.className='chk';
+    var c=document.createElement('input');c.type='checkbox';c.value=x.id;c.checked=marcadas.indexOf(x.id)>-1;
+    var t=document.createElement('span');t.textContent=x.nombre;
+    l.appendChild(c);l.appendChild(t);box.appendChild(l);
+  });
   $('dlg').showModal();
+}
+function gruposMarcados(){
+  return Array.prototype.map.call($('fGra').querySelectorAll('input:checked'),function(c){return c.value});
 }
 $('dCan').onclick=function(){$('dlg').close()};
 $('frm').addEventListener('submit',function(e){
@@ -446,9 +486,9 @@ $('frm').addEventListener('submit',function(e){
   if(!nom||!urlSegura(url)){e.preventDefault();aviso('Escribe un nombre y un enlace que empiece por http');return}
   if(editId){
     var p=datos.proyectos.filter(function(x){return x.id===editId})[0];
-    if(p){p.nombre=nom;p.url=url;p.grupo=$('fGra').value}
+    if(p){p.nombre=nom;p.url=url;ponerGrupos(p,gruposMarcados())}
   }else{
-    datos.proyectos.push({id:unico(slug(nom),datos.proyectos),nombre:nom,grupo:$('fGra').value,url:url});
+    var np={id:unico(slug(nom),datos.proyectos),nombre:nom,grupos:[''],url:url};ponerGrupos(np,gruposMarcados());datos.proyectos.push(np);
   }
   guardarBorrador();pintar();aviso('Guardado en el borrador');
 });
@@ -509,6 +549,22 @@ function cargar(cb){
 }
 admin=false;
 cargar(function(){pintar();if(location.hash==='#admin')pedirPin()});
+
+/* Zoom al desplazarse: al bajar por la página el portal se acerca, como si entraras */
+(function(){
+  var z=document.getElementById('zoom'),b=document.querySelector('.banner');
+  if(!z||!b||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return;
+  var pend=false;
+  function act(){
+    pend=false;
+    var h=b.offsetHeight||600,p=Math.min(Math.max((window.scrollY||0)/(h*0.95),0),1);
+    var e=p*p*(3-2*p);                         /* suavizado */
+    z.style.transform='scale('+(1+0.7*e).toFixed(4)+')';
+    z.style.opacity=(1-0.35*e).toFixed(3);
+  }
+  window.addEventListener('scroll',function(){if(!pend){pend=true;requestAnimationFrame(act)}},{passive:true});
+  window.addEventListener('resize',act);act();
+})();
 </script>
 </body>
 </html>
