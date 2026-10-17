@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "proyectos": [
+    {"id":"typing","nombre":"Typing (El teclado)","grado":"1","url":"https://iscosanchezl.github.io/Typing/"},
+    {"id":"partes","nombre":"Partes del computador","grado":"1","url":"https://iscosanchezl.github.io/partes-del-computador/"},
+    {"id":"algoritmos","nombre":"Algoritmos","grado":"1","url":"https://iscosanchezl.github.io/beto-algoritmos/"},
+    {"id":"paint","nombre":"Proyecto Paint","grado":"2","url":"https://iscosanchezl.github.io/Proyecto_Paint_2do/"},
+    {"id":"goldberg","nombre":"Máquina de Goldberg","grado":"3","url":"https://iscosanchezl.github.io/Goldberg-Machine/"},
+    {"id":"kody","nombre":"Kody","grado":"4","url":"https://kody.iscosanchez.com"},
+    {"id":"correos","nombre":"Correos","grado":"4","url":"https://iscosanchezl.github.io/Correos4to/"},
+    {"id":"hardware","nombre":"Hardware y software","grado":"6","url":"https://iscosanchezl.github.io/Hardware_Software/"},
+    {"id":"detectives","nombre":"Detectives de carpetas","grado":"6","url":"https://iscosanchezl.github.io/Detectives-de-Carpetas/"},
+    {"id":"phishing","nombre":"Laboratorio anti-phishing","grado":"6","url":"https://iscosanchezl.github.io/Laboratorio-anti-phishing/"},
+    {"id":"puzzles","nombre":"Puzzles","grado":"","url":"https://iscosanchezl.github.io/Puzzles/"}
+  ]
+}

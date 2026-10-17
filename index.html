@@ -4,17 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Labs · iscosanchez.com</title>
-<meta name="description" content="Juegos, simuladores y actividades de tecnología e informática para el aula.">
+<meta name="description" content="Proyectos de tecnología e informática para el aula, organizados por grado.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#070f1c;--text:#eaf2fb;--muted:#b3c4d6;--dim:#7f97ae;--accent:#4fd1c5;--glass:rgba(255,255,255,.07);--glass2:rgba(255,255,255,.12);--edge:rgba(255,255,255,.18)}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;position:relative;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
 
-/* Aurora de fondo */
 .aurora{position:fixed;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,#0f2740 0%,var(--bg) 60%)}
 .aurora i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;animation:flota 22s ease-in-out infinite alternate}
 .aurora i:nth-child(1){width:520px;height:520px;background:#1fb6a6;top:-140px;left:-120px}
@@ -30,72 +31,104 @@ header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:spac
 nav{display:flex;gap:24px;font-size:15px;color:var(--muted)}
 nav a:hover{color:var(--text)}
 
-.hero{padding:56px 0 36px}
-.eyebrow{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
-h1{margin:0;font-size:clamp(34px,6vw,56px);line-height:1.05;max-width:760px}
-.hero p{margin:24px 0 0;font-size:19px;line-height:1.55;color:var(--muted);max-width:620px}
+.hero{padding:40px 0 28px}
+.eyebrow{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+h1{margin:0;font-size:clamp(32px,5.6vw,52px);line-height:1.06;max-width:760px}
+.hero p{margin:20px 0 0;font-size:18px;line-height:1.55;color:var(--muted);max-width:600px}
 
-/* Tarjeta de cristal principal */
-.autor{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:32px;padding:36px;margin:8px 0 56px;border-radius:28px;
+/* Tarjeta central de cristal */
+.central{position:relative;padding:34px;margin:8px 0 48px;border-radius:30px;isolation:isolate;overflow:hidden;
   background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.04) 45%,rgba(255,255,255,.10));
   border:1px solid var(--edge);
   box-shadow:0 30px 80px -20px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(255,255,255,.06);
-  -webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);overflow:hidden;isolation:isolate}
-.autor::before{content:"";position:absolute;inset:-60% -20% auto auto;width:70%;height:200%;background:linear-gradient(100deg,transparent 40%,rgba(255,255,255,.14) 50%,transparent 60%);transform:translateX(-120%) rotate(8deg);animation:brillo 7s ease-in-out infinite;z-index:-1}
+  -webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%)}
+.central::before{content:"";position:absolute;inset:-60% -20% auto auto;width:70%;height:200%;background:linear-gradient(100deg,transparent 40%,rgba(255,255,255,.12) 50%,transparent 60%);transform:translateX(-120%) rotate(8deg);animation:brillo 9s ease-in-out infinite;z-index:-1;pointer-events:none}
 @keyframes brillo{0%,55%{transform:translateX(-130%) rotate(8deg)}100%{transform:translateX(230%) rotate(8deg)}}
-.autor::after{content:"";position:absolute;width:260px;height:260px;right:-60px;bottom:-110px;border-radius:50%;background:radial-gradient(circle,rgba(79,209,197,.45),transparent 70%);z-index:-1}
-.sello{flex:0 0 auto;width:132px;height:132px;filter:drop-shadow(0 14px 28px rgba(79,209,197,.35))}
-.autor .txt{flex:1 1 320px;min-width:0}
-.autor .rol{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
-.autor h2{margin:0;font-size:clamp(28px,4.4vw,40px);line-height:1.1;font-weight:700}
-.autor h2 em{font-style:normal;background:linear-gradient(90deg,#7ff0e4,#9db8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
-.autor p{margin:14px 0 0;color:var(--muted);font-size:17px;line-height:1.55;max-width:520px}
-.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
-.chip{display:flex;align-items:baseline;gap:8px;padding:9px 16px;border-radius:999px;background:var(--glass);border:1px solid var(--edge);font-size:14px;color:var(--muted);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.chip b{font-size:20px;color:var(--text)}
+.central::after{content:"";position:absolute;width:300px;height:300px;right:-80px;bottom:-130px;border-radius:50%;background:radial-gradient(circle,rgba(79,209,197,.4),transparent 70%);z-index:-1;pointer-events:none}
 
-/* Tarjetas de proyectos, en cristal */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;padding-bottom:56px}
-.card{display:flex;flex-direction:column;gap:14px;padding:24px;border-radius:20px;min-height:190px;
-  background:linear-gradient(145deg,var(--glass2),var(--glass));border:1px solid var(--edge);
-  box-shadow:0 18px 40px -22px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.22);
-  -webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%);
-  transition:transform .18s,border-color .18s,box-shadow .18s}
-.card:hover,.card:focus-visible{transform:translateY(-4px);border-color:rgba(127,240,228,.6);box-shadow:0 26px 50px -22px rgba(79,209,197,.45),inset 0 1px 0 rgba(255,255,255,.3)}
-.row{display:flex;align-items:center;justify-content:space-between}
-.ini{width:44px;height:44px;border-radius:13px;color:#06121f;font-weight:700;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
-.tag{font-size:12px;color:var(--muted);border:1px solid var(--edge);border-radius:999px;padding:4px 10px;background:rgba(255,255,255,.05)}
-.card h3{margin:0;font-size:21px;line-height:1.2}
-.card p{margin:0;font-size:15px;line-height:1.5;color:var(--muted);flex-grow:1}
-.go{font-size:13px;color:var(--accent);font-weight:500}
+.cab{display:flex;flex-wrap:wrap;align-items:center;gap:20px;margin-bottom:24px}
+.sello{flex:0 0 auto;width:76px;height:76px;filter:drop-shadow(0 10px 22px rgba(79,209,197,.35))}
+.cab .t{flex:1 1 260px;min-width:0}
+.rol{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.cab h2{margin:0;font-size:clamp(24px,3.6vw,32px);line-height:1.1}
+.cab h2 em{font-style:normal;background:linear-gradient(90deg,#7ff0e4,#9db8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.buscar{flex:0 1 240px;display:flex}
+.buscar input{width:100%;padding:11px 16px;border-radius:999px;background:var(--glass);border:1px solid var(--edge);outline:none;font-size:15px}
+.buscar input::placeholder{color:var(--dim)}
+.buscar input:focus{border-color:rgba(127,240,228,.7)}
 
-.label{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:20px}
-.apps{display:flex;flex-wrap:wrap;gap:12px;padding-bottom:64px}
+/* Pestañas de grado */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.tab{padding:8px 16px;border-radius:999px;border:1px solid var(--edge);background:var(--glass);font-size:14px;color:var(--muted);transition:background .15s,color .15s,border-color .15s}
+.tab:hover{color:var(--text);border-color:rgba(127,240,228,.5)}
+.tab[aria-pressed="true"]{background:linear-gradient(135deg,rgba(127,240,228,.28),rgba(157,184,255,.22));color:var(--text);border-color:rgba(127,240,228,.7)}
+
+/* Columnas por grado */
+.grados{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.grado{padding:18px;border-radius:20px;background:rgba(7,15,28,.34);border:1px solid rgba(255,255,255,.12);min-height:120px;transition:border-color .15s,background .15s}
+.grado.sobre{border-color:rgba(127,240,228,.9);background:rgba(79,209,197,.14)}
+.grado h3{margin:0 0 14px;display:flex;align-items:center;justify-content:space-between;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.grado h3 .n{display:flex;align-items:center;gap:10px}
+.grado h3 .dot{width:10px;height:10px;border-radius:50%}
+.grado h3 .c{font-size:12px;color:var(--dim);letter-spacing:0;text-transform:none}
+.lista{display:flex;flex-direction:column;gap:8px}
+.proy{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:14px;background:linear-gradient(145deg,var(--glass2),var(--glass));border:1px solid var(--edge);box-shadow:inset 0 1px 0 rgba(255,255,255,.2);transition:transform .15s,border-color .15s}
+.proy:hover{border-color:rgba(127,240,228,.6);transform:translateX(3px)}
+.proy .i{flex:0 0 auto;width:30px;height:30px;border-radius:9px;color:#06121f;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+.proy .nom{flex:1;min-width:0;font-size:15px;line-height:1.25}
+.proy .fl{flex:0 0 auto;color:var(--accent);font-size:14px}
+.vacio{font-size:14px;color:var(--dim);padding:6px 2px}
+.sinres{display:none;color:var(--muted);padding:12px 4px}
+
+/* Administración */
+.adm .proy{cursor:grab;flex-wrap:wrap}
+.ctl{display:none;flex-basis:100%;gap:6px;flex-wrap:wrap;margin-top:2px}
+.adm .ctl{display:flex}
+.adm .proy .fl{display:none}
+.ctl select{padding:5px 8px;border-radius:8px;background:rgba(7,15,28,.6);border:1px solid var(--edge);font-size:12px}
+.mini{padding:5px 10px;border-radius:8px;background:rgba(255,255,255,.08);border:1px solid var(--edge);font-size:12px}
+.mini:hover{border-color:rgba(127,240,228,.7)}
+.mini.rojo:hover{border-color:#ff9f9f;color:#ffc4c4}
+.barra{display:none;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:18px;padding:12px 14px;border-radius:16px;background:rgba(79,209,197,.12);border:1px solid rgba(127,240,228,.45)}
+.adm .barra{display:flex}
+.barra .est{flex:1 1 220px;font-size:13px;color:var(--muted)}
+.barra .est b{color:var(--text)}
+.btn{padding:9px 16px;border-radius:999px;background:linear-gradient(135deg,rgba(127,240,228,.35),rgba(157,184,255,.3));border:1px solid rgba(127,240,228,.7);font-size:14px}
+.btn.sec{background:rgba(255,255,255,.08);border-color:var(--edge)}
+.btn:hover{filter:brightness(1.15)}
+
+dialog{width:min(440px,92vw);border:1px solid var(--edge);border-radius:20px;padding:24px;color:var(--text);background:rgba(13,27,42,.92);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+dialog::backdrop{background:rgba(3,8,16,.6)}
+dialog h4{margin:0 0 16px;font-size:20px}
+dialog label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}
+dialog input,dialog select{width:100%;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid var(--edge);outline:none}
+dialog input:focus,dialog select:focus{border-color:rgba(127,240,228,.7)}
+dialog .acc{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.aviso{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);padding:12px 20px;border-radius:999px;background:rgba(13,27,42,.95);border:1px solid rgba(127,240,228,.6);font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.aviso.v{opacity:1}
+
+.label{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:18px}
+.apps{display:flex;flex-wrap:wrap;gap:12px;padding-bottom:56px}
 .apps a{padding:12px 20px;border-radius:999px;border:1px solid var(--edge);background:var(--glass);font-size:15px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .apps a:hover{border-color:rgba(127,240,228,.6)}
 .apps span{color:var(--dim)}
 footer{margin-top:auto;border-top:1px solid rgba(255,255,255,.08)}
-footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;padding:28px 24px;font-size:14px;color:var(--dim)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;padding:24px 24px;font-size:14px;color:var(--dim)}
+.entrar{background:none;border:0;color:var(--dim);font-size:13px;padding:4px 8px;border-radius:8px}
+.entrar:hover{color:var(--text)}
 
-@media (max-width:560px){.autor{padding:26px;gap:22px}.sello{width:104px;height:104px}}
-@media (prefers-reduced-motion:reduce){.aurora i,.autor::before{animation:none}.card{transition:none}}
+@media (max-width:560px){.central{padding:22px}.sello{width:60px;height:60px}.buscar{flex-basis:100%}}
+@media (prefers-reduced-motion:reduce){.aurora i,.central::before{animation:none}.proy{transition:none}}
 </style>
 </head>
 <body>
 <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
 
-<!-- Símbolos del logo -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <linearGradient id="lgAro" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#9ff7ec"/><stop offset=".55" stop-color="#7fa8ff"/><stop offset="1" stop-color="#b89cff"/>
-    </linearGradient>
-    <linearGradient id="lgLetra" gradientUnits="userSpaceOnUse" x1="0" y1="30" x2="0" y2="90">
-      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#bfe9ff"/>
-    </linearGradient>
-    <linearGradient id="lgVidrio" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff" stop-opacity=".38"/><stop offset=".5" stop-color="#ffffff" stop-opacity=".08"/><stop offset="1" stop-color="#ffffff" stop-opacity=".22"/>
-    </linearGradient>
+    <linearGradient id="lgAro" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9ff7ec"/><stop offset=".55" stop-color="#7fa8ff"/><stop offset="1" stop-color="#b89cff"/></linearGradient>
+    <linearGradient id="lgLetra" gradientUnits="userSpaceOnUse" x1="0" y1="30" x2="0" y2="90"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#bfe9ff"/></linearGradient>
+    <linearGradient id="lgVidrio" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".38"/><stop offset=".5" stop-color="#ffffff" stop-opacity=".08"/><stop offset="1" stop-color="#ffffff" stop-opacity=".22"/></linearGradient>
     <symbol id="logoIS" viewBox="0 0 120 120">
       <polygon points="60,6 106,33 106,87 60,114 14,87 14,33" fill="url(#lgVidrio)" stroke="url(#lgAro)" stroke-width="2.5" stroke-linejoin="round"/>
       <polygon points="60,18 96,39 96,81 60,102 24,81 24,39" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1"/>
@@ -115,24 +148,32 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
   <section class="hero">
     <div class="eyebrow">Actividades y experimentos</div>
     <h1>Pequeños proyectos para aprender haciendo</h1>
-    <p>Juegos, simuladores y actividades de tecnología e informática, hechos para el aula. Elige uno y empieza.</p>
+    <p>Juegos, simuladores y actividades de tecnología e informática, organizados por grado. Elige el tuyo y empieza.</p>
   </section>
 
-  <section class="autor" aria-label="Autor">
-    <svg class="sello" role="img" aria-label="Logo Isco Sánchez"><use href="#logoIS"/></svg>
-    <div class="txt">
-      <div class="rol">Tecnología e informática</div>
-      <h2>Hecho por <em>Isco Sánchez</em></h2>
-      <p>Cada proyecto nace de una clase: algo que los estudiantes puedan abrir, tocar y entender.</p>
-      <div class="chips">
-        <div class="chip"><b id="nProy">0</b> proyectos</div>
-        <div class="chip"><b id="nApps">0</b> aplicaciones</div>
-        <div class="chip">Gi School</div>
+  <section class="central" id="proyectos" aria-label="Proyectos por grado">
+    <div class="cab">
+      <svg class="sello" role="img" aria-label="Logo Isco Sánchez"><use href="#logoIS"/></svg>
+      <div class="t">
+        <div class="rol">Tecnología e informática</div>
+        <h2>Proyectos de <em>Isco Sánchez</em></h2>
       </div>
+      <div class="buscar"><input id="q" type="search" placeholder="Buscar un proyecto…" aria-label="Buscar un proyecto"></div>
     </div>
-  </section>
 
-  <section id="proyectos"><div class="grid" id="lista"></div></section>
+    <div class="barra" id="barra">
+      <div class="est" id="est"><b>Modo administración.</b> Arrastra un proyecto a otro grado, o usa su selector. Los cambios son un borrador en este navegador hasta que los publiques.</div>
+      <button class="btn" id="bNuevo" type="button">Agregar proyecto</button>
+      <button class="btn sec" id="bCopiar" type="button">Copiar JSON</button>
+      <button class="btn sec" id="bBajar" type="button">Descargar JSON</button>
+      <button class="btn sec" id="bReset" type="button">Descartar borrador</button>
+      <button class="btn sec" id="bSalir" type="button">Salir</button>
+    </div>
+
+    <div class="tabs" id="tabs" role="group" aria-label="Filtrar por grado"></div>
+    <div class="grados" id="grados"></div>
+    <div class="sinres" id="sinres">No encontré proyectos con esa búsqueda.</div>
+  </section>
 
   <section id="apps">
     <div class="label">Aplicaciones completas</div>
@@ -140,45 +181,197 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
   </section>
 </main>
 
-<footer><div class="wrap"><div>Hecho para el aula · Gi School</div><div>iscosanchez.com</div></div></footer>
+<footer><div class="wrap"><div>Hecho para el aula · Gi School</div><div>iscosanchez.com <button class="entrar" id="bAdm" type="button">Administrar</button></div></div></footer>
+
+<dialog id="dlg">
+  <form method="dialog" id="frm">
+    <h4 id="dTit">Proyecto</h4>
+    <label for="fNom">Nombre</label><input id="fNom" required maxlength="60">
+    <label for="fUrl">Enlace</label><input id="fUrl" type="url" required placeholder="https://…">
+    <label for="fGra">Grado</label><select id="fGra"></select>
+    <div class="acc"><button class="btn sec" value="cancel" type="button" id="dCan">Cancelar</button><button class="btn" value="ok" id="dOk">Guardar</button></div>
+  </form>
+</dialog>
+<div class="aviso" id="aviso" role="status"></div>
 
 <script>
-var colores=['#7ff0e4','#ffc27a','#c3a6ff','#8cc5ff','#ff9f9f','#8be8ae'];
-var proyectos=[
-  ['Typing','Grado 1','Primeros pasos con el teclado: aprende dónde está cada letra jugando.','Typing'],
-  ['Correos 4°','Informática','Actividad de correo electrónico para practicar enviar, responder y adjuntar.','Correos4to'],
-  ['Detectives de carpetas','Informática','Encuentra archivos perdidos y aprende a organizar carpetas como un detective.','Detectives-de-Carpetas'],
-  ['Partes del computador','Hardware','Conoce cada pieza del computador arrastrándola a su lugar.','partes-del-computador'],
-  ['Proyecto Paint 2°','Creatividad','Dibuja y crea con las herramientas básicas de pintura digital.','Proyecto_Paint_2do'],
-  ['Algoritmos con Beto','Lógica','Da instrucciones paso a paso y descubre cómo piensa un algoritmo.','beto-algoritmos'],
-  ['Puzzles','Lógica','Rompecabezas para entrenar la atención y el razonamiento.','Puzzles'],
-  ['Hardware y software','Conceptos','Clasifica qué es hardware y qué es software, con ejemplos.','Hardware_Software'],
-  ['Máquina de Goldberg','Simulación','Arma una cadena de reacciones y mira cómo se mueve todo.','Goldberg-Machine'],
-  ['Laboratorio anti-phishing','Seguridad','Aprende a reconocer correos falsos antes de hacer clic.','Laboratorio-anti-phishing']
+var GRADOS=[
+  {k:'1',n:'Grado 1°',c:'#7ff0e4'},{k:'2',n:'Grado 2°',c:'#ffc27a'},{k:'3',n:'Grado 3°',c:'#c3a6ff'},
+  {k:'4',n:'Grado 4°',c:'#8cc5ff'},{k:'5',n:'Grado 5°',c:'#ff9f9f'},{k:'6',n:'Grado 6°',c:'#8be8ae'},
+  {k:'',n:'Sin asignar',c:'#9aa9b8'}
 ];
-var apps=[['ClassDrive','classdrive'],['Teclea','teclea'],['CodeKid','codekid'],['Planner Gi','planner'],['Kody','kody']];
-var base='https://iscosanchezl.github.io/';
-var cont=document.getElementById('lista');
-proyectos.forEach(function(p,i){
-  var a=document.createElement('a');
-  a.className='card';a.href=base+p[3]+'/';
-  a.innerHTML='<div class="row"><div class="ini"></div><div class="tag"></div></div><h3></h3><p></p><div class="go">Abrir →</div>';
-  a.querySelector('.ini').textContent=p[0].charAt(0);
-  a.querySelector('.ini').style.background=colores[i%colores.length];
-  a.querySelector('.tag').textContent=p[1];
-  a.querySelector('h3').textContent=p[0];
-  a.querySelector('p').textContent=p[2];
-  cont.appendChild(a);
+var DEF={version:1,proyectos:[
+  {id:'typing',nombre:'Typing (El teclado)',grado:'1',url:'https://iscosanchezl.github.io/Typing/'},
+  {id:'partes',nombre:'Partes del computador',grado:'1',url:'https://iscosanchezl.github.io/partes-del-computador/'},
+  {id:'algoritmos',nombre:'Algoritmos',grado:'1',url:'https://iscosanchezl.github.io/beto-algoritmos/'},
+  {id:'paint',nombre:'Proyecto Paint',grado:'2',url:'https://iscosanchezl.github.io/Proyecto_Paint_2do/'},
+  {id:'goldberg',nombre:'Máquina de Goldberg',grado:'3',url:'https://iscosanchezl.github.io/Goldberg-Machine/'},
+  {id:'kody',nombre:'Kody',grado:'4',url:'https://kody.iscosanchez.com'},
+  {id:'correos',nombre:'Correos',grado:'4',url:'https://iscosanchezl.github.io/Correos4to/'},
+  {id:'hardware',nombre:'Hardware y software',grado:'6',url:'https://iscosanchezl.github.io/Hardware_Software/'},
+  {id:'detectives',nombre:'Detectives de carpetas',grado:'6',url:'https://iscosanchezl.github.io/Detectives-de-Carpetas/'},
+  {id:'phishing',nombre:'Laboratorio anti-phishing',grado:'6',url:'https://iscosanchezl.github.io/Laboratorio-anti-phishing/'},
+  {id:'puzzles',nombre:'Puzzles',grado:'',url:'https://iscosanchezl.github.io/Puzzles/'}
+]};
+var APPS=[['ClassDrive','classdrive'],['Teclea','teclea'],['CodeKid','codekid'],['Planner Gi','planner'],['Kody','kody']];
+var BKEY='labs-borrador';
+var datos=null, admin=false, filtro='todos', consulta='', editId=null;
+var $=function(id){return document.getElementById(id)};
+
+function lsGet(){try{return localStorage.getItem(BKEY)}catch(e){return null}}
+function lsSet(v){try{localStorage.setItem(BKEY,v)}catch(e){}}
+function lsDel(){try{localStorage.removeItem(BKEY)}catch(e){}}
+
+function aviso(t){var a=$('aviso');a.textContent=t;a.classList.add('v');clearTimeout(aviso.t);aviso.t=setTimeout(function(){a.classList.remove('v')},2200)}
+function slug(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'proyecto'}
+function limpiar(d){
+  var ok=d&&Array.isArray(d.proyectos)?d.proyectos:[];
+  return {version:1,proyectos:ok.filter(function(p){return p&&p.nombre&&p.url}).map(function(p){
+    return {id:String(p.id||slug(p.nombre)),nombre:String(p.nombre),grado:String(p.grado||''),url:String(p.url)};
+  })};
+}
+function urlSegura(u){return /^https?:\/\//i.test(u)}
+
+function guardarBorrador(){lsSet(JSON.stringify(datos))}
+
+function pintarTabs(){
+  var t=$('tabs');t.textContent='';
+  var items=[{k:'todos'}].concat(GRADOS.filter(function(g){return g.k!==''||admin||datos.proyectos.some(function(p){return p.grado===''})}).map(function(g){return {k:g.k===''?'sin':g.k}}));
+  items.forEach(function(it){
+    var b=document.createElement('button');b.type='button';b.className='tab';
+    b.textContent=it.k==='todos'?'Todos':(it.k==='sin'?'Sin asignar':'Grado '+it.k+'°');
+    b.setAttribute('aria-pressed',String(filtro===it.k));
+    b.onclick=function(){filtro=it.k;pintar()};
+    t.appendChild(b);
+  });
+}
+
+function pintarProyecto(p,g){
+  var a=document.createElement(admin?'div':'a');
+  a.className='proy';a.dataset.id=p.id;
+  if(!admin){a.href=p.url;a.target='_blank';a.rel='noopener'}
+  var i=document.createElement('div');i.className='i';i.textContent=p.nombre.charAt(0).toUpperCase();i.style.background=g.c;
+  var n=document.createElement('div');n.className='nom';n.textContent=p.nombre;
+  var f=document.createElement('div');f.className='fl';f.textContent='→';
+  a.appendChild(i);a.appendChild(n);a.appendChild(f);
+  if(admin){
+    a.draggable=true;
+    a.addEventListener('dragstart',function(e){e.dataTransfer.setData('text/plain',p.id);e.dataTransfer.effectAllowed='move'});
+    var c=document.createElement('div');c.className='ctl';
+    var s=document.createElement('select');s.setAttribute('aria-label','Mover '+p.nombre);
+    GRADOS.forEach(function(x){var o=document.createElement('option');o.value=x.k;o.textContent=x.n;if(x.k===p.grado)o.selected=true;s.appendChild(o)});
+    s.onchange=function(){p.grado=s.value;guardarBorrador();pintar();aviso('Movido a '+nombreGrado(p.grado))};
+    var e=document.createElement('button');e.type='button';e.className='mini';e.textContent='Editar';e.onclick=function(){abrir(p)};
+    var d=document.createElement('button');d.type='button';d.className='mini rojo';d.textContent='Quitar';d.onclick=function(){
+      if(confirm('¿Quitar "'+p.nombre+'" de la lista?')){datos.proyectos=datos.proyectos.filter(function(x){return x!==p});guardarBorrador();pintar()}};
+    var v=document.createElement('a');v.className='mini';v.href=p.url;v.target='_blank';v.rel='noopener';v.textContent='Abrir';
+    c.appendChild(s);c.appendChild(e);c.appendChild(v);c.appendChild(d);a.appendChild(c);
+  }
+  return a;
+}
+function nombreGrado(k){var g=GRADOS.filter(function(x){return x.k===k})[0];return g?g.n:'Sin asignar'}
+
+function pintar(){
+  document.body.classList.toggle('adm',admin);
+  pintarTabs();
+  var cont=$('grados');cont.textContent='';
+  var q=consulta.trim().toLowerCase(),total=0;
+  GRADOS.forEach(function(g){
+    var key=g.k===''?'sin':g.k;
+    if(filtro!=='todos'&&filtro!==key)return;
+    var lista=datos.proyectos.filter(function(p){return p.grado===g.k&&(!q||p.nombre.toLowerCase().indexOf(q)>-1)});
+    if(g.k===''&&!lista.length&&!admin)return;
+    if(!lista.length&&(q||filtro==='todos'&&!admin))return;
+    total+=lista.length;
+    var s=document.createElement('section');s.className='grado';s.dataset.k=g.k;
+    var h=document.createElement('h3');
+    var n=document.createElement('span');n.className='n';
+    var dot=document.createElement('span');dot.className='dot';dot.style.background=g.c;
+    var tx=document.createElement('span');tx.textContent=g.n;
+    n.appendChild(dot);n.appendChild(tx);
+    var c=document.createElement('span');c.className='c';c.textContent=lista.length+(lista.length===1?' proyecto':' proyectos');
+    h.appendChild(n);h.appendChild(c);s.appendChild(h);
+    var l=document.createElement('div');l.className='lista';
+    lista.forEach(function(p){l.appendChild(pintarProyecto(p,g))});
+    if(!lista.length){var v=document.createElement('div');v.className='vacio';v.textContent=admin?'Suelta aquí un proyecto.':'Pronto habrá proyectos.';l.appendChild(v)}
+    s.appendChild(l);
+    if(admin){
+      s.addEventListener('dragover',function(e){e.preventDefault();s.classList.add('sobre')});
+      s.addEventListener('dragleave',function(){s.classList.remove('sobre')});
+      s.addEventListener('drop',function(e){
+        e.preventDefault();s.classList.remove('sobre');
+        var id=e.dataTransfer.getData('text/plain');
+        var p=datos.proyectos.filter(function(x){return x.id===id})[0];
+        if(p&&p.grado!==g.k){p.grado=g.k;guardarBorrador();pintar();aviso('Movido a '+g.n)}
+      });
+    }
+    cont.appendChild(s);
+  });
+  $('sinres').style.display=(q&&!total)?'block':'none';
+}
+
+function abrir(p){
+  editId=p?p.id:null;
+  $('dTit').textContent=p?'Editar proyecto':'Agregar proyecto';
+  $('fNom').value=p?p.nombre:'';
+  $('fUrl').value=p?p.url:'https://';
+  var s=$('fGra');s.textContent='';
+  GRADOS.forEach(function(x){var o=document.createElement('option');o.value=x.k;o.textContent=x.n;s.appendChild(o)});
+  s.value=p?p.grado:(filtro!=='todos'&&filtro!=='sin'?filtro:'');
+  $('dlg').showModal();
+}
+$('dCan').onclick=function(){$('dlg').close()};
+$('frm').addEventListener('submit',function(e){
+  var nom=$('fNom').value.trim(),url=$('fUrl').value.trim();
+  if(!nom||!urlSegura(url)){e.preventDefault();aviso('Escribe un nombre y un enlace que empiece por http');return}
+  if(editId){
+    var p=datos.proyectos.filter(function(x){return x.id===editId})[0];
+    if(p){p.nombre=nom;p.url=url;p.grado=$('fGra').value}
+  }else{
+    var id=slug(nom),base=id,k=2;
+    while(datos.proyectos.some(function(x){return x.id===id}))id=base+'-'+(k++);
+    datos.proyectos.push({id:id,nombre:nom,grado:$('fGra').value,url:url});
+  }
+  guardarBorrador();pintar();aviso('Guardado en el borrador');
 });
-var la=document.getElementById('listaApps');
-apps.forEach(function(x){
+
+function json(){return JSON.stringify(datos,null,2)+'\n'}
+$('bCopiar').onclick=function(){
+  var t=json();
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){aviso('JSON copiado')},function(){aviso('No pude copiar; usa Descargar')})}
+  else aviso('No pude copiar; usa Descargar');
+};
+$('bBajar').onclick=function(){
+  var b=new Blob([json()],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
+  a.href=u;a.download='proyectos.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},500);
+  aviso('Descargado: súbelo al repo labs como proyectos.json');
+};
+$('bNuevo').onclick=function(){abrir(null)};
+$('bReset').onclick=function(){if(confirm('¿Descartar el borrador y volver a la lista publicada?')){lsDel();cargar(function(){pintar();aviso('Borrador descartado')})}};
+$('bSalir').onclick=function(){admin=false;pintar()};
+$('bAdm').onclick=function(){admin=true;var b=lsGet();if(b){try{datos=limpiar(JSON.parse(b))}catch(e){}}pintar();$('proyectos').scrollIntoView({block:'start'})};
+$('q').addEventListener('input',function(){consulta=this.value;pintar()});
+
+function cargar(cb){
+  fetch('proyectos.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){datos=limpiar(d)})
+  .catch(function(){datos=limpiar(DEF)}).then(function(){
+    if(!datos.proyectos.length)datos=limpiar(DEF);
+    var b=lsGet();
+    if(admin&&b){try{datos=limpiar(JSON.parse(b))}catch(e){}}
+    cb();
+  });
+}
+
+var la=$('listaApps');
+APPS.forEach(function(x){
   var a=document.createElement('a');a.href='https://'+x[1]+'.iscosanchez.com';
   a.appendChild(document.createTextNode(x[0]));
   var s=document.createElement('span');s.textContent=' · '+x[1];a.appendChild(s);
   la.appendChild(a);
 });
-document.getElementById('nProy').textContent=proyectos.length;
-document.getElementById('nApps').textContent=apps.length;
+
+admin=location.hash==='#admin';
+cargar(function(){pintar();if(admin)$('proyectos').scrollIntoView()});
 </script>
 </body>
 </html>
