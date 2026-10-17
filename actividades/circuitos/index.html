@@ -51,8 +51,8 @@ kbd{padding:1px 6px;border-radius:6px;border:1px solid var(--edge);font-size:12p
 <div class="piso" aria-hidden="true"></div>
 
 <header class="top"><div class="wrap">
-  <a class="logo" href="../../"><img src="../../logo.png" alt="Isco Sánchez" width="40" height="40"><div>labs<span>.iscosanchez.com</span></div></a>
-  <div class="der"><div id="lang"></div><a class="volver" href="../../" data-i18n="c.volver"></a></div>
+  <div class="logo"><img src="../../logo.png" alt="Isco Sánchez" width="40" height="40"><div>Gi School<span> · Labs</span></div></div>
+  <div class="der"><div id="lang"></div></div>
 </div></header>
 
 <main class="wrap">
@@ -601,7 +601,7 @@ function guardarImagen(){
   x.fillStyle='#eaf2fb';x.font='700 34px "Space Grotesk",system-ui,sans-serif';x.textAlign='left';
   x.fillText(T('c.img.tit',{n:m.id,nombre:T('c.m'+m.id+'.nombre')}),30,H+48);
   x.font='400 26px "Space Grotesk",system-ui,sans-serif';x.fillStyle='#b3c4d6';
-  x.fillText((($('nombre').value||'').trim()||T('c.img.sin'))+'  ·  labs.iscosanchez.com',30,H+92);
+  x.fillText((($('nombre').value||'').trim()||T('c.img.sin'))+'  ·  Gi School',30,H+92);
   x.textAlign='right';x.font='700 38px "Space Grotesk",system-ui,sans-serif';x.fillStyle=ok?'#8be8ae':'#ffc27a';x.fillText(ok?T('c.img.ok'):T('c.img.prog'),W-30,H+60);
   off.toBlob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='circuito-mision-'+m.id+'.png';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)});
 }

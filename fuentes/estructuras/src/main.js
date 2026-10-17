@@ -400,7 +400,7 @@ function guardarInforme() {
     g.fillText(T('p.img.tit', { n: S.niv + 1, nombre: T('p.n.' + nv().id + '.nombre') }), pad, y);
     g.font = fN; g.fillStyle = '#b3c4d6'; y += Math.round(f * 1.5);
     const datos = R ? T('p.img.datos', { fs: R.fs.toFixed(2), l: R.longi.toFixed(1), m: Math.round(R.masa) }) : T('p.img.sinPrueba');
-    g.fillText(`${nombre}  ·  ${datos}  ·  labs.iscosanchez.com`, pad, y);
+    g.fillText(`${nombre}  ·  ${datos}  ·  Gi School`, pad, y);
     if (R && !nv().libre) { g.textAlign = 'right'; g.fillStyle = '#ffd36b'; g.font = fT; g.fillText('★'.repeat(R.estrellas) + '☆'.repeat(3 - R.estrellas), W - pad, H + pad + f); g.textAlign = 'left'; }
     y += Math.round(f * 1.3);
     bloques.forEach(([t, v]) => {
