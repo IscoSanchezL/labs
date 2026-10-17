@@ -3,35 +3,43 @@
   "grupos": [
     {
       "id": "1",
-      "nombre": "Grado 1°"
+      "nombre": "Grado 1°",
+      "nombre_en": "Grade 1"
     },
     {
       "id": "2",
-      "nombre": "Grado 2°"
+      "nombre": "Grado 2°",
+      "nombre_en": "Grade 2"
     },
     {
       "id": "3",
-      "nombre": "Grado 3°"
+      "nombre": "Grado 3°",
+      "nombre_en": "Grade 3"
     },
     {
       "id": "4",
-      "nombre": "Grado 4°"
+      "nombre": "Grado 4°",
+      "nombre_en": "Grade 4"
     },
     {
       "id": "5",
-      "nombre": "Grado 5°"
+      "nombre": "Grado 5°",
+      "nombre_en": "Grade 5"
     },
     {
       "id": "6",
-      "nombre": "Grado 6°"
+      "nombre": "Grado 6°",
+      "nombre_en": "Grade 6"
     },
     {
       "id": "apps-escolares",
-      "nombre": "Apps Escolares"
+      "nombre": "Apps Escolares",
+      "nombre_en": "School Apps"
     },
     {
       "id": "proyectos-personales",
-      "nombre": "Proyectos Personales"
+      "nombre": "Proyectos Personales",
+      "nombre_en": "Personal Projects"
     }
   ],
   "proyectos": [
@@ -41,7 +49,8 @@
       "grupos": [
         "1"
       ],
-      "url": "https://iscosanchezl.github.io/Typing/"
+      "url": "https://iscosanchezl.github.io/Typing/",
+      "nombre_en": "Typing (The keyboard)"
     },
     {
       "id": "partes",
@@ -49,7 +58,8 @@
       "grupos": [
         "1"
       ],
-      "url": "https://iscosanchezl.github.io/partes-del-computador/"
+      "url": "https://iscosanchezl.github.io/partes-del-computador/",
+      "nombre_en": "Parts of the computer"
     },
     {
       "id": "algoritmos",
@@ -57,7 +67,8 @@
       "grupos": [
         "1"
       ],
-      "url": "https://iscosanchezl.github.io/beto-algoritmos/"
+      "url": "https://iscosanchezl.github.io/beto-algoritmos/",
+      "nombre_en": "Algorithms"
     },
     {
       "id": "paint",
@@ -65,7 +76,8 @@
       "grupos": [
         "2"
       ],
-      "url": "https://iscosanchezl.github.io/Proyecto_Paint_2do/"
+      "url": "https://iscosanchezl.github.io/Proyecto_Paint_2do/",
+      "nombre_en": "Paint project"
     },
     {
       "id": "goldberg",
@@ -73,7 +85,8 @@
       "grupos": [
         "3"
       ],
-      "url": "https://iscosanchezl.github.io/Goldberg-Machine/"
+      "url": "https://iscosanchezl.github.io/Goldberg-Machine/",
+      "nombre_en": "Rube Goldberg machine"
     },
     {
       "id": "kody",
@@ -81,7 +94,8 @@
       "grupos": [
         "4"
       ],
-      "url": "https://kody.iscosanchez.com"
+      "url": "https://kody.iscosanchez.com",
+      "nombre_en": "Kody"
     },
     {
       "id": "correos",
@@ -89,7 +103,8 @@
       "grupos": [
         "4"
       ],
-      "url": "https://iscosanchezl.github.io/Correos4to/"
+      "url": "https://iscosanchezl.github.io/Correos4to/",
+      "nombre_en": "Email"
     },
     {
       "id": "hardware",
@@ -97,7 +112,8 @@
       "grupos": [
         "6"
       ],
-      "url": "https://iscosanchezl.github.io/Hardware_Software/"
+      "url": "https://iscosanchezl.github.io/Hardware_Software/",
+      "nombre_en": "Hardware and software"
     },
     {
       "id": "detectives",
@@ -105,7 +121,8 @@
       "grupos": [
         "6"
       ],
-      "url": "https://iscosanchezl.github.io/Detectives-de-Carpetas/"
+      "url": "https://iscosanchezl.github.io/Detectives-de-Carpetas/",
+      "nombre_en": "Folder detectives"
     },
     {
       "id": "phishing",
@@ -113,7 +130,8 @@
       "grupos": [
         "6"
       ],
-      "url": "https://iscosanchezl.github.io/Laboratorio-anti-phishing/"
+      "url": "https://iscosanchezl.github.io/Laboratorio-anti-phishing/",
+      "nombre_en": "Anti-phishing lab"
     },
     {
       "id": "puzzles",
@@ -121,7 +139,8 @@
       "grupos": [
         "1"
       ],
-      "url": "https://iscosanchezl.github.io/Puzzles/"
+      "url": "https://iscosanchezl.github.io/Puzzles/",
+      "nombre_en": "Puzzles"
     },
     {
       "id": "classdrive",
@@ -129,7 +148,8 @@
       "grupos": [
         "apps-escolares"
       ],
-      "url": "https://classdrive.iscosanchez.com"
+      "url": "https://classdrive.iscosanchez.com",
+      "nombre_en": "ClassDrive"
     },
     {
       "id": "teclea",
@@ -139,7 +159,8 @@
         "4",
         "6"
       ],
-      "url": "https://teclea.iscosanchez.com"
+      "url": "https://teclea.iscosanchez.com",
+      "nombre_en": "Teclea"
     },
     {
       "id": "codekid",
@@ -147,7 +168,8 @@
       "grupos": [
         "2"
       ],
-      "url": "https://codekid.iscosanchez.com"
+      "url": "https://codekid.iscosanchez.com",
+      "nombre_en": "CodeKid"
     },
     {
       "id": "planner",
@@ -155,7 +177,8 @@
       "grupos": [
         "apps-escolares"
       ],
-      "url": "https://planner.iscosanchez.com"
+      "url": "https://planner.iscosanchez.com",
+      "nombre_en": "Planner Gi"
     },
     {
       "id": "tienda-iscostore",
@@ -163,7 +186,8 @@
       "grupos": [
         "proyectos-personales"
       ],
-      "url": "https://techstore.iscosanchez.com"
+      "url": "https://techstore.iscosanchez.com",
+      "nombre_en": "IscoStore shop"
     },
     {
       "id": "rednexo",
@@ -171,7 +195,8 @@
       "grupos": [
         "proyectos-personales"
       ],
-      "url": "https://rednexo.iscosanchez.com"
+      "url": "https://rednexo.iscosanchez.com",
+      "nombre_en": "RedNexo"
     },
     {
       "id": "estructuras",
@@ -179,7 +204,8 @@
       "grupos": [
         "5"
       ],
-      "url": "actividades/estructuras/"
+      "url": "actividades/estructuras/",
+      "nombre_en": "Bridge Lab"
     },
     {
       "id": "circuitos",
@@ -187,7 +213,8 @@
       "grupos": [
         "6"
       ],
-      "url": "actividades/circuitos/"
+      "url": "actividades/circuitos/",
+      "nombre_en": "Circuit Lab"
     },
     {
       "id": "gimun",
@@ -195,7 +222,8 @@
       "grupos": [
         "5"
       ],
-      "url": "actividades/gimun/"
+      "url": "actividades/gimun/",
+      "nombre_en": "GIMUN: country position"
     }
   ]
 }

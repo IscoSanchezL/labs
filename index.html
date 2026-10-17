@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Labs · iscosanchez.com</title>
 <meta name="description" content="Proyectos de tecnología e informática para el aula, organizados por grado.">
+<script src="assets/i18n.js"></script>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -30,6 +31,11 @@ header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:spac
 .logo img{width:44px;height:44px}
 .logo span{color:var(--dim);font-weight:400}
 nav{display:flex;gap:24px;font-size:15px;color:var(--muted)}
+.lang{display:inline-flex;border:1px solid var(--edge);border-radius:999px;background:var(--glass);overflow:hidden}
+.lang button{padding:7px 14px;border:0;background:transparent;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--muted)}
+.lang button:hover{color:var(--text)}
+.lang button[aria-pressed="true"]{background:linear-gradient(135deg,rgba(127,240,228,.36),rgba(157,184,255,.3));color:var(--text)}
+.der{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 nav a:hover{color:var(--text)}
 
 .hero{padding:40px 0 28px}
@@ -182,27 +188,27 @@ header.top{position:absolute;top:0;left:0;right:0;z-index:5;background:linear-gr
   </defs>
 </svg>
 
-<div class="banner"><div class="zoom" id="zoom"><img src="hero.jpg" alt="LABS: un portal de cristal que se abre hacia un mundo digital" fetchpriority="high"></div></div>
+<div class="banner"><div class="zoom" id="zoom"><img src="hero.jpg" alt="LABS: un portal de cristal que se abre hacia un mundo digital" data-i18n-attr="alt:heroAlt" fetchpriority="high"></div></div>
 <header class="top"><div class="wrap">
   <div class="logo"><img src="logo.png" alt="Isco Sánchez" width="44" height="44"><div>labs<span>.iscosanchez.com</span></div></div>
-  <nav><a href="#proyectos">Proyectos</a></nav>
+  <div class="der"><nav><a href="#proyectos" data-i18n="nav">Proyectos</a></nav><div id="lang"></div></div>
 </div></header>
 
 <main class="wrap">
   <section class="hero">
-    <div class="eyebrow">// actividades y experimentos<span class="cur"></span></div>
-    <h1>Pequeños proyectos para <em>aprender haciendo</em></h1>
-    <p>Juegos, simuladores y actividades de tecnología e informática, organizados por grado. Elige el tuyo y empieza.</p>
+    <div class="eyebrow"><span data-i18n="eyebrow">// actividades y experimentos</span><span class="cur"></span></div>
+    <h1 data-i18n="h1">Pequeños proyectos para <em>aprender haciendo</em></h1>
+    <p data-i18n="sub">Juegos, simuladores y actividades de tecnología e informática, organizados por grado. Elige el tuyo y empieza.</p>
   </section>
 
   <section class="central" id="proyectos" aria-label="Proyectos por grado">
     <div class="cab">
       <img class="sello" src="logo.png" alt="Logo Isco Sánchez" width="96" height="96">
       <div class="t">
-        <div class="rol">Tecnología e informática</div>
-        <h2>Proyectos de <em>Isco Sánchez</em></h2>
+        <div class="rol" data-i18n="rol">Tecnología e informática</div>
+        <h2 data-i18n="h2">Proyectos de <em>Isco Sánchez</em></h2>
       </div>
-      <div class="buscar"><input id="q" type="search" placeholder="Buscar un proyecto…" aria-label="Buscar un proyecto"></div>
+      <div class="buscar"><input id="q" type="search" placeholder="Buscar un proyecto…" aria-label="Buscar un proyecto" data-i18n-attr="placeholder:buscar;aria-label:buscarA"></div>
     </div>
 
     <div class="barra" id="barra">
@@ -215,19 +221,20 @@ header.top{position:absolute;top:0;left:0;right:0;z-index:5;background:linear-gr
       <button class="btn sec" id="bSalir" type="button">Salir</button>
     </div>
 
-    <div class="tabs" id="tabs" role="group" aria-label="Filtrar por grado"></div>
+    <div class="tabs" id="tabs" role="group" aria-label="Filtrar por grado" data-i18n-attr="aria-label:filtrar"></div>
     <div class="grados" id="grados"></div>
-    <div class="sinres" id="sinres">No encontré proyectos con esa búsqueda.</div>
+    <div class="sinres" id="sinres" data-i18n="sinres">No encontré proyectos con esa búsqueda.</div>
   </section>
 
 </main>
 
-<footer><div class="wrap"><div>Hecho para el aula · Gi School</div><div>iscosanchez.com <button class="entrar" id="bAdm" type="button">Administrar</button></div></div></footer>
+<footer><div class="wrap"><div data-i18n="pie">Hecho para el aula · Gi School</div><div>iscosanchez.com <button class="entrar" id="bAdm" type="button" data-i18n="adm">Administrar</button></div></div></footer>
 
 <dialog id="dlg">
   <form method="dialog" id="frm">
     <h4 id="dTit">Proyecto</h4>
     <label for="fNom">Nombre</label><input id="fNom" required maxlength="60">
+    <label for="fNomEn">Nombre en inglés (opcional)</label><input id="fNomEn" maxlength="60" placeholder="English name">
     <label for="fUrl">Enlace</label><input id="fUrl" type="text" required placeholder="https://… o actividades/nombre/">
     <label>Tarjetas donde aparece</label><div id="fGra" class="checks"></div>
     <div class="acc"><button class="btn sec" value="cancel" type="button" id="dCan">Cancelar</button><button class="btn" value="ok" id="dOk">Guardar</button></div>
@@ -237,6 +244,7 @@ header.top{position:absolute;top:0;left:0;right:0;z-index:5;background:linear-gr
   <form id="fgrp" autocomplete="off">
     <h4 id="gTit">Nombre de la tarjeta</h4>
     <label for="gNom">Nombre</label><input id="gNom" required maxlength="40" placeholder="Ej.: General, Grado 7°, Para todos los grados">
+    <label for="gNomEn">Nombre en inglés (opcional)</label><input id="gNomEn" maxlength="40" placeholder="Ej.: Grade 7, For all grades">
     <div class="acc"><button class="btn sec" type="button" id="gCan">Cancelar</button><button class="btn" type="submit">Guardar</button></div>
   </form>
 </dialog>
@@ -280,6 +288,25 @@ var DEF={version:2,
   {id:'codekid',nombre:'CodeKid',grupos:['apps'],url:'https://codekid.iscosanchez.com'},
   {id:'planner',nombre:'Planner Gi',grupos:['apps'],url:'https://planner.iscosanchez.com'}
 ]};
+I18N.add({
+titulo:'Labs · iscosanchez.com',descripcion:'Proyectos de tecnología e informática para el aula, organizados por grado.',
+nav:'Proyectos',eyebrow:'// actividades y experimentos',h1:'Pequeños proyectos para <em>aprender haciendo</em>',
+sub:'Juegos, simuladores y actividades de tecnología e informática, organizados por grado. Elige el tuyo y empieza.',
+rol:'Tecnología e informática',h2:'Proyectos de <em>Isco Sánchez</em>',buscar:'Buscar un proyecto…',buscarA:'Buscar un proyecto',
+filtrar:'Filtrar por grado',sinres:'No encontré proyectos con esa búsqueda.',pie:'Hecho para el aula · Gi School',adm:'Administrar',
+heroAlt:'LABS: un portal de cristal que se abre hacia un mundo digital',todos:'Todos',sin:'Sin asignar',
+proy1:'proyecto',proyN:'proyectos',vacio:'Pronto habrá proyectos aquí.',vacioAdm:'Suelta aquí un proyecto.'
+},{
+titulo:'Labs · iscosanchez.com',descripcion:'Technology and computer science projects for the classroom, organized by grade.',
+nav:'Projects',eyebrow:'// activities and experiments',h1:'Small projects for <em>learning by doing</em>',
+sub:'Games, simulators and technology and computer science activities, organized by grade. Pick yours and start.',
+rol:'Technology and computer science',h2:'Projects by <em>Isco Sánchez</em>',buscar:'Search for a project…',buscarA:'Search for a project',
+filtrar:'Filter by grade',sinres:'No projects match your search.',pie:'Made for the classroom · Gi School',adm:'Admin',
+heroAlt:'LABS: a glass portal opening onto a digital world',todos:'All',sin:'Unassigned',
+proy1:'project',proyN:'projects',vacio:'Projects will be here soon.',vacioAdm:'Drop a project here.'
+});
+var T=function(k,v){return I18N.t(k,v)};
+function N(x){return (I18N.get()==='en'&&x.nombre_en)?x.nombre_en:x.nombre}
 var BKEY='labs-borrador';
 var datos=null, pub=null, admin=false, filtro='todos', consulta='', editId=null, grpEdit=null;
 var $=function(id){return document.getElementById(id)};
@@ -294,11 +321,11 @@ function urlSegura(u){return /^(https?:\/\/|\.{0,2}\/|[a-z0-9_-]+\/)/i.test(u)}
 
 function limpiar(d){
   var gs=d&&Array.isArray(d.grupos)&&d.grupos.length?d.grupos:DEF.grupos;
-  gs=gs.filter(function(g){return g&&g.nombre}).map(function(g){return {id:String(g.id||slug(g.nombre)),nombre:String(g.nombre)}});
+  gs=gs.filter(function(g){return g&&g.nombre}).map(function(g){var o={id:String(g.id||slug(g.nombre)),nombre:String(g.nombre)};if(g.nombre_en)o.nombre_en=String(g.nombre_en);return o});
   var ok=d&&Array.isArray(d.proyectos)?d.proyectos:[];
   var ps=ok.filter(function(p){return p&&p.nombre&&p.url}).map(function(p){
     var g=Array.isArray(p.grupos)?p.grupos:[p.grupo!==undefined?p.grupo:p.grado];
-    return {id:String(p.id||slug(p.nombre)),nombre:String(p.nombre),grupos:g.map(function(x){return String(x||'')}),url:String(p.url)};
+    var o={id:String(p.id||slug(p.nombre)),nombre:String(p.nombre),grupos:g.map(function(x){return String(x||'')}),url:String(p.url)};if(p.nombre_en)o.nombre_en=String(p.nombre_en);return o;
   });
   ps.forEach(function(p){
     var ids=p.grupos.filter(function(x){return x===''||gs.some(function(g){return g.id===x})});
@@ -316,16 +343,16 @@ function leerBorrador(){
   lsDel();return null;
 }
 function colorDe(id){var i=datos.grupos.findIndex(function(g){return g.id===id});return i<0?GRIS:PALETA[i%PALETA.length]}
-function nombreDe(id){var g=datos.grupos.filter(function(x){return x.id===id})[0];return g?g.nombre:'Sin asignar'}
+function nombreDe(id){var g=datos.grupos.filter(function(x){return x.id===id})[0];return g?N(g):T('sin')}
 function enGrupo(p,id){return p.grupos.indexOf(id)>-1}
 function haySinAsignar(){return datos.proyectos.some(function(p){return enGrupo(p,'')})}
 function ponerGrupos(p,ids){ids=ids.filter(function(x,i){return ids.indexOf(x)===i});if(ids.length>1)ids=ids.filter(function(x){return x!==''});p.grupos=ids.length?ids:['']}
 
 function pintarTabs(){
   var t=$('tabs');t.textContent='';
-  var items=[{k:'todos',n:'Todos'}];
-  datos.grupos.forEach(function(g){items.push({k:g.id,n:g.nombre})});
-  if(admin||haySinAsignar())items.push({k:'sin',n:'Sin asignar'});
+  var items=[{k:'todos',n:T('todos')}];
+  datos.grupos.forEach(function(g){items.push({k:g.id,n:N(g)})});
+  if(admin||haySinAsignar())items.push({k:'sin',n:T('sin')});
   if(!items.some(function(x){return x.k===filtro}))filtro='todos';
   items.forEach(function(it){
     var b=document.createElement('button');b.type='button';b.className='tab';b.textContent=it.n;
@@ -339,8 +366,8 @@ function pintarProyecto(p,color,gid){
   var a=document.createElement(admin?'div':'a');
   a.className='proy';a.dataset.id=p.id;
   if(!admin){a.href=p.url;a.target='_blank';a.rel='noopener'}
-  var i=document.createElement('div');i.className='i';i.textContent=p.nombre.charAt(0).toUpperCase();i.style.background=color;
-  var n=document.createElement('div');n.className='nom';n.textContent=p.nombre;
+  var i=document.createElement('div');i.className='i';i.textContent=N(p).charAt(0).toUpperCase();i.style.background=color;
+  var n=document.createElement('div');n.className='nom';n.textContent=N(p);
   var f=document.createElement('div');f.className='fl';f.textContent='→';
   a.appendChild(i);a.appendChild(n);a.appendChild(f);
   if(admin){
@@ -381,9 +408,9 @@ function pintarGrupo(g,idx,lista,q){
   var h=document.createElement('h3');
   var n=document.createElement('span');n.className='n';
   var dot=document.createElement('span');dot.className='dot';dot.style.background=color;
-  var tx=document.createElement('span');tx.textContent=g.nombre;
+  var tx=document.createElement('span');tx.textContent=g.id===''?T('sin'):N(g);
   n.appendChild(dot);n.appendChild(tx);
-  var c=document.createElement('span');c.className='c';c.textContent=lista.length+(lista.length===1?' proyecto':' proyectos');
+  var c=document.createElement('span');c.className='c';c.textContent=lista.length+' '+(lista.length===1?T('proy1'):T('proyN'));
   h.appendChild(n);h.appendChild(c);s.appendChild(h);
   if(admin&&g.id!==''){
     var gc=document.createElement('div');gc.className='gctl';
@@ -396,7 +423,7 @@ function pintarGrupo(g,idx,lista,q){
   }
   var l=document.createElement('div');l.className='lista';
   lista.forEach(function(p){l.appendChild(pintarProyecto(p,color,g.id))});
-  if(!lista.length){var v=document.createElement('div');v.className='vacio';v.textContent=admin?'Suelta aquí un proyecto.':'Pronto habrá proyectos aquí.';l.appendChild(v)}
+  if(!lista.length){var v=document.createElement('div');v.className='vacio';v.textContent=admin?T('vacioAdm'):T('vacio');l.appendChild(v)}
   s.appendChild(l);
   if(admin){
     s.addEventListener('dragover',function(e){e.preventDefault();s.classList.add('sobre')});
@@ -420,11 +447,11 @@ function pintar(){
   var cont=$('grados');cont.textContent='';
   var q=consulta.trim().toLowerCase(),total=0;
   var grupos=datos.grupos.map(function(g,i){return {g:g,i:i}});
-  if(admin||haySinAsignar())grupos.push({g:{id:'',nombre:'Sin asignar'},i:-1});
+  if(admin||haySinAsignar())grupos.push({g:{id:'',nombre:'Sin asignar',nombre_en:'Unassigned'},i:-1});
   grupos.forEach(function(x){
     var g=x.g,key=g.id===''?'sin':g.id;
     if(filtro!=='todos'&&filtro!==key)return;
-    var lista=datos.proyectos.filter(function(p){return enGrupo(p,g.id)&&(!q||p.nombre.toLowerCase().indexOf(q)>-1)});
+    var lista=datos.proyectos.filter(function(p){return enGrupo(p,g.id)&&(!q||p.nombre.toLowerCase().indexOf(q)>-1||(p.nombre_en||'').toLowerCase().indexOf(q)>-1)});
     if(!lista.length&&(q||(g.id===''&&!admin)))return;
     total+=lista.length;
     cont.appendChild(pintarGrupo(g,x.i,lista,q));
@@ -450,15 +477,16 @@ function quitarGrupo(g){
 function abrirGrupo(g){
   grpEdit=g||null;
   $('gTit').textContent=g?'Renombrar tarjeta':'Agregar tarjeta';
-  $('gNom').value=g?g.nombre:'';
+  $('gNom').value=g?g.nombre:'';$('gNomEn').value=g&&g.nombre_en?g.nombre_en:'';
   $('dgrp').showModal();$('gNom').focus();
 }
 $('gCan').onclick=function(){$('dgrp').close()};
 $('fgrp').addEventListener('submit',function(e){
   e.preventDefault();
   var nom=$('gNom').value.trim();if(!nom)return;
-  if(grpEdit){grpEdit.nombre=nom}
-  else{var id=unico(slug(nom),datos.grupos);datos.grupos.push({id:id,nombre:nom});filtro='todos'}
+  var ne=$('gNomEn').value.trim();
+  if(grpEdit){grpEdit.nombre=nom;if(ne)grpEdit.nombre_en=ne;else delete grpEdit.nombre_en}
+  else{var id=unico(slug(nom),datos.grupos),ng={id:id,nombre:nom};if(ne)ng.nombre_en=ne;datos.grupos.push(ng);filtro='todos'}
   guardarBorrador();$('dgrp').close();pintar();aviso('Guardado en el borrador');
 });
 $('bGrupo').onclick=function(){abrirGrupo(null)};
@@ -467,7 +495,7 @@ $('bGrupo').onclick=function(){abrirGrupo(null)};
 function abrir(p){
   editId=p?p.id:null;
   $('dTit').textContent=p?'Editar proyecto':'Agregar proyecto';
-  $('fNom').value=p?p.nombre:'';
+  $('fNom').value=p?p.nombre:'';$('fNomEn').value=p&&p.nombre_en?p.nombre_en:'';
   $('fUrl').value=p?p.url:'https://';
   var box=$('fGra');box.textContent='';
   var def=filtro!=='todos'&&filtro!=='sin'?filtro:'';
@@ -489,9 +517,10 @@ $('frm').addEventListener('submit',function(e){
   if(!nom||!urlSegura(url)){e.preventDefault();aviso('Escribe un nombre y un enlace (https://… o una ruta como actividades/nombre/)');return}
   if(editId){
     var p=datos.proyectos.filter(function(x){return x.id===editId})[0];
-    if(p){p.nombre=nom;p.url=url;ponerGrupos(p,gruposMarcados())}
+    var ne=$('fNomEn').value.trim();
+    if(p){p.nombre=nom;if(ne)p.nombre_en=ne;else delete p.nombre_en;p.url=url;ponerGrupos(p,gruposMarcados())}
   }else{
-    var np={id:unico(slug(nom),datos.proyectos),nombre:nom,grupos:[''],url:url};ponerGrupos(np,gruposMarcados());datos.proyectos.push(np);
+    var np={id:unico(slug(nom),datos.proyectos),nombre:nom,grupos:[''],url:url};if($('fNomEn').value.trim())np.nombre_en=$('fNomEn').value.trim();ponerGrupos(np,gruposMarcados());datos.proyectos.push(np);
   }
   guardarBorrador();pintar();aviso('Guardado en el borrador');
 });
@@ -551,7 +580,7 @@ function cargar(cb){
   });
 }
 admin=false;
-cargar(function(){pintar();if(location.hash==='#admin')pedirPin()});
+cargar(function(){pintar();I18N.montar();I18N.onChange(function(){if(datos)pintar()});if(location.hash==='#admin')pedirPin()});
 
 /* Zoom al desplazarse: al bajar por la página el portal se acerca, como si entraras */
 (function(){
