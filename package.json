@@ -1,0 +1,18 @@
+{
+  "name": "labs-fuentes",
+  "private": true,
+  "type": "module",
+  "description": "Código fuente (Vite) de las actividades de labs.iscosanchez.com que lo necesitan. El resultado compilado se publica en /actividades.",
+  "scripts": {
+    "dev:estructuras": "vite fuentes/estructuras",
+    "build:estructuras": "vite build fuentes/estructuras",
+    "test": "node fuentes/estructuras/pruebas/motor.test.mjs"
+  },
+  "devDependencies": {
+    "vite": "^8.0.0"
+  },
+  "dependencies": {
+    "gsap": "^3.12.0",
+    "three": "^0.180.0"
+  }
+}

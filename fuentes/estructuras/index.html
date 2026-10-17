@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratorio de puentes · Labs</title>
+<meta name="description" content="Diseña puentes, torres y voladizos en 3D, haz cruzar un camión y mide su factor de seguridad. Grado 5°.">
+<link rel="icon" type="image/png" href="../../favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/lab.css">
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="piso" aria-hidden="true"></div>
+
+<header class="top"><div class="wrap">
+  <a class="logo" href="../../"><img src="../../logo.png" alt="Isco Sánchez" width="40" height="40"><div>labs<span>.iscosanchez.com</span></div></a>
+  <div class="der"><div id="lang"></div><a class="volver" href="../../" data-i18n="p.volver"></a></div>
+</div></header>
+
+<main class="wrap">
+  <section class="titulo">
+    <span class="eyebrow" data-i18n="p.eyebrow"></span>
+    <h1 data-i18n="p.h1"></h1>
+    <p class="sub" data-i18n="p.sub"></p>
+  </section>
+
+  <section class="zona">
+    <div>
+      <div class="glass lienzo">
+        <div class="cabeza">
+          <div class="tabs" id="tabsNivel" role="group" data-i18n-attr="aria-label:p.nivel"></div>
+          <div class="ntit"><b id="nTit"></b> <span class="estrellas" id="estrellasNivel"></span></div>
+        </div>
+        <div class="vista" id="vista" role="img" data-i18n-attr="aria-label:p.canvas">
+          <div class="toast" id="toast" role="status"></div>
+          <div class="tip" id="tip" hidden></div>
+          <div class="hud" id="hudPrueba" hidden></div>
+          <div class="vivo" id="medidorVivo" hidden>
+            <span data-i18n="p.vivo"></span>
+            <div class="bar"><i id="barraVivo"></i></div>
+            <b id="txtVivo"></b>
+          </div>
+        </div>
+
+        <div class="barra">
+          <div class="grupo" role="group" data-i18n-attr="aria-label:p.herramientas">
+            <button class="tab" id="tCons" type="button" aria-pressed="true" data-i18n="p.construir"></button>
+            <button class="tab" id="tBorr" type="button" aria-pressed="false" data-i18n="p.borrar"></button>
+          </div>
+          <div class="mats" id="mats" role="group" data-i18n-attr="aria-label:p.material"></div>
+        </div>
+        <div class="barra">
+          <button class="btn sec" id="bDeshacer" type="button" data-i18n="p.deshacer"></button>
+          <button class="btn sec" id="bLimpiar" type="button" data-i18n="p.limpiar"></button>
+          <button class="btn sec" id="bEjemplo" type="button" data-i18n="p.ejemplo"></button>
+          <span class="sep"></span>
+          <button class="tab" id="bEditar" type="button" aria-pressed="true" data-i18n="p.editar"></button>
+          <button class="tab" id="bVer3D" type="button" aria-pressed="false" data-i18n="p.ver3d"></button>
+        </div>
+        <div class="barra">
+          <button class="btn grande" id="bProbar" type="button" data-i18n="p.probar"></button>
+          <button class="btn grande sec" id="bResist" type="button" data-i18n="p.resist"></button>
+          <div class="camion" id="camionBox" hidden>
+            <span data-i18n="p.camion"></span>
+            <button class="tab" id="camionMenos" type="button" data-i18n-attr="aria-label:p.pesoMenos">−</button>
+            <b id="camionVal">3 t</b>
+            <button class="tab" id="camionMas" type="button" data-i18n-attr="aria-label:p.pesoMas">+</button>
+          </div>
+        </div>
+        <p class="mini" data-i18n="p.ayuda"></p>
+      </div>
+    </div>
+
+    <aside>
+      <div class="glass panel">
+        <h2 data-i18n="p.reto"></h2>
+        <h3 class="rtit" id="retoTit"></h3>
+        <div class="msg" id="reto"></div>
+        <p class="mini" id="infoCarga"></p>
+      </div>
+
+      <div class="glass panel resultado" id="resultado" hidden>
+        <h2 data-i18n="p.resultado"></h2>
+        <h3 class="rtit" id="rTitulo"></h3>
+        <div class="rest" id="rEst"></div>
+        <p id="rTexto" class="rtxt"></p>
+        <div class="fsbox">
+          <span class="mini" data-i18n="p.fs"></span>
+          <b class="fsnum" id="rFS"></b>
+          <div class="bar"><i id="rBarra"></i></div>
+          <span class="mini" data-i18n="p.fsAyuda"></span>
+        </div>
+        <div class="fila"><span class="chip"><b id="rLong"></b></span><span class="chip"><b id="rMasa"></b></span></div>
+        <div class="mini crit" id="rCrit"></div>
+        <div class="fila" style="margin-top:12px">
+          <button class="btn" id="bSig" type="button" data-i18n="p.sig"></button>
+          <button class="btn sec" id="bReint" type="button" data-i18n="p.mejorar"></button>
+        </div>
+      </div>
+
+      <div class="glass panel">
+        <h2 data-i18n="p.datos"></h2>
+        <div class="datos">
+          <div><span class="mini" data-i18n="p.piezasT"></span><b id="dPiezas">0</b></div>
+          <div><span class="mini" data-i18n="p.long"></span><b id="dLong">0</b></div>
+          <div><span class="mini" data-i18n="p.masa"></span><b id="dMasa">0</b></div>
+        </div>
+        <div class="fila" id="conteo" style="margin-top:10px"></div>
+      </div>
+
+      <div class="glass panel">
+        <h2 data-i18n="p.cuaderno"></h2>
+        <label class="et" for="cu_h" data-i18n="p.cu.h"></label>
+        <textarea id="cu_h" rows="2" data-i18n-attr="placeholder:p.cu.phH"></textarea>
+        <label class="et" for="cu_o" data-i18n="p.cu.o"></label>
+        <textarea id="cu_o" rows="2" data-i18n-attr="placeholder:p.cu.phO"></textarea>
+        <label class="et" for="cu_m" data-i18n="p.cu.m"></label>
+        <textarea id="cu_m" rows="2" data-i18n-attr="placeholder:p.cu.phM"></textarea>
+        <div class="fila" style="margin-top:8px"><button class="btn sec" id="cuDatos" type="button" data-i18n="p.cuDatos"></button></div>
+        <p class="mini" data-i18n="p.cuAyuda"></p>
+      </div>
+
+      <div class="glass panel aprende">
+        <h2 data-i18n="p.aprende"></h2>
+        <dl>
+          <dt data-i18n="p.a.colores"></dt><dd data-i18n="p.a.coloresT"></dd>
+          <dt data-i18n="p.a.pandeo"></dt><dd data-i18n="p.a.pandeoT"></dd>
+          <dt data-i18n="p.a.tri"></dt><dd data-i18n="p.a.triT"></dd>
+          <dt data-i18n="p.a.cables"></dt><dd data-i18n="p.a.cablesT"></dd>
+          <dt data-i18n="p.a.fs"></dt><dd data-i18n="p.a.fsT"></dd>
+          <dt data-i18n="p.a.tipos"></dt>
+          <dd><b data-i18n="p.a.t1"></b>: <span data-i18n="p.a.t1T"></span><br><b data-i18n="p.a.t2"></b>: <span data-i18n="p.a.t2T"></span><br><b data-i18n="p.a.t3"></b>: <span data-i18n="p.a.t3T"></span><br><b data-i18n="p.a.t4"></b>: <span data-i18n="p.a.t4T"></span><br><b data-i18n="p.a.t5"></b>: <span data-i18n="p.a.t5T"></span></dd>
+        </dl>
+      </div>
+
+      <div class="glass panel">
+        <h2 data-i18n="p.entrega"></h2>
+        <label class="et" for="nombre" data-i18n="p.tuNombre"></label>
+        <input type="text" id="nombre" maxlength="40" data-i18n-attr="placeholder:p.phNombre">
+        <div class="fila" style="margin-top:10px"><button class="btn" id="bInforme" type="button" data-i18n="p.informe"></button></div>
+        <p class="mini" data-i18n="p.informeAyuda"></p>
+      </div>
+    </aside>
+  </section>
+</main>
+<footer><div class="wrap"><span data-i18n="p.pie"></span></div></footer>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
