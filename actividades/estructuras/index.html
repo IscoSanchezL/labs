@@ -47,119 +47,119 @@ kbd{padding:1px 6px;border-radius:6px;border:1px solid var(--edge);font-size:12p
 
 <header class="top"><div class="wrap">
   <a class="logo" href="../../"><img src="../../logo.png" alt="Isco Sánchez" width="40" height="40"><div>labs<span>.iscosanchez.com</span></div></a>
-  <a class="volver" href="../../">← Volver a labs</a>
+  <div class="der"><div id="lang"></div><a class="volver" href="../../" data-i18n="e.volver"></a></div>
 </div></header>
 
 <main class="wrap">
   <section class="titulo">
-    <span class="eyebrow">// grado 5° · diseño estructural</span>
-    <h1>Ingeniero de <em>estructuras</em></h1>
-    <p class="sub">Construye puentes y torres con <b>vigas</b>, <b>columnas</b> y <b>travesaños</b>. Pruébalos con una carga de verdad y descubre por qué los ingenieros aman los triángulos.</p>
+    <span class="eyebrow" data-i18n="e.eyebrow"></span>
+    <h1 data-i18n="e.h1"></h1>
+    <p class="sub" data-i18n="e.sub"></p>
   </section>
 
   <section class="zona">
     <div>
       <div class="glass lienzo fin">
         <div class="toast" id="toast" role="status"></div>
-        <canvas id="cv" width="1400" height="900" aria-label="Zona de construcción: haz clic en un punto y arrastra hasta otro para crear una pieza"></canvas>
+        <canvas id="cv" width="1400" height="900" data-i18n-attr="aria-label:e.canvas"></canvas>
         <div class="barra">
-          <div class="nivel"><h3 id="nTit">Puente pequeño</h3><span class="estrellas" id="nEst" aria-label="estrellas"></span></div>
-          <div class="fila" id="tabsNivel" role="group" aria-label="Nivel"></div>
+          <div class="nivel"><h3 id="nTit"></h3><span class="estrellas" id="nEst" aria-hidden="true"></span></div>
+          <div class="fila" id="tabsNivel" role="group" data-i18n-attr="aria-label:e.nivel"></div>
         </div>
       </div>
       <div class="glass panel" style="margin-top:14px">
-        <h2>Reto</h2>
+        <h2 data-i18n="e.reto"></h2>
         <div class="msg" id="reto"></div>
       </div>
     </div>
 
     <aside>
       <div class="glass panel">
-        <h2>Presupuesto</h2>
+        <h2 data-i18n="e.presupuesto"></h2>
         <div class="dinero">
-          <div class="dato"><span>Gastado</span><b id="gasto">$0</b></div>
+          <div class="dato"><span data-i18n="e.gastado"></span><b id="gasto">$0</b></div>
           <div class="medidor" id="med"><i id="medI"></i></div>
-          <div class="dato"><span>Disponible</span><b id="resta">$0</b></div>
+          <div class="dato"><span data-i18n="e.disponible"></span><b id="resta">$0</b></div>
         </div>
       </div>
 
       <div class="glass panel">
-        <h2>Material</h2>
+        <h2 data-i18n="e.material"></h2>
         <div class="mat" id="mats"></div>
       </div>
 
       <div class="glass panel">
-        <h2>Herramientas</h2>
+        <h2 data-i18n="e.herramientas"></h2>
         <div class="fila" style="margin-bottom:10px">
-          <button class="tab" id="tCons" type="button" aria-pressed="true">Construir</button>
-          <button class="tab" id="tBorr" type="button" aria-pressed="false">Borrar pieza</button>
+          <button class="tab" id="tCons" type="button" aria-pressed="true" data-i18n="e.construir"></button>
+          <button class="tab" id="tBorr" type="button" aria-pressed="false" data-i18n="e.borrar"></button>
         </div>
         <div class="fila">
-          <button class="btn grande" id="bProbar" type="button">▶ Probar</button>
-          <button class="btn sec" id="bDeshacer" type="button">Deshacer</button>
-          <button class="btn sec" id="bLimpiar" type="button">Empezar de nuevo</button>
+          <button class="btn grande" id="bProbar" type="button" data-i18n="e.probar"></button>
+          <button class="btn sec" id="bDeshacer" type="button" data-i18n="e.deshacer"></button>
+          <button class="btn sec" id="bLimpiar" type="button" data-i18n="e.limpiar"></button>
         </div>
-        <p class="mini" style="margin:10px 0 0">Haz clic en un punto y arrastra hasta otro. También sirve tocar un punto y luego el otro. <kbd>Esc</kbd> cancela.</p>
+        <p class="mini" style="margin:10px 0 0" data-i18n="e.ayuda"></p>
       </div>
 
       <div class="glass panel" id="resPanel" style="display:none">
-        <h2>Resultado</h2>
+        <h2 data-i18n="e.resultado"></h2>
         <div class="msg" id="resMsg"></div>
-        <div class="fila" style="margin-top:10px"><button class="btn" id="bSig" type="button" style="display:none">Siguiente nivel →</button><button class="btn sec" id="bReint" type="button">Seguir mejorando</button></div>
+        <div class="fila" style="margin-top:10px"><button class="btn" id="bSig" type="button" style="display:none" data-i18n="e.siguiente"></button><button class="btn sec" id="bReint" type="button" data-i18n="e.mejorar"></button></div>
       </div>
 
       <div class="glass panel">
-        <h2>Mis piezas</h2>
+        <h2 data-i18n="e.piezas"></h2>
         <div class="fila" id="conteo"></div>
         <div class="leyenda" style="margin-top:12px">
-          <span><i class="sw" style="background:#4fd1c5"></i>se estira</span>
-          <span><i class="sw" style="background:#c9a8ff"></i>se comprime</span>
-          <span><i class="sw" style="background:#ff6b7d"></i>se rompe</span>
+          <span><i class="sw" style="background:#4fd1c5"></i><span data-i18n="e.leyEstira"></span></span>
+          <span><i class="sw" style="background:#c9a8ff"></i><span data-i18n="e.leyComprime"></span></span>
+          <span><i class="sw" style="background:#ff6b7d"></i><span data-i18n="e.leyRompe"></span></span>
         </div>
       </div>
 
       <div class="glass panel aprende">
-        <h2>Aprende</h2>
+        <h2 data-i18n="e.aprende"></h2>
         <dl style="margin:0">
-          <dt>Viga</dt><dd>Pieza horizontal. Sostiene lo que pasa por encima.</dd>
-          <dt>Columna</dt><dd>Pieza vertical. Aguanta el peso hacia abajo.</dd>
-          <dt>Travesaño</dt><dd>Pieza inclinada que une las demás. Sin ella, todo se mueve.</dd>
-          <dt>¿Por qué triángulos?</dt><dd>Es la única figura que no se deforma al empujarla. Un cuadrado se aplasta; un triángulo no.</dd>
+          <dt data-i18n="e.dtViga"></dt><dd data-i18n="e.ddViga"></dd>
+          <dt data-i18n="e.dtColumna"></dt><dd data-i18n="e.ddColumna"></dd>
+          <dt data-i18n="e.dtTrav"></dt><dd data-i18n="e.ddTrav"></dd>
+          <dt data-i18n="e.dtTri"></dt><dd data-i18n="e.ddTri"></dd>
         </dl>
       </div>
 
       <div class="glass panel">
-        <h2>Entrega</h2>
-        <label class="et" for="nombre">Tu nombre</label>
-        <input type="text" id="nombre" maxlength="40" placeholder="Escribe tu nombre" autocomplete="off">
-        <div class="fila" style="margin-top:10px"><button class="btn sec" id="bImg" type="button">Guardar imagen de mi diseño</button></div>
-        <p class="mini" style="margin:8px 0 0">La imagen sale con tu nombre y tus estrellas. Súbela a Classroom.</p>
+        <h2 data-i18n="e.entrega"></h2>
+        <label class="et" for="nombre" data-i18n="e.tuNombre"></label>
+        <input type="text" id="nombre" maxlength="40" autocomplete="off" data-i18n-attr="placeholder:e.phNombre">
+        <div class="fila" style="margin-top:10px"><button class="btn sec" id="bImg" type="button" data-i18n="e.guardarImg"></button></div>
+        <p class="mini" style="margin:8px 0 0" data-i18n="e.notaImg"></p>
       </div>
     </aside>
   </section>
 </main>
 
-<footer><div class="wrap"><div>Hecho para el aula · Gi School</div><div>iscosanchez.com</div></div></footer>
+<footer><div class="wrap"><div data-i18n="e.pie"></div><div>iscosanchez.com</div></div></footer>
 
+<script src="../../assets/i18n.js"></script>
 <script src="motor.js"></script>
 <script>
+I18N.add({"titulo": "Ingeniero de estructuras · Labs", "descripcion": "Construye puentes y torres con vigas, columnas y travesaños, y pruébalos con carga real. Grado 5°.", "e.volver": "← Volver a labs", "e.eyebrow": "// grado 5° · diseño estructural", "e.h1": "Ingeniero de <em>estructuras</em>", "e.sub": "Construye puentes y torres con <b>vigas</b>, <b>columnas</b> y <b>travesaños</b>. Pruébalos con una carga de verdad y descubre por qué los ingenieros aman los triángulos.", "e.canvas": "Zona de construcción: haz clic en un punto y arrastra hasta otro para crear una pieza", "e.nivel": "Nivel", "e.reto": "Reto", "e.presupuesto": "Presupuesto", "e.gastado": "Gastado", "e.disponible": "Disponible", "e.material": "Material", "e.herramientas": "Herramientas", "e.construir": "Construir", "e.borrar": "Borrar pieza", "e.probar": "▶ Probar", "e.deshacer": "Deshacer", "e.limpiar": "Empezar de nuevo", "e.ayuda": "Haz clic en un punto y arrastra hasta otro. También sirve tocar un punto y luego el otro. <kbd>Esc</kbd> cancela.", "e.resultado": "Resultado", "e.siguiente": "Siguiente nivel →", "e.mejorar": "Seguir mejorando", "e.piezas": "Mis piezas", "e.leyEstira": "se estira", "e.leyComprime": "se comprime", "e.leyRompe": "se rompe", "e.aprende": "Aprende", "e.dtViga": "Viga", "e.ddViga": "Pieza horizontal. Sostiene lo que pasa por encima.", "e.dtColumna": "Columna", "e.ddColumna": "Pieza vertical. Aguanta el peso hacia abajo.", "e.dtTrav": "Travesaño", "e.ddTrav": "Pieza inclinada que une las demás. Sin ella, todo se mueve.", "e.dtTri": "¿Por qué triángulos?", "e.ddTri": "Es la única figura que no se deforma al empujarla. Un cuadrado se aplasta; un triángulo no.", "e.entrega": "Entrega", "e.tuNombre": "Tu nombre", "e.phNombre": "Escribe tu nombre", "e.guardarImg": "Guardar imagen de mi diseño", "e.notaImg": "La imagen sale con tu nombre y tus estrellas. Súbela a Classroom.", "e.pie": "Hecho para el aula · Gi School", "e.nivelN": "Nivel {n} · {nombre}", "e.tabNivel": "Nivel {n}", "e.n1.nombre": "Puente pequeño", "e.n1.reto": "Une las dos orillas para que el carro de <b>3 toneladas</b> cruce el río. Empieza probando una viga recta… y mira qué pasa.", "e.n2.nombre": "Torre contra el viento", "e.n2.reto": "Sostén la antena de <b>1.5 toneladas</b> en la punta, aunque sople el viento. Cuidado: las piezas muy largas se doblan.", "e.n3.nombre": "Puente largo", "e.n3.reto": "Dos camiones de <b>1.2 toneladas</b> cruzan a la vez. Piensa en triángulos pequeños: cuestan menos que piezas largas.", "e.mat.madera": "Madera", "e.mat.acero": "Acero", "e.matInfo": "${p} por metro · resiste {t} t estirada", "e.cViga": "vigas", "e.cColumna": "columnas", "e.cTrav": "travesaños", "e.err.mismo": "Elige otro punto.", "e.err.bloq": "Ese punto está dentro del suelo o del río.", "e.err.max": "Cada pieza mide máximo {m} m. Usa más nodos.", "e.err.dup": "Esa pieza ya existe.", "e.err.nodo": "La pieza pasa por un nodo. Únelo en dos piezas.", "e.err.cruce": "Las piezas no se pueden cruzar sin un nodo.", "e.err.sobre": "Ese punto cae sobre otra pieza.", "e.err.presu": "Te pasas del presupuesto. Usa menos piezas o material más barato.", "e.err.vacio": "Primero construye algo.", "e.r.sinCon": "<b>La carga no está conectada.</b> Une el punto de la carga a tu estructura con al menos una pieza.", "e.r.mec": "<b>¡Se cayó!</b> Tu estructura se mueve como un mecanismo: le faltan <b>triángulos</b>. Es la única figura que no se deforma. Añade travesaños en diagonal.", "e.r.rompio": "<b>¡Se rompió!</b> ", "e.r.pandeo": "{n} pieza(s) se <b>pandearon</b>: las piezas largas que se comprimen se doblan. Acórtalas con más nodos o usa acero. ", "e.r.rotura": "{n} pieza(s) se <b>rompieron estiradas</b>: refuerza con otra pieza o cambia el material. ", "e.r.rojas": "Las piezas en rojo son las que fallaron.", "e.r.ok": "<b>¡Aguantó!</b> Tu diseño soporta la carga y costó <b>${c}</b> de ${b}. ", "e.r.e3": "¡Eficiencia de ingeniero! Tres estrellas.", "e.r.e2": "Muy bien. Para tres estrellas gasta menos: quita piezas que no trabajan (las más apagadas) o usa madera donde se pueda.", "e.r.e1": "Funciona. Intenta gastar menos quitando piezas que casi no trabajan.", "e.conf": "¿Empezar de nuevo este nivel?", "e.viento": "viento {f} t", "e.img.tit": "Ingeniero de estructuras · Nivel {n}: {nombre}", "e.img.sin": "Sin nombre", "e.img.costo": "Costo ${c} de ${b}"},{"titulo": "Structural Engineer · Labs", "descripcion": "Build bridges and towers with beams, columns and braces, and test them with a real load. Grade 5.", "e.volver": "← Back to labs", "e.eyebrow": "// grade 5 · structural design", "e.h1": "Structural <em>Engineer</em>", "e.sub": "Build bridges and towers with <b>beams</b>, <b>columns</b> and <b>braces</b>. Test them with a real load and find out why engineers love triangles.", "e.canvas": "Building area: click a point and drag to another to create a piece", "e.nivel": "Level", "e.reto": "Challenge", "e.presupuesto": "Budget", "e.gastado": "Spent", "e.disponible": "Available", "e.material": "Material", "e.herramientas": "Tools", "e.construir": "Build", "e.borrar": "Erase piece", "e.probar": "▶ Test", "e.deshacer": "Undo", "e.limpiar": "Start over", "e.ayuda": "Click a point and drag to another. You can also tap one point, then the other. <kbd>Esc</kbd> cancels.", "e.resultado": "Result", "e.siguiente": "Next level →", "e.mejorar": "Keep improving", "e.piezas": "My pieces", "e.leyEstira": "stretches", "e.leyComprime": "compresses", "e.leyRompe": "breaks", "e.aprende": "Learn", "e.dtViga": "Beam", "e.ddViga": "Horizontal piece. It supports what passes over it.", "e.dtColumna": "Column", "e.ddColumna": "Vertical piece. It carries the weight downward.", "e.dtTrav": "Brace", "e.ddTrav": "Slanted piece that ties the others together. Without it, everything moves.", "e.dtTri": "Why triangles?", "e.ddTri": "It is the only shape that does not deform when pushed. A square collapses; a triangle does not.", "e.entrega": "Hand-in", "e.tuNombre": "Your name", "e.phNombre": "Write your name", "e.guardarImg": "Save an image of my design", "e.notaImg": "The image includes your name and your stars. Upload it to Classroom.", "e.pie": "Made for the classroom · Gi School", "e.nivelN": "Level {n} · {nombre}", "e.tabNivel": "Level {n}", "e.n1.nombre": "Small bridge", "e.n1.reto": "Join the two river banks so the <b>3-ton</b> truck can cross. Start by testing a straight beam… and see what happens.", "e.n2.nombre": "Tower against the wind", "e.n2.reto": "Hold the <b>1.5-ton</b> antenna at the top, even when the wind blows. Careful: very long pieces bend.", "e.n3.nombre": "Long bridge", "e.n3.reto": "Two <b>1.2-ton</b> trucks cross at the same time. Think small triangles: they cost less than long pieces.", "e.mat.madera": "Wood", "e.mat.acero": "Steel", "e.matInfo": "${p} per meter · holds {t} t when stretched", "e.cViga": "beams", "e.cColumna": "columns", "e.cTrav": "braces", "e.err.mismo": "Pick another point.", "e.err.bloq": "That point is inside the ground or the river.", "e.err.max": "Each piece can be {m} m long at most. Use more nodes.", "e.err.dup": "That piece already exists.", "e.err.nodo": "The piece goes through a node. Join it as two pieces.", "e.err.cruce": "Pieces cannot cross without a node.", "e.err.sobre": "That point lies on another piece.", "e.err.presu": "You are over budget. Use fewer pieces or a cheaper material.", "e.err.vacio": "Build something first.", "e.r.sinCon": "<b>The load is not connected.</b> Join the load point to your structure with at least one piece.", "e.r.mec": "<b>It collapsed!</b> Your structure moves like a mechanism: it needs <b>triangles</b>. They are the only shape that does not deform. Add diagonal braces.", "e.r.rompio": "<b>It broke!</b> ", "e.r.pandeo": "{n} piece(s) <b>buckled</b>: long pieces under compression bend. Shorten them with more nodes or use steel. ", "e.r.rotura": "{n} piece(s) <b>snapped when stretched</b>: reinforce with another piece or change the material. ", "e.r.rojas": "The red pieces are the ones that failed.", "e.r.ok": "<b>It held!</b> Your design carries the load and cost <b>${c}</b> of ${b}. ", "e.r.e3": "Engineer-level efficiency! Three stars.", "e.r.e2": "Very good. For three stars, spend less: remove pieces that do little work (the dimmest ones) or use wood where you can.", "e.r.e1": "It works. Try to spend less by removing pieces that hardly work.", "e.conf": "Start this level over?", "e.viento": "wind {f} t", "e.img.tit": "Structural Engineer · Level {n}: {nombre}", "e.img.sin": "No name", "e.img.costo": "Cost ${c} of ${b}"});
 (function(){
 'use strict';
 var M=window.Motor;
+var T=I18N.t;
 var COLS=14,FILAS=9;
 var NIVELES=[
-  {id:1,nombre:'Puente pequeño',tipo:'puente',presupuesto:260,
+  {id:1,tipo:'puente',presupuesto:260,
    apoyos:[{x:2,y:6,t:'fijo'},{x:8,y:6,t:'rodillo'}],
-   cargas:[{x:5,y:6,fy:3,fx:0,etq:'3 t'}],
-   reto:'Une las dos orillas para que el carro de <b>3 toneladas</b> cruce el río. Empieza probando una viga recta… y mira qué pasa.'},
-  {id:2,nombre:'Torre contra el viento',tipo:'torre',presupuesto:300,
+   cargas:[{x:5,y:6,fy:3,fx:0,etq:'3 t'}]},
+  {id:2,tipo:'torre',presupuesto:300,
    apoyos:[{x:6,y:7,t:'fijo'},{x:8,y:7,t:'fijo'}],
-   cargas:[{x:7,y:2,fy:1.5,fx:0.8,etq:'1.5 t'}],
-   reto:'Sostén la antena de <b>1.5 toneladas</b> en la punta, aunque sople el viento. Cuidado: las piezas muy largas se doblan.'},
-  {id:3,nombre:'Puente largo',tipo:'puente',presupuesto:420,
+   cargas:[{x:7,y:2,fy:1.5,fx:0.8,etq:'1.5 t'}]},
+  {id:3,tipo:'puente',presupuesto:420,
    apoyos:[{x:1,y:6,t:'fijo'},{x:11,y:6,t:'rodillo'}],
-   cargas:[{x:4,y:6,fy:1.2,fx:0,etq:'1.2 t'},{x:8,y:6,fy:1.2,fx:0,etq:'1.2 t'}],
-   reto:'Dos camiones de <b>1.2 toneladas</b> cruzan a la vez. Piensa en triángulos pequeños: cuestan menos que piezas largas.'}
+   cargas:[{x:4,y:6,fy:1.2,fx:0,etq:'1.2 t'},{x:8,y:6,fy:1.2,fx:0,etq:'1.2 t'}]}
 ];
 var MAXL=5;
 var $=function(id){return document.getElementById(id)};
@@ -209,22 +209,22 @@ function nodosActuales(){
   return Object.keys(m).map(function(k){return m[k]});
 }
 function validar(x1,y1,x2,y2,mat){
-  if(x1===x2&&y1===y2)return 'Elige otro punto.';
-  if(bloqueado(x1,y1)||bloqueado(x2,y2))return 'Ese punto está dentro del suelo o del río.';
+  if(x1===x2&&y1===y2)return T('e.err.mismo');
+  if(bloqueado(x1,y1)||bloqueado(x2,y2))return T('e.err.bloq');
   var L=Math.hypot(x2-x1,y2-y1);
-  if(L>MAXL+1e-9)return 'Cada pieza mide máximo '+MAXL+' m. Usa más nodos.';
+  if(L>MAXL+1e-9)return T('e.err.max',{m:MAXL});
   var dup=S.piezas.some(function(p){return (p.x1===x1&&p.y1===y1&&p.x2===x2&&p.y2===y2)||(p.x1===x2&&p.y1===y2&&p.x2===x1&&p.y2===y1)});
-  if(dup)return 'Esa pieza ya existe.';
+  if(dup)return T('e.err.dup');
   var A={x:x1,y:y1},B={x:x2,y:y2},i;
   var nodos=nodosActuales();
-  for(i=0;i<nodos.length;i++){var q=nodos[i];if(sobreSegmento(q,A,B))return 'La pieza pasa por un nodo. Únelo en dos piezas.'}
+  for(i=0;i<nodos.length;i++){var q=nodos[i];if(sobreSegmento(q,A,B))return T('e.err.nodo')}
   for(i=0;i<S.piezas.length;i++){
     var p=S.piezas[i],P={x:p.x1,y:p.y1},Q={x:p.x2,y:p.y2};
-    if(cruza({p:A,q:B},{p:P,q:Q}))return 'Las piezas no se pueden cruzar sin un nodo.';
-    if(sobreSegmento(A,P,Q)||sobreSegmento(B,P,Q))return 'Ese punto cae sobre otra pieza.';
+    if(cruza({p:A,q:B},{p:P,q:Q}))return T('e.err.cruce');
+    if(sobreSegmento(A,P,Q)||sobreSegmento(B,P,Q))return T('e.err.sobre');
   }
   var costo=costoTotal()+L*M.MATERIALES[mat].precio;
-  if(costo>nv().presupuesto+1e-9)return 'Te pasas del presupuesto. Usa menos piezas o material más barato.';
+  if(costo>nv().presupuesto+1e-9)return T('e.err.presu');
   return null;
 }
 
@@ -263,7 +263,7 @@ function construirModelo(){
   return {nodos:nodos,piezas:pz,idx:idx};
 }
 function probar(){
-  if(!S.piezas.length){toast('Primero construye algo.');return}
+  if(!S.piezas.length){toast(T('e.err.vacio'));return}
   var mod=construirModelo();
   var res=M.analizar(mod.nodos,mod.piezas);
   var sinConexion=nv().cargas.some(function(c){return !S.piezas.some(function(p){return (p.x1===c.x&&p.y1===c.y)||(p.x2===c.x&&p.y2===c.y)})});
@@ -274,17 +274,17 @@ function terminarPrueba(){
   var P=S.prueba,r=P.res,costo=costoTotal(),msg,ok=false,estr=0;
   var nPandeo=r.piezas.filter(function(p){return p.pandeo}).length;
   var nRotura=r.piezas.filter(function(p){return p.falla&&!p.pandeo}).length;
-  if(P.sinConexion){msg='<b>La carga no está conectada.</b> Une el punto de la carga a tu estructura con al menos una pieza.'}
-  else if(r.mecanismo){msg='<b>¡Se cayó!</b> Tu estructura se mueve como un mecanismo: le faltan <b>triángulos</b>. Es la única figura que no se deforma. Añade travesaños en diagonal.'}
+  if(P.sinConexion){msg=T('e.r.sinCon')}
+  else if(r.mecanismo){msg=T('e.r.mec')}
   else if(r.falla){
-    msg='<b>¡Se rompió!</b> ';
-    if(nPandeo)msg+=nPandeo+' pieza(s) se <b>pandearon</b>: las piezas largas que se comprimen se doblan. Acórtalas con más nodos o usa acero. ';
-    if(nRotura)msg+=nRotura+' pieza(s) se <b>rompieron estiradas</b>: refuerza con otra pieza o cambia el material. ';
-    msg+='Las piezas en rojo son las que fallaron.';
+    msg=T('e.r.rompio');
+    if(nPandeo)msg+=T('e.r.pandeo',{n:nPandeo});
+    if(nRotura)msg+=T('e.r.rotura',{n:nRotura});
+    msg+=T('e.r.rojas');
   }else{
     ok=true;estr=nivelEstrellas(costo);
-    msg='<b>¡Aguantó!</b> Tu diseño soporta la carga y costó <b>$'+Math.round(costo)+'</b> de $'+nv().presupuesto+'. ';
-    msg+=estr===3?'¡Eficiencia de ingeniero! Tres estrellas.':(estr===2?'Muy bien. Para tres estrellas gasta menos: quita piezas que no trabajan (las más apagadas) o usa madera donde se pueda.':'Funciona. Intenta gastar menos quitando piezas que casi no trabajan.');
+    msg=T('e.r.ok',{c:Math.round(costo),b:nv().presupuesto});
+    msg+=estr===3?T('e.r.e3'):(estr===2?T('e.r.e2'):T('e.r.e1'));
     var prev=AV.estrellas[nv().id]||0;
     if(estr>prev){AV.estrellas[nv().id]=estr;guardar()}
   }
@@ -299,36 +299,41 @@ function estrellasHtml(n){var s='';for(var i=1;i<=3;i++)s+=i<=n?'★':'<span cla
 /* ---------- interfaz ---------- */
 function actualizarUI(){
   var n=nv(),g=costoTotal(),B=n.presupuesto;
-  $('nTit').textContent='Nivel '+n.id+' · '+n.nombre;
+  $('nTit').textContent=T('e.nivelN',{n:n.id,nombre:T('e.n'+n.id+'.nombre')});
   $('nEst').innerHTML=estrellasHtml(AV.estrellas[n.id]||0);
-  $('reto').innerHTML=n.reto;
+  $('reto').innerHTML=T('e.n'+n.id+'.reto');
   $('gasto').textContent='$'+Math.round(g);
   $('resta').textContent='$'+Math.max(0,Math.round(B-g));
   var pc=Math.min(100,g/B*100);$('medI').style.width=pc+'%';$('med').className='medidor'+(pc>85?' rojo':'');
   var cont={viga:0,columna:0,'travesaño':0};S.piezas.forEach(function(p){cont[tipoPieza(p)]++});
-  $('conteo').innerHTML='<span class="chip"><b>'+cont.viga+'</b> vigas</span><span class="chip"><b>'+cont.columna+'</b> columnas</span><span class="chip"><b>'+cont['travesaño']+'</b> travesaños</span>';
-  document.querySelectorAll('#tabsNivel .tab').forEach(function(b,i){b.setAttribute('aria-pressed',String(i===S.nivel))});
+  $('conteo').innerHTML='<span class="chip"><b>'+cont.viga+'</b> '+T('e.cViga')+'</span><span class="chip"><b>'+cont.columna+'</b> '+T('e.cColumna')+'</span><span class="chip"><b>'+cont['travesaño']+'</b> '+T('e.cTrav')+'</span>';
+  document.querySelectorAll('#tabsNivel .tab').forEach(function(b,i){b.textContent=T('e.tabNivel',{n:i+1});b.setAttribute('aria-pressed',String(i===S.nivel))});
+  $('nEst').setAttribute('aria-label',(AV.estrellas[n.id]||0)+' / 3');
   $('bDeshacer').disabled=!S.undo.length;
   $('tCons').setAttribute('aria-pressed',String(S.herr==='construir'));
   $('tBorr').setAttribute('aria-pressed',String(S.herr==='borrar'));
   cv.classList.toggle('borrar',S.herr==='borrar');
   document.querySelectorAll('#mats button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.m===S.mat))});
 }
-function armarUI(){
-  var t=$('tabsNivel');NIVELES.forEach(function(n,i){
-    var b=document.createElement('button');b.type='button';b.className='tab';b.textContent='Nivel '+n.id;
-    b.onclick=function(){cambiarNivel(i)};t.appendChild(b);
-  });
-  var m=$('mats');['madera','acero'].forEach(function(k){
+function armarMats(){
+  var m=$('mats');m.textContent='';
+  ['madera','acero'].forEach(function(k){
     var d=M.MATERIALES[k],b=document.createElement('button');b.type='button';b.dataset.m=k;
-    b.innerHTML='<span class="sw" style="background:'+(k==='madera'?'#e0a96d':'#bcd0ff')+'"></span><b>'+d.nombre+'</b><small>$'+d.precio+' por metro · resiste '+d.tension+' t estirada</small>';
+    b.innerHTML='<span class="sw" style="background:'+(k==='madera'?'#e0a96d':'#bcd0ff')+'"></span><b>'+T('e.mat.'+k)+'</b><small>'+T('e.matInfo',{p:d.precio,t:d.tension})+'</small>';
     b.onclick=function(){S.mat=k;actualizarUI()};m.appendChild(b);
   });
+}
+function armarUI(){
+  var t=$('tabsNivel');NIVELES.forEach(function(n,i){
+    var b=document.createElement('button');b.type='button';b.className='tab';b.textContent=T('e.tabNivel',{n:n.id});
+    b.onclick=function(){cambiarNivel(i)};t.appendChild(b);
+  });
+  armarMats();
   $('tCons').onclick=function(){S.herr='construir';S.inicio=null;actualizarUI()};
   $('tBorr').onclick=function(){S.herr='borrar';S.inicio=null;actualizarUI()};
   $('bProbar').onclick=probar;
   $('bDeshacer').onclick=function(){if(S.undo.length){S.piezas=JSON.parse(S.undo.pop());limpiarPrueba();actualizarUI()}};
-  $('bLimpiar').onclick=function(){if(S.piezas.length&&confirm('¿Empezar de nuevo este nivel?')){snapshot();S.piezas=[];limpiarPrueba();actualizarUI()}};
+  $('bLimpiar').onclick=function(){if(S.piezas.length&&confirm(T('e.conf'))){snapshot();S.piezas=[];limpiarPrueba();actualizarUI()}};
   $('bReint').onclick=function(){limpiarPrueba();actualizarUI()};
   $('bSig').onclick=function(){cambiarNivel(S.nivel+1)};
   $('bImg').onclick=guardarImagen;
@@ -352,7 +357,7 @@ cv.addEventListener('pointerdown',function(e){
   if(S.herr==='borrar'){borrarEn(p.px,p.py);return}
   if(S.prueba)limpiarPrueba();
   if(S.inicio){var a=S.inicio;S.inicio=null;S.abajo=false;agregar(a.x,a.y,p.x,p.y);return}
-  if(bloqueado(p.x,p.y)){toast('Ese punto está dentro del suelo o del río.');return}
+  if(bloqueado(p.x,p.y)){toast(T('e.err.bloq'));return}
   S.inicio={x:p.x,y:p.y};S.abajo=true;
   try{cv.setPointerCapture(e.pointerId)}catch(_){}
 });
@@ -558,7 +563,7 @@ function dibujarViento(x,y,fx,c,t){
     ctx.strokeStyle='rgba(180,240,250,'+(0.7*(1-Math.abs(ph-.5)*1.6))+')';ctx.lineWidth=2.2;
     ctx.beginPath();for(var i=0;i<=16;i++){var px=x0+i*c*.1,py=yy+Math.sin(i*.55+t*5+k)*c*.05;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.stroke();
   }
-  ctx.fillStyle='rgba(180,240,250,.95)';ctx.font='600 '+Math.round(c*.22)+'px "JetBrains Mono",monospace';ctx.textAlign='left';ctx.fillText('viento '+fx+' t',x-c*3.6,y-c*.62);
+  ctx.fillStyle='rgba(180,240,250,.95)';ctx.font='600 '+Math.round(c*.22)+'px "JetBrains Mono",monospace';ctx.textAlign='left';ctx.fillText(T('e.viento',{f:fx}),x-c*3.6,y-c*.62);
 }
 
 function dibujar(now){
@@ -664,9 +669,9 @@ function guardarImagen(){
   x.fillStyle='#0b1a2c';x.fillRect(0,H,W,130);
   x.fillStyle='#4fd1c5';x.fillRect(0,H,W,3);
   x.fillStyle='#eaf2fb';x.font='700 34px "Space Grotesk",system-ui,sans-serif';x.textAlign='left';
-  x.fillText('Ingeniero de estructuras · Nivel '+n.id+': '+n.nombre,30,H+48);
+  x.fillText(T('e.img.tit',{n:n.id,nombre:T('e.n'+n.id+'.nombre')}),30,H+48);
   x.font='400 26px "Space Grotesk",system-ui,sans-serif';x.fillStyle='#b3c4d6';
-  x.fillText((($('nombre').value||'').trim()||'Sin nombre')+'  ·  Costo $'+Math.round(g)+' de $'+n.presupuesto+'  ·  labs.iscosanchez.com',30,H+92);
+  x.fillText((($('nombre').value||'').trim()||T('e.img.sin'))+'  ·  '+T('e.img.costo',{c:Math.round(g),b:n.presupuesto})+'  ·  labs.iscosanchez.com',30,H+92);
   x.textAlign='right';x.fillStyle='#ffd36b';x.font='700 44px "Space Grotesk",system-ui,sans-serif';
   x.fillText('★★★'.slice(0,est)+'☆☆☆'.slice(0,3-est),W-30,H+60);
   off.toBlob(function(b){
@@ -682,6 +687,8 @@ function ajustar(){
 }
 window.addEventListener('resize',ajustar);
 armarUI();ajustar();cambiarNivel(0);
+I18N.onChange(function(){armarMats();actualizarUI();if(S.prueba&&S.resultado)terminarPrueba()});
+I18N.montar();
 (function bucle(now){dibujar(now||0);requestAnimationFrame(bucle)})();
 window.__estructuras={S:S,agregar:agregar,probar:probar,cambiarNivel:cambiarNivel,NIVELES:NIVELES,terminar:function(){return S.resultado}};
 })();

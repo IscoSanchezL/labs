@@ -64,3 +64,10 @@ label.et{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}
 footer{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);padding:18px 0;color:var(--dim);font-size:13.5px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
 @media (prefers-reduced-motion:reduce){.aurora i{animation:none}}
+
+/* Selector de idioma */
+.lang{display:inline-flex;border:1px solid var(--edge);border-radius:999px;background:var(--glass);overflow:hidden}
+.lang button{padding:7px 14px;border:0;background:transparent;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--muted)}
+.lang button:hover{color:var(--text)}
+.lang button[aria-pressed="true"]{background:linear-gradient(135deg,rgba(127,240,228,.36),rgba(157,184,255,.3));color:var(--text)}
+.top .der{display:flex;align-items:center;gap:10px;flex-wrap:wrap}

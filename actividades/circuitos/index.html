@@ -52,89 +52,92 @@ kbd{padding:1px 6px;border-radius:6px;border:1px solid var(--edge);font-size:12p
 
 <header class="top"><div class="wrap">
   <a class="logo" href="../../"><img src="../../logo.png" alt="Isco Sánchez" width="40" height="40"><div>labs<span>.iscosanchez.com</span></div></a>
-  <a class="volver" href="../../">← Volver a labs</a>
+  <div class="der"><div id="lang"></div><a class="volver" href="../../" data-i18n="c.volver"></a></div>
 </div></header>
 
 <main class="wrap">
   <section class="titulo">
-    <span class="eyebrow">// grado 6° · circuitos eléctricos</span>
-    <h1>Laboratorio de <em>circuitos</em></h1>
-    <p class="sub">Arma circuitos con <b>pila</b>, <b>resistencias</b>, <b>LED</b> e <b>interruptores</b>. Cinco misiones te preparan para construir el <b>semáforo</b> en TinkerCAD.</p>
+    <span class="eyebrow" data-i18n="c.eyebrow"></span>
+    <h1 data-i18n="c.h1"></h1>
+    <p class="sub" data-i18n="c.sub"></p>
   </section>
 
   <section class="zona">
     <div>
       <div class="glass lienzo">
         <div class="alerta" id="alerta" role="alert"></div>
-        <canvas id="cv" width="1600" height="1000" aria-label="Tablero de circuitos"></canvas>
-        <div class="paleta" id="paleta" role="group" aria-label="Piezas"></div>
+        <canvas id="cv" width="1600" height="1000" data-i18n-attr="aria-label:c.tablero"></canvas>
+        <div class="paleta" id="paleta" role="group" data-i18n-attr="aria-label:c.piezas"></div>
         <div class="paleta">
-          <button class="tab" id="tMover" type="button" aria-pressed="true">Cables y mover</button>
-          <button class="tab" id="tBorrar" type="button" aria-pressed="false">Borrar</button>
-          <button class="tab" id="bRotar" type="button">Rotar (R)</button>
+          <button class="tab" id="tMover" type="button" aria-pressed="true" data-i18n="c.mover"></button>
+          <button class="tab" id="tBorrar" type="button" aria-pressed="false" data-i18n="c.borrar"></button>
+          <button class="tab" id="bRotar" type="button" data-i18n="c.rotar"></button>
           <span class="sep"></span>
-          <button class="btn sec" id="bLimpiar" type="button">Tablero vacío</button>
-          <button class="btn sec" id="bReparar" type="button">Cambiar LED quemados</button>
+          <button class="btn sec" id="bLimpiar" type="button" data-i18n="c.vaciar"></button>
+          <button class="btn sec" id="bReparar" type="button" data-i18n="c.reparar"></button>
         </div>
-        <p class="mini" style="margin:8px 6px 4px">Arrastra desde un <b>punto</b> de una pieza hasta otro para tender un cable. Arrastra la pieza para moverla. Haz clic en el interruptor para abrirlo o cerrarlo, y en la resistencia para cambiar su valor.</p>
+        <p class="mini" style="margin:8px 6px 4px" data-i18n="c.ayuda"></p>
       </div>
     </div>
 
     <aside>
       <div class="glass panel">
-        <h2>Misión</h2>
+        <h2 data-i18n="c.mision"></h2>
         <div class="pasos" id="pasos"></div>
         <div class="msg" id="texto"></div>
         <ul class="lista" id="check"></ul>
         <div class="fila" style="margin-top:12px">
-          <button class="btn sec" id="bPista" type="button">Pista</button>
-          <button class="btn sec" id="bSol" type="button">Ver una solución</button>
+          <button class="btn sec" id="bPista" type="button" data-i18n="c.pista"></button>
+          <button class="btn sec" id="bSol" type="button" data-i18n="c.solucion"></button>
         </div>
         <div class="msg" id="pista" style="display:none;margin-top:10px"></div>
       </div>
 
       <div class="glass panel quiz" id="quiz" style="display:none">
-        <h2>Pregunta</h2>
+        <h2 data-i18n="c.pregunta"></h2>
         <div id="qTxt" style="font-size:15px;line-height:1.45"></div>
         <div id="qOps"></div>
         <div class="msg" id="qExp" style="display:none;margin-top:10px"></div>
       </div>
 
       <div class="glass panel" id="autoPanel" style="display:none">
-        <h2>Semáforo automático</h2>
-        <p class="mini" style="margin:0 0 10px">Como lo hará el Arduino: abre y cierra tus interruptores en secuencia.</p>
-        <div class="fila"><button class="btn" id="bAuto" type="button">▶ Iniciar</button></div>
+        <h2 data-i18n="c.autoTit"></h2>
+        <p class="mini" style="margin:0 0 10px" data-i18n="c.autoTxt"></p>
+        <div class="fila"><button class="btn" id="bAuto" type="button"></button></div>
         <div class="semaforo"><span class="luz r" id="lR"></span><span class="luz a" id="lA"></span><span class="luz v" id="lV"></span></div>
       </div>
 
       <div class="glass panel aprende">
-        <h2>Aprende</h2>
+        <h2 data-i18n="c.aprende"></h2>
         <dl style="margin:0">
-          <dt>LED</dt><dd>Solo deja pasar la corriente en un sentido. El lado del triángulo es el <b>ánodo (+)</b>.</dd>
-          <dt>Resistencia</dt><dd>Frena la corriente. Un LED necesita entre 5 y 25 mA; más de 30 mA lo quema.</dd>
-          <dt>Interruptor</dt><dd>Abre o cierra el camino. Sin camino cerrado, no hay corriente.</dd>
-          <dt>Serie y paralelo</dt><dd>Serie: un solo camino. Paralelo: varios caminos a la vez.</dd>
-          <dt>Jumper y protoboard</dt><dd>En TinkerCAD usarás cables <b>jumper</b> sobre una <b>protoboard</b>. Aquí, tus cables hacen el mismo trabajo.</dd>
+          <dt data-i18n="c.dtLed"></dt><dd data-i18n="c.ddLed"></dd>
+          <dt data-i18n="c.dtRes"></dt><dd data-i18n="c.ddRes"></dd>
+          <dt data-i18n="c.dtSw"></dt><dd data-i18n="c.ddSw"></dd>
+          <dt data-i18n="c.dtSP"></dt><dd data-i18n="c.ddSP"></dd>
+          <dt data-i18n="c.dtJP"></dt><dd data-i18n="c.ddJP"></dd>
         </dl>
       </div>
 
       <div class="glass panel">
-        <h2>Entrega</h2>
-        <label class="et" for="nombre">Tu nombre</label>
-        <input type="text" id="nombre" maxlength="40" placeholder="Escribe tu nombre" autocomplete="off">
-        <div class="fila" style="margin-top:10px"><button class="btn sec" id="bImg" type="button">Guardar imagen de mi circuito</button></div>
+        <h2 data-i18n="c.entrega"></h2>
+        <label class="et" for="nombre" data-i18n="c.tuNombre"></label>
+        <input type="text" id="nombre" maxlength="40" autocomplete="off" data-i18n-attr="placeholder:c.phNombre">
+        <div class="fila" style="margin-top:10px"><button class="btn sec" id="bImg" type="button" data-i18n="c.guardarImg"></button></div>
       </div>
     </aside>
   </section>
 </main>
 
-<footer><div class="wrap"><div>Hecho para el aula · Gi School</div><div>iscosanchez.com</div></div></footer>
+<footer><div class="wrap"><div data-i18n="c.pie"></div><div>iscosanchez.com</div></div></footer>
 
+<script src="../../assets/i18n.js"></script>
 <script src="motor.js"></script>
 <script>
+I18N.add({"titulo": "Laboratorio de circuitos · Labs", "descripcion": "Arma circuitos con pila, resistencias, LED e interruptores. Misiones hasta construir un semáforo. Grado 6°.", "c.volver": "← Volver a labs", "c.eyebrow": "// grado 6° · circuitos eléctricos", "c.h1": "Laboratorio de <em>circuitos</em>", "c.sub": "Arma circuitos con <b>pila</b>, <b>resistencias</b>, <b>LED</b> e <b>interruptores</b>. Cinco misiones te preparan para construir el <b>semáforo</b> en TinkerCAD.", "c.tablero": "Tablero de circuitos", "c.piezas": "Piezas", "c.mover": "Cables y mover", "c.borrar": "Borrar", "c.rotar": "Rotar (R)", "c.vaciar": "Tablero vacío", "c.reparar": "Cambiar LED quemados", "c.ayuda": "Arrastra desde un <b>punto</b> de una pieza hasta otro para tender un cable. Arrastra la pieza para moverla. Haz clic en el interruptor para abrirlo o cerrarlo, y en la resistencia para cambiar su valor.", "c.mision": "Misión", "c.pista": "Pista", "c.solucion": "Ver una solución", "c.pregunta": "Pregunta", "c.autoTit": "Semáforo automático", "c.autoTxt": "Como lo hará el Arduino: abre y cierra tus interruptores en secuencia.", "c.auto.ini": "▶ Iniciar", "c.auto.stop": "■ Detener", "c.aprende": "Aprende", "c.dtLed": "LED", "c.ddLed": "Solo deja pasar la corriente en un sentido. El lado del triángulo es el <b>ánodo (+)</b>.", "c.dtRes": "Resistencia", "c.ddRes": "Frena la corriente. Un LED necesita entre 5 y 25 mA; más de 30 mA lo quema.", "c.dtSw": "Interruptor", "c.ddSw": "Abre o cierra el camino. Sin camino cerrado, no hay corriente.", "c.dtSP": "Serie y paralelo", "c.ddSP": "Serie: un solo camino. Paralelo: varios caminos a la vez.", "c.dtJP": "Jumper y protoboard", "c.ddJP": "En TinkerCAD usarás cables <b>jumper</b> sobre una <b>protoboard</b>. Aquí, tus cables hacen el mismo trabajo.", "c.entrega": "Entrega", "c.tuNombre": "Tu nombre", "c.phNombre": "Escribe tu nombre", "c.guardarImg": "Guardar imagen de mi circuito", "c.pie": "Hecho para el aula · Gi School", "c.p.pila": "Pila 5 V", "c.p.res": "Resistencia", "c.p.rojo": "LED rojo", "c.p.amarillo": "LED amarillo", "c.p.verde": "LED verde", "c.p.sw": "Interruptor", "c.p.emp": "Empalme", "c.k.pila": "Hay una pila", "c.k.res": "Hay una resistencia", "c.k.led": "Hay un LED", "c.k.brilla": "El LED brilla sin quemarse", "c.k.sw": "Hay un interruptor", "c.k.swok": "Cerrado, el LED brilla; abierto, se apaga", "c.k.dos": "Hay dos LED", "c.k.juntos": "Los dos brillan a la vez", "c.k.serie": "Están en serie (si uno falla, el otro se apaga)", "c.k.par": "Están en paralelo, cada uno con su resistencia", "c.k.rojo": "LED rojo", "c.k.amarillo": "LED amarillo", "c.k.verde": "LED verde", "c.k.tres": "Tres interruptores", "c.k.cada": "Cada color se enciende solo, sin quemarse", "c.a.quemo": "¡Se quemó un LED! Le faltó una resistencia, o tenía poca.", "c.a.corto": "¡Cortocircuito! Un cable une la pila consigo misma. La pila se protegió.", "c.a.nocabe": "No cabe ahí.", "c.a.choque": "Ahí ya hay otra pieza. Elige un lugar libre.", "c.a.unapila": "Solo hay una pila.", "c.a.girar": "No hay espacio para girarla.", "c.a.cambiaste": "Cambiaste {n} LED. ¡Revisa la resistencia!", "c.a.noquem": "No hay LED quemados.", "c.conf.vaciar": "¿Vaciar el tablero?", "c.conf.sol": "Esto reemplaza tu tablero con una solución. ¿Continuar?", "c.abierto": "abierto", "c.cerrado": "cerrado", "c.quemado": "✖ quemado", "c.q.bien": "¡Correcto!", "c.q.casi": "Casi.", "c.img.tit": "Laboratorio de circuitos · Misión {n}: {nombre}", "c.img.sin": "Sin nombre", "c.img.ok": "¡Misión cumplida!", "c.img.prog": "En progreso", "c.m1.nombre": "Enciende tu primer LED", "c.m1.tab": "Primer LED", "c.m1.texto": "Conecta la <b>pila</b>, una <b>resistencia</b> y un <b>LED</b> para que el LED brille <b>sin quemarse</b>. Primero prueba sin la resistencia, ¡y mira qué pasa!", "c.m1.pista": "Haz un camino cerrado: pila + → resistencia → LED (por el lado del triángulo, el ánodo) → pila −. La resistencia limita la corriente.", "c.m1.pregunta": "¿Para qué sirve la resistencia en este circuito?", "c.m1.op0": "Para que el LED brille más fuerte", "c.m1.op1": "Para limitar la corriente y que el LED no se queme", "c.m1.op2": "Para guardar la energía de la pila", "c.m1.explica": "Sin resistencia, la corriente es demasiado grande y el LED se quema. La resistencia la limita a un valor seguro.", "c.m2.nombre": "Controla con un interruptor", "c.m2.tab": "Interruptor", "c.m2.texto": "Añade un <b>interruptor</b> para encender y apagar el LED. Debe brillar con el interruptor <b>cerrado</b> y apagarse al <b>abrirlo</b>.", "c.m2.pista": "Pon el interruptor en el mismo camino que la resistencia y el LED. Haz clic sobre él para abrirlo o cerrarlo.", "c.m2.pregunta": "¿Qué pasa con la corriente cuando el interruptor está abierto?", "c.m2.op0": "Sigue pasando, pero más despacio", "c.m2.op1": "No pasa: el camino está cortado", "c.m2.op2": "Pasa en sentido contrario", "c.m2.explica": "Abierto significa que el camino se interrumpe. Sin camino cerrado no hay corriente y el LED se apaga.", "c.m3.nombre": "Dos LED en serie", "c.m3.tab": "En serie", "c.m3.texto": "Enciende <b>dos LED uno detrás del otro</b> (en <b>serie</b>) con una sola resistencia. Si uno falla, ¿qué pasará con el otro?", "c.m3.pista": "Un solo camino: pila + → resistencia → LED 1 → LED 2 → pila −. Con 5 V no alcanza para tres LED en serie, ¡pruébalo!", "c.m3.pregunta": "Si se quema uno de los LED en serie, ¿qué pasa con el otro?", "c.m3.op0": "Se apaga también, porque el camino se corta", "c.m3.op1": "Brilla más fuerte", "c.m3.op2": "No le pasa nada", "c.m3.explica": "En serie hay un solo camino. Si se corta en un punto, se apaga todo, como las luces de un árbol de Navidad viejo.", "c.m4.nombre": "Dos LED en paralelo", "c.m4.tab": "En paralelo", "c.m4.texto": "Enciende <b>dos LED en paralelo</b>, cada uno con su propia resistencia. Si uno falla, el otro debe <b>seguir brillando</b>.", "c.m4.pista": "Dos caminos a la vez: de la pila salen dos ramas, cada una con resistencia + LED, y se juntan de nuevo en la pila −. Usa los empalmes para repartir.", "c.m4.pregunta": "Si se quema uno de los LED en paralelo, ¿qué pasa con el otro?", "c.m4.op0": "Se apaga también", "c.m4.op1": "Sigue brillando, porque tiene su propio camino", "c.m4.op2": "Se quema también", "c.m4.explica": "En paralelo cada rama es un camino independiente. Por eso las luces de tu casa están en paralelo: si una falla, las demás siguen.", "c.m5.nombre": "El semáforo", "c.m5.tab": "Semáforo", "c.m5.texto": "Arma un <b>semáforo</b>: un LED <b>rojo</b>, uno <b>amarillo</b> y uno <b>verde</b>, cada uno con su resistencia y su interruptor. Debes poder encender <b>cada color solo</b>.", "c.m5.pista": "Tres ramas en paralelo. Cada rama: interruptor → resistencia → LED. Así controlas cada luz por separado, como harás con el Arduino en TinkerCAD.", "c.m5.pregunta": "En el semáforo, ¿por qué cada LED lleva su propia resistencia?", "c.m5.op0": "Para que cada LED reciba una corriente segura", "c.m5.op1": "Para que se vean de colores distintos", "c.m5.op2": "Porque una sola resistencia no cabe", "c.m5.explica": "Cada rama necesita limitar su corriente. Es exactamente lo que harás con el Arduino: un pin, una resistencia y un LED por cada luz."},{"titulo": "Circuit Lab · Labs", "descripcion": "Build circuits with a battery, resistors, LEDs and switches. Missions up to building a traffic light. Grade 6.", "c.volver": "← Back to labs", "c.eyebrow": "// grade 6 · electric circuits", "c.h1": "Circuit <em>Lab</em>", "c.sub": "Build circuits with a <b>battery</b>, <b>resistors</b>, <b>LEDs</b> and <b>switches</b>. Five missions get you ready to build the <b>traffic light</b> in TinkerCAD.", "c.tablero": "Circuit board", "c.piezas": "Parts", "c.mover": "Wires and move", "c.borrar": "Erase", "c.rotar": "Rotate (R)", "c.vaciar": "Empty board", "c.reparar": "Replace burnt LEDs", "c.ayuda": "Drag from a <b>point</b> on a part to another to run a wire. Drag the part to move it. Click a switch to open or close it, and a resistor to change its value.", "c.mision": "Mission", "c.pista": "Hint", "c.solucion": "See a solution", "c.pregunta": "Question", "c.autoTit": "Automatic traffic light", "c.autoTxt": "Like the Arduino will do: it opens and closes your switches in sequence.", "c.auto.ini": "▶ Start", "c.auto.stop": "■ Stop", "c.aprende": "Learn", "c.dtLed": "LED", "c.ddLed": "It lets current through in one direction only. The triangle side is the <b>anode (+)</b>.", "c.dtRes": "Resistor", "c.ddRes": "It slows down the current. An LED needs between 5 and 25 mA; more than 30 mA burns it.", "c.dtSw": "Switch", "c.ddSw": "It opens or closes the path. With no closed path, there is no current.", "c.dtSP": "Series and parallel", "c.ddSP": "Series: a single path. Parallel: several paths at once.", "c.dtJP": "Jumper and breadboard", "c.ddJP": "In TinkerCAD you will use <b>jumper</b> wires on a <b>breadboard</b>. Here, your wires do the same job.", "c.entrega": "Hand-in", "c.tuNombre": "Your name", "c.phNombre": "Write your name", "c.guardarImg": "Save an image of my circuit", "c.pie": "Made for the classroom · Gi School", "c.p.pila": "5 V battery", "c.p.res": "Resistor", "c.p.rojo": "Red LED", "c.p.amarillo": "Yellow LED", "c.p.verde": "Green LED", "c.p.sw": "Switch", "c.p.emp": "Junction", "c.k.pila": "There is a battery", "c.k.res": "There is a resistor", "c.k.led": "There is an LED", "c.k.brilla": "The LED glows without burning out", "c.k.sw": "There is a switch", "c.k.swok": "Closed, the LED glows; open, it turns off", "c.k.dos": "There are two LEDs", "c.k.juntos": "Both glow at the same time", "c.k.serie": "They are in series (if one fails, the other goes out)", "c.k.par": "They are in parallel, each with its own resistor", "c.k.rojo": "Red LED", "c.k.amarillo": "Yellow LED", "c.k.verde": "Green LED", "c.k.tres": "Three switches", "c.k.cada": "Each color lights up alone, without burning out", "c.a.quemo": "An LED burned out! It needed a resistor, or a bigger one.", "c.a.corto": "Short circuit! A wire connects the battery to itself. The battery protected itself.", "c.a.nocabe": "It doesn't fit there.", "c.a.choque": "There is already a part there. Pick a free spot.", "c.a.unapila": "There is only one battery.", "c.a.girar": "There is no room to rotate it.", "c.a.cambiaste": "You replaced {n} LED(s). Check the resistor!", "c.a.noquem": "There are no burnt LEDs.", "c.conf.vaciar": "Empty the board?", "c.conf.sol": "This replaces your board with a solution. Continue?", "c.abierto": "open", "c.cerrado": "closed", "c.quemado": "✖ burnt", "c.q.bien": "Correct!", "c.q.casi": "Almost.", "c.img.tit": "Circuit Lab · Mission {n}: {nombre}", "c.img.sin": "No name", "c.img.ok": "Mission complete!", "c.img.prog": "In progress", "c.m1.nombre": "Light your first LED", "c.m1.tab": "First LED", "c.m1.texto": "Connect the <b>battery</b>, a <b>resistor</b> and an <b>LED</b> so the LED glows <b>without burning out</b>. First try it without the resistor, and see what happens!", "c.m1.pista": "Make a closed path: battery + → resistor → LED (through the triangle side, the anode) → battery −. The resistor limits the current.", "c.m1.pregunta": "What is the resistor for in this circuit?", "c.m1.op0": "To make the LED glow brighter", "c.m1.op1": "To limit the current so the LED does not burn out", "c.m1.op2": "To store the battery energy", "c.m1.explica": "Without a resistor, the current is too large and the LED burns out. The resistor limits it to a safe value.", "c.m2.nombre": "Control it with a switch", "c.m2.tab": "Switch", "c.m2.texto": "Add a <b>switch</b> to turn the LED on and off. It must glow with the switch <b>closed</b> and go out when you <b>open</b> it.", "c.m2.pista": "Put the switch on the same path as the resistor and the LED. Click it to open or close it.", "c.m2.pregunta": "What happens to the current when the switch is open?", "c.m2.op0": "It keeps flowing, but more slowly", "c.m2.op1": "It does not flow: the path is cut", "c.m2.op2": "It flows the other way", "c.m2.explica": "Open means the path is interrupted. With no closed path there is no current and the LED goes out.", "c.m3.nombre": "Two LEDs in series", "c.m3.tab": "In series", "c.m3.texto": "Light <b>two LEDs one after the other</b> (in <b>series</b>) with a single resistor. If one fails, what will happen to the other?", "c.m3.pista": "A single path: battery + → resistor → LED 1 → LED 2 → battery −. With 5 V there is not enough for three LEDs in series, try it!", "c.m3.pregunta": "If one of the LEDs in series burns out, what happens to the other?", "c.m3.op0": "It goes out too, because the path is cut", "c.m3.op1": "It glows brighter", "c.m3.op2": "Nothing happens to it", "c.m3.explica": "In series there is only one path. If it is cut anywhere, everything goes out, like the lights on an old Christmas tree.", "c.m4.nombre": "Two LEDs in parallel", "c.m4.tab": "In parallel", "c.m4.texto": "Light <b>two LEDs in parallel</b>, each with its own resistor. If one fails, the other must <b>keep glowing</b>.", "c.m4.pista": "Two paths at once: two branches leave the battery, each with a resistor + LED, and meet again at the battery −. Use junctions to split them.", "c.m4.pregunta": "If one of the LEDs in parallel burns out, what happens to the other?", "c.m4.op0": "It goes out too", "c.m4.op1": "It keeps glowing, because it has its own path", "c.m4.op2": "It burns out too", "c.m4.explica": "In parallel every branch is an independent path. That is why the lights in your house are in parallel: if one fails, the others keep working.", "c.m5.nombre": "The traffic light", "c.m5.tab": "Traffic light", "c.m5.texto": "Build a <b>traffic light</b>: a <b>red</b> LED, a <b>yellow</b> one and a <b>green</b> one, each with its own resistor and switch. You must be able to light <b>each color alone</b>.", "c.m5.pista": "Three branches in parallel. Each branch: switch → resistor → LED. This way you control each light separately, just like you will with the Arduino in TinkerCAD.", "c.m5.pregunta": "In the traffic light, why does each LED have its own resistor?", "c.m5.op0": "So each LED gets a safe current", "c.m5.op1": "So they show different colors", "c.m5.op2": "Because a single resistor does not fit", "c.m5.explica": "Each branch needs to limit its own current. It is exactly what you will do with the Arduino: one pin, one resistor and one LED for each light."});
 (function(){
 'use strict';
 var M=window.MotorCircuitos;
+var T=I18N.t;
 var COLS=16,FILAS=10;
 var $=function(id){return document.getElementById(id)};
 var cv=$('cv'),ctx=cv.getContext('2d');
@@ -196,9 +199,9 @@ function recalcular(){
   var circ=circuito();
   S.sim=M.simular(circ);
   // los LED que se queman se quedan quemados hasta que el alumno los cambie
-  S.sim.quemados.forEach(function(id){var c=compPorId(id);if(c&&!c.quemado){c.quemado=true;avisar('¡Se quemó un LED! Le faltó una resistencia, o tenía poca.')}});
+  S.sim.quemados.forEach(function(id){var c=compPorId(id);if(c&&!c.quemado){c.quemado=true;avisar(T('c.a.quemo'))}});
   if(S.sim.quemados.length)S.sim=M.simular(circuito());
-  if(S.sim.corto)avisar('¡Cortocircuito! Un cable une la pila consigo misma. La pila se protegió.');
+  if(S.sim.corto)avisar(T('c.a.corto'));
   S.val=M.MISIONES[S.mision].validar(circuito());
   S.comps.forEach(function(c){if(c.tipo==='led'){/* nada */}});
   actualizarMision();
@@ -210,22 +213,22 @@ function criterios(){
   var tiene=function(t){return S.comps.some(function(x){return x.tipo===t})};
   var enc=function(l){var r=sim.comps[l.id];return r&&r.lit};
   var L=[];
-  L.push(['Hay una pila',tiene('pila')]);
-  if(n===0){L.push(['Hay una resistencia',tiene('resistencia')]);L.push(['Hay un LED',tiene('led')]);L.push(['El LED brilla sin quemarse',S.val&&S.val.ok]);}
-  if(n===1){L.push(['Hay un interruptor',tiene('interruptor')]);L.push(['Cerrado, el LED brilla; abierto, se apaga',S.val&&S.val.ok]);}
-  if(n===2){L.push(['Hay dos LED',leds.length>=2]);L.push(['Los dos brillan a la vez',leds.filter(enc).length>=2]);L.push(['Están en serie (si uno falla, el otro se apaga)',S.val&&S.val.ok]);}
-  if(n===3){L.push(['Hay dos LED',leds.length>=2]);L.push(['Los dos brillan a la vez',leds.filter(enc).length>=2]);L.push(['Están en paralelo, cada uno con su resistencia',S.val&&S.val.ok]);}
-  if(n===4){['rojo','amarillo','verde'].forEach(function(col){L.push(['LED '+col,leds.some(function(l){return l.color===col})])});
-    L.push(['Tres interruptores',S.comps.filter(function(x){return x.tipo==='interruptor'}).length>=3]);
-    L.push(['Cada color se enciende solo, sin quemarse',S.val&&S.val.ok]);}
+  L.push([T('c.k.pila'),tiene('pila')]);
+  if(n===0){L.push([T('c.k.res'),tiene('resistencia')]);L.push([T('c.k.led'),tiene('led')]);L.push([T('c.k.brilla'),S.val&&S.val.ok]);}
+  if(n===1){L.push([T('c.k.sw'),tiene('interruptor')]);L.push([T('c.k.swok'),S.val&&S.val.ok]);}
+  if(n===2){L.push([T('c.k.dos'),leds.length>=2]);L.push([T('c.k.juntos'),leds.filter(enc).length>=2]);L.push([T('c.k.serie'),S.val&&S.val.ok]);}
+  if(n===3){L.push([T('c.k.dos'),leds.length>=2]);L.push([T('c.k.juntos'),leds.filter(enc).length>=2]);L.push([T('c.k.par'),S.val&&S.val.ok]);}
+  if(n===4){['rojo','amarillo','verde'].forEach(function(col){L.push([T('c.k.'+col),leds.some(function(l){return l.color===col})])});
+    L.push([T('c.k.tres'),S.comps.filter(function(x){return x.tipo==='interruptor'}).length>=3]);
+    L.push([T('c.k.cada'),S.val&&S.val.ok]);}
   return L;
 }
 function actualizarMision(){
   var m=M.MISIONES[S.mision];
-  $('texto').innerHTML=m.texto;
+  $('texto').innerHTML=T('c.m'+m.id+'.texto');
   var ul=$('check');ul.textContent='';
   criterios().forEach(function(k){var li=document.createElement('li');if(k[1])li.className='si';li.innerHTML='<span class="dot"></span><span>'+k[0]+'</span>';ul.appendChild(li)});
-  document.querySelectorAll('#pasos .tab').forEach(function(b,i){b.setAttribute('aria-pressed',String(i===S.mision));b.classList.toggle('hecha',!!AV.hechas[i+1])});
+  document.querySelectorAll('#pasos .tab').forEach(function(b,i){b.textContent=(i+1)+'. '+T('c.m'+(i+1)+'.tab');b.title=T('c.m'+(i+1)+'.nombre');b.setAttribute('aria-pressed',String(i===S.mision));b.classList.toggle('hecha',!!AV.hechas[i+1])});
   var ok=S.val&&S.val.ok;
   $('quiz').style.display=ok?'block':'none';
   if(ok&&!S.quizMostrado!==false){}
@@ -238,15 +241,15 @@ function actualizarMision(){
 }
 function armarQuiz(){
   var m=M.MISIONES[S.mision];S.quizDe=S.mision;
-  $('qTxt').textContent=m.pregunta;var box=$('qOps');box.textContent='';$('qExp').style.display='none';
-  m.opciones.forEach(function(o,i){
-    var b=document.createElement('button');b.type='button';b.className='op';b.textContent=o;
+  $('qTxt').textContent=T('c.m'+m.id+'.pregunta');var box=$('qOps');box.textContent='';$('qExp').style.display='none';
+  [0,1,2].forEach(function(i){
+    var b=document.createElement('button');b.type='button';b.className='op';b.textContent=T('c.m'+m.id+'.op'+i);
     b.onclick=function(){
       box.querySelectorAll('button').forEach(function(x){x.disabled=true});
       b.classList.add(i===m.correcta?'bien':'mal');
       if(i!==m.correcta)box.querySelectorAll('button')[m.correcta].classList.add('bien');
       var e=$('qExp');e.style.display='block';e.className='msg '+(i===m.correcta?'ok':'mal');
-      e.innerHTML=(i===m.correcta?'<b>¡Correcto!</b> ':'<b>Casi.</b> ')+m.explica;
+      e.innerHTML=(i===m.correcta?'<b>'+T('c.q.bien')+'</b> ':'<b>'+T('c.q.casi')+'</b> ')+T('c.m'+m.id+'.explica');
     };
     box.appendChild(b);
   });
@@ -258,9 +261,9 @@ function colocarPieza(tipo,color,x,y){
   if(tipo==='resistencia')c.valor=220;
   if(tipo==='led'){c.color=color||'rojo'}
   if(tipo==='interruptor')c.abierto=false;
-  if(!dentro(c)){c.or=1;if(!dentro(c)){avisar('No cabe ahí.');return null}}
-  if(hayChoque(c)){avisar('Ahí ya hay otra pieza. Elige un lugar libre.');return null}
-  if(tipo==='pila'&&S.comps.some(function(k){return k.tipo==='pila'})){avisar('Solo hay una pila.');return null}
+  if(!dentro(c)){c.or=1;if(!dentro(c)){avisar(T('c.a.nocabe'));return null}}
+  if(hayChoque(c)){avisar(T('c.a.choque'));return null}
+  if(tipo==='pila'&&S.comps.some(function(k){return k.tipo==='pila'})){avisar(T('c.a.unapila'));return null}
   S.comps.push(c);recalcular();return c;
 }
 function cablear(t1,t2){
@@ -277,7 +280,7 @@ function vaciar(){S.comps=[];S.cables=[];S.sel=null;detenerAuto();recalcular()}
 function rotar(){
   var c=S.sel;if(!c||c.tipo==='empalme')return;
   var old=c.or;c.or=old===1?0:1;
-  if(!dentro(c)||hayChoque(c)){c.or=old;avisar('No hay espacio para girarla.');return}
+  if(!dentro(c)||hayChoque(c)){c.or=old;avisar(T('c.a.girar'));return}
   recalcular();
 }
 
@@ -380,26 +383,33 @@ function refrescarPaleta(){
   $('tBorrar').setAttribute('aria-pressed',String(S.herr==='borrar'));
   cv.style.cursor=S.colocar?'copy':(S.herr==='borrar'?'not-allowed':'default');
 }
-function armarUI(){
-  var P=$('paleta');
-  var defs=[['pila','','Pila 5 V','#ffd36b'],['resistencia','','Resistencia','#e0a96d'],['led','rojo','LED rojo',COLORES.rojo],['led','amarillo','LED amarillo',COLORES.amarillo],['led','verde','LED verde',COLORES.verde],['interruptor','','Interruptor','#bcd0ff'],['empalme','','Empalme','#ffffff']];
+function armarPaleta(){
+  var P=$('paleta');P.textContent='';
+  var defs=[['pila','','c.p.pila','#ffd36b'],['resistencia','','c.p.res','#e0a96d'],['led','rojo','c.p.rojo',COLORES.rojo],['led','amarillo','c.p.amarillo',COLORES.amarillo],['led','verde','c.p.verde',COLORES.verde],['interruptor','','c.p.sw','#bcd0ff'],['empalme','','c.p.emp','#ffffff']];
   defs.forEach(function(d){
     var b=document.createElement('button');b.type='button';b.className='comp';b.dataset.tipo=d[0];b.dataset.color=d[1];
-    b.innerHTML='<span class="pt" style="background:'+d[3]+'"></span>'+d[2];
+    b.innerHTML='<span class="pt" style="background:'+d[3]+'"></span>'+T(d[2]);
     b.onclick=function(){S.herr='mover';S.colocar=(S.colocar&&S.colocar.tipo===d[0]&&(S.colocar.color||'')===d[1])?null:{tipo:d[0],color:d[1]};refrescarPaleta()};
     P.appendChild(b);
   });
-  var pa=$('pasos');M.MISIONES.forEach(function(m,i){
-    var b=document.createElement('button');b.type='button';b.className='tab';b.textContent=(i+1)+'. '+m.nombre.split(' ').slice(0,2).join(' ');b.title=m.nombre;
+  refrescarPaleta();
+}
+function armarPasos(){
+  var pa=$('pasos');pa.textContent='';
+  M.MISIONES.forEach(function(m,i){
+    var b=document.createElement('button');b.type='button';b.className='tab';b.textContent=(i+1)+'. '+T('c.m'+m.id+'.tab');b.title=T('c.m'+m.id+'.nombre');
     b.onclick=function(){cambiarMision(i)};pa.appendChild(b);
   });
+}
+function armarUI(){
+  armarPaleta();armarPasos();
   $('tMover').onclick=function(){S.herr='mover';S.colocar=null;refrescarPaleta()};
   $('tBorrar').onclick=function(){S.herr='borrar';S.colocar=null;S.cable=null;refrescarPaleta()};
   $('bRotar').onclick=rotar;
-  $('bLimpiar').onclick=function(){if((S.comps.length)&&!confirm('¿Vaciar el tablero?'))return;vaciar()};
-  $('bReparar').onclick=function(){var n=0;S.comps.forEach(function(c){if(c.quemado){c.quemado=false;n++}});if(n){recalcular();avisar('Cambiaste '+n+' LED. ¡Revisa la resistencia!')}else avisar('No hay LED quemados.')};
-  $('bPista').onclick=function(){var e=$('pista');e.style.display=e.style.display==='none'?'block':'none';e.textContent=M.MISIONES[S.mision].pista};
-  $('bSol').onclick=function(){if(S.comps.length&&!confirm('Esto reemplaza tu tablero con una solución. ¿Continuar?'))return;solucion(S.mision)};
+  $('bLimpiar').onclick=function(){if((S.comps.length)&&!confirm(T('c.conf.vaciar')))return;vaciar()};
+  $('bReparar').onclick=function(){var n=0;S.comps.forEach(function(c){if(c.quemado){c.quemado=false;n++}});if(n){recalcular();avisar(T('c.a.cambiaste',{n:n}))}else avisar(T('c.a.noquem'))};
+  $('bPista').onclick=function(){var e=$('pista');e.style.display=e.style.display==='none'?'block':'none';e.textContent=T('c.m'+M.MISIONES[S.mision].id+'.pista')};
+  $('bSol').onclick=function(){if(S.comps.length&&!confirm(T('c.conf.sol')))return;solucion(S.mision)};
   $('bAuto').onclick=function(){S.auto?detenerAuto():iniciarAuto()};
   $('bImg').onclick=guardarImagen;
   $('nombre').value=AV.nombre||'';
@@ -444,11 +454,11 @@ var SECUENCIA=[['rojo',3000],['verde',3000],['amarillo',1400]];
 function iniciarAuto(){
   var combos=S.val&&S.val.combos,sw=S.val&&S.val.switches;if(!combos)return;
   S.auto={t0:performance.now(),paso:-1,combos:combos,sw:sw};
-  $('bAuto').textContent='■ Detener';
+  $('bAuto').textContent=T('c.auto.stop');
 }
 function detenerAuto(){
   if(S.auto){S.auto=null;S.comps.forEach(function(c){if(c.tipo==='interruptor')c.abierto=true});recalcular()}
-  $('bAuto').textContent='▶ Iniciar';['lR','lA','lV'].forEach(function(i){$(i).classList.remove('on')});
+  $('bAuto').textContent=T('c.auto.ini');['lR','lA','lV'].forEach(function(i){$(i).classList.remove('on')});
 }
 function tickAuto(now){
   var A=S.auto;if(!A)return;
@@ -556,7 +566,7 @@ function dibujarPieza(k,c,t,sim){
     if(k.abierto)ctx.lineTo(c*0.25,-c*0.32);else ctx.lineTo(c*0.4,0);ctx.stroke();
     ctx.restore();ctx.save();ctx.translate(cx,cy);
     ctx.fillStyle=k.abierto?'#ffb3b3':'#9af0bb';ctx.font='600 '+Math.round(c*0.22)+'px "JetBrains Mono",monospace';ctx.textAlign='center';
-    ctx.fillText(k.abierto?'abierto':'cerrado',v?c*0.95:0,v?c*0.08:-c*0.42);
+    ctx.fillText(k.abierto?T('c.abierto'):T('c.cerrado'),v?c*0.95:0,v?c*0.08:-c*0.42);
     ctx.restore();return;
   }
   if(k.tipo==='led'){
@@ -572,7 +582,7 @@ function dibujarPieza(k,c,t,sim){
     [[-0.05,-0.42],[0.2,-0.5]].forEach(function(o){ctx.beginPath();ctx.moveTo(c*o[0],c*o[1]);ctx.lineTo(c*(o[0]+0.22),c*(o[1]-0.2));ctx.stroke()});
     ctx.restore();ctx.save();ctx.translate(cx,cy);
     ctx.textAlign='center';
-    if(q){ctx.fillStyle='#ff9f9f';ctx.font='700 '+Math.round(c*0.26)+'px "JetBrains Mono",monospace';ctx.fillText('✖ quemado',v?c*1.2:0,v?c*0.1:c*0.72)}
+    if(q){ctx.fillStyle='#ff9f9f';ctx.font='700 '+Math.round(c*0.26)+'px "JetBrains Mono",monospace';ctx.fillText(T('c.quemado'),v?c*1.2:0,v?c*0.1:c*0.72)}
     else if(res&&res.I>1e-4){ctx.fillStyle='rgba(234,242,251,.9)';ctx.font='600 '+Math.round(c*0.24)+'px "JetBrains Mono",monospace';ctx.fillText((res.I*1000).toFixed(1)+' mA',v?c*1.0:0,v?c*0.1:c*0.72)}
     ctx.fillStyle='rgba(234,242,251,.6)';ctx.font='500 '+Math.round(c*0.2)+'px "JetBrains Mono",monospace';
     ctx.fillText('+',v?-c*0.5:-c*0.62,v?-c*0.7:-c*0.5);
@@ -589,10 +599,10 @@ function guardarImagen(){
   x.fillStyle='#0b1a2c';x.fillRect(0,H,W,130);x.fillStyle='#4fd1c5';x.fillRect(0,H,W,3);
   var m=M.MISIONES[S.mision],ok=S.val&&S.val.ok;
   x.fillStyle='#eaf2fb';x.font='700 34px "Space Grotesk",system-ui,sans-serif';x.textAlign='left';
-  x.fillText('Laboratorio de circuitos · Misión '+m.id+': '+m.nombre,30,H+48);
+  x.fillText(T('c.img.tit',{n:m.id,nombre:T('c.m'+m.id+'.nombre')}),30,H+48);
   x.font='400 26px "Space Grotesk",system-ui,sans-serif';x.fillStyle='#b3c4d6';
-  x.fillText((($('nombre').value||'').trim()||'Sin nombre')+'  ·  labs.iscosanchez.com',30,H+92);
-  x.textAlign='right';x.font='700 38px "Space Grotesk",system-ui,sans-serif';x.fillStyle=ok?'#8be8ae':'#ffc27a';x.fillText(ok?'¡Misión cumplida!':'En progreso',W-30,H+60);
+  x.fillText((($('nombre').value||'').trim()||T('c.img.sin'))+'  ·  labs.iscosanchez.com',30,H+92);
+  x.textAlign='right';x.font='700 38px "Space Grotesk",system-ui,sans-serif';x.fillStyle=ok?'#8be8ae':'#ffc27a';x.fillText(ok?T('c.img.ok'):T('c.img.prog'),W-30,H+60);
   off.toBlob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='circuito-mision-'+m.id+'.png';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)});
 }
 
@@ -603,6 +613,8 @@ function ajustar(){
 }
 window.addEventListener('resize',ajustar);
 armarUI();ajustar();refrescarPaleta();recalcular();
+I18N.onChange(function(){armarPaleta();armarPasos();S.quizDe=null;recalcular();if($('qExp').style.display==='none'||true){}});
+I18N.montar();
 (function bucle(now){dibujar(now||0);requestAnimationFrame(bucle)})();
 window.__circ={S:S,solucion:solucion,colocar:colocarPieza,cablear:cablear,cambiarMision:cambiarMision,recalcular:recalcular,iniciarAuto:iniciarAuto};
 })();
