@@ -98,7 +98,7 @@
     {
       "id": "puzzles",
       "nombre": "Puzzles",
-      "grupo": "general",
+      "grupo": "1",
       "url": "https://iscosanchezl.github.io/Puzzles/"
     },
     {
@@ -110,13 +110,13 @@
     {
       "id": "teclea",
       "nombre": "Teclea",
-      "grupo": "apps",
+      "grupo": "general",
       "url": "https://teclea.iscosanchez.com"
     },
     {
       "id": "codekid",
       "nombre": "CodeKid",
-      "grupo": "apps",
+      "grupo": "general",
       "url": "https://codekid.iscosanchez.com"
     },
     {
