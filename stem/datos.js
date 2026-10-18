@@ -25,7 +25,7 @@ window.STEM = {
     { id: 'imanes', grado: 2, cat: 'fisica', estado: 'listo', url: 'actividades/imanes/', icono: '🧲',
       es: { n: 'Imanes', d: '¿Qué atrae un imán y qué no? Prueba objetos de todos los materiales.', a: 'Algunos materiales son atraídos por imanes.' },
       en: { n: 'Magnets', d: 'What does a magnet attract and what not? Test objects made of different materials.', a: 'Some materials are attracted by magnets.' } },
-    { id: 'plantas', grado: 2, cat: 'vida', estado: 'pronto', icono: '🌻',
+    { id: 'plantas', grado: 2, cat: 'vida', estado: 'listo', url: 'actividades/plantas/', icono: '🌻',
       es: { n: 'Cómo crece una planta', d: 'Riega, da luz y mira crecer una semilla.', a: 'Las plantas necesitan agua y luz.' },
       en: { n: 'How a plant grows', d: 'Water it, give it light and watch a seed grow.', a: 'Plants need water and light.' } },
     { id: 'mezclas', grado: 3, cat: 'materia', estado: 'pronto', icono: '🥤',
