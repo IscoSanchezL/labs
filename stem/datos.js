@@ -28,7 +28,7 @@ window.STEM = {
     { id: 'plantas', grado: 2, cat: 'vida', estado: 'listo', url: 'actividades/plantas/', icono: '🌻',
       es: { n: 'Cómo crece una planta', d: 'Riega, da luz y mira crecer una semilla.', a: 'Las plantas necesitan agua y luz.' },
       en: { n: 'How a plant grows', d: 'Water it, give it light and watch a seed grow.', a: 'Plants need water and light.' } },
-    { id: 'mezclas', grado: 3, cat: 'materia', estado: 'pronto', icono: '🥤',
+    { id: 'mezclas', grado: 3, cat: 'materia', estado: 'listo', url: 'actividades/mezclas/', icono: '🥤',
       es: { n: 'Mezclas y disoluciones', d: '¿Qué se disuelve en agua? Prueba sal, azúcar, arena y aceite.', a: 'Algunas mezclas se separan y otras no.' },
       en: { n: 'Mixtures and solutions', d: 'What dissolves in water? Try salt, sugar, sand and oil.', a: 'Some mixtures separate and others do not.' } },
     { id: 'ciclo-agua', grado: 3, cat: 'tierra', estado: 'pronto', icono: '🌧️',
