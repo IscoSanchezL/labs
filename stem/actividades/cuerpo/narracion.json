@@ -1,0 +1,9 @@
+[
+ {"id":"p1","texto":"Mi cuerpo por dentro. Dentro de tu cuerpo hay partes muy importantes. El corazón, los pulmones, el cerebro y los huesos. Toca cada una para saber qué hace."},
+ {"id":"m1","texto":"Tu misión. Conoce las cuatro partes."},
+ {"id":"p2","texto":"Mi corazón late. Cuando corres, tu corazón late más rápido. Cuando descansas, late más despacio. Prueba correr y descansar."},
+ {"id":"m2","texto":"Tu misión. Haz que tu corazón lata rápido y luego despacio."},
+ {"id":"p3","texto":"¿Para qué sirve?. Toca la parte del cuerpo que contesta cada pregunta."},
+ {"id":"m3","texto":"Tu misión. Acierta cuatro veces."},
+ {"id":"ok","texto":"¡Muy bien! Misión cumplida."}
+]
