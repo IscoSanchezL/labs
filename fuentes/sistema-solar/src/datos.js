@@ -1,0 +1,17 @@
+/* Datos de los planetas (cifras redondeadas de la NASA). r: radio ilustrado; a: distancia ilustrada; rReal: radio relativo a la Tierra. */
+export const PLANETAS = [
+  { id: 'mercurio', n: 'Mercurio', tipo: 'Planeta rocoso', color: '#b5aba0', r: 0.9, a: 17, rReal: 0.383, diam: '4 879 km', dist: '58 millones de km', dia: '59 días terrestres', anio: '88 días', lunas: '0', temp: '-180 a 430 °C', dato: 'Es el más pequeño y el más cercano al Sol, pero no el más caliente: Venus lo supera.', vel: 4.15, rot: 0.05 },
+  { id: 'venus', n: 'Venus', tipo: 'Planeta rocoso', color: '#e8cf9a', r: 1.6, a: 24, rReal: 0.949, diam: '12 104 km', dist: '108 millones de km', dia: '243 días terrestres', anio: '225 días', lunas: '0', temp: '465 °C', dato: 'Gira al revés que casi todos los planetas, y su día dura más que su año.', vel: 1.62, rot: -0.02 },
+  { id: 'tierra', n: 'Tierra', tipo: 'Planeta rocoso', color: '#5aa0ff', r: 1.7, a: 32, rReal: 1, diam: '12 756 km', dist: '150 millones de km', dia: '24 horas', anio: '365 días', lunas: '1', temp: '15 °C en promedio', dato: 'Es el único lugar del universo donde sabemos que hay vida.', vel: 1, rot: 0.6 },
+  { id: 'marte', n: 'Marte', tipo: 'Planeta rocoso', color: '#d8704a', r: 1.2, a: 40, rReal: 0.532, diam: '6 792 km', dist: '228 millones de km', dia: '24,6 horas', anio: '687 días', lunas: '2', temp: '-60 °C en promedio', dato: 'Tiene el volcán más alto del sistema solar: el Monte Olimpo, casi tres veces el Everest.', vel: 0.53, rot: 0.58 },
+  { id: 'jupiter', n: 'Júpiter', tipo: 'Gigante gaseoso', color: '#d9b48a', r: 5, a: 58, rReal: 11.2, diam: '142 984 km', dist: '778 millones de km', dia: '9,9 horas', anio: '11,9 años', lunas: 'más de 90', temp: '-110 °C', dato: 'Cabrían más de 1 000 Tierras dentro de él. Su Gran Mancha Roja es una tormenta de siglos.', vel: 0.084, rot: 1.4 },
+  { id: 'saturno', n: 'Saturno', tipo: 'Gigante gaseoso', color: '#e6d3a4', r: 4.4, a: 77, rReal: 9.45, diam: '120 536 km', dist: '1 434 millones de km', dia: '10,7 horas', anio: '29,5 años', lunas: 'más de 140', temp: '-140 °C', dato: 'Sus anillos son de hielo y roca, y son tan delgados que de canto casi desaparecen.', vel: 0.034, rot: 1.3 },
+  { id: 'urano', n: 'Urano', tipo: 'Gigante helado', color: '#9fe3e6', r: 2.9, a: 93, rReal: 4.0, diam: '51 118 km', dist: '2 871 millones de km', dia: '17,2 horas', anio: '84 años', lunas: '28', temp: '-195 °C', dato: 'Gira "acostado": su eje está inclinado casi 98°, así que rueda por su órbita.', vel: 0.012, rot: -0.8 },
+  { id: 'neptuno', n: 'Neptuno', tipo: 'Gigante helado', color: '#4a6dff', r: 2.8, a: 108, rReal: 3.88, diam: '49 528 km', dist: '4 495 millones de km', dia: '16,1 horas', anio: '165 años', lunas: '16', temp: '-200 °C', dato: 'Tiene los vientos más rápidos del sistema solar: pasan de 2 000 km/h.', vel: 0.006, rot: 0.9 }
+];
+export const SOL = { id: 'sol', n: 'Sol', tipo: 'Estrella', color: '#ffc861', r: 7, diam: '1 392 000 km', dist: '—', dia: '25 días terrestres', anio: '—', lunas: '—', temp: '5 500 °C en la superficie', dato: 'Su diámetro es 109 veces el de la Tierra, y contiene el 99,8 % de la masa del sistema solar.' };
+export const PREGUNTAS = [
+  { p: '¿Cuál es el planeta más grande del sistema solar?', o: ['Saturno', 'Júpiter', 'Neptuno'], ok: 1 },
+  { p: '¿Qué planeta está más cerca del Sol?', o: ['Mercurio', 'Venus', 'Marte'], ok: 0 },
+  { p: '¿Qué planeta es famoso por sus anillos?', o: ['Marte', 'Saturno', 'Venus'], ok: 1 }
+];

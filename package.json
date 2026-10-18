@@ -6,7 +6,9 @@
   "scripts": {
     "dev:estructuras": "vite fuentes/estructuras",
     "build:estructuras": "vite build fuentes/estructuras",
-    "test": "node fuentes/estructuras/pruebas/motor.test.mjs"
+    "test": "node fuentes/estructuras/pruebas/motor.test.mjs",
+    "dev:solar": "vite fuentes/sistema-solar",
+    "build:solar": "vite build fuentes/sistema-solar"
   },
   "devDependencies": {
     "vite": "^8.0.0"

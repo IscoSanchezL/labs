@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sistema solar · STEM Labs</title>
+<meta name="description" content="Recorre el sistema solar en 3D: visita los ocho planetas, compara sus tamaños reales y responde el reto final. Grado 4°.">
+<link rel="icon" type="image/png" href="./assets/favicon-BaN3nY2g.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="./assets/index-BtK1AkAh.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-Bt6i9Rdf.css">
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<header class="top"><div class="wrap ancho">
+  <div class="logo"><img src="./assets/logo-CECkom-n.png" alt="" width="44" height="44"><div>STEM Labs<span> · Gi School</span></div></div>
+  <div class="der"><a class="volver" href="../../stem/">← Todos los experimentos</a></div>
+</div></header>
+<main class="wrap ancho">
+  <section class="titulo">
+    <span class="eyebrow">// grado 4° · tierra y espacio</span>
+    <h1>Sistema <em>solar</em></h1>
+    <p class="sub">Recórrelo en 3D: toca un planeta para viajar hasta él, compara sus tamaños reales y supera el reto final.</p>
+  </section>
+  <section class="visor" id="visor" aria-label="Sistema solar en 3D">
+    <div id="vista"></div>
+    <div class="etiquetas" id="etiquetas" aria-hidden="true"></div>
+    <nav class="lista" id="lista" aria-label="Cuerpos del sistema solar"></nav>
+    <div class="misiones" id="misiones" aria-live="polite"></div>
+    <aside class="ficha" id="ficha" hidden></aside>
+    <div class="barra">
+      <div class="grupo" role="group" aria-label="Velocidad de los planetas">
+        <span class="mini">Tiempo</span>
+        <button class="tab" data-v="0" type="button">Pausa</button>
+        <button class="tab" data-v="1" type="button" aria-pressed="true">Lento</button>
+        <button class="tab" data-v="4" type="button">Normal</button>
+        <button class="tab" data-v="14" type="button">Rápido</button>
+      </div>
+      <div class="grupo">
+        <button class="btn sec" id="bGeneral" type="button">🔭 Vista general</button>
+        <button class="btn" id="bComparar" type="button" aria-pressed="false">📏 Comparar tamaños reales</button>
+        <button class="btn sec" id="bReto" type="button">🎯 Reto final</button>
+      </div>
+    </div>
+    <div class="reto" id="reto" hidden></div>
+  </section>
+</main>
+<footer><div class="wrap"><div>Hecho para el aula · Gi School</div><div>iscosanchez.com</div></div></footer>
+</body>
+</html>
