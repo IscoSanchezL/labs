@@ -120,7 +120,7 @@
     if (i <= 1) cont.grave = true; if (i >= 6) cont.agudo = true; if (vol4 > 0.5) cont.fuerte = true; else cont.suave = true;
     if (cont.grave && cont.agudo && cont.fuerte && cont.suave) cumplir(3);
   }
-  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; pintar(); }
+  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; pintar(); Narrar.decir('ok', T('ok')); }
 
   /* ---------- interfaz ---------- */
   function ctl() {
@@ -151,13 +151,12 @@
     $('bAnt').disabled = paso === 0; $('bSig').disabled = paso === 3;
     $('fin').className = 'fin' + (hecho.every(Boolean) ? ' v' : '');
   }
-  function ir(n) { paso = n; try { window.speechSynthesis && speechSynthesis.cancel(); } catch (e) {} ctl(); pintar(); }
+  function ir(n) { paso = n; Narrar.parar(); ctl(); pintar(); Narrar.decir('p' + (n + 1), $('tit').textContent.replace(/^\d\.\s*/, '') + '. ' + $('txt').textContent, false, ['m' + (n + 1), T('m' + (n + 1))]); }
   $('bAnt').onclick = function () { if (paso > 0) ir(paso - 1); };
   $('bSig').onclick = function () { if (paso < 3) ir(paso + 1); };
-  $('bVoz').onclick = function () {
-    if (!window.speechSynthesis) return; speechSynthesis.cancel();
-    var u = new SpeechSynthesisUtterance($('tit').textContent.replace(/^\d\.\s*/, '') + '. ' + $('txt').textContent); u.lang = I18N.get() === 'en' ? 'en-US' : 'es-MX'; u.rate = 0.9; speechSynthesis.speak(u);
-  };
+  $('bVoz').onclick = function () { Narrar.decir('p' + (paso + 1), $('tit').textContent.replace(/^\d\.\s*/, '') + '. ' + $('txt').textContent, true, ['m' + (paso + 1), T('m' + (paso + 1))]); };
+  $('bAuto').setAttribute('aria-pressed', String(Narrar.activa()));
+  $('bAuto').onclick = function () { $('bAuto').setAttribute('aria-pressed', String(Narrar.alternar())); };
   function pos(e) { var r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height }; }
   cv.addEventListener('pointerdown', function (e) {
     var p = pos(e);

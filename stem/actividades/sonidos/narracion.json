@@ -1,0 +1,38 @@
+[
+ {
+  "id": "p1",
+  "texto": "Todo sonido empieza con algo que vibra. Una cuerda estirada vibra: se mueve muy rápido de un lado a otro. ¡Esa vibración es lo que hace el sonido!"
+ },
+ {
+  "id": "m1",
+  "texto": "Tu misión. Toca la cuerda 3 veces y mira cómo vibra."
+ },
+ {
+  "id": "p2",
+  "texto": "La vibración mueve el aire. El aire está lleno de partículas diminutas. Cuando el tambor vibra, empuja el aire y las partículas empujan a las de al lado: ¡así viaja el sonido!"
+ },
+ {
+  "id": "m2",
+  "texto": "Tu misión. Golpea el tambor 3 veces y mira la onda viajar."
+ },
+ {
+  "id": "p3",
+  "texto": "La onda llega a tu oído. La onda de aire llega a tu oído. Tu oído también vibra y tu cerebro entiende: ¡es un sonido! Cuanto más lejos, más suave se oye."
+ },
+ {
+  "id": "m3",
+  "texto": "Tu misión. Haz sonar la campana con el oído cerca y luego lejos."
+ },
+ {
+  "id": "p4",
+  "texto": "Fuerte, suave, agudo y grave. Si la vibración es grande, el sonido es fuerte. Si es chiquita, es suave. Si vibra rápido, el sonido es agudo; si vibra despacio, es grave."
+ },
+ {
+  "id": "m4",
+  "texto": "Tu misión. Toca una barra grave (izquierda) y una aguda (derecha). Luego un sonido fuerte y uno suave."
+ },
+ {
+  "id": "ok",
+  "texto": "¡Muy bien! Misión cumplida."
+ }
+]

@@ -15,7 +15,7 @@ window.STEM = {
     { id: 'sonidos', grado: 1, cat: 'fisica', estado: 'listo', url: 'actividades/sonidos/', icono: '🎵',
       es: { n: 'Sonidos que vibran', d: 'Toca un xilófono, un tambor y una cuerda. Descubre por qué suena fuerte, suave, agudo o grave.', a: 'El sonido es una vibración.' },
       en: { n: 'Sounds that vibrate', d: 'Play a xylophone, a drum and a string. Find out why a sound is loud, soft, high or low.', a: 'Sound is a vibration.' } },
-    { id: 'sombras', grado: 1, cat: 'luz', estado: 'pronto', icono: '🔦',
+    { id: 'sombras', grado: 1, cat: 'luz', estado: 'listo', url: 'actividades/sombras/', icono: '🔦',
       es: { n: 'Luz y sombras', d: 'Mueve una linterna y mira cómo cambia tu sombra.', a: 'La luz no pasa por los objetos.' },
       en: { n: 'Light and shadows', d: 'Move a flashlight and see how your shadow changes.', a: 'Light does not go through objects.' } },
     { id: 'sentidos', grado: 1, cat: 'vida', estado: 'pronto', icono: '👀',

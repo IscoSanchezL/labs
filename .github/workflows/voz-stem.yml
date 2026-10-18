@@ -1,0 +1,28 @@
+name: Voz de los laboratorios STEM
+
+# Cada vez que se cambia un narracion.json en main, se generan los MP3 con la voz de Beto y se guardan en el repo.
+on:
+  push:
+    branches: [main]
+    paths: ['stem/actividades/*/narracion.json', 'tools/generar_voz_stem.py']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  voz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install edge-tts
+      - run: python3 tools/generar_voz_stem.py
+      - name: Guardar los MP3 en el repo
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add stem/actividades
+          if git diff --cached --quiet; then echo "Sin cambios"; else git commit -m "Voz de los laboratorios STEM (MP3 generados)"; git push; fi
