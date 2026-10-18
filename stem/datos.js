@@ -190,8 +190,8 @@ window.STEM = {
     { id: 'partes-animales', grado: 2, cat: 'vida', estado: 'pronto', icono: '🐦',
       es: { n: 'Partes de los animales', d: 'Alas, patas y aletas: ¿para qué sirven?', a: '' },
       en: { n: 'Animal parts', d: '', a: '' } },
-    { id: 'calor', grado: 3, cat: 'fisica', estado: 'pronto', icono: '🌡️',
-      es: { n: 'Calor y temperatura', d: 'Calienta y enfría y mide con termómetro.', a: '' },
-      en: { n: 'Heat and temperature', d: '', a: '' } }
+    { id: 'calor', grado: 3, cat: 'fisica', estado: 'listo', url: 'actividades/calor/', icono: '🌡️',
+      es: { n: 'Calor y temperatura', d: 'Calienta, enfría y descubre conductores y aislantes.', a: 'Termómetro y cucharas' },
+      en: { n: 'Heat and temperature', d: 'Heat, cool and discover conductors and insulators.', a: 'Thermometer and spoons' } }
   ]
 };
