@@ -8,7 +8,7 @@ var ORG = [
 ];
 var RUTA = [[480, 70], [480, 110], [480, 160], [520, 200], [530, 245], [470, 275], [540, 290], [450, 305], [540, 320], [470, 340], [430, 300], [440, 260], [520, 235], [560, 300], [540, 360], [480, 395], [480, 425]];
 var LAB = LabKit({
-  hook: '__dig',
+  reto: true, hook: '__dig',
   pasos: [
     { n: 'Los órganos', t: '1. El tubo de la digestión', x: 'La <b>digestión</b> transforma la comida en nutrientes pequeños que tu sangre puede llevar a todo el cuerpo. Ocurre en un largo tubo con varios órganos. Toca cada uno para descubrir qué hace.', m: 'Toca los 5 órganos del sistema digestivo.', d: 'El intestino delgado mide unos 6 metros: ¡más largo que una cama!' },
     { n: 'El orden', t: '2. ¿Por dónde pasa primero?', x: 'La comida sigue siempre el mismo camino: <b>boca → esófago → estómago → intestino delgado → intestino grueso</b>.', m: 'Responde 4 de 5 preguntas sobre el recorrido.', d: 'Todo el viaje dura entre 24 y 72 horas.' },

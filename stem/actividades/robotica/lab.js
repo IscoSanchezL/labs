@@ -6,7 +6,7 @@ var NIV = [
 var DIRS = [[0, -1], [1, 0], [0, 1], [-1, 0]]; // 0 arriba (N), 1 derecha, 2 abajo, 3 izquierda
 function bfs(nv) { var s = nv.start, key = function (x, y, d) { return x + ',' + y + ',' + d; }, seen = {}, q = [[s[0], s[1], s[2], []]]; seen[key(s[0], s[1], s[2])] = 1; while (q.length) { var c = q.shift(); if (c[0] === nv.goal[0] && c[1] === nv.goal[1]) return c[3]; [['F'], ['L'], ['R']].forEach(function (m) { var x = c[0], y = c[1], d = c[2]; if (m[0] === 'F') { x += DIRS[d][0]; y += DIRS[d][1]; if (x < 0 || y < 0 || x > 5 || y > 5 || nv.walls.some(function (w) { return w[0] === x && w[1] === y; })) return; } else d = (d + (m[0] === 'R' ? 1 : 3)) % 4; var k = key(x, y, d); if (!seen[k]) { seen[k] = 1; q.push([x, y, d, c[3].concat(m)]); } }); } return null; }
 var LAB = LabKit({
-  hook: '__rob',
+  reto: true, hook: '__rob',
   pasos: [
     { n: 'Sensor ultrasónico', t: '1. Medir con sonido', x: 'Un robot «ve» con sensores. El <b>sensor ultrasónico</b> emite un sonido que no oímos, espera el <b>eco</b> y calcula la distancia: <b>d = v · t / 2</b> (el sonido va y vuelve, por eso se divide entre 2). La velocidad del sonido es 343 m/s.', m: 'Mueve el obstáculo a 3 distancias distintas y mira el tiempo del eco.', d: 'Los murciélagos y los delfines usan el mismo principio: se llama ecolocalización.' },
     { n: 'Si… entonces', t: '2. Decisiones del robot', x: 'Los robots toman decisiones con reglas <b>«si… entonces…»</b>. Por ejemplo: <b>si</b> el sensor detecta un obstáculo cerca, <b>entonces</b> el robot frena. Elige la regla correcta para cada situación.', m: 'Acierta 4 de 5 situaciones.', d: 'Un aspirador robot usa decenas de reglas así para no chocar ni caerse por las escaleras.' },

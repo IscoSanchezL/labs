@@ -4,7 +4,7 @@ function barras(L, g, vals, x0, y0, w, h, labels, cols, max, titulo) { var n = v
 var TIPOS = [['📊', 'Barras'], ['📈', 'Líneas'], ['🥧', 'Circular']];
 var CASOS = [['Comparar cuántos niños prefieren cada fruta', 0], ['Mostrar cómo cambió la temperatura cada hora del día', 1], ['Mostrar qué parte del recreo dedica cada niño a jugar, comer y hablar (el total es 100 %)', 2], ['Comparar cuántos libros leyó cada curso', 0], ['Ver cómo creció una planta cada semana', 1], ['Mostrar qué fracción de la clase tiene cada color de ojos', 2]];
 var LAB = LabKit({
-  hook: '__dat',
+  reto: true, hook: '__dat',
   pasos: [
     { n: 'Recoge datos', t: '1. Cuenta y registra', x: 'Un <b>dato</b> es una información que se puede contar o medir. Preguntamos a la clase cuál fruta prefiere y anotamos cada respuesta en una <b>tabla de conteo</b>. La gráfica de barras se arma sola.', m: 'Registra 15 votos tocando las frutas.', d: 'Los científicos y las empresas toman decisiones usando datos.' },
     { n: 'Lee la gráfica', t: '2. ¿Qué dice la gráfica?', x: 'Una <b>gráfica de barras</b> compara cantidades: la barra más alta es la que más tiene. Fíjate en la escala del lado izquierdo para leer los valores.', m: 'Responde bien 4 de 5 preguntas sobre la gráfica.', d: 'Siempre mira el título y la escala antes de sacar conclusiones.' },

@@ -39,18 +39,19 @@
     L.op = function (e, l, fn) { var b = document.createElement('button'); b.type = 'button'; b.className = 'op'; b.style.minWidth = '92px'; b.style.fontSize = '46px'; b.innerHTML = e + '<small>' + l + '</small>'; b.onclick = fn; ctlEl.appendChild(b); return b; };
     L.rango = function (etq, min, max, step, val, fn) { var l = document.createElement('label'); l.className = 'rango'; l.innerHTML = etq + ' <input type="range" min="' + min + '" max="' + max + '" step="' + step + '" value="' + val + '" aria-label="' + etq + '">'; l.querySelector('input').oninput = function (e) { fn(Number(e.target.value)); }; ctlEl.appendChild(l); return l; };
     /* cuestionario: items [{q, e, a}] (a = índice de la opción correcta) */
-    L.nuevoQuiz = function (items, n, need) { L.q = { items: L.mezclar(items).slice(0, n), i: 0, ok: 0, need: need, n: n, fin: false, msj: '' }; L.msj = ''; };
+    L.pool = [];
+    L.nuevoQuiz = function (items, n, need) { items.forEach(function (it) { var k = JSON.stringify([it.q, it.th, it.e, it.a, it.c1, it.h]); if (!L.pool.some(function (p) { return p.k === k; })) L.pool.push({ k: k, it: it }); }); L.q = { items: L.mezclar(items).slice(0, n), i: 0, ok: 0, need: need, n: n, fin: false, msj: '' }; L.msj = ''; };
     L.quizResp = function (k) { var q = L.q; if (!q || q.i >= q.n) return; var it = q.items[q.i], ok = it.a === k; (q.res = q.res || [])[q.i] = ok ? 1 : 0; if (ok) { q.ok++; L.racha++; L.mejorRacha = Math.max(L.mejorRacha, L.racha); q.msj = '✔ ¡Correcto!'; L.tono(740, 0.12, 0.15); L.chispas(L.W / 2, 160, '#8be8ae', 22); L.xp(10 + Math.min(L.racha - 1, 4) * 5, L.W / 2, 140); } else { L.racha = 0; q.msj = '✖ ' + (it.fb || 'Intenta recordarlo'); L.mal(); L.sacudir(7); hudPintar(); } q.i++; if (q.i >= q.n) { q.fin = true; if (q.ok >= q.need) L.cumplir(L.paso); } L.ctl(); };
     L.dibQuiz = function (fondo, col) {
       var q = L.q, g2 = g, W = L.W, H = L.H; if (fondo) { g2.fillStyle = fondo; g2.fillRect(0, 0, W, H); } col = col || '#cfe6ff'; if (!q) return;
       var cx = W / 2, c = g2.createLinearGradient(0, 60, 0, 330); c.addColorStop(0, 'rgba(255,255,255,.14)'); c.addColorStop(1, 'rgba(255,255,255,.04)');
-      g2.save(); g2.fillStyle = c; g2.strokeStyle = 'rgba(127,240,228,.45)'; g2.lineWidth = 2; g2.shadowColor = 'rgba(79,209,197,.35)'; g2.shadowBlur = 24; g2.beginPath(); if (g2.roundRect) g2.roundRect(60, 50, W - 120, 290, 26); else g2.rect(60, 50, W - 120, 290); g2.fill(); g2.stroke(); g2.restore();
+      g2.save(); g2.fillStyle = 'rgba(5,11,22,.9)'; g2.shadowColor = 'rgba(79,209,197,.35)'; g2.shadowBlur = 24; g2.beginPath(); if (g2.roundRect) g2.roundRect(60, 50, W - 120, 290, 26); else g2.rect(60, 50, W - 120, 290); g2.fill(); g2.shadowBlur = 0; g2.fillStyle = c; g2.strokeStyle = 'rgba(127,240,228,.45)'; g2.lineWidth = 2; g2.shadowColor = 'rgba(79,209,197,.35)'; g2.shadowBlur = 24; g2.beginPath(); if (g2.roundRect) g2.roundRect(60, 50, W - 120, 290, 26); else g2.rect(60, 50, W - 120, 290); g2.fill(); g2.stroke(); g2.restore();
       for (var d = 0; d < q.n; d++) { var dx = cx + (d - (q.n - 1) / 2) * 26; g2.beginPath(); g2.arc(dx, 36, d === q.i && !q.fin ? 8 : 6, 0, 7); g2.fillStyle = d < q.i || q.fin ? (q.res && q.res[d] === 0 ? '#ff7b8a' : '#8be8ae') : d === q.i ? '#ffe08a' : 'rgba(255,255,255,.25)'; g2.fill(); }
       if (!q.fin) { var it = q.items[q.i]; if (it.e) L.emoji(it.e, cx, 135 + Math.sin(L.t * 2.2) * 5, 92); L.wrap(it.q, cx, it.e ? 250 : 175, W - 170, 32, col, 26); }
       else { var bien = q.ok >= q.need; L.emoji(bien ? '🏆' : '💪', cx, 130 + Math.sin(L.t * 3) * 6, 88); L.txt(bien ? '¡Muy bien! ' + q.ok + ' de ' + q.n : 'Aciertos: ' + q.ok + ' de ' + q.n + '. ¡Inténtalo otra vez!', cx, 240, bien ? '#8be8ae' : '#ffb3b3', 'center', 32); var est = Math.max(1, Math.round(q.ok / q.n * 3)); L.txt(bien ? '⭐'.repeat(est) + '☆'.repeat(3 - est) : '', cx, 285, '#ffd36b', 'center', 30); }
       L.txt(q.msj, cx, 316, q.msj.indexOf('✔') > -1 ? '#8be8ae' : '#ff9f9f', 'center', 22); L.txt('Pregunta ' + Math.min(q.n, q.i + 1) + ' de ' + q.n + (L.racha >= 2 ? '   🔥 racha ×' + L.racha : ''), cx, H - 16, '#9db8ff', 'center', 15);
     };
-    L.quizBtns = function (opts, emojiMode) { opts.forEach(function (o, k) { if (emojiMode) L.op(o[0], o[1], function () { L.quizResp(k); }); else L.btn(o, function () { L.quizResp(k); }, 'btn'); }); if (L.q && L.q.fin && L.q.ok < L.q.need) L.btn('🔄 Reintentar', function () { cfg.reintentar(L); L.ctl(); }, 'btn'); };
+    L.quizBtns = function (opts, emojiMode) { opts.forEach(function (o, k) { if (emojiMode) L.op(o[0], o[1], function () { L.quizResp(k); }); else L.btn(o, function () { L.quizResp(k); }, 'btn'); }); if (L.q && L.q.fin && L.q.ok < L.q.need) L.btn('🔄 Reintentar', function () { reiniciar(); L.ctl(); }, 'btn'); };
     /* fondo animado: tipo 'espacio' | 'lab' | 'agua' | 'tierra' | 'cielo' | 'noche' */
     var TEMAS = { espacio: ['#0a0a24', '#02020a', '#7a5cff'], lab: ['#0c2238', '#050b14', '#4fd1c5'], agua: ['#0e4a7a', '#06192e', '#5cc8ff'], tierra: ['#2a1f14', '#0c0804', '#ffb36b'], cielo: ['#3a8fd9', '#bfe9ff', '#ffffff'], noche: ['#0a1030', '#1b1b4a', '#ffe08a'] };
     L.fondo = function (tipo, vel) {
@@ -63,7 +64,20 @@
     };
     L.tarjeta = function (x, y, w, h, col) { g.save(); var c = g.createLinearGradient(x, y, x, y + h); c.addColorStop(0, 'rgba(255,255,255,.13)'); c.addColorStop(1, 'rgba(255,255,255,.04)'); g.fillStyle = c; g.strokeStyle = col || 'rgba(127,240,228,.4)'; g.lineWidth = 1.5; g.shadowColor = 'rgba(0,0,0,.4)'; g.shadowBlur = 16; g.beginPath(); if (g.roundRect) g.roundRect(x, y, w, h, 18); else g.rect(x, y, w, h); g.fill(); g.shadowBlur = 0; g.stroke(); g.restore(); };
     L.barra = function (x, y, w, v, col, etq) { g.save(); g.fillStyle = 'rgba(255,255,255,.12)'; g.beginPath(); if (g.roundRect) g.roundRect(x, y, w, 12, 6); else g.rect(x, y, w, 12); g.fill(); g.fillStyle = col || '#4fd1c5'; g.shadowColor = col || '#4fd1c5'; g.shadowBlur = 8; g.beginPath(); if (g.roundRect) g.roundRect(x, y, Math.max(8, w * Math.max(0, Math.min(1, v))), 12, 6); else g.rect(x, y, w * v, 12); g.fill(); g.restore(); if (etq) L.txt(etq, x, y - 6, '#cfe6ff', 'left', 13); };
-    L.ctl = function () { ctlEl.textContent = ''; if (cfg.ctl) cfg.ctl(L); };
+    var R = -1, QP = 0;
+    function virt(fn) { if (R < 0 || L.paso !== R) return fn(); var pv = L.paso; L.paso = QP; try { return fn(); } finally { L.paso = pv; } }
+    L.ctl = function () { ctlEl.textContent = ''; if (cfg.ctl) virt(function () { cfg.ctl(L); }); };
+    function reiniciar() { if (R >= 0 && L.paso === R) montarReto(); else if (cfg.reintentar) cfg.reintentar(L); }
+    function montarReto() {
+      L.pool = []; L.q = null; virt(function () { cfg.enter(L, QP); }); var base = L.pool.map(function (p) { return p.it; }), items = [];
+      if (!base.length) return; while (items.length < 10) items = items.concat(L.mezclar(base)); items = items.slice(0, 10);
+      L.q = { items: items, i: 0, ok: 0, need: 8, n: items.length, fin: false, msj: '', reto: true, t: 0, lim: 75 }; L.racha = 0; L.msj = '';
+    }
+    if (cfg.reto) {
+      var probe = null; for (var pi = 0; pi < cfg.pasos.length - 0; pi++) { L.q = null; try { cfg.enter(L, pi); } catch (e) {} if (L.q) { QP = pi; probe = true; break; } }
+      L.q = null; L.pool = []; if (probe) { R = cfg.pasos.length; cfg.pasos = cfg.pasos.concat([{ n: '🏆 Reto', t: '4. Reto relámpago', x: 'Responde lo más rápido que puedas: tienes <b>75 segundos</b> para 10 preguntas. Las respuestas seguidas suman <b>racha</b> y XP extra.', m: 'Consigue 8 aciertos antes de que se acabe el tiempo.', d: 'Los científicos también trabajan bajo presión: confía en lo que aprendiste.' }]); L.hecho.push(false); }
+    }
+    function retoHud(g) { if (R < 0 || L.paso !== R || !L.q) return; var q = L.q, f = Math.max(0, 1 - q.t / q.lim); L.barra(20, 12, 220, f, f > 0.3 ? '#4fd1c5' : '#ff6b7d'); L.txt('⏱ ' + Math.max(0, Math.ceil(q.lim - q.t)) + ' s', 252, 24, '#fff', 'left', 15); L.txt('🏆 ' + q.ok + ' / ' + q.need, L.W - 20, 26, '#ffe08a', 'right', 18); }
     function pintar() {
       var p = $('pasos'); p.textContent = '';
       cfg.pasos.forEach(function (Q, i) { var b = document.createElement('button'); b.type = 'button'; b.className = 'tab' + (L.hecho[i] ? ' hecho' : ''); b.setAttribute('aria-pressed', String(i === L.paso)); b.innerHTML = '<b>' + (L.hecho[i] ? '✓' : i + 1) + '</b>' + Q.n; b.onclick = function () { ir(i); }; p.appendChild(b); });
@@ -71,13 +85,13 @@
       $('mis').className = 'mision' + (L.hecho[L.paso] ? ' ok' : ''); $('bAnt').disabled = L.paso === 0; $('bSig').disabled = L.paso === cfg.pasos.length - 1; $('fin').className = 'fin' + (L.hecho.every(Boolean) ? ' v' : '');
     }
     function narrar(f) { if (!cfg.voz || !window.Narrar) return; var Q = cfg.pasos[L.paso]; Narrar.decir('p' + (L.paso + 1), Q.t + '. ' + Q.x.replace(/<[^>]+>/g, ''), f, ['m' + (L.paso + 1), 'Tu misión. ' + Q.m]); }
-    function ir(n) { L.paso = n; L.msj = ''; if (cfg.voz && window.Narrar) Narrar.parar(); if (cfg.enter) cfg.enter(L, n); L.ctl(); pintar(); narrar(false); }
+    function ir(n) { L.paso = n; L.msj = ''; if (cfg.voz && window.Narrar) Narrar.parar(); if (R >= 0 && n === R) montarReto(); else if (cfg.enter) cfg.enter(L, n); L.ctl(); pintar(); narrar(false); }
     L.ir = ir; L.pintar = pintar;
     $('bAnt').onclick = function () { if (L.paso > 0) ir(L.paso - 1); }; $('bSig').onclick = function () { if (L.paso < cfg.pasos.length - 1) ir(L.paso + 1); };
     if (cfg.voz && window.Narrar && $('bVoz')) { $('bVoz').onclick = function () { narrar(true); }; $('bAuto').setAttribute('aria-pressed', String(Narrar.activa())); $('bAuto').onclick = function () { $('bAuto').setAttribute('aria-pressed', String(Narrar.alternar())); }; }
     var pasosEl = $('pasos'); if (pasosEl && pasosEl.parentNode) { hud = document.createElement('div'); hud.className = 'hud'; pasosEl.parentNode.insertBefore(hud, pasosEl.nextSibling); hudPintar(); }
     var last = 0;
-    function frame(ms) { var dt = Math.min(0.05, (ms - (last || ms)) / 1000); last = ms; L.t += dt; if (cfg.sim) cfg.sim(L, dt); fxMover(dt); if (g && cfg.draw) { g.setTransform(dpr, 0, 0, dpr, 0, 0); g.save(); if (L.shake > 0) g.translate((Math.random() - 0.5) * L.shake, (Math.random() - 0.5) * L.shake); cfg.draw(L, g, dt); g.restore(); fxDibujar(g); } requestAnimationFrame(frame); }
+    function frame(ms) { var dt = Math.min(0.05, (ms - (last || ms)) / 1000); last = ms; L.t += dt; if (R >= 0 && L.paso === R && L.q && !L.q.fin && L.q.reto) { L.q.t += dt; if (L.q.t >= L.q.lim) { L.q.fin = true; L.q.msj = '⏰ ¡Se acabó el tiempo!'; if (L.q.ok >= L.q.need) L.cumplir(R); L.ctl(); } } if (cfg.sim) virt(function () { cfg.sim(L, dt); }); fxMover(dt); if (g && cfg.draw) { g.setTransform(dpr, 0, 0, dpr, 0, 0); g.save(); if (L.shake > 0) g.translate((Math.random() - 0.5) * L.shake, (Math.random() - 0.5) * L.shake); virt(function () { cfg.draw(L, g, dt); }); retoHud(g); g.restore(); fxDibujar(g); } requestAnimationFrame(frame); }
     window[cfg.hook] = Object.assign({ ir: ir, L: L, estado: function () { return { hecho: L.hecho.slice(), paso: L.paso }; }, avanzar: function (s) { for (var i = 0; i < s * 40; i++) { L.t += 0.025; if (cfg.sim) cfg.sim(L, 0.025); } } }, cfg.hooks ? cfg.hooks(L) : {});
     if (cfg.init) cfg.init(L);
     if (cfg.enter) cfg.enter(L, 0); L.ctl(); pintar(); if (!cfg.voz) { } requestAnimationFrame(frame);

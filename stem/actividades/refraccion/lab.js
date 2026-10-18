@@ -1,7 +1,7 @@
 /* Lentes y refracción (5°, solo español, sin voz): ley de Snell, índices de refracción y enfoque con una lente convergente. */
 var MEDIOS = [['💨 Aire', 1.0, '#9db8ff'], ['💧 Agua', 1.33, '#3aa0f0'], ['🪟 Vidrio', 1.5, '#7ff0e4'], ['💎 Diamante', 2.42, '#c9a8ff']];
 LabKit({
-  hook: '__ref',
+  reto: true, hook: '__ref',
   pasos: [
     { n: 'La luz se dobla', t: '1. Refracción', x: 'Cuando la luz pasa de un medio a otro (del aire al agua, por ejemplo) <b>cambia de velocidad</b> y su camino se <b>dobla</b>. A esto se le llama <b>refracción</b>. Por eso un lápiz en un vaso de agua parece quebrado.', m: 'Cambia el ángulo del rayo hasta 3 valores distintos (al menos 15° de diferencia) y mira cómo se dobla.', d: 'Los pescadores ven los peces en un lugar distinto al real: la refracción los engaña.' },
     { n: 'Índice de refracción', t: '2. Cada medio dobla distinto', x: 'Cada material tiene un <b>índice de refracción (n)</b>: mide cuánto frena la luz. Mientras mayor es n, más se dobla el rayo. Se calcula con la ley de Snell: <b>n₁ · sen θ₁ = n₂ · sen θ₂</b>.', m: 'Prueba el rayo en los 4 materiales: aire, agua, vidrio y diamante.', d: 'El diamante brilla tanto porque su índice (2,42) dobla y refleja muchísimo la luz.' },

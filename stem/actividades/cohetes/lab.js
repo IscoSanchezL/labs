@@ -10,7 +10,7 @@ function simularCohete(twr, etapas) {
   var ap = h + (v > 0 ? v * v / (2 * G) : 0); return { apogeo: ap / 1000, vmax: v, pts: pts, t: t };
 }
 var LAB = LabKit({
-  hook: '__coh',
+  reto: true, hook: '__coh',
   pasos: [
     { n: 'Acción y reacción', t: '1. Un cohete empuja gases', x: 'Un cohete se mueve porque <b>expulsa gases hacia abajo</b> y, por acción y reacción, esos gases lo empujan hacia arriba. Para despegar, el empuje debe ser <b>mayor que el peso</b>: eso se mide con la relación empuje/peso (TWR).', m: 'Lanza un cohete de una etapa que alcance más de 20 km de altura.', d: 'Los cohetes funcionan en el vacío del espacio: no necesitan aire para empujarse.' },
     { n: 'Etapas', t: '2. Etapas: soltar peso', x: 'Un cohete de una sola etapa carga su tanque vacío hasta el final. Con <b>varias etapas</b> se van soltando los tanques vacíos y el cohete se vuelve más liviano, así llega mucho más alto.', m: 'Alcanza más de 250 km de altura (con una sola etapa no se logra: prueba 2 o 3).', d: 'El cohete Saturno V, que llevó al ser humano a la Luna, tenía 3 etapas.' },

@@ -5,7 +5,7 @@ var ROND = [SEC, MAS];
 function destino(m) { return m < 8 ? ['Enana blanca', '#e8f4ff', 'Estrella pequeña: se hincha como gigante roja y termina como enana blanca.'] : m < 20 ? ['Estrella de neutrones', '#7fb8ff', 'Explota como supernova y deja un núcleo diminuto y densísimo.'] : ['Agujero negro', '#b9a8ff', 'Explota como supernova y su núcleo colapsa en un agujero negro.']; }
 function color(m) { return m < 1 ? '#ff8a5c' : m < 2 ? '#ffd27a' : m < 8 ? '#fff3c4' : m < 20 ? '#cfe6ff' : '#9db8ff'; }
 var LAB = LabKit({
-  hook: '__astro',
+  reto: true, hook: '__astro',
   pasos: [
     { n: 'Masa y destino', t: '1. La masa decide todo', x: 'Una estrella nace en una <b>nebulosa</b> de gas y polvo. Según su <b>masa</b> (medida en masas solares) termina como <b>enana blanca</b>, <b>estrella de neutrones</b> o <b>agujero negro</b>. Mueve el deslizador y observa.', m: 'Descubre los 3 destinos posibles cambiando la masa.', d: 'Las estrellas más grandes viven poco: ¡algunas duran solo unos millones de años, mientras el Sol vivirá 10 000 millones!' },
     { n: 'Color y temperatura', t: '2. Preguntas de estrellas', x: 'El <b>color</b> de una estrella revela su temperatura: las <b>rojas</b> son las más frías y las <b>azules</b> las más calientes. Nuestra galaxia, la <b>Vía Láctea</b>, tiene unos 200 000 millones de estrellas.', m: 'Acierta 4 de 5 preguntas.', d: 'El Sol es una estrella amarilla de tamaño mediano, a solo 8 minutos luz de nosotros.' },

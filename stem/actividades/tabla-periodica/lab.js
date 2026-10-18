@@ -11,7 +11,7 @@ var EL = [
 function pos(z) { var i = z - 1; if (z === 1) return [0, 0]; if (z === 2) return [17, 0]; if (z <= 4) return [z - 3, 1]; if (z <= 10) return [z - 5 + 12, 1]; if (z <= 12) return [z - 11, 2]; if (z <= 18) return [z - 13 + 12, 2]; if (z <= 20) return [z - 19, 3]; if (z <= 30) return [z - 21 + 2, 3]; return [z - 31 + 12, 3]; }
 var CW = 46, CH = 66, X0 = 70, Y0 = 130;
 var LAB = LabKit({
-  hook: '__tab',
+  reto: true, hook: '__tab',
   pasos: [
     { n: 'Explora', t: '1. El mapa de los elementos', x: 'Todo lo que existe está hecho de unos 118 <b>elementos químicos</b>. La <b>tabla periódica</b> los ordena por su <b>número atómico</b> (Z, la cantidad de protones) y los agrupa en <b>familias</b> con propiedades parecidas. Aquí verás los primeros 36.', m: 'Toca 8 elementos distintos y lee qué hacen.', d: 'La tabla la ordenó Dmitri Mendeléyev en 1869, ¡y hasta predijo elementos que aún no se habían descubierto!' },
     { n: 'Familias', t: '2. Metales, no metales y gases nobles', x: 'Los <b>metales</b> conducen la electricidad y brillan; los <b>no metales</b> no; los <b>metaloides</b> están en el medio; y los <b>gases nobles</b> casi no reaccionan con nada. Los colores de la tabla muestran las familias.', m: 'Clasifica 6 elementos: acierta al menos 5.', d: 'Los gases nobles están en la última columna de la derecha.' },

@@ -3,7 +3,7 @@ var BASE = { A: ['#ff6b8a', 'T'], T: ['#ffd05c', 'A'], C: ['#5cc8ff', 'G'], G: [
 var COD = { 'AUG': 'Inicio', 'GCU': 'Alanina', 'UUU': 'Fenilalanina', 'GGC': 'Glicina', 'AAA': 'Lisina', 'UAA': 'Parada' };
 var CODS = Object.keys(COD);
 var LAB = LabKit({
-  hook: '__adn',
+  reto: true, hook: '__adn',
   pasos: [
     { n: 'Doble hélice', t: '1. Empareja las bases', x: 'El <b>ADN</b> es una doble hélice. Sus peldaños son <b>bases</b> que siempre se juntan igual: <b>A con T</b> y <b>C con G</b>. Completa la hebra complementaria tocando la base correcta.', m: 'Completa 8 pares de bases correctamente.', d: 'Si estiraras el ADN de una sola célula tuyo, medirías cerca de 2 metros.' },
     { n: 'Copiar', t: '2. Preguntas de ADN', x: 'Antes de dividirse, la célula <b>copia</b> su ADN: la hélice se abre y cada hebra sirve de molde para una nueva. Así cada célula hija recibe la misma información.', m: 'Acierta 4 de 5 preguntas.', d: 'El ADN está en el núcleo de casi todas tus células y es casi igual al de cualquier otra persona.' },

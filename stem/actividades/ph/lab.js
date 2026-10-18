@@ -3,7 +3,7 @@ var SUST = [['🍋', 'Limón', 2.2], ['🥛', 'Leche', 6.7], ['💧', 'Agua', 7]
 function colPH(v) { var s = [[0, '#ff2a2a'], [2, '#ff6a2a'], [4, '#ffb02a'], [6, '#f2e84a'], [7, '#4fd16a'], [8, '#2fb8c4'], [10, '#3a6bff'], [12, '#7a3aff'], [14, '#5a1a9a']], i = 0; while (i < s.length - 2 && v > s[i + 1][0]) i++; var a = s[i], b = s[i + 1], t = Math.max(0, Math.min(1, (v - a[0]) / (b[0] - a[0]))); function h(x) { return [parseInt(x.substr(1, 2), 16), parseInt(x.substr(3, 2), 16), parseInt(x.substr(5, 2), 16)]; } var A = h(a[1]), B = h(b[1]); return 'rgb(' + A.map(function (c, k) { return Math.round(c + (B[k] - c) * t); }).join(',') + ')'; }
 function tipo(v) { return v < 6.5 ? 0 : v > 7.5 ? 2 : 1; }
 LabKit({
-  hook: '__ph',
+  reto: true, hook: '__ph',
   pasos: [
     { n: 'Mide el pH', t: '1. La escala del pH', x: 'El <b>pH</b> dice qué tan <b>ácida</b> o <b>básica</b> es una sustancia, de 0 a 14. Menos de 7 es <b>ácida</b>, 7 es <b>neutra</b> (el agua pura) y más de 7 es <b>básica</b>. El jugo de repollo morado cambia de color según el pH.', m: 'Mide el pH de 6 sustancias distintas.', d: 'El jugo de repollo morado es un indicador natural: rojo en ácidos, verde-azul en bases.' },
     { n: 'Ácido, neutro o base', t: '2. Clasifica las sustancias', x: 'Los <b>ácidos</b> (limón, vinagre) tienen sabor agrio. Las <b>bases</b> (jabón, cloro) son resbalosas y amargas. Nunca pruebes ni mezcles productos de limpieza.', m: 'Clasifica 6 sustancias: acierta al menos 5.', d: 'Tu estómago tiene ácido para digerir la comida: ¡un pH de 1,5 a 3,5!' },

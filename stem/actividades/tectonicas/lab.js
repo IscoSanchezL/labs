@@ -1,7 +1,7 @@
 /* Placas tectónicas (4°, solo español, sin voz): tipos de borde, clasificación y acumulación de tensión de un terremoto. */
 var TIPOS = [['➡️⬅️ Convergente', 'conv', 'Las placas chocan: se levantan montañas y hay volcanes y terremotos.'], ['⬅️➡️ Divergente', 'div', 'Las placas se separan: sube magma y nace nueva corteza.'], ['⬆️⬇️ Transformante', 'trans', 'Las placas se deslizan de lado: se acumula tensión y ocurren terremotos.']];
 LabKit({
-  hook: '__tec',
+  reto: true, hook: '__tec',
   pasos: [
     { n: 'Tipos de borde', t: '1. La corteza se mueve', x: 'La superficie de la Tierra está partida en enormes <b>placas tectónicas</b> que flotan sobre el manto caliente y se mueven unos centímetros al año. Donde se encuentran hay tres tipos de borde: <b>convergente</b>, <b>divergente</b> y <b>transformante</b>.', m: 'Mira los tres tipos de movimiento de placas.', d: 'Las placas se mueven aproximadamente a la velocidad a la que crecen tus uñas.' },
     { n: '¿Qué forma cada borde?', t: '2. Montañas, océanos y fallas', x: 'En el borde <b>convergente</b> se forman montañas y volcanes. En el <b>divergente</b> nacen dorsales y valles de rift. En el <b>transformante</b> hay fallas con muchos terremotos.', m: 'Acierta 4 de 5 preguntas sobre los bordes.', juego: 1, d: 'La Cordillera de los Andes se formó donde la placa de Nazca se hunde bajo Sudamérica.' },

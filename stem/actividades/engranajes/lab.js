@@ -6,7 +6,7 @@ function engrane(g, x, y, r, n, ang, col, glow) {
 }
 var RETOS = [[2, 'el doble de rápido'], [0.5, 'a la mitad de velocidad'], [3, 'el triple de rápido'], [1, 'a la misma velocidad']];
 var LAB = LabKit({
-  hook: '__eng',
+  reto: true, hook: '__eng',
   pasos: [
     { n: 'Giro contrario', t: '1. Los engranajes se empujan', x: 'Un <b>engranaje</b> es una rueda con dientes. Cuando sus dientes encajan con otro, lo hacen girar en <b>sentido contrario</b>. En una cadena de engranajes, cada uno gira al revés que su vecino.', m: 'Toca los 3 engranajes de la cadena para ver su sentido de giro.', d: 'Los relojes mecánicos tienen decenas de engranajes diminutos.' },
     { n: 'Velocidad y fuerza', t: '2. Pequeño y grande', x: 'Si un engranaje <b>pequeño</b> mueve a uno <b>grande</b>, el grande gira <b>más despacio</b> pero con <b>más fuerza</b>. Si uno grande mueve a uno pequeño, este gira <b>más rápido</b>. La relación es: dientes del motor ÷ dientes del movido.', m: 'Logra que el engranaje movido gire más rápido que el motor, y luego más lento.', d: 'Las bicicletas usan esto: el plato grande y el piñón pequeño dan velocidad; al revés, fuerza para subir.' },

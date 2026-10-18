@@ -1,6 +1,6 @@
 /* Fases de la Luna y eclipses (4°, solo español, sin voz). */
 LabKit({
-  hook: '__luna',
+  reto: true, hook: '__luna',
   pasos: [
     { n: 'Las fases', t: '1. La Luna cambia de forma', x: 'La Luna no tiene luz propia: la ilumina el <b>Sol</b>. Siempre está alumbrada la mitad que mira al Sol, pero desde la Tierra vemos más o menos de esa mitad según dónde esté en su órbita. Eso son las <b>fases</b>.', m: 'Mueve la Luna por su órbita y encuentra Luna nueva, cuarto creciente, llena y cuarto menguante.', d: 'La Luna tarda unos 29,5 días en completar todas sus fases.' },
     { n: 'Reconoce la fase', t: '2. ¿Qué fase es?', x: 'Observa cómo se ve la Luna desde la Tierra: si crece hacia la derecha es <b>creciente</b>; si se achica por la derecha es <b>menguante</b>. Cuando no se ve es <b>nueva</b> y cuando se ve entera, <b>llena</b>.', m: 'Acierta 4 de 5 fases.', d: 'En el hemisferio norte la Luna creciente se ve como una «D» y la menguante como una «C».' },

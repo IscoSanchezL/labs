@@ -1,6 +1,6 @@
 /* Presión y fluidos (6°, solo español, sin voz): P = F/A, prensa hidráulica (Pascal), presión según la profundidad. */
 var LAB = LabKit({
-  hook: '__flu',
+  reto: true, hook: '__flu',
   pasos: [
     { n: 'Presión', t: '1. Presión = fuerza / área', x: 'La <b>presión</b> es cuánta fuerza actúa sobre cada unidad de área: <b>P = F / A</b>. Con la misma fuerza, una punta pequeña presiona mucho más que una superficie grande. Cambia la fuerza y el área.', m: 'Logra una presión mayor a 500 kPa y una menor a 20 kPa.', d: 'Por eso un cuchillo afilado corta: toda la fuerza se concentra en un área minúscula.' },
     { n: 'Prensa hidráulica', t: '2. El principio de Pascal', x: 'En un líquido encerrado, la presión se transmite igual en todas direcciones (<b>Pascal</b>). En una <b>prensa hidráulica</b>, un émbolo pequeño empuja y otro más grande levanta mucho más peso: <b>F₂ = F₁ · A₂ / A₁</b>.', m: 'Levanta el carro de 800 N usando una fuerza menor a 100 N.', d: 'Los frenos de los carros y los gatos hidráulicos usan este principio.' },

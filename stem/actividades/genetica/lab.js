@@ -4,7 +4,7 @@ function fenotipo(g) { return g.indexOf('P') >= 0 ? 0 : 1; } // 0 = morada (domi
 function punnett(a, b) { var r = []; for (var i = 0; i < 2; i++) for (var j = 0; j < 2; j++) { var x = [a[i], b[j]].sort().join(''); r.push(x === 'pP' ? 'Pp' : x); } return r; }
 function pctMorada(a, b) { var c = punnett(a, b); return c.filter(function (x) { return fenotipo(x) === 0; }).length * 25; }
 var LAB = LabKit({
-  hook: '__gen',
+  reto: true, hook: '__gen',
   pasos: [
     { n: 'Alelos', t: '1. Dos copias de cada gen', x: 'Cada ser vivo hereda <b>dos copias</b> de cada gen, una de cada padre. Las versiones del gen se llaman <b>alelos</b>. El alelo <b>dominante</b> (P, flor morada) se nota aunque haya uno solo; el <b>recesivo</b> (p, flor blanca) solo se nota si hay dos.', m: 'Haz 3 cruces distintos y mira el cuadro de Punnett.', d: 'Gregor Mendel descubrió estas reglas hace más de 150 años cruzando miles de plantas de arveja.' },
     { n: 'Predice', t: '2. ¿Qué porcentaje saldrá morado?', x: 'El <b>cuadro de Punnett</b> reparte los alelos de los padres en 4 casillas posibles. Contando las casillas con al menos una P sabes qué porcentaje de hijos tendrá flor morada.', m: 'Predice bien 4 de 5 cruces.', d: 'Pp × Pp da 75 % moradas y 25 % blancas: ¡la proporción 3:1 de Mendel!' },

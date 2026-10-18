@@ -7,7 +7,7 @@ var BIOMAS = [
 ];
 var ADAPT = [['🐪 Camello: guarda grasa en la joroba y soporta la sed', 0], ['🐧 Pingüino: tiene plumas gruesas y grasa para el frío', 2], ['🦜 Guacamaya: pico fuerte para abrir frutos de la selva', 1], ['🐠 Pez: respira con branquias bajo el agua', 3], ['🌵 Cactus: almacena agua en su tallo', 0], ['🐒 Mono: cola y brazos para trepar árboles', 1], ['🐻‍❄️ Oso polar: pelaje blanco para camuflarse en el hielo', 2], ['🐙 Pulpo: cambia de color y vive en el mar', 3]];
 var LAB = LabKit({
-  hook: '__bio',
+  reto: true, hook: '__bio',
   pasos: [
     { n: 'Conoce los biomas', t: '1. Cuatro casas distintas', x: 'Un <b>bioma</b> es una gran región con un clima parecido y seres vivos adaptados a él. Hay desiertos, selvas, polos y océanos, entre otros. Toca cada bioma para conocerlo.', m: 'Visita los 4 biomas.', d: 'Colombia tiene selva, páramos, desiertos, costas y más: ¡es uno de los países más biodiversos!' },
     { n: 'Adaptaciones', t: '2. Cada uno en su lugar', x: 'Una <b>adaptación</b> es una característica que ayuda a un ser vivo a sobrevivir en su ambiente: un pelaje grueso para el frío, branquias para respirar en el agua, joroba para guardar energía.', m: 'Une 5 seres vivos con su bioma: acierta al menos 4.', d: 'El camuflaje es una adaptación que ayuda a esconderse o a cazar.' },
