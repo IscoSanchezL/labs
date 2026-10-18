@@ -81,3 +81,4 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
 .hud-r{color:#ff9f43;border-color:rgba(255,159,67,.6)!important}
 .escena canvas{box-shadow:0 0 0 1px rgba(127,240,228,.18),0 16px 50px -20px rgba(0,0,0,.7)}
 @media (prefers-reduced-motion:reduce){.aurora i{animation:none}}
+.cv3{background:transparent!important;position:absolute;z-index:2;border-radius:18px;touch-action:none;cursor:grab}.cv3:active{cursor:grabbing}
