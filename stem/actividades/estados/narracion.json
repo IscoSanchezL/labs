@@ -1,0 +1,9 @@
+[
+ {"id":"p1","texto":"El agua cambia. El agua puede ser sólida, líquida o gas. Con mucho frío es hielo, que es sólido. Con calor es agua, que es líquida. Con muchísimo calor es vapor, que es gas. Calienta y enfría para verlo."},
+ {"id":"m1","texto":"Tu misión. Mira los tres estados del agua."},
+ {"id":"p2","texto":"¿Qué estado es?. Mira el objeto y toca si es sólido, líquido o gas."},
+ {"id":"m2","texto":"Tu misión. Acierta cuatro veces."},
+ {"id":"p3","texto":"Otra vez, con más cosas. Ahora hay objetos nuevos. Toca si cada uno es sólido, líquido o gas."},
+ {"id":"m3","texto":"Tu misión. Acierta cuatro veces."},
+ {"id":"ok","texto":"¡Muy bien! Misión cumplida."}
+]
