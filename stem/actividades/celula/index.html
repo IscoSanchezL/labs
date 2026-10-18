@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>La célula · STEM Labs</title>
-<meta name="description" content="Viaja al interior de una célula animal y una vegetal y descubre para qué sirve cada parte. Grado 4°.">
+<meta name="description" content="Gira la célula en 3D, toca cada parte y descubre qué hace. Grado 4°.">
 <link rel="icon" type="image/png" href="../../favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -29,6 +29,9 @@
 .dato{margin-top:12px;font-size:14.5px;color:var(--dim)}
 .rango{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--muted)}
 .rango input{width:180px;accent-color:#7ff0e4}
+.op{min-width:92px;padding:10px 10px;border-radius:22px;border:3px solid var(--edge);background:var(--glass);font-size:46px;line-height:1;transition:transform .15s,border-color .15s}
+.op small{display:block;margin-top:6px;font-size:14px;color:var(--muted);font-weight:500}
+.op:hover{transform:translateY(-3px);border-color:rgba(127,240,228,.7)}
 .nav{display:flex;justify-content:space-between;margin-top:14px;gap:10px}
 .fin{display:none;margin-top:12px;text-align:center;font-size:20px}
 .fin.v{display:block}
@@ -48,14 +51,14 @@
   <section class="titulo">
     <span class="eyebrow">// grado 4° · seres vivos</span>
     <h1>La <em>célula</em> por dentro</h1>
-    <p class="sub">Toca cada parte, descubre qué hace y encuentra las diferencias entre animal y planta.</p>
+    <p class="sub">Gira la célula en 3D, toca cada parte y descubre qué hace.</p>
   </section>
 
   <section class="zona">
     <div>
       <div class="glass escena">
         <div class="pasos" id="pasos" role="group" aria-label="Pasos"></div>
-        <canvas id="cv" width="960" height="460" aria-label="Célula con sus orgánulos"></canvas>
+        <canvas id="cv" width="960" height="460" aria-label="La célula"></canvas>
         <div class="controles" id="ctl"></div>
       </div>
     </div>
@@ -65,14 +68,17 @@
         <p id="txt"></p>
         <div class="mision" id="mis"><div class="t">// TU MISIÓN</div><span id="misTxt"></span></div>
         <div class="dato" id="dato"></div>
-                <div class="nav"><button class="btn sec" id="bAnt" type="button">← Atrás</button><button class="btn" id="bSig" type="button">Siguiente →</button></div>
+        
+        <div class="nav"><button class="btn sec" id="bAnt" type="button">← Atrás</button><button class="btn" id="bSig" type="button">Siguiente →</button></div>
         <div class="fin" id="fin">🎉 ¡Ya conoces la célula por dentro!</div>
       </div>
     </aside>
   </section>
 </main>
 <footer><div class="wrap"><div>Hecho para el aula · Gi School</div><div>iscosanchez.com</div></div></footer>
-
-<script src="celula.js"></script>
+<script src="../../vendor/three.min.js"></script>
+<script src="../../lab-kit.js"></script>
+<script src="../../vista3d.js"></script>
+<script src="lab.js"></script>
 </body>
 </html>

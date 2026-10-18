@@ -16,7 +16,11 @@
     if (o.fijo) c3.style.pointerEvents = 'none';
     c3.addEventListener('pointerdown', function (e) { drag = true; px = e.clientX; py = e.clientY; try { c3.setPointerCapture(e.pointerId); } catch (x) {} });
     c3.addEventListener('pointermove', function (e) { if (!drag) return; V.vy += (e.clientX - px) * 0.01; V.vx += (e.clientY - py) * 0.01; px = e.clientX; py = e.clientY; });
-    c3.addEventListener('pointerup', function () { drag = false; }); c3.addEventListener('pointercancel', function () { drag = false; });
+    var ray = new T.Raycaster(), mv = new T.Vector2(), dx0 = 0, dy0 = 0, moved = 0;
+    function pick(e) { var b = c3.getBoundingClientRect(); mv.set(((e.clientX - b.left) / b.width) * 2 - 1, -((e.clientY - b.top) / b.height) * 2 + 1); ray.setFromCamera(mv, cam); var h = ray.intersectObjects(grupo.children, true); for (var i = 0; i < h.length; i++) { var o = h[i].object; while (o && !(o.userData && o.userData.k)) o = o.parent; if (o && o.userData && o.userData.k && o.userData.pick !== false) return o; } return null; }
+    c3.addEventListener('pointerdown', function (e) { dx0 = e.clientX; dy0 = e.clientY; moved = 0; });
+    c3.addEventListener('pointermove', function (e) { if (drag) { moved = Math.max(moved, Math.abs(e.clientX - dx0) + Math.abs(e.clientY - dy0)); return; } if (!V.onPick) return; var o = pick(e); V.hover = o ? o.userData.k : null; c3.style.cursor = o ? 'pointer' : 'grab'; });
+    c3.addEventListener('pointerup', function (e) { if (moved < 6 && V.onPick) { var o = pick(e); V.onPick(o ? o.userData.k : null, o); } drag = false; }); c3.addEventListener('pointercancel', function () { drag = false; });
     V.textura = function (w, h, fn) { var c = document.createElement('canvas'); c.width = w; c.height = h; fn(c.getContext('2d'), w, h); return new T.CanvasTexture(c); };
     V.mostrar = function (v) { V.vis = !!v; c3.style.display = v ? 'block' : 'none'; };
     V.anim = function (fn) { V.fns.push(fn); };
