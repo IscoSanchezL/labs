@@ -1,0 +1,9 @@
+[
+ { "id": "p1", "texto": "La Tierra gira. La Tierra da vueltas como una pelota. Cuando tu lado mira al Sol, es de día. Cuando tu lado queda lejos del Sol, es de noche." },
+ { "id": "m1", "texto": "Tu misión. Toca el botón para girar la Tierra y mira cuándo es de día y cuándo es de noche." },
+ { "id": "p2", "texto": "Qué hacemos de día y de noche. De día hay luz del Sol y jugamos, comemos y vamos al colegio. De noche está oscuro y descansamos." },
+ { "id": "m2", "texto": "Tu misión. Di si cada actividad es de día o de noche. Acierta cuatro veces." },
+ { "id": "p3", "texto": "El Sol y la Luna. De día vemos el Sol en el cielo. De noche vemos la Luna y las estrellas. Mueve la hora para verlo." },
+ { "id": "m3", "texto": "Tu misión. Pon el Sol bien arriba en el cielo. Después busca la Luna en la noche." },
+ { "id": "ok", "texto": "¡Muy bien! Misión cumplida." }
+]
