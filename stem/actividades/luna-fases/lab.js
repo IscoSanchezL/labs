@@ -15,7 +15,7 @@ LabKit({
     if (L.paso === 2) { L.rango('🌙 Posición de la Luna (grados)', 0, 359, 1, S.th, function (v) { S.th = v; }); L.btn(S.alin ? '✔ Órbita alineada' : '↔ Alinear la órbita', function () { S.alin = !S.alin; L.ctl(); }, 'tab', S.alin); }
   },
   draw: function (L, g) {
-    var S = L.S, W = L.W, H = L.H, bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#02040a'); bg.addColorStop(1, '#0a1226'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    var S = L.S, W = L.W, H = L.H; L.fondo('espacio');
     for (var i = 0; i < 70; i++) { g.fillStyle = 'rgba(255,255,255,.6)'; g.fillRect((i * 151) % W, (i * 47) % H, 1.6, 1.6); }
     function fase(cx, cy, R, th, rojo, sombra) {
       g.save(); g.beginPath(); g.arc(cx, cy, R, 0, 7); g.clip(); g.fillStyle = rojo ? '#3a1410' : '#1a2033'; g.fillRect(cx - R, cy - R, 2 * R, 2 * R);

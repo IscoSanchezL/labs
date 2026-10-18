@@ -18,7 +18,7 @@ var LAB = LabKit({
     if (L.paso === 2 && S.opc) S.opc.forEach(function (o) { L.btn(o, function () { respCod(L, o); }, 'btn'); });
   },
   draw: function (L, g) {
-    var S = L.S, W = L.W, H = L.H, bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#12082a'); bg.addColorStop(1, '#050310'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    var S = L.S, W = L.W, H = L.H; L.fondo('espacio');
     if (L.paso === 1) { L.dibQuiz(null, '#cfe6ff'); return; }
     if (L.paso === 0) {
       for (var i = 0; i < 12; i++) { var x = 60 + i * 72, ph = L.t * 1.5 + i * 0.5, dy = Math.sin(ph) * 26, y1 = 150 + dy, y2 = 330 - dy; g.strokeStyle = 'rgba(255,255,255,.15)'; g.lineWidth = 3; g.beginPath(); g.moveTo(x, y1); g.lineTo(x, y2); g.stroke(); g.fillStyle = '#9db8ff'; g.beginPath(); g.arc(x, y1, 6, 0, 7); g.fill(); g.beginPath(); g.arc(x, y2, 6, 0, 7); g.fill();

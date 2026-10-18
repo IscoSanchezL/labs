@@ -25,7 +25,7 @@ var LAB = LabKit({
   },
   sim: function (L, dt) { var S = L.S; if (S.vuelo) { S.vuelo.t += dt * 8; if (S.vuelo.t >= S.res.t * 1.0 + 40) S.vuelo.fin = true; } if (S.o) S.tl += dt; },
   draw: function (L, g) {
-    var S = L.S, W = L.W, H = L.H, bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#02040a'); bg.addColorStop(1, '#0a1a3a'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    var S = L.S, W = L.W, H = L.H; L.fondo('espacio');
     for (var i = 0; i < 60; i++) { g.fillStyle = 'rgba(255,255,255,.6)'; g.fillRect((i * 151) % W, (i * 47) % 360, 1.6, 1.6); }
     if (L.paso < 2) {
       g.fillStyle = '#3a6a3a'; g.fillRect(0, 410, W, 50); var altKm = 0, apo = S.res ? S.res.apogeo : 0, p = S.vuelo ? S.vuelo : null;

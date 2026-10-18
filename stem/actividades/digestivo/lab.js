@@ -19,7 +19,7 @@ var LAB = LabKit({
   ctl: function (L) { var S = L.S; if (L.paso === 1) L.quizBtns(['👄 Boca', '〰️ Esófago', '🫃 Estómago', '🌀 I. delgado', '🔲 I. grueso']); if (L.paso === 2) L.btn('🍎 ¡Comer!', function () { S.viaje = { s: 0, fin: false }; S.nutr = 0; L.tono(300, 0.12, 0.2); }, 'btn grande'); },
   sim: function (L, dt) { var S = L.S; if (S.viaje && !S.viaje.fin) { S.viaje.s += dt * 0.9; if (S.viaje.s >= RUTA.length - 1) { S.viaje.s = RUTA.length - 1; S.viaje.fin = true; L.cumplir(2); } var i = Math.floor(S.viaje.s); if (i >= 5 && i <= 13) S.nutr = Math.min(100, S.nutr + dt * 12); } },
   draw: function (L, g) {
-    var S = L.S, W = L.W, H = L.H, bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#2a0f14'); bg.addColorStop(1, '#0a0507'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    var S = L.S, W = L.W, H = L.H; L.fondo('tierra');
     if (L.paso === 1) { L.dibQuiz(null, '#ffd9d9'); return; }
     // silueta
     g.fillStyle = 'rgba(255,200,180,.08)'; g.beginPath(); g.ellipse(480, 230, 190, 235, 0, 0, 7); g.fill(); g.strokeStyle = 'rgba(255,200,180,.25)'; g.lineWidth = 3; g.stroke();

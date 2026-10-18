@@ -15,7 +15,7 @@ LabKit({
     if (L.paso === 2) { L.rango('🔍 Curvatura de la lente', 2, 10, 1, S.curv, function (v) { S.curv = v; S.msj3 = ''; }); L.rango('🖥️ Posición de la pantalla', 120, 460, 2, S.pant, function (v) { S.pant = v; chequear(L); }); }
   },
   draw: function (L, g) {
-    var S = L.S, W = L.W, H = L.H, bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0a1a2e'); bg.addColorStop(1, '#050b14'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    var S = L.S, W = L.W, H = L.H; L.fondo('lab');
     if (L.paso < 2) {
       var n2 = MEDIOS[L.paso === 0 ? 1 : S.m][1], col = MEDIOS[L.paso === 0 ? 1 : S.m][2], cx = 480, cy = 250; g.fillStyle = 'rgba(100,150,255,.12)'; g.fillRect(0, 0, W, cy); g.fillStyle = col; g.globalAlpha = 0.32; g.fillRect(0, cy, W, H - cy); g.globalAlpha = 1; g.strokeStyle = '#fff'; g.lineWidth = 3; g.beginPath(); g.moveTo(0, cy); g.lineTo(W, cy); g.stroke();
       var t1 = S.ang * Math.PI / 180, s2 = Math.sin(t1) / n2, t2 = Math.asin(Math.min(1, s2)), len = 230;

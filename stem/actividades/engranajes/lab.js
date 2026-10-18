@@ -21,7 +21,7 @@ var LAB = LabKit({
   },
   sim: function (L, dt) { var S = L.S; S.ang = (S.ang || 0) + (S.rpm || 30) / 60 * 6.2832 * dt * 0.5; },
   draw: function (L, g) {
-    var S = L.S, W = L.W, H = L.H, bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0a1a2e'); bg.addColorStop(1, '#050b14'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    var S = L.S, W = L.W, H = L.H; L.fondo('lab');
     if (L.paso === 0) { var X = [230, 480, 730], N = [16, 16, 16], R = 80; X.forEach(function (x, i) { var dir = i % 2 ? -1 : 1; engrane(g, x, 230, R, 16, S.ang * dir + (i % 2 ? 0.2 : 0), S.tocados[i] ? (dir > 0 ? '#7ff0e4' : '#ffb347') : '#9db8ff', S.tocados[i]); if (S.tocados[i]) L.txt(dir > 0 ? '↻ horario' : '↺ antihorario', x, 360, dir > 0 ? '#7ff0e4' : '#ffb347', 'center', 20); }); L.txt('Toca cada engranaje · vistos ' + Object.keys(S.tocados).length + ' de 3', W / 2, 60, '#cfe6ff', 'center', 20); return; }
     var r1 = 5 * S.n1 * 0.55 + 10, r2 = 5 * S.n2 * 0.55 + 10, x1 = 280, x2 = x1 + r1 + r2 + 8, y = 230, w1 = S.ang, w2 = -S.ang * S.n1 / S.n2;
     // dientes encajados: rotación de fase

@@ -20,7 +20,7 @@ var LAB = LabKit({
     if (L.paso === 2 && S.mez) S.mez.forEach(function (e) { L.btn(e[1] + ' ' + e[0], function () { elegir(L, e[0]); }, 'btn'); });
   },
   draw: function (L, g) {
-    var S = L.S, W = L.W, H = L.H, bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#07061a'); bg.addColorStop(1, '#020208'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    var S = L.S, W = L.W, H = L.H; L.fondo('espacio');
     for (var i = 0; i < 70; i++) { var sx = (i * 137.5) % W, sy = (i * 71.3) % H; g.fillStyle = 'rgba(255,255,255,' + (0.3 + 0.5 * Math.abs(Math.sin(L.t + i))) + ')'; g.fillRect(sx, sy, 2, 2); }
     if (L.paso === 1) { L.dibQuiz(null, '#cfe6ff'); return; }
     if (L.paso === 0) {

@@ -19,7 +19,7 @@ var LAB = LabKit({
     if (L.paso === 1) L.quizBtns(['0 %', '25 %', '50 %', '75 %', '100 %']);
   },
   draw: function (L, g) {
-    var S = L.S, W = L.W, H = L.H, bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#102a2a'); bg.addColorStop(1, '#07120f'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    var S = L.S, W = L.W, H = L.H; L.fondo('lab');
     var A = GEN[S.a], B = GEN[S.b];
     if (L.paso === 1) { var q = L.q; if (q && !q.fin) { var it = q.items[q.i]; A = it.A; B = it.B; } else { L.dibQuiz(null, '#cfe6ff'); return; } L.txt('¿Qué porcentaje de hijos tendrá flor morada?', W / 2, 40, '#cfe6ff', 'center', 22); }
     function flor(x, y, f, s) { L.emoji(fenotipo(f) === 0 ? '🪻' : '🌼', x, y, s); }

@@ -21,7 +21,7 @@ var LAB = LabKit({
   reintentar: function (L) { if (L.paso === 1) preg(L); else { nuevaBusq(L); } },
   ctl: function (L) { if (L.paso === 1) L.quizBtns(['🧲 Metal', '💨 No metal', '💎 Metaloide', '🎈 Gas noble']); if (L.paso === 2 && L.S.rb >= 5 && L.S.okb < 4) L.btn('🔄 Reintentar', function () { nuevaBusq(L); L.ctl(); }, 'btn'); },
   draw: function (L, g) {
-    var S = L.S, W = L.W, H = L.H, bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0a1a2e'); bg.addColorStop(1, '#050b14'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    var S = L.S, W = L.W, H = L.H; L.fondo('lab');
     if (L.paso === 1) { L.dibQuiz(null, '#fff'); var q = L.q; if (q && !q.fin) { var z = q.items[q.i].z; } return; }
     EL.forEach(function (e, i) { var z = i + 1, p = pos(z), x = X0 + p[0] * CW, y = Y0 + p[1] * CH, c = CAT[e[2]][1], sel = S.sel === z; g.fillStyle = c; g.globalAlpha = sel ? 1 : 0.8; if (sel) { g.shadowColor = '#fff'; g.shadowBlur = 20; } g.fillRect(x, y, CW - 3, CH - 3); g.shadowBlur = 0; g.globalAlpha = 1; g.fillStyle = '#0a1a2e'; g.font = '700 22px "Space Grotesk",system-ui,sans-serif'; g.textAlign = 'center'; g.fillText(e[0], x + CW / 2 - 1, y + 38); g.font = '600 11px "JetBrains Mono",monospace'; g.fillText(String(z), x + CW / 2 - 1, y + 16); if (S.vis[z]) { g.fillStyle = '#0a1a2e'; g.fillText('✔', x + CW - 12, y + 60); } });
     // leyenda

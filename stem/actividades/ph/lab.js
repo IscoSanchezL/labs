@@ -18,7 +18,7 @@ LabKit({
     if (L.paso === 2) L.rango('🧼 Base agregada (gotas)', 0, 40, 1, S.base, function (v) { S.base = v; var ph = phMezcla(S.base); if (ph >= 6.8 && ph <= 7.2) L.cumplir(2); });
   },
   draw: function (L, g) {
-    var S = L.S, W = L.W, H = L.H, bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0a1a2e'); bg.addColorStop(1, '#050b14'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    var S = L.S, W = L.W, H = L.H; L.fondo('lab');
     // escala pH
     var sx = 90, sw = 780, sy = 60; for (var i = 0; i < 14; i++) { g.fillStyle = colPH(i + 0.5); g.fillRect(sx + i * sw / 14, sy, sw / 14, 26); L.txt(String(i), sx + (i + 0.5) * sw / 14, sy + 46, '#cfe6ff', 'center', 14); }
     L.txt('ÁCIDO', sx + 90, sy - 12, '#ff9f9f', 'center', 14); L.txt('NEUTRO', sx + sw / 2, sy - 12, '#8be8ae', 'center', 14); L.txt('BASE', sx + sw - 90, sy - 12, '#9db8ff', 'center', 14);

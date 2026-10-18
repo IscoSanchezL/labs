@@ -15,7 +15,7 @@ var LAB = LabKit({
     if (L.paso === 2) L.quizBtns(S.ops || ['A', 'B', 'C']);
   },
   draw: function (L, g) {
-    var S = L.S, W = L.W, H = L.H, bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0a1a2e'); bg.addColorStop(1, '#050b14'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    var S = L.S, W = L.W, H = L.H; L.fondo('agua');
     if (L.paso === 2) { var q = L.q; if (q && !q.fin) { for (var i = 0; i < 5; i++) { g.fillStyle = 'rgba(80,160,255,' + (0.08 + i * 0.04) + ')'; g.fillRect(0, 300 + i * 32, W, 32); } L.txt('🤿', 880, 300 + Math.min(4, q.ok || 0) * 36 + 20, '#fff', 'center', 40); } L.dibQuiz(null, '#cfe6ff'); return; }
     if (L.paso === 0) {
       var P = S.F / S.A / 1000, w = 30 + S.A * 800, cx = 300, y = 360; g.fillStyle = '#ffb347'; g.fillRect(cx - w / 2, y - 14, w, 14); g.fillStyle = '#c28a4a'; g.fillRect(cx - w / 2 - 20, y, w + 40, 60);
