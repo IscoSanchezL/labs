@@ -16,7 +16,7 @@
   var ac = null;
   function tono(f, v, d, tipo) { try { var C = window.AudioContext || window.webkitAudioContext; if (!ac) ac = new C(); if (ac.state === 'suspended') ac.resume(); var o = ac.createOscillator(), gn = ac.createGain(); o.type = tipo || 'sine'; o.frequency.value = f; gn.gain.setValueAtTime(v, ac.currentTime); gn.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + d); o.connect(gn); gn.connect(ac.destination); o.start(); o.stop(ac.currentTime + d); } catch (e) {} }
   function ex() { tono(660, 0.2, 0.2); setTimeout(function () { tono(880, 0.2, 0.3); }, 130); }
-  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; ex(); pintar(); }
+  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; ex(); if (window.STEMFX) STEMFX.exito(); pintar(); }
   function gg() { return MUNDOS[mundo].g; }
   function nuevoObjetivo() { var hi = Math.min(180, Math.floor(0.85 * 1600 / gg())), lo = Math.min(45, Math.floor(hi * 0.5)); obj = lo + Math.round(Math.random() * (hi - lo)); }
   function disparar() {

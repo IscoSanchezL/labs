@@ -14,7 +14,7 @@
   var ac = null;
   function tono(fr, v, d) { try { var C = window.AudioContext || window.webkitAudioContext; if (!ac) ac = new C(); if (ac.state === 'suspended') ac.resume(); var o = ac.createOscillator(), gn = ac.createGain(); o.type = 'sine'; o.frequency.value = fr; gn.gain.setValueAtTime(v, ac.currentTime); gn.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + d); o.connect(gn); gn.connect(ac.destination); o.start(); o.stop(ac.currentTime + d); } catch (e) {} }
   function ex() { tono(660, 0.2, 0.2); setTimeout(function () { tono(880, 0.2, 0.3); }, 130); }
-  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; ex(); pintar(); }
+  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; ex(); if (window.STEMFX) STEMFX.exito(); pintar(); }
   function txt(s, x, y, col, al, tam) { g.font = '700 ' + (tam || 18) + 'px "Space Grotesk",system-ui,sans-serif'; g.fillStyle = col || '#cfe6ff'; g.textAlign = al || 'center'; g.textBaseline = 'alphabetic'; g.fillText(s, x, y); }
   function nuevoReto() { var wl = 2 + Math.floor(Math.random() * 5), dl = 1 + Math.floor(Math.random() * 5), tl = wl * dl, opts = []; for (var w = 1; w <= 8; w++) for (var d = 1; d <= 5; d++) if (w * d === tl) opts.push([w, d]); if (!opts.length) { wl = 4; dl = 3; tl = 12; opts = [[4, 3], [3, 4], [2, 6]]; } ret = { wl: wl, dl: dl }; izq = wl; dI = dl; der = 1; dD = 1; msj = ''; }
   function torques() {

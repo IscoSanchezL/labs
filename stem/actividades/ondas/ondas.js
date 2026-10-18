@@ -19,7 +19,7 @@
     } catch (e) {}
   }
   function ex() { try { var c = ctxA(), o = c.createOscillator(), q = c.createGain(); o.frequency.value = 880; q.gain.setValueAtTime(0.15, c.currentTime); q.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.3); o.connect(q); q.connect(c.destination); o.start(); o.stop(c.currentTime + 0.3); } catch (e) {} }
-  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; ex(); pintar(); }
+  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; ex(); if (window.STEMFX) STEMFX.exito(); pintar(); }
   function revisar() {
     if (paso === 0) { if (A < 0.2) vistos.aBaja = 1; if (A > 0.8) vistos.aAlta = 1; if (vistos.aBaja && vistos.aAlta) cumplir(0); }
     if (paso === 1) { if (F < 2) vistos.fBaja = 1; if (F > 8) vistos.fAlta = 1; if (vistos.fBaja && vistos.fAlta) cumplir(1); }

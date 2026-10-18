@@ -13,7 +13,7 @@
   var ac = null;
   function tono(f, v, d) { try { var C = window.AudioContext || window.webkitAudioContext; if (!ac) ac = new C(); if (ac.state === 'suspended') ac.resume(); var o = ac.createOscillator(), gn = ac.createGain(); o.type = 'sine'; o.frequency.value = f; gn.gain.setValueAtTime(v, ac.currentTime); gn.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + d); o.connect(gn); gn.connect(ac.destination); o.start(); o.stop(ac.currentTime + d); } catch (e) {} }
   function ex() { tono(660, 0.2, 0.2); setTimeout(function () { tono(880, 0.2, 0.3); }, 130); }
-  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; ex(); pintar(); }
+  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; ex(); if (window.STEMFX) STEMFX.exito(); pintar(); }
   function corriente() { return paso === 2 && reto ? reto.v / R : V / R; }
   function voltaje() { return paso === 2 && reto ? reto.v : V; }
   function nuevoReto() { var q = RETOS[Math.floor(Math.random() * RETOS.length)]; reto = { v: q[0], i: q[1] / 1000 }; msj = ''; quemado = 0; }

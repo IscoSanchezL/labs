@@ -13,7 +13,7 @@
   function tono(f, v, d) { try { var C = window.AudioContext || window.webkitAudioContext; if (!ac) ac = new C(); if (ac.state === 'suspended') ac.resume(); var o = ac.createOscillator(), G = ac.createGain(), n = ac.currentTime; o.type = 'sine'; o.frequency.value = f; G.gain.setValueAtTime(0.0001, n); G.gain.exponentialRampToValueAtTime(v, n + 0.01); G.gain.exponentialRampToValueAtTime(0.0001, n + d); o.connect(G); G.connect(ac.destination); o.start(); o.stop(n + d + 0.05); } catch (e) {} }
   function gota() { tono(520, 0.16, 0.12); setTimeout(function () { tono(380, 0.12, 0.15); }, 90); }
   function ex() { tono(660, 0.2, 0.2); setTimeout(function () { tono(880, 0.2, 0.3); }, 130); }
-  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; ex(); pintar(); }
+  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; ex(); if (window.STEMFX) STEMFX.exito(); pintar(); }
   function mezcla(a, b, t) { return Math.round(a + (b - a) * t); }
   function verde(sano, palido) { return 'rgb(' + mezcla(mezcla(150, 60, sano), 215, palido * 0.9) + ',' + mezcla(mezcla(130, 200, sano), 215, palido * 0.8) + ',' + mezcla(mezcla(60, 90, sano), 120, palido * 0.9) + ')'; }
   function dibT(s, x, y, tam, col, al) { g.font = '700 ' + tam + 'px "Space Grotesk",system-ui,sans-serif'; g.fillStyle = col || '#eaf2fb'; g.textAlign = al || 'center'; g.fillText(s, x, y); }

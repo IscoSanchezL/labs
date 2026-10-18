@@ -12,7 +12,7 @@
   var ac = null;
   function tono(f, v, d) { try { var C = window.AudioContext || window.webkitAudioContext; if (!ac) ac = new C(); if (ac.state === 'suspended') ac.resume(); var o = ac.createOscillator(), gn = ac.createGain(); o.type = 'triangle'; o.frequency.value = f; gn.gain.setValueAtTime(v, ac.currentTime); gn.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + d); o.connect(gn); gn.connect(ac.destination); o.start(); o.stop(ac.currentTime + d); } catch (e) {} }
   function ex() { tono(660, 0.2, 0.2); setTimeout(function () { tono(880, 0.2, 0.3); }, 130); }
-  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; ex(); pintar(); }
+  function cumplir(n) { if (hecho[n]) return; hecho[n] = true; ex(); if (window.STEMFX) STEMFX.exito(); pintar(); }
 
   var SUP = { hielo: { n: 'Hielo', e: '❄️', mu: 0.08, c: '#bfe9ff' }, madera: { n: 'Madera', e: '🪵', mu: 0.25, c: '#d9a066' }, alfombra: { n: 'Alfombra', e: '🧶', mu: 0.45, c: '#e0698f' }, lija: { n: 'Lija', e: '🧱', mu: 0.8, c: '#b9a58a' } };
   var G = 500, L = 300, PISO = 340, BX = 330, PL = 570;
