@@ -5,12 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>STEM Labs · Gi School</title>
 <meta name="description" content="Laboratorio STEM para primaria: experimentos interactivos por grado y por categoría.">
-<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/lab.css">
 <style>
 .wrap.ancho{max-width:1180px}
+.banner{position:relative;width:100%;max-width:1400px;margin:0 auto;aspect-ratio:1672/941;max-height:740px;overflow:hidden;
+  -webkit-mask-image:linear-gradient(#000 58%,transparent 100%);mask-image:linear-gradient(#000 58%,transparent 100%)}
+.banner img{display:block;width:100%;height:100%;object-fit:cover;animation:respira 10s ease-in-out infinite alternate}
+@keyframes respira{from{transform:scale(1);filter:brightness(1)}to{transform:scale(1.04);filter:brightness(1.1)}}
+.zoom{position:absolute;inset:0;transform-origin:50% 36%;will-change:transform,opacity}
+header.top{position:absolute;top:0;left:0;right:0;z-index:5;background:linear-gradient(rgba(7,15,28,.88),rgba(7,15,28,.35) 70%,transparent);text-shadow:0 1px 12px rgba(7,15,28,.95),0 0 3px rgba(7,15,28,.9)}
+.hero{position:relative;z-index:2;margin-top:-8.5vw;padding:0 0 30px;text-align:center}
+.hero::before{content:"";position:absolute;inset:-130px -6% -20px;z-index:-1;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(7,15,28,.9),rgba(7,15,28,.6) 55%,transparent 100%);pointer-events:none}
+.hero .eyebrow{background:rgba(7,15,28,.72)}
+.hero h1{margin:14px auto 0;max-width:900px;font-size:clamp(32px,5.6vw,60px);text-shadow:0 4px 40px rgba(7,15,28,.9)}
+.hero .sub{margin:18px auto 0;max-width:680px}
+.cur{display:inline-block;width:8px;height:15px;margin-left:6px;vertical-align:-2px;background:var(--accent);animation:parp 1s steps(2) infinite}
+@keyframes parp{50%{opacity:0}}
+.logo img{width:44px;height:44px;border-radius:12px}
+@media (min-width:1401px){.banner{max-width:1500px;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 16%,#000 84%,transparent 100%),linear-gradient(#000 58%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0,#000 16%,#000 84%,transparent 100%),linear-gradient(#000 58%,transparent 100%);mask-composite:intersect}}
+@media (max-width:560px){.hero{margin-top:-16vw}.banner{aspect-ratio:4/3.4;max-height:none}.banner img{object-position:50% 35%}}
+@media (prefers-reduced-motion:reduce){.banner img,.cur{animation:none}}
 .centro{padding:22px;margin:6px 0 34px;border-radius:28px}
 .filtros{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 18px}
 .cats{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
@@ -42,14 +59,15 @@ a.exp:hover{transform:translateY(-3px);border-color:var(--c);box-shadow:0 12px 3
 <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="piso" aria-hidden="true"></div>
 
+<div class="banner"><div class="zoom" id="zoom"><img src="hero.jpg" alt="STEM: un portal de cristal que se abre hacia un mundo de ciencia" data-i18n-attr="alt:heroAlt" fetchpriority="high"></div></div>
 <header class="top"><div class="wrap ancho">
-  <div class="logo"><img src="../logo.png" alt="" width="40" height="40"><div>STEM Labs<span> · Gi School</span></div></div>
+  <div class="logo"><img src="logo.png" alt="" width="44" height="44"><div>STEM Labs<span> · Gi School</span></div></div>
   <div class="der"><div id="lang"></div></div>
 </div></header>
 
 <main class="wrap ancho">
-  <section class="titulo">
-    <span class="eyebrow" data-i18n="eyebrow"></span>
+  <section class="hero">
+    <span class="eyebrow"><span data-i18n="eyebrow"></span><span class="cur"></span></span>
     <h1 data-i18n="h1"></h1>
     <p class="sub" data-i18n="sub"></p>
   </section>
@@ -70,13 +88,13 @@ I18N.add({
   titulo: 'STEM Labs · Gi School', descripcion: 'Laboratorio STEM para primaria: experimentos interactivos por grado y por categoría.',
   eyebrow: '// laboratorio STEM', h1: 'Experimenta, <em>descubre</em> y crea',
   sub: 'Elige tu grado y tu categoría. Cada tarjeta es un experimento interactivo que explica una idea de ciencia, tecnología, ingeniería o matemáticas.',
-  fGrado: 'Elegir grado', fCat: 'Elegir categoría', todos: 'Todos', todas: 'Todas', grado: 'Grado', exps: 'experimentos', exp1: 'experimento',
+  heroAlt: 'STEM: un portal de cristal que se abre hacia un mundo de ciencia', fGrado: 'Elegir grado', fCat: 'Elegir categoría', todos: 'Todos', todas: 'Todas', grado: 'Grado', exps: 'experimentos', exp1: 'experimento',
   listo: 'LISTO', pronto: 'PRONTO', aprendes: 'Aprendes:', vacio: 'Todavía no hay experimentos aquí.', pie: 'Hecho para el aula · Gi School'
 }, {
   titulo: 'STEM Labs · Gi School', descripcion: 'STEM lab for elementary school: interactive experiments by grade and by category.',
   eyebrow: '// STEM lab', h1: 'Experiment, <em>discover</em> and create',
   sub: 'Pick your grade and your category. Each card is an interactive experiment that explains an idea from science, technology, engineering or math.',
-  fGrado: 'Choose grade', fCat: 'Choose category', todos: 'All', todas: 'All', grado: 'Grade', exps: 'experiments', exp1: 'experiment',
+  heroAlt: 'STEM: a crystal portal opening onto a world of science', fGrado: 'Choose grade', fCat: 'Choose category', todos: 'All', todas: 'All', grado: 'Grade', exps: 'experiments', exp1: 'experiment',
   listo: 'READY', pronto: 'SOON', aprendes: 'You learn:', vacio: 'There are no experiments here yet.', pie: 'Made for the classroom · Gi School'
 });
 var fg = 'todos', fc = 'todas';
@@ -122,6 +140,15 @@ function pintar() {
   if (!hubo) { var v2 = document.createElement('div'); v2.className = 'vacio'; v2.textContent = T('vacio'); cont.appendChild(v2); }
 }
 I18N.onChange(pintar); pintar(); I18N.montar();
+/* Zoom al desplazarse: al bajar por la página el portal se acerca, como si entraras */
+(function () {
+  var z = document.getElementById('zoom'), b = document.querySelector('.banner');
+  if (!z || !b || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+  var pend = false;
+  function act() { pend = false; var h = b.offsetHeight || 600, p = Math.min(Math.max((window.scrollY || 0) / (h * 0.95), 0), 1), e = p * p * (3 - 2 * p); z.style.transform = 'scale(' + (1 + 0.7 * e).toFixed(4) + ')'; z.style.opacity = (1 - 0.35 * e).toFixed(3); }
+  window.addEventListener('scroll', function () { if (!pend) { pend = true; requestAnimationFrame(act); } }, { passive: true });
+  window.addEventListener('resize', act); act();
+})();
 </script>
 </body>
 </html>
