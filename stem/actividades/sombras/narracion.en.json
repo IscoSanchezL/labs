@@ -1,0 +1,30 @@
+[
+ {
+  "id": "p1",
+  "texto": "Light travels in a straight line. Light leaves the flashlight and travels in a straight line, like an arrow. That is why the rays look straight."
+ },
+ {
+  "id": "m1",
+  "texto": "Your mission. Drag the flashlight up and down and watch the rays."
+ },
+ {
+  "id": "p2",
+  "texto": "Objects block light and make a shadow. When an object is in the way, light cannot pass and a dark area is left behind it: the shadow. If you bring the object closer to the flashlight, the shadow gets bigger."
+ },
+ {
+  "id": "m2",
+  "texto": "Your mission. Drag the object close to and far from the flashlight and watch the shadow change."
+ },
+ {
+  "id": "p3",
+  "texto": "Transparent, translucent and opaque. Some materials let all the light through: they are transparent. Others let a little through: they are translucent. And others let none through: they are opaque."
+ },
+ {
+  "id": "m3",
+  "texto": "Your mission. Try the glass, the wax paper and the wood."
+ },
+ {
+  "id": "ok",
+  "texto": "Great job! Mission complete."
+ }
+]

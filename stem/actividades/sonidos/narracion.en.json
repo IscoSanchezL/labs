@@ -1,0 +1,38 @@
+[
+ {
+  "id": "p1",
+  "texto": "Every sound starts with something that vibrates. A stretched string vibrates: it moves very fast from side to side. That vibration is what makes the sound!"
+ },
+ {
+  "id": "m1",
+  "texto": "Your mission. Pluck the string 3 times and watch it vibrate."
+ },
+ {
+  "id": "p2",
+  "texto": "The vibration moves the air. The air is full of tiny particles. When the drum vibrates it pushes the air, and the particles push the ones next to them: that is how sound travels!"
+ },
+ {
+  "id": "m2",
+  "texto": "Your mission. Hit the drum 3 times and watch the wave travel."
+ },
+ {
+  "id": "p3",
+  "texto": "The wave reaches your ear. The air wave reaches your ear. Your ear vibrates too and your brain understands: it is a sound! The farther away, the softer it sounds."
+ },
+ {
+  "id": "m3",
+  "texto": "Your mission. Ring the bell with the ear close, then far away."
+ },
+ {
+  "id": "p4",
+  "texto": "Loud, soft, high and low. If the vibration is big, the sound is loud. If it is tiny, it is soft. If it vibrates fast, the sound is high; if it vibrates slowly, it is low."
+ },
+ {
+  "id": "m4",
+  "texto": "Your mission. Play a low bar (left) and a high bar (right). Then a loud sound and a soft one."
+ },
+ {
+  "id": "ok",
+  "texto": "Great job! Mission complete."
+ }
+]

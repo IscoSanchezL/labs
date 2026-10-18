@@ -4,7 +4,7 @@ name: Voz de los laboratorios STEM
 on:
   push:
     branches: [main]
-    paths: ['stem/actividades/*/narracion.json', 'tools/generar_voz_stem.py']
+    paths: ['stem/actividades/*/narracion*.json', 'tools/generar_voz_stem.py']
   workflow_dispatch:
 
 permissions:

@@ -1,5 +1,5 @@
 /* Narración de los laboratorios STEM: MP3 con la voz de Beto (es-MX-JorgeNeural) en <página>/audio/<id>.mp3.
-   Si no hay MP3 (o el idioma no es español) habla el navegador. */
+   Español: voz de Beto (es-MX-JorgeNeural). Inglés: voz de hombre (en-US-AndrewNeural) en audio/en/. Si no hay MP3 habla el navegador. */
 (function () {
   'use strict';
   var on = true; try { if (localStorage.getItem('stem-voz') === '0') on = false; } catch (e) {}
@@ -11,8 +11,7 @@
   }
   function decir(id, texto, forzar, sig) {
     if (!on && !forzar) return; parar();
-    if (I18N.get() !== 'es') return hablar(texto);
-    var a = new Audio('audio/' + id + '.mp3'); el = a;
+    var a = new Audio((I18N.get() === 'en' ? 'audio/en/' : 'audio/') + id + '.mp3'); el = a;
     a.onerror = function () { hablar(texto); };
     if (sig) a.onended = function () { if (el === a) decir(sig[0], sig[1], true); };
     var p = a.play(); if (p && p.catch) p.catch(function () {});
