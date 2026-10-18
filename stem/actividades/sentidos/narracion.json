@@ -1,0 +1,54 @@
+[
+ {
+  "id": "p1",
+  "texto": "La vista: los ojos. Con los ojos vemos los colores, las formas y la luz. Sin luz no podemos ver."
+ },
+ {
+  "id": "m1",
+  "texto": "Tu misión. Toca la manzana roja."
+ },
+ {
+  "id": "p2",
+  "texto": "El oído: las orejas. Con los oídos escuchamos. Los sonidos son vibraciones que llegan hasta tu oído."
+ },
+ {
+  "id": "m2",
+  "texto": "Tu misión. Escucha el sonido y toca lo que suena."
+ },
+ {
+  "id": "p3",
+  "texto": "El tacto: la piel. Con la piel, sobre todo con las manos, sentimos si algo es suave, áspero, frío o caliente."
+ },
+ {
+  "id": "m3",
+  "texto": "Tu misión. Toca lo que está frío."
+ },
+ {
+  "id": "p4",
+  "texto": "El olfato: la nariz. Con la nariz olemos. Los olores nos avisan de lo rico y también de lo peligroso."
+ },
+ {
+  "id": "m4",
+  "texto": "Tu misión. Toca lo que huele a flor."
+ },
+ {
+  "id": "p5",
+  "texto": "El gusto: la lengua. Con la lengua probamos los sabores: dulce, salado, ácido y amargo."
+ },
+ {
+  "id": "m5",
+  "texto": "Tu misión. Toca lo que sabe ácido."
+ },
+ {
+  "id": "p6",
+  "texto": "¿Qué sentido uso?. Ahora une cada acción con el sentido que usas. ¡Tu cerebro recibe lo que sienten tus cinco sentidos!"
+ },
+ {
+  "id": "m6",
+  "texto": "Tu misión. Acierta cuatro veces."
+ },
+ {
+  "id": "ok",
+  "texto": "¡Muy bien! Misión cumplida."
+ }
+]

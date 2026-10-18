@@ -19,7 +19,7 @@ window.STEM = {
     { id: 'sombras', grado: 1, cat: 'luz', estado: 'listo', url: 'actividades/sombras/', icono: '🔦',
       es: { n: 'Luz y sombras', d: 'Mueve una linterna y mira cómo cambia tu sombra.', a: 'La luz no pasa por los objetos.' },
       en: { n: 'Light and shadows', d: 'Move a flashlight and see how your shadow changes.', a: 'Light does not go through objects.' } },
-    { id: 'sentidos', grado: 1, cat: 'vida', estado: 'pronto', icono: '👀',
+    { id: 'sentidos', grado: 1, cat: 'vida', estado: 'listo', url: 'actividades/sentidos/', icono: '👀',
       es: { n: 'Mis cinco sentidos', d: 'Adivina objetos con la vista, el oído, el tacto, el olfato y el gusto.', a: 'Usamos los sentidos para conocer el mundo.' },
       en: { n: 'My five senses', d: 'Guess objects using sight, hearing, touch, smell and taste.', a: 'We use our senses to know the world.' } },
     { id: 'imanes', grado: 2, cat: 'fisica', estado: 'pronto', icono: '🧲',
