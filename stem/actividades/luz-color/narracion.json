@@ -1,0 +1,9 @@
+[
+ {"id":"p1","texto":"El arco iris. El arco iris aparece cuando hay sol y lluvia al mismo tiempo. La luz del sol se separa en muchos colores. Enciende el sol y la lluvia."},
+ {"id":"m1","texto":"Tu misión. Haz aparecer el arco iris."},
+ {"id":"p2","texto":"Mezclar colores. Con tres colores se pueden hacer otros. Elige dos colores y mira qué color nuevo sale."},
+ {"id":"m2","texto":"Tu misión. Haz tres mezclas distintas."},
+ {"id":"p3","texto":"¿Qué color sale?. Mira los dos colores y toca el color que sale al mezclarlos."},
+ {"id":"m3","texto":"Tu misión. Acierta cuatro veces."},
+ {"id":"ok","texto":"¡Muy bien! Misión cumplida."}
+]
