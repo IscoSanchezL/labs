@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STEM Labs · Gi School</title>
+<meta name="description" content="Laboratorio STEM para primaria: experimentos interactivos por grado y por categoría.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/lab.css">
+<style>
+.wrap.ancho{max-width:1180px}
+.centro{padding:22px;margin:6px 0 34px;border-radius:28px}
+.filtros{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 18px}
+.cats{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.cats .tab{display:inline-flex;gap:7px;align-items:center}
+.grado{margin:0 0 18px;padding:20px;border-radius:24px}
+.grado>h2{display:flex;align-items:center;gap:14px;margin:0 0 4px;font-size:clamp(22px,3vw,30px);letter-spacing:0;text-transform:none;color:var(--text);font-weight:700}
+.num{display:grid;place-items:center;width:52px;height:52px;border-radius:16px;font-size:26px;font-weight:700;color:#06121f;background:linear-gradient(135deg,#9ff7ec,#9db8ff)}
+.grado>h2 small{font-size:14px;color:var(--dim);font-weight:400}
+.cuerpo{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px 16px;margin-top:18px}
+.cat{margin:0}
+.cat h3{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:18px}
+.cat h3 i{font-style:normal;font-size:22px}
+.cat h3 span{width:34px;height:4px;border-radius:4px;display:inline-block}
+.exps{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.exp{position:relative;display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid var(--edge);transition:transform .18s,border-color .18s,box-shadow .18s;min-height:170px}
+a.exp:hover{transform:translateY(-3px);border-color:var(--c);box-shadow:0 12px 30px -14px var(--c)}
+.exp .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:color-mix(in srgb,var(--c) 22%,transparent);border:1px solid color-mix(in srgb,var(--c) 55%,transparent)}
+.exp b{font-size:17px;line-height:1.2}
+.exp p{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
+.exp .aprende{margin-top:auto;font-size:12.5px;color:var(--c)}
+.exp .est{position:absolute;top:14px;right:14px;font-size:11.5px;letter-spacing:.05em;padding:3px 9px;border-radius:999px;border:1px solid var(--edge);color:var(--dim)}
+.exp.listo .est{color:#06121f;background:var(--c);border-color:var(--c);font-weight:700}
+.exp.pronto{opacity:.62}
+.vacio{padding:30px;text-align:center;color:var(--dim)}
+@media (prefers-reduced-motion:reduce){a.exp:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="piso" aria-hidden="true"></div>
+
+<header class="top"><div class="wrap ancho">
+  <div class="logo"><img src="../logo.png" alt="" width="40" height="40"><div>STEM Labs<span> · Gi School</span></div></div>
+  <div class="der"><div id="lang"></div></div>
+</div></header>
+
+<main class="wrap ancho">
+  <section class="titulo">
+    <span class="eyebrow" data-i18n="eyebrow"></span>
+    <h1 data-i18n="h1"></h1>
+    <p class="sub" data-i18n="sub"></p>
+  </section>
+
+  <section class="glass centro" aria-label="STEM Labs">
+    <div class="filtros" id="grados" role="group" data-i18n-attr="aria-label:fGrado"></div>
+    <div class="cats" id="cats" role="group" data-i18n-attr="aria-label:fCat"></div>
+    <div id="lista"></div>
+  </section>
+</main>
+<footer><div class="wrap"><div data-i18n="pie"></div><div>iscosanchez.com</div></div></footer>
+
+<script src="../assets/i18n.js"></script>
+<script src="datos.js"></script>
+<script>
+var D = window.STEM, T = I18N.t, L = function () { return I18N.get(); };
+I18N.add({
+  titulo: 'STEM Labs · Gi School', descripcion: 'Laboratorio STEM para primaria: experimentos interactivos por grado y por categoría.',
+  eyebrow: '// laboratorio STEM', h1: 'Experimenta, <em>descubre</em> y crea',
+  sub: 'Elige tu grado y tu categoría. Cada tarjeta es un experimento interactivo que explica una idea de ciencia, tecnología, ingeniería o matemáticas.',
+  fGrado: 'Elegir grado', fCat: 'Elegir categoría', todos: 'Todos', todas: 'Todas', grado: 'Grado', exps: 'experimentos', exp1: 'experimento',
+  listo: 'LISTO', pronto: 'PRONTO', aprendes: 'Aprendes:', vacio: 'Todavía no hay experimentos aquí.', pie: 'Hecho para el aula · Gi School'
+}, {
+  titulo: 'STEM Labs · Gi School', descripcion: 'STEM lab for elementary school: interactive experiments by grade and by category.',
+  eyebrow: '// STEM lab', h1: 'Experiment, <em>discover</em> and create',
+  sub: 'Pick your grade and your category. Each card is an interactive experiment that explains an idea from science, technology, engineering or math.',
+  fGrado: 'Choose grade', fCat: 'Choose category', todos: 'All', todas: 'All', grado: 'Grade', exps: 'experiments', exp1: 'experiment',
+  listo: 'READY', pronto: 'SOON', aprendes: 'You learn:', vacio: 'There are no experiments here yet.', pie: 'Made for the classroom · Gi School'
+});
+var fg = 'todos', fc = 'todas';
+var $ = function (id) { return document.getElementById(id); };
+function boton(txt, pr, fn) { var b = document.createElement('button'); b.type = 'button'; b.className = 'tab'; b.innerHTML = txt; b.setAttribute('aria-pressed', String(pr)); b.onclick = fn; return b; }
+function pintar() {
+  var g = $('grados'); g.textContent = '';
+  g.appendChild(boton(T('todos'), fg === 'todos', function () { fg = 'todos'; pintar(); }));
+  D.grados.forEach(function (n) { g.appendChild(boton(n + '°', fg === n, function () { fg = n; pintar(); })); });
+  var c = $('cats'); c.textContent = '';
+  c.appendChild(boton(T('todas'), fc === 'todas', function () { fc = 'todas'; pintar(); }));
+  Object.keys(D.categorias).forEach(function (k) {
+    var ct = D.categorias[k]; c.appendChild(boton(ct.icono + ' ' + ct[L()], fc === k, function () { fc = k; pintar(); }));
+  });
+  var cont = $('lista'); cont.textContent = ''; var hubo = false;
+  D.grados.forEach(function (n) {
+    if (fg !== 'todos' && fg !== n) return;
+    var xs = D.experimentos.filter(function (e) { return e.grado === n && (fc === 'todas' || e.cat === fc); });
+    if (!xs.length && fg === 'todos') return;
+    hubo = true;
+    var s = document.createElement('section'); s.className = 'glass grado';
+    var h = document.createElement('h2');
+    h.innerHTML = '<span class="num">' + n + '°</span><span>' + T('grado') + ' ' + n + '<br><small>' + xs.length + ' ' + (xs.length === 1 ? T('exp1') : T('exps')) + '</small></span>';
+    s.appendChild(h);
+    var cuerpo = document.createElement('div'); cuerpo.className = 'cuerpo'; s.appendChild(cuerpo);
+    Object.keys(D.categorias).forEach(function (k) {
+      var ys = xs.filter(function (e) { return e.cat === k; }); if (!ys.length) return;
+      var ct = D.categorias[k], sec = document.createElement('div'); sec.className = 'cat';
+      sec.innerHTML = '<h3><i>' + ct.icono + '</i>' + ct[L()] + '<span style="background:' + ct.color + '"></span></h3>';
+      var gr = document.createElement('div'); gr.className = 'exps';
+      ys.forEach(function (e) {
+        var t = e[L()], listo = e.estado === 'listo';
+        var a = document.createElement(listo ? 'a' : 'div'); a.className = 'exp ' + e.estado; a.style.setProperty('--c', ct.color);
+        if (listo) a.href = e.url;
+        a.innerHTML = '<span class="est">' + T(e.estado) + '</span><div class="ic">' + e.icono + '</div><b>' + t.n + '</b><p>' + t.d + '</p><div class="aprende">' + T('aprendes') + ' ' + t.a + '</div>';
+        gr.appendChild(a);
+      });
+      sec.appendChild(gr); cuerpo.appendChild(sec);
+    });
+    if (!xs.length) { var v = document.createElement('div'); v.className = 'vacio'; v.textContent = T('vacio'); cuerpo.appendChild(v); }
+    cont.appendChild(s);
+  });
+  if (!hubo) { var v2 = document.createElement('div'); v2.className = 'vacio'; v2.textContent = T('vacio'); cont.appendChild(v2); }
+}
+I18N.onChange(pintar); pintar(); I18N.montar();
+</script>
+</body>
+</html>
