@@ -1,0 +1,9 @@
+[
+ { "id": "p1", "texto": "Flota o se hunde. Cuando dejamos caer un objeto al agua, algunos se quedan arriba. Eso es flotar. Otros se van al fondo. Eso es hundirse. Toca cada objeto y míralo." },
+ { "id": "m1", "texto": "Tu misión. Prueba seis objetos distintos en el agua." },
+ { "id": "p2", "texto": "Adivina antes de probar. Mira el objeto. Piensa si es liviano o pesado, y adivina si va a flotar o a hundirse." },
+ { "id": "m2", "texto": "Tu misión. Adivina cuatro veces si flota o se hunde." },
+ { "id": "p3", "texto": "La bolita de plastilina. Una bolita de plastilina se hunde. Pero si le das forma de barquito, ¡flota! La forma ayuda a que el agua la sostenga." },
+ { "id": "m3", "texto": "Tu misión. Mira la bolita y el barquito de plastilina en el agua." },
+ { "id": "ok", "texto": "¡Muy bien! Misión cumplida." }
+]
