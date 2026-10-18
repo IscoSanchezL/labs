@@ -3,7 +3,7 @@ import { agregar } from './i18n.js';
 agregar({
 'titulo': 'Laboratorio de puentes · Labs',
 'descripcion': 'Diseña puentes, torres y voladizos en 3D, haz cruzar un camión y mide su factor de seguridad. Grado 5°.',
-'p.volver': '← Volver a labs', 'p.eyebrow': '// grado 5° · diseño de ingeniería', 'p.h1': 'Laboratorio de <em>puentes</em>',
+'p.volver': '← Volver a STEM Labs', 'p.eyebrow': '// grado 5° · diseño de ingeniería', 'p.h1': 'Laboratorio de <em>puentes</em>',
 'p.sub': 'Diseña una estructura, haz cruzar el camión y mide cuánto aguanta. Sigue el ciclo de diseño: <b>investigar, planear, crear y evaluar</b>.',
 'p.canvas': 'Zona de construcción 3D: haz clic en un punto y arrastra hasta otro para crear una pieza', 'p.nivel': 'Retos',
 'p.reto': 'Reto', 'p.vivo': 'Esfuerzo máximo', 'p.datos': 'Mi diseño', 'p.piezasT': 'Piezas', 'p.long': 'Longitud', 'p.masa': 'Masa',
@@ -55,7 +55,7 @@ agregar({
 }, {
 'titulo': 'Bridge Lab · Labs',
 'descripcion': 'Design bridges, towers and cantilevers in 3D, drive a truck across and measure the safety factor. Grade 5.',
-'p.volver': '← Back to labs', 'p.eyebrow': '// grade 5 · engineering design', 'p.h1': 'Bridge <em>Lab</em>',
+'p.volver': '← Back to STEM Labs', 'p.eyebrow': '// grade 5 · engineering design', 'p.h1': 'Bridge <em>Lab</em>',
 'p.sub': 'Design a structure, drive the truck across and measure how much it holds. Follow the design cycle: <b>research, plan, create and evaluate</b>.',
 'p.canvas': '3D building area: click a point and drag to another to create a piece', 'p.nivel': 'Challenges',
 'p.reto': 'Challenge', 'p.vivo': 'Maximum stress', 'p.datos': 'My design', 'p.piezasT': 'Pieces', 'p.long': 'Length', 'p.masa': 'Mass',
