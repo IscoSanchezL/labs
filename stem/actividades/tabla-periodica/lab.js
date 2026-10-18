@@ -10,6 +10,7 @@ var EL = [
 ];
 function pos(z) { var i = z - 1; if (z === 1) return [0, 0]; if (z === 2) return [17, 0]; if (z <= 4) return [z - 3, 1]; if (z <= 10) return [z - 5 + 12, 1]; if (z <= 12) return [z - 11, 2]; if (z <= 18) return [z - 13 + 12, 2]; if (z <= 20) return [z - 19, 3]; if (z <= 30) return [z - 21 + 2, 3]; return [z - 31 + 12, 3]; }
 var CW = 46, CH = 66, X0 = 70, Y0 = 130;
+var V3 = null, B3 = null, zActual = 0;
 var LAB = LabKit({
   reto: true, hook: '__tab',
   pasos: [
@@ -22,8 +23,10 @@ var LAB = LabKit({
   ctl: function (L) { if (L.paso === 1) L.quizBtns(['🧲 Metal', '💨 No metal', '💎 Metaloide', '🎈 Gas noble']); if (L.paso === 2 && L.S.rb >= 5 && L.S.okb < 4) L.btn('🔄 Reintentar', function () { nuevaBusq(L); L.ctl(); }, 'btn'); },
   draw: function (L, g) {
     var S = L.S, W = L.W, H = L.H; L.fondo('lab');
+    if (V3) { V3.mostrar(L.paso === 0 && !!S.sel); if (L.paso === 0 && S.sel && S.sel !== zActual) bohr(S.sel); }
     if (L.paso === 1) { L.dibQuiz(null, '#fff'); var q = L.q; if (q && !q.fin) { var z = q.items[q.i].z; } return; }
     EL.forEach(function (e, i) { var z = i + 1, p = pos(z), x = X0 + p[0] * CW, y = Y0 + p[1] * CH, c = CAT[e[2]][1], sel = S.sel === z; g.fillStyle = c; g.globalAlpha = sel ? 1 : 0.8; if (sel) { g.shadowColor = '#fff'; g.shadowBlur = 20; } g.fillRect(x, y, CW - 3, CH - 3); g.shadowBlur = 0; g.globalAlpha = 1; g.fillStyle = '#0a1a2e'; g.font = '700 22px "Space Grotesk",system-ui,sans-serif'; g.textAlign = 'center'; g.fillText(e[0], x + CW / 2 - 1, y + 38); g.font = '600 11px "JetBrains Mono",monospace'; g.fillText(String(z), x + CW / 2 - 1, y + 16); if (S.vis[z]) { g.fillStyle = '#0a1a2e'; g.fillText('✔', x + CW - 12, y + 60); } });
+    if (L.paso === 0 && S.sel) { var cp = capas(S.sel); L.txt('Modelo de Bohr · electrones por capa: ' + cp.join(' · '), 390, 150, '#cfe6ff', 'center', 13); }
     // leyenda
     var lx = 70; Object.keys(CAT).forEach(function (k, i) { var x = 70 + (i % 4) * 215, y = 20 + Math.floor(i / 4) * 24; g.fillStyle = CAT[k][1]; g.fillRect(x, y, 16, 16); L.txt(CAT[k][0], x + 22, y + 13, '#cfe6ff', 'left', 14); });
     if (L.paso === 0) { if (S.sel) { var e = EL[S.sel - 1]; g.fillStyle = 'rgba(5,11,20,.85)'; g.fillRect(70, 400, 820, 50); L.txt(e[0] + ' · ' + e[1] + ' · Z = ' + S.sel + ' · ' + CAT[e[2]][0], 90, 422, CAT[e[2]][1], 'left', 17); L.txt(e[3], 90, 443, '#cfe6ff', 'left', 14); } else L.txt('Toca un elemento (' + Object.keys(S.vis).length + '/8)', W / 2, 430, '#9db8ff', 'center', 18); }
@@ -39,3 +42,19 @@ function clicZ(L, z) {
   else if (L.paso === 2 && S.rb < 5) { if (z === S.busq.z) { S.okb++; S.mb = '✔ ¡Ahí está!'; L.tono(740, 0.12, 0.15); } else { S.mb = '✖ Ese es ' + EL[z - 1][1]; L.mal(); } S.rb++; if (S.rb >= 5) { if (S.okb >= 4) L.cumplir(2); L.ctl(); } else S.busq = { z: S.lista[S.rb][0], t: S.lista[S.rb][1] }; }
 }
 document.getElementById('cv').addEventListener('click', function (e) { var L = LAB; if (L.paso === 1) return; var q = L.xy(e); for (var z = 1; z <= 36; z++) { var p = pos(z), x = X0 + p[0] * CW, y = Y0 + p[1] * CH; if (q[0] >= x && q[0] < x + CW && q[1] >= y && q[1] < y + CH) { clicZ(L, z); return; } } });
+
+/* ---------- modelo de Bohr en 3D ---------- */
+function capas(z) { var c = [Math.min(2, z)], r = z - c[0]; if (r > 0) { c.push(Math.min(8, r)); r -= c[1]; } if (r > 0) { if (z <= 20) { c.push(Math.min(8, r)); r -= c[2]; } else { var k = Math.min(18, z - 12 > 18 ? 18 : z - 12); c.push(k); r -= k; } } if (r > 0) c.push(r); return c; }
+function iniciar3d() {
+  var V = window.Vista3D ? Vista3D({ z: 9, fov: 40, auto: 0.25, fijo: true }) : null; if (!V) return; V3 = V; B3 = { g: new THREE.Group(), el: [] }; B3.g.position.set(-1.28, -0.1, 0); V.grupo.add(B3.g); V.mostrar(false);
+  V.anim(function (dt, t) { B3.el.forEach(function (e) { e.a += dt * e.v; e.m.position.set(Math.cos(e.a) * e.r, Math.sin(e.a) * e.r * Math.cos(e.tilt), Math.sin(e.a) * e.r * Math.sin(e.tilt)); }); if (B3.nuc) B3.nuc.rotation.y += dt * 0.8; });
+}
+function bohr(z) {
+  zActual = z; var V = V3, T = THREE, G = B3.g; while (G.children.length) G.remove(G.children[0]); B3.el = [];
+  var n = Math.round(z * 1.1 + 0.5), nuc = new T.Group(), rN = 0.12 + Math.cbrt(z + n) * 0.07;
+  for (var i = 0; i < z + n; i++) { var p = i < z, u = Math.random(), v = Math.random(), th = 2 * Math.PI * u, ph = Math.acos(2 * v - 1), rr = rN * Math.cbrt(Math.random()); var m = new T.Mesh(new T.SphereGeometry(0.07, 10, 8), V.mat(p ? 0xff5a5a : 0xaab4c8)); m.position.set(rr * Math.sin(ph) * Math.cos(th), rr * Math.sin(ph) * Math.sin(th), rr * Math.cos(ph)); nuc.add(m); }
+  G.add(nuc); B3.nuc = nuc; var cp = capas(z);
+  cp.forEach(function (k, s) { var R = 0.55 + s * 0.28 + Math.min(0, 0), tilt = s * 0.55; var anillo = new T.Mesh(new T.RingGeometry(R - 0.006, R + 0.006, 80), new T.MeshBasicMaterial({ color: 0x7fb8ff, transparent: true, opacity: 0.35, side: T.DoubleSide })); anillo.rotation.x = Math.PI / 2 - Math.PI / 2; anillo.rotation.y = Math.atan(Math.tan(tilt)) * 0; G.add(anillo);
+    for (var j = 0; j < k; j++) { var e = new T.Mesh(new T.SphereGeometry(0.075, 12, 10), V.mat(0x6fe0ff, 0x2fb8ff)); G.add(e); B3.el.push({ m: e, a: j / k * Math.PI * 2, r: R, v: 1.8 / (1 + s * 0.8), tilt: 0 }); } });
+}
+iniciar3d();
