@@ -1,4 +1,5 @@
-/* Catálogo de STEM Labs. Para agregar un experimento: añade una línea en EXPERIMENTOS.
+/* Catálogo de STEM Labs.
+   VOZ: solo los laboratorios de 1° llevan narración con la voz de Beto (narracion.json + narrar.js). De 2° a 6° van SIN voz. Para agregar un experimento: añade una línea en EXPERIMENTOS.
    estado: 'listo' (tiene página) o 'pronto'. url: ruta relativa a esta carpeta. */
 window.STEM = {
   categorias: {
