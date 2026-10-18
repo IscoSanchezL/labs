@@ -187,9 +187,9 @@ window.STEM = {
     { id: 'adn', grado: 6, cat: 'vida', estado: 'listo', url: 'actividades/adn/', icono: '🧬',
       es: { n: 'ADN', d: 'Empareja bases y traduce codones a aminoácidos.', a: 'La doble hélice' },
       en: { n: 'DNA', d: 'Pair bases and translate codons into amino acids.', a: 'The double helix' } },
-    { id: 'partes-animales', grado: 2, cat: 'vida', estado: 'pronto', icono: '🐦',
-      es: { n: 'Partes de los animales', d: 'Alas, patas y aletas: ¿para qué sirven?', a: '' },
-      en: { n: 'Animal parts', d: '', a: '' } },
+    { id: 'partes-animales', grado: 2, cat: 'vida', estado: 'listo', url: 'actividades/partes-animales/', icono: '🐦',
+      es: { n: 'Partes de los animales', d: 'Descubre para qué sirven las alas, patas y aletas.', a: '¿Qué animal es?' },
+      en: { n: 'Animal parts', d: 'Discover what wings, legs and fins are for.', a: 'Which animal is it?' } },
     { id: 'calor', grado: 3, cat: 'fisica', estado: 'listo', url: 'actividades/calor/', icono: '🌡️',
       es: { n: 'Calor y temperatura', d: 'Calienta, enfría y descubre conductores y aislantes.', a: 'Termómetro y cucharas' },
       en: { n: 'Heat and temperature', d: 'Heat, cool and discover conductors and insulators.', a: 'Thermometer and spoons' } }
