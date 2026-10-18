@@ -22,7 +22,7 @@ window.STEM = {
     { id: 'sentidos', grado: 1, cat: 'vida', estado: 'listo', url: 'actividades/sentidos/', icono: '👀',
       es: { n: 'Mis cinco sentidos', d: 'Adivina objetos con la vista, el oído, el tacto, el olfato y el gusto.', a: 'Usamos los sentidos para conocer el mundo.' },
       en: { n: 'My five senses', d: 'Guess objects using sight, hearing, touch, smell and taste.', a: 'We use our senses to know the world.' } },
-    { id: 'imanes', grado: 2, cat: 'fisica', estado: 'pronto', icono: '🧲',
+    { id: 'imanes', grado: 2, cat: 'fisica', estado: 'listo', url: 'actividades/imanes/', icono: '🧲',
       es: { n: 'Imanes', d: '¿Qué atrae un imán y qué no? Prueba objetos de todos los materiales.', a: 'Algunos materiales son atraídos por imanes.' },
       en: { n: 'Magnets', d: 'What does a magnet attract and what not? Test objects made of different materials.', a: 'Some materials are attracted by magnets.' } },
     { id: 'plantas', grado: 2, cat: 'vida', estado: 'pronto', icono: '🌻',
