@@ -31,7 +31,7 @@ window.STEM = {
     { id: 'mezclas', grado: 3, cat: 'materia', estado: 'listo', url: 'actividades/mezclas/', icono: '🥤',
       es: { n: 'Mezclas y disoluciones', d: '¿Qué se disuelve en agua? Prueba sal, azúcar, arena y aceite.', a: 'Algunas mezclas se separan y otras no.' },
       en: { n: 'Mixtures and solutions', d: 'What dissolves in water? Try salt, sugar, sand and oil.', a: 'Some mixtures separate and others do not.' } },
-    { id: 'ciclo-agua', grado: 3, cat: 'tierra', estado: 'pronto', icono: '🌧️',
+    { id: 'ciclo-agua', grado: 3, cat: 'tierra', estado: 'listo', url: 'actividades/ciclo-agua/', icono: '🌧️',
       es: { n: 'El ciclo del agua', d: 'Sigue una gota: evaporación, nubes, lluvia y ríos.', a: 'El agua cambia de estado y vuelve a empezar.' },
       en: { n: 'The water cycle', d: 'Follow a drop: evaporation, clouds, rain and rivers.', a: 'Water changes state and starts again.' } },
     { id: 'planetas', grado: 4, cat: 'tierra', estado: 'listo', url: 'actividades/sistema-solar/', icono: '🪐',
