@@ -71,3 +71,13 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
 .lang button:hover{color:var(--text)}
 .lang button[aria-pressed="true"]{background:linear-gradient(135deg,rgba(127,240,228,.36),rgba(157,184,255,.3));color:var(--text)}
 .top .der{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+.hud{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 10px;font-size:13.5px;color:var(--muted)}
+.hud>span{padding:5px 12px;border-radius:999px;background:var(--glass);border:1px solid var(--edge)}
+.hud-n{color:var(--text);font-weight:700}
+.hud-barra{display:inline-block;width:110px;height:10px;padding:0!important;overflow:hidden}
+.hud-barra i{display:block;height:100%;background:linear-gradient(90deg,#4fd1c5,#9f8bff);border-radius:999px;transition:width .5s}
+.hud-xp{color:#ffd36b}
+.hud-r{color:#ff9f43;border-color:rgba(255,159,67,.6)!important}
+.escena canvas{box-shadow:0 0 0 1px rgba(127,240,228,.18),0 16px 50px -20px rgba(0,0,0,.7)}
+@media (prefers-reduced-motion:reduce){.aurora i{animation:none}}
