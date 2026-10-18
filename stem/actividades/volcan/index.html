@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Volcanes · STEM Labs</title>
-<meta name="description" content="Mira por dentro un volcán y provoca erupciones suaves y explosivas. Grado 4°.">
+<meta name="description" content="Corta un volcán en 3D, sube la presión y provoca erupciones suaves o explosivas. Grado 4°.">
 <link rel="icon" type="image/png" href="../../favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
 <style>
 .zona{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:18px;align-items:start;padding-bottom:30px}
 .escena{padding:10px}
-.escena canvas{display:block;width:100%;height:auto;border-radius:18px;background:#070308;touch-action:none}
+.escena canvas{display:block;width:100%;height:auto;border-radius:18px;background:#050b14;touch-action:none}
 .pasos{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .pasos .tab{display:inline-flex;gap:8px;align-items:center;font-size:15px;padding:9px 14px}
 .pasos .tab b{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.14);font-size:13px}
@@ -29,6 +29,9 @@
 .dato{margin-top:12px;font-size:14.5px;color:var(--dim)}
 .rango{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--muted)}
 .rango input{width:180px;accent-color:#7ff0e4}
+.op{min-width:92px;padding:10px 10px;border-radius:22px;border:3px solid var(--edge);background:var(--glass);font-size:46px;line-height:1;transition:transform .15s,border-color .15s}
+.op small{display:block;margin-top:6px;font-size:14px;color:var(--muted);font-weight:500}
+.op:hover{transform:translateY(-3px);border-color:rgba(127,240,228,.7)}
 .nav{display:flex;justify-content:space-between;margin-top:14px;gap:10px}
 .fin{display:none;margin-top:12px;text-align:center;font-size:20px}
 .fin.v{display:block}
@@ -48,14 +51,14 @@
   <section class="titulo">
     <span class="eyebrow">// grado 4° · tierra y espacio</span>
     <h1><em>Volcanes</em> por dentro</h1>
-    <p class="sub">Sube la presión del magma y descubre por qué unos volcanes fluyen y otros explotan.</p>
+    <p class="sub">Corta un volcán en 3D, sube la presión y provoca erupciones suaves o explosivas.</p>
   </section>
 
   <section class="zona">
     <div>
       <div class="glass escena">
         <div class="pasos" id="pasos" role="group" aria-label="Pasos"></div>
-        <canvas id="cv" width="960" height="460" aria-label="Corte transversal de un volcán"></canvas>
+        <canvas id="cv" width="960" height="460" aria-label="Volcanes"></canvas>
         <div class="controles" id="ctl"></div>
       </div>
     </div>
@@ -65,15 +68,17 @@
         <p id="txt"></p>
         <div class="mision" id="mis"><div class="t">// TU MISIÓN</div><span id="misTxt"></span></div>
         <div class="dato" id="dato"></div>
-                <div class="nav"><button class="btn sec" id="bAnt" type="button">← Atrás</button><button class="btn" id="bSig" type="button">Siguiente →</button></div>
+        
+        <div class="nav"><button class="btn sec" id="bAnt" type="button">← Atrás</button><button class="btn" id="bSig" type="button">Siguiente →</button></div>
         <div class="fin" id="fin">🎉 ¡Ya entiendes cómo erupciona un volcán!</div>
       </div>
     </aside>
   </section>
 </main>
 <footer><div class="wrap"><div>Hecho para el aula · Gi School</div><div>iscosanchez.com</div></div></footer>
-
-<script src="volcan.js"></script>
-<script src="../../fx-lite.js"></script>
+<script src="../../vendor/three.min.js"></script>
+<script src="../../lab-kit.js"></script>
+<script src="../../vista3d.js"></script>
+<script src="lab.js"></script>
 </body>
 </html>
