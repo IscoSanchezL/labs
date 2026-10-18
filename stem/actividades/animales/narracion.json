@@ -1,0 +1,9 @@
+[
+ {"id":"p1","texto":"Las casas de los animales. Cada animal vive en un lugar que se llama hábitat. Algunos viven en el mar, otros en la granja, en la selva o en el polo. Toca cada lugar y mira quién vive ahí."},
+ {"id":"m1","texto":"Tu misión. Visita los cuatro lugares."},
+ {"id":"p2","texto":"¿Dónde vive?. Mira el animal y toca el lugar donde vive."},
+ {"id":"m2","texto":"Tu misión. Acierta cuatro veces."},
+ {"id":"p3","texto":"¿Quién vive aquí?. Mira el lugar y toca al animal que vive allí."},
+ {"id":"m3","texto":"Tu misión. Acierta cuatro veces."},
+ {"id":"ok","texto":"¡Muy bien! Misión cumplida."}
+]
