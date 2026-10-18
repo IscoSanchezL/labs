@@ -9,6 +9,7 @@ function simularCohete(twr, etapas) {
   }
   var ap = h + (v > 0 ? v * v / (2 * G) : 0); return { apogeo: ap / 1000, vmax: v, pts: pts, t: t };
 }
+var V3 = null, K3 = null, RK = { y: 400, p: null, apo: 0 };
 var LAB = LabKit({
   reto: true, hook: '__coh',
   pasos: [
@@ -26,15 +27,14 @@ var LAB = LabKit({
   sim: function (L, dt) { var S = L.S; if (S.vuelo) { S.vuelo.t += dt * 8; if (S.vuelo.t >= S.res.t * 1.0 + 40) S.vuelo.fin = true; } if (S.o) S.tl += dt; },
   draw: function (L, g) {
     var S = L.S, W = L.W, H = L.H; L.fondo('espacio');
-    for (var i = 0; i < 60; i++) { g.fillStyle = 'rgba(255,255,255,.6)'; g.fillRect((i * 151) % W, (i * 47) % 360, 1.6, 1.6); }
     if (L.paso < 2) {
-      g.fillStyle = '#3a6a3a'; g.fillRect(0, 410, W, 50); var altKm = 0, apo = S.res ? S.res.apogeo : 0, p = S.vuelo ? S.vuelo : null;
+      if (!V3) { g.fillStyle = '#3a6a3a'; g.fillRect(0, 410, W, 50); } var altKm = 0, apo = S.res ? S.res.apogeo : 0, p = S.vuelo ? S.vuelo : null;
       if (p && S.res) { var idx = Math.min(S.res.pts.length - 1, Math.floor(p.t / 0.5)); altKm = idx >= S.res.pts.length - 1 ? Math.max(0, apo * Math.min(1, (p.t - S.res.t) / 40 + 0.0)) : S.res.pts[idx][1]; if (p.t > S.res.t) altKm = apo; }
-      var escala = Math.max(40, apo * 1.1, 60), y = 400 - Math.min(360, altKm / escala * 360); L.emoji('🚀', 480, y, 56); if (p && !p.fin && altKm < apo - 0.5) { g.fillStyle = '#ffb347'; g.beginPath(); g.moveTo(468, y + 34); g.lineTo(480, y + 34 + 40 + Math.random() * 20); g.lineTo(492, y + 34); g.fill(); }
+      var escala = Math.max(40, apo * 1.1, 60), y = 400 - Math.min(360, altKm / escala * 360); RK = { y: y, p: p, apo: apo, alt: altKm }; if (!V3) { L.emoji('🚀', 480, y, 56); if (p && !p.fin && altKm < apo - 0.5) { g.fillStyle = '#ffb347'; g.beginPath(); g.moveTo(468, y + 34); g.lineTo(480, y + 34 + 40 + Math.random() * 20); g.lineTo(492, y + 34); g.fill(); } }
       g.strokeStyle = 'rgba(255,255,255,.25)'; g.setLineDash([6, 6]); g.lineWidth = 2; [[20, '20 km'], [100, '100 km (espacio)'], [250, '250 km']].forEach(function (m) { var yy = 400 - m[0] / escala * 360; if (yy > 30) { g.beginPath(); g.moveTo(80, yy); g.lineTo(880, yy); g.stroke(); L.txt(m[1], 120, yy - 6, '#9db8ff', 'center', 14); } }); g.setLineDash([]);
       L.txt(S.res ? 'Altura máxima: ' + S.res.apogeo.toFixed(0) + ' km' : 'Ajusta y lanza el cohete', W / 2, 40, '#ffe08a', 'center', 24); if (S.res && p && p.fin) L.txt(S.res.apogeo > (L.paso === 0 ? 20 : 250) ? '✔ ¡Meta lograda!' : '✖ No alcanzó la meta: cambia el empuje' + (L.paso === 1 ? ' o las etapas' : ''), W / 2, 80, S.res.apogeo > (L.paso === 0 ? 20 : 250) ? '#8be8ae' : '#ff9f9f', 'center', 20); if (S.res && S.res.apogeo < 0.5 && p) L.txt('No despega: el empuje es menor que el peso', W / 2, 80, '#ff9f9f', 'center', 20);
     } else {
-      var cx = 480, cy = 250, Rt = 70; var gt = g.createRadialGradient(cx - 14, cy - 14, 6, cx, cy, Rt); gt.addColorStop(0, '#6fb8ff'); gt.addColorStop(1, '#1d4f9a'); g.fillStyle = gt; g.beginPath(); g.arc(cx, cy, Rt, 0, 7); g.fill(); g.fillStyle = '#3fbf6a'; g.beginPath(); g.ellipse(cx - 20, cy - 12, 22, 14, 0.4, 0, 7); g.fill();
+      var cx = 480, cy = 250, Rt = 70; if (!V3) { var gt = g.createRadialGradient(cx - 14, cy - 14, 6, cx, cy, Rt); gt.addColorStop(0, '#6fb8ff'); gt.addColorStop(1, '#1d4f9a'); g.fillStyle = gt; g.beginPath(); g.arc(cx, cy, Rt, 0, 7); g.fill(); g.fillStyle = '#3fbf6a'; g.beginPath(); g.ellipse(cx - 20, cy - 12, 22, 14, 0.4, 0, 7); g.fill(); }
       var v = S.v, r0 = 96; g.strokeStyle = 'rgba(157,184,255,.3)'; g.setLineDash([5, 7]); g.beginPath(); g.arc(cx, cy, r0, 0, 7); g.stroke(); g.setLineDash([]);
       // trayectoria por integración simple (unidades: Tierra radio = 1, v circular = 7.9)
       var mu = 62.4 * 1.0, x = r0 / Rt * 1, y = 0, vx = 0, vy = -v / 7.9 * Math.sqrt(1 / (r0 / Rt)) * 1.0; var pts = [], dt = 0.02, choca = false, sx = r0 / Rt, sy = 0; var px = sx, py = 0, pvx = 0, pvy = -v / 7.9 * Math.sqrt(1 / sx);
@@ -48,3 +48,38 @@ var LAB = LabKit({
 });
 function lanzar(L, et) { var S = L.S; S.res = simularCohete(S.twr, et); S.vuelo = { t: 0, fin: false }; L.tono(90, 0.3, 1.2, 'sawtooth'); if (S.res.apogeo > (L.paso === 0 ? 20 : 250)) setTimeout(function () { L.cumplir(L.paso); }, 700); }
 function orbitar(L) { var S = L.S; S.o = true; if (S.v >= 7.6 && S.v <= 8.2) L.cumplir(2); }
+
+/* ---------- cohete y Tierra en 3D ---------- */
+function iniciar3d() {
+  var V = window.Vista3D ? Vista3D({ z: 9, fov: 40, auto: 0, fijo: true }) : null; if (!V) return; V3 = V; var T = THREE;
+  V.camera.position.set(0, 0, 9); V.mostrar(true);
+  var brillo = V.textura(64, 64, function (c, w, h) { var g2 = c.createRadialGradient(32, 32, 2, 32, 32, 32); g2.addColorStop(0, 'rgba(255,255,255,1)'); g2.addColorStop(0.4, 'rgba(255,255,255,.5)'); g2.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = g2; c.fillRect(0, 0, w, h); });
+  function sp(col, sz) { var m = new T.Sprite(new T.SpriteMaterial({ map: brillo, color: col, transparent: true, blending: T.AdditiveBlending, depthWrite: false })); m.scale.set(sz, sz, 1); return m; }
+  var tex = V.textura(512, 256, function (c, w, h) { c.fillStyle = '#1d5fb8'; c.fillRect(0, 0, w, h); c.fillStyle = '#3fbf6a'; for (var i = 0; i < 18; i++) { c.beginPath(); c.ellipse(Math.random() * w, 30 + Math.random() * (h - 60), 14 + Math.random() * 40, 8 + Math.random() * 22, Math.random() * 3, 0, 7); c.fill(); } c.fillStyle = 'rgba(255,255,255,.35)'; for (var j = 0; j < 40; j++) { c.beginPath(); c.ellipse(Math.random() * w, Math.random() * h, 10 + Math.random() * 30, 3 + Math.random() * 6, 0, 0, 7); c.fill(); } });
+  var tierra = new T.Mesh(new T.SphereGeometry(1, 64, 48), new T.MeshLambertMaterial({ map: tex })), aire = new T.Mesh(new T.SphereGeometry(1.06, 48, 36), new T.MeshBasicMaterial({ color: 0x6fb8ff, transparent: true, opacity: 0.16, side: T.BackSide })); V.scene.add(tierra, aire);
+  var cohete = new T.Group(), cuerpos = [], metal = V.mat(0xf2f4f8, 0x222a38), rojo = V.mat(0xff5a4a, 0x551510);
+  for (var e = 0; e < 3; e++) { var seg = new T.Group(), cy = new T.Mesh(new T.CylinderGeometry(0.2 - e * 0.025, 0.22 - e * 0.025, 0.75, 20), metal); seg.add(cy); for (var a = 0; a < 3; a++) { var aleta = new T.Mesh(new T.BoxGeometry(0.02, 0.32, 0.2), rojo); aleta.position.set(Math.cos(a * 2.094) * 0.27, -0.22, Math.sin(a * 2.094) * 0.27); aleta.rotation.y = -a * 2.094; seg.add(aleta); } seg.position.y = -e * 0.78; cohete.add(seg); cuerpos.push(seg); }
+  var nariz = new T.Mesh(new T.ConeGeometry(0.2, 0.5, 20), rojo); nariz.position.y = 0.62; cohete.add(nariz);
+  var llama = new T.Group(), c1 = new T.Mesh(new T.ConeGeometry(0.17, 1, 16, 1, true), new T.MeshBasicMaterial({ color: 0xffb347, transparent: true, opacity: 0.85, blending: T.AdditiveBlending, depthWrite: false })); c1.rotation.x = Math.PI; c1.position.y = -0.5; llama.add(c1, sp(0xffd9a0, 1.2)); cohete.add(llama); V.scene.add(cohete);
+  var humo = []; for (var h = 0; h < 40; h++) { var m = new T.Sprite(new T.SpriteMaterial({ map: brillo, color: 0xb8c0cc, transparent: true, opacity: 0, depthWrite: false })); m.scale.set(0.5, 0.5, 1); V.scene.add(m); humo.push({ m: m, v: 0 }); }
+  var caida = [];
+  K3 = { tierra: tierra, aire: aire, cohete: cohete, cuerpos: cuerpos, llama: llama, c1: c1, humo: humo, caida: caida, hi: 0, ult: -1 };
+  var k = 0.01424;
+  V.anim(function (dt, t) {
+    var L = LAB, S = L.S; tierra.rotation.y += dt * 0.15;
+    if (L.paso === 2) { tierra.visible = aire.visible = true; tierra.position.set(0, -0.28, 0); aire.position.copy(tierra.position); tierra.scale.setScalar(0.997); aire.scale.setScalar(0.997); cohete.visible = false; humo.forEach(function (h) { h.m.material.opacity = 0; }); return; }
+    tierra.visible = aire.visible = true; var R = 60; tierra.scale.setScalar(R); aire.scale.setScalar(R * 0.995); tierra.position.set(0, -2.5 - R, 0); aire.position.copy(tierra.position);
+    var p = RK.p, wy = (230 - RK.y) * k; cohete.visible = true; cohete.position.set(0, wy, 0);
+    var et = S.res ? (L.paso === 0 ? 1 : S.et) : (L.paso === 0 ? 1 : S.et), tq = p ? Math.floor(p.t / 40) : 0, enVuelo = p && !p.fin && RK.alt < RK.apo - 0.5;
+    cuerpos.forEach(function (c, i) { c.visible = i < et && i >= Math.min(tq, et - 1) && true; });
+    cuerpos.forEach(function (c, i) { c.position.y = -(i - Math.min(tq, et - 1)) * 0.78; });
+    if (K3.ult !== tq && p && tq > 0 && tq < et) { var fall = cuerpos[tq - 1].clone(); fall.position.set(0, wy - 0.78, 0); fall.visible = true; V.scene.add(fall); caida.push({ m: fall, v: 0 }); }
+    K3.ult = p ? tq : -1; if (!p) { caida.forEach(function (c) { V.scene.remove(c.m); }); caida.length = 0; }
+    caida.forEach(function (c) { c.v += dt * 3; c.m.position.y -= c.v * dt; c.m.rotation.z += dt; });
+    llama.visible = !!enVuelo; llama.position.y = -0.38 - 0.78 * (et - 1 - Math.min(tq, et - 1)); c1.scale.set(1, 0.8 + 0.5 * Math.random(), 1);
+    if (enVuelo) { var h = humo[K3.hi++ % humo.length]; h.v = 1; h.m.position.set((Math.random() - 0.5) * 0.15, wy + llama.position.y - 0.6, 0); h.m.scale.set(0.35, 0.35, 1); }
+    humo.forEach(function (h) { if (h.v > 0) { h.v -= dt * 0.6; h.m.material.opacity = Math.max(0, h.v) * 0.45; h.m.scale.multiplyScalar(1 + dt * 0.9); } else h.m.material.opacity = 0; });
+    cohete.rotation.z = enVuelo ? 0.01 * Math.sin(t * 30) : 0;
+  });
+}
+iniciar3d();
