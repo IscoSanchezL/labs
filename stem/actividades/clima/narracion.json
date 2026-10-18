@@ -1,0 +1,9 @@
+[
+ { "id": "p1", "texto": "El clima. El clima nos dice cómo está el cielo hoy. Puede estar soleado, nublado, con lluvia o con viento. Toca cada botón y mira cómo cambia el cielo." },
+ { "id": "m1", "texto": "Tu misión. Prueba los cuatro tipos de clima." },
+ { "id": "p2", "texto": "Qué me pongo. Según el clima, nos vestimos distinto. Con sol usamos gorra. Con lluvia usamos paraguas. Con viento usamos chaqueta." },
+ { "id": "m2", "texto": "Tu misión. Escoge lo que necesitas en cada clima. Acierta cuatro veces." },
+ { "id": "p3", "texto": "Adivina el clima. Te voy a dar una pista y tú adivinas qué clima es. Fíjate bien en el cielo." },
+ { "id": "m3", "texto": "Tu misión. Adivina el clima cuatro veces." },
+ { "id": "ok", "texto": "¡Muy bien! Misión cumplida." }
+]
