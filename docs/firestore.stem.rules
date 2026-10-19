@@ -1,0 +1,36 @@
+rules_version = '2';
+
+// STEM Labs — reglas de Firestore (proyecto propio, independiente de Class Drive).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function mi() {
+      return request.auth != null && request.auth.token.email_verified == true
+        ? request.auth.token.email.lower() : '';
+    }
+    function esAdmin() { return mi() == 'franksanlo@gmail.com'; }
+    function aprobado() {
+      return mi() != '' && (esAdmin()
+        || (exists(/databases/$(database)/documents/labs_docentes/$(mi()))
+            && get(/databases/$(database)/documents/labs_docentes/$(mi())).data.estado == 'aprobado'));
+    }
+
+    // Solicitudes de docentes: cada uno crea y ve la suya (siempre «pendiente»); solo el administrador cambia el estado
+    match /labs_docentes/{id} {
+      allow read: if mi() != '' && (id == mi() || esAdmin());
+      allow create: if esAdmin()
+        || (id == mi() && request.resource.data.email == mi() && request.resource.data.estado == 'pendiente');
+      allow update: if esAdmin()
+        || (id == mi() && request.resource.data.estado == resource.data.estado);
+      allow delete: if esAdmin();
+    }
+
+    // Guías Makerspace editadas por cada docente (solo las suyas)
+    match /labs_guias/{id} {
+      allow read: if aprobado() && (esAdmin() || resource.data.email == mi());
+      allow create, update: if aprobado() && request.resource.data.email == mi()
+        && id == mi() + '__' + request.resource.data.actividad;
+      allow delete: if aprobado() && id.split('__')[0] == mi();
+    }
+  }
+}

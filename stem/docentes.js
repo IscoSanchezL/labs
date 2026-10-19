@@ -1,10 +1,11 @@
 /* Cuentas de docentes de STEM Labs: inicio de sesión con Google, aprobación del superadministrador y guías Makerspace propias.
-   Usa el mismo proyecto de Firebase que Class Drive (Auth con Google + Firestore). Colecciones:
+   Usa un proyecto de Firebase propio de STEM Labs (Auth con Google + Firestore); su configuración va en firebase-config.js. Colecciones:
      labs_docentes/{correo}        → { email, nombre, foto, estado: 'pendiente' | 'aprobado' | 'bloqueado', pedido, resuelto, por }
      labs_guias/{correo}__{actividad} → { email, actividad, datos (JSON de la guía), actualizado }
    Expone window.DOCENTES. Para pruebas: definir window.__DOCENTES_MOCK antes de cargar este módulo. */
 const ADMIN = 'franksanlo@gmail.com';
-const CONF = { apiKey: 'AIzaSyCUIMsOJ628tz80fMEQXxWe8_fmRjzYf-A', authDomain: 'classdrive-981c2.firebaseapp.com', projectId: 'classdrive-981c2', storageBucket: 'classdrive-981c2.firebasestorage.app', messagingSenderId: '296658855074', appId: '1:296658855074:web:025f4c3c8a69fe4ba323fb' };
+const CONF = window.STEM_FIREBASE || {};
+const configurado = () => !!(CONF.apiKey && CONF.projectId && !/^(REEMPLAZA|PEGA)/i.test(CONF.apiKey));
 
 let B = window.__DOCENTES_MOCK || null;
 async function backendReal() {
@@ -57,4 +58,4 @@ D.borrarGuia = async (act) => { if (!D.esDocente()) throw new Error('Sin permiso
 D.guiasPropias = async () => { if (!D.esDocente()) return []; return (await B.listar('labs_guias', 'email', D._u.email)).map((g) => g.actividad); };
 window.DOCENTES = D;
 
-(async () => { try { if (!B) B = await backendReal(); B.onSesion(sesion); } catch (e) { console.error('Docentes:', e); D._est = 'error'; D._err = (e && (e.code || e.message)) || 'error'; avisar(); } })();
+(async () => { try { if (!B && !configurado()) { D._est = 'sin-configurar'; return avisar(); } if (!B) B = await backendReal(); B.onSesion(sesion); } catch (e) { console.error('Docentes:', e); D._est = 'error'; D._err = (e && (e.code || e.message)) || 'error'; avisar(); } })();
