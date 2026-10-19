@@ -1,4 +1,5 @@
 /* Presión y fluidos (6°, solo español, sin voz): P = F/A, prensa hidráulica (Pascal), presión según la profundidad. */
+var V3 = null, P3 = { lift: 0 };
 var LAB = LabKit({
   reto: true, hook: '__flu',
   pasos: [
@@ -23,11 +24,12 @@ var LAB = LabKit({
       L.txt('F = ' + S.F + ' N', cx + 60, 200, '#7ff0e4', 'left', 20); L.txt('A = ' + (S.A * 1000).toFixed(0) + ' cm²', cx + 60, 230, '#ffb347', 'left', 20);
       g.fillStyle = 'rgba(5,11,20,.8)'; g.fillRect(560, 90, 340, 270); L.txt('Presión', 730, 130, '#9db8ff', 'center', 16); L.txt(P.toFixed(P < 10 ? 1 : 0) + ' kPa', 730, 210, P > 500 ? '#ff9f9f' : P < 20 ? '#8be8ae' : '#ffe08a', 'center', 52); L.txt('P = F / A', 730, 260, '#9db8ff', 'center', 20); L.txt(P > 500 ? '🔪 ¡Muy alta!' : P < 20 ? '🛏️ Muy suave' : '', 730, 320, '#fff', 'center', 24);
     }
+    if (V3) V3.mostrar(L.paso === 1);
     if (L.paso === 1) {
       var f2 = S.f1 * S.a2, lift = Math.min(1, f2 / 800), ok = f2 >= 800;
-      g.fillStyle = '#2b6cb0'; g.fillRect(180, 330, 600, 60); g.fillRect(180, 250, 40, 100); g.fillRect(660, 190 + 0, 120, 160);
-      var p1 = 40 + (1 - lift) * 0, y1 = 250 + 20 * lift; g.fillStyle = '#9ad1ff'; g.fillRect(185, y1, 30, 10); L.emoji('👇', 200, y1 - 28, 34); L.txt(S.f1 + ' N', 200, y1 - 62, '#7ff0e4', 'center', 18);
-      var y2 = 190 - lift * 55; g.fillStyle = '#9ad1ff'; g.fillRect(665, y2 + 40, 110, 10); L.emoji('🚗', 720, y2 + 15, 56); L.txt(f2.toFixed(0) + ' N de empuje', 720, 140, ok ? '#8be8ae' : '#ffe08a', 'center', 18);
+      if (!V3) { g.fillStyle = '#2b6cb0'; g.fillRect(180, 330, 600, 60); g.fillRect(180, 250, 40, 100); g.fillRect(660, 190 + 0, 120, 160); }
+      var p1 = 40 + (1 - lift) * 0, y1 = 250 + 20 * lift; if (!V3) { g.fillStyle = '#9ad1ff'; g.fillRect(185, y1, 30, 10); } L.emoji('👇', 200, y1 - 28, 34); L.txt(S.f1 + ' N', 200, y1 - 62, '#7ff0e4', 'center', 18);
+      var y2 = 190 - lift * 55; P3.lift = lift; if (!V3) { g.fillStyle = '#9ad1ff'; g.fillRect(665, y2 + 40, 110, 10); L.emoji('🚗', 720, y2 + 15, 56); } L.txt(f2.toFixed(0) + ' N de empuje', 720, 96, ok ? '#8be8ae' : '#ffe08a', 'center', 18);
       L.txt(ok ? '✔ ¡El carro sube! (800 N)' : 'Falta fuerza: el carro pesa 800 N', 480, 440, ok ? '#8be8ae' : '#9db8ff', 'center', 20);
     }
   },
@@ -45,3 +47,21 @@ function preg(L) {
     ['🛑 ¿Qué principio usan los frenos hidráulicos?', ['A) Principio de Pascal', 'B) Ley de Ohm', 'C) Ley de la gravedad'], 0, 'Principio de Pascal']
   ];
   L.nuevoQuiz(it.map(function (x) { return { q: x[0] + '   ' + x[1].join('   '), e: '', a: x[2], fb: x[3] }; }), 5, 4); L.S.ops = ['A', 'B', 'C']; L.ctl(); }
+
+/* ---------- prensa hidráulica 3D ---------- */
+function iniciar3d() {
+  var V = window.Vista3D ? Vista3D({ z: 9, fov: 40, auto: 0.1 }) : null; if (!V) return; V3 = V; var T = THREE, K = 0.01424, WX = function (x) { return (x - 480) * K; }, WY = function (y) { return (230 - y) * K; };
+  V.grupo.rotation.x = 0.12; var vid = new T.MeshPhysicalMaterial({ color: 0xcfe8ff, transparent: true, opacity: 0.2, roughness: 0.05, side: T.DoubleSide, depthWrite: false }), agua = new T.MeshStandardMaterial({ color: 0x2b8ae0, emissive: 0x0a3a7a, emissiveIntensity: 0.3, transparent: true, opacity: 0.85 });
+  var rP = 20 * K, rG = 60 * K, yBase = WY(390), yTop1 = WY(250), yTop2 = WY(190);
+  var base = new T.Mesh(new T.BoxGeometry((780 - 180) * K, 60 * K, 0.9), agua); base.position.set(WX(480), WY(360), 0); V.grupo.add(base);
+  var tp = new T.Mesh(new T.CylinderGeometry(rP, rP, (350 - 250) * K, 28, 1, true), vid), tg = new T.Mesh(new T.CylinderGeometry(rG, rG, (350 - 190) * K, 36, 1, true), vid); tp.position.set(WX(200), WY(300), 0); tg.position.set(WX(720), WY(270), 0); V.grupo.add(tp, tg);
+  var ap = new T.Mesh(new T.CylinderGeometry(rP * 0.92, rP * 0.92, (350 - 250) * K, 28), agua), ag = new T.Mesh(new T.CylinderGeometry(rG * 0.94, rG * 0.94, (350 - 190) * K, 36), agua); ap.position.copy(tp.position); ag.position.copy(tg.position); V.grupo.add(ap, ag);
+  var pp = new T.Mesh(new T.CylinderGeometry(rP * 0.96, rP * 0.96, 0.12, 28), V.mat(0xdddddd, 0x222222)), vp = new T.Mesh(new T.CylinderGeometry(0.06, 0.06, 0.7, 10), V.mat(0xdddddd, 0x222222)), pg = new T.Mesh(new T.CylinderGeometry(rG * 0.96, rG * 0.96, 0.14, 36), V.mat(0xdddddd, 0x222222)); V.grupo.add(pp, vp, pg);
+  var car = new T.Group(), ch = new T.Mesh(new T.BoxGeometry(1.4, 0.4, 0.7), V.mat(0xe04a4a, 0x400a0a)), cab = new T.Mesh(new T.BoxGeometry(0.7, 0.32, 0.6), V.mat(0x9db8ff, 0x223a6a)); cab.position.set(-0.1, 0.36, 0); car.add(ch, cab); [[-0.45, -0.38], [0.45, -0.38], [-0.45, 0.38], [0.45, 0.38]].forEach(function (p) { var w = new T.Mesh(new T.CylinderGeometry(0.16, 0.16, 0.12, 14), V.mat(0x111111, 0x000000)); w.rotation.x = Math.PI / 2; w.position.set(p[0], -0.22, p[1]); car.add(w); }); V.grupo.add(car);
+  V.anim(function (dt, t) {
+    var S = LAB.S, lift = P3.lift || 0, y1 = 250 + 20 * lift, y2 = 190 - lift * 55; pp.position.set(WX(200), WY(y1), 0); vp.position.set(WX(200), WY(y1) + 0.4, 0); pg.position.set(WX(720), WY(y2 + 40), 0); car.position.set(WX(720), WY(y2 + 40) + 0.42, 0);
+    car.rotation.y = 0.1 * Math.sin(t * 0.8);
+  });
+  V.mostrar(LAB.paso === 1);
+}
+iniciar3d();
