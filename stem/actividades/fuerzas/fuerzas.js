@@ -37,6 +37,7 @@
     if (r.t > 9 || (r.t > T_EMPUJE && r.v <= 0.001)) { r.fin = true; r.a = 0; }
   }
   function txt(s, x, y, col, al, tam) { g.font = '600 ' + (tam || 16) + 'px "JetBrains Mono",monospace'; g.fillStyle = col || '#cfe6ff'; g.textAlign = al || 'left'; g.fillText(s, x, y); }
+  var V3 = null, C3 = { mw: 100, M: 4, v: 0 };
   function dibujar() {
     var bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#07131f'); bg.addColorStop(1, '#040a14'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
     var x0 = run ? run.x : 0, PX = 70, camx = 260;
@@ -48,9 +49,12 @@
     if (run && run.v > 0.5) { g.strokeStyle = 'rgba(127,240,228,' + Math.min(.5, run.v / 14) + ')'; g.lineWidth = 2; for (var q = 0; q < 14; q++) { var lx = ((q * 97 - run.x * PX * 1.6) % W + W) % W, ly = 100 + (q * 53 % 100), ll = 20 + run.v * 6; g.beginPath(); g.moveTo(lx, ly); g.lineTo(lx + ll, ly); g.stroke(); } }
     // carro
     var mw = 70 + (run ? run.M : M) * 6; var cx = camx, cy = py - 10;
+    if (!V3) {
     g.fillStyle = '#7ff0e4'; var gr = g.createLinearGradient(0, cy - 44, 0, cy); gr.addColorStop(0, '#9db8ff'); gr.addColorStop(1, '#4fd1c5'); g.fillStyle = gr; g.beginPath(); g.roundRect ? g.roundRect(cx - mw / 2, cy - 46, mw, 40, 8) : g.rect(cx - mw / 2, cy - 46, mw, 40); g.fill();
     g.fillStyle = '#06121f'; g.beginPath(); g.arc(cx - mw / 2 + 16, cy - 2, 11, 0, 7); g.arc(cx + mw / 2 - 16, cy - 2, 11, 0, 7); g.fill(); g.strokeStyle = '#7ff0e4'; g.lineWidth = 2; g.stroke();
     txt((run ? run.M : M) + ' kg', cx, cy - 20, '#06121f', 'center', 17);
+    }
+    if (V3) { C3.mw = mw; C3.M = run ? run.M : M; C3.v = run ? run.v : 0; txt(C3.M + ' kg', cx, cy - 74, '#cfe6ff', 'center', 17); }
     // flecha de fuerza
     var empuja = run && !run.fin && run.t < T_EMPUJE, fv = run ? run.F : F;
     var alen = 18 + (empuja ? fv : fv * 0.6) * 6; g.globalAlpha = empuja ? 1 : 0.35; g.strokeStyle = '#ffe08a'; g.fillStyle = '#ffe08a'; g.lineWidth = 6; g.beginPath(); g.moveTo(cx - mw / 2 - alen - 6, cy - 26); g.lineTo(cx - mw / 2 - 6, cy - 26); g.stroke(); g.beginPath(); g.moveTo(cx - mw / 2 - 2, cy - 26); g.lineTo(cx - mw / 2 - 18, cy - 38); g.lineTo(cx - mw / 2 - 18, cy - 14); g.fill(); g.globalAlpha = 1;
@@ -66,6 +70,23 @@
     g.strokeStyle = 'rgba(255,224,138,.5)'; g.setLineDash([5, 5]); g.beginPath(); g.moveTo(gx + gw * T_EMPUJE / 9, gy); g.lineTo(gx + gw * T_EMPUJE / 9, gy + gh); g.stroke(); g.setLineDash([]); txt('suelta', gx + gw * T_EMPUJE / 9 + 4, gy + 14, '#ffe08a', 'left', 12);
     if (run && run.pts.length > 1) { var vm = 12; g.save(); g.strokeStyle = '#c9a8ff'; g.lineWidth = 3; g.shadowColor = '#c9a8ff'; g.shadowBlur = 10; g.beginPath(); run.pts.forEach(function (p, i) { var px = gx + gw * p[0] / 9, py2 = gy + gh - gh * Math.min(1, p[1] / vm); if (i) g.lineTo(px, py2); else g.moveTo(px, py2); }); g.stroke(); g.restore(); }
     if (!run) txt('Pulsa «Empujar» para lanzar el carro', W / 2, 160, '#7fa6c8', 'center', 18);
+  }
+  /* ---------- carro de laboratorio 3D ---------- */
+  if (window.Vista3D) {
+    V3 = Vista3D({ z: 9, fov: 40, auto: 0, fijo: true }); var T = THREE, K = 0.01424; V3.camera.position.set(0, 1.0, 9); V3.camera.lookAt(0, 0.3, 0);
+    var car = new T.Group(), met = V3.mat(0x4fd1c5, 0x0a4a44), cuerpo = new T.Mesh(new T.BoxGeometry(1, 0.42, 0.9), met), techo = new T.Mesh(new T.BoxGeometry(0.9, 0.06, 0.8), V3.mat(0x9db8ff, 0x223a6a)); techo.position.y = 0.24; car.add(cuerpo, techo);
+    var ruedas = []; [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(function (p) { var r = new T.Mesh(new T.CylinderGeometry(0.17, 0.17, 0.12, 18), V3.mat(0x1a2638, 0x050a12)); r.rotation.x = Math.PI / 2; r.userData = { sx: p[0], sz: p[1] }; car.add(r); ruedas.push(r); var ll = new T.Mesh(new T.CylinderGeometry(0.07, 0.07, 0.13, 10), V3.mat(0x7ff0e4, 0x1a8a80)); ll.rotation.x = Math.PI / 2; r.add(ll); ll.rotation.set(0, 0, 0); });
+    var bloques = []; for (var i = 0; i < 6; i++) { var b = new T.Mesh(new T.BoxGeometry(0.34, 0.2, 0.34), V3.mat(i % 2 ? 0xffd05c : 0xff8a6a, 0x201005)); b.visible = false; car.add(b); bloques.push(b); }
+    var suelo = new T.Mesh(new T.BoxGeometry(14, 0.1, 2.6), V3.mat(0x0d2236, 0x050f1a)); suelo.visible = false;
+    var chispas = []; for (var c = 0; c < 20; c++) { var sp = new T.Mesh(new T.SphereGeometry(0.035, 6, 5), new T.MeshBasicMaterial({ color: 0xffb060 })); sp.visible = false; V3.grupo.add(sp); chispas.push({ m: sp, v: 0, vx: 0, vy: 0 }); }
+    V3.grupo.add(car); var hi = 0;
+    V3.anim(function (dt, t) {
+      var w = C3.mw * K, v = C3.v; car.position.set((260 - 480) * K, 0.58, 0); car.scale.set(w, 1, 1); car.rotation.y = -0.35; car.position.y = 0.58 + 0.015 * Math.sin(t * 20 * Math.min(1, v / 3));
+      ruedas.forEach(function (r) { r.position.set(r.userData.sx * 0.34, -0.26, r.userData.sz * 0.5); r.scale.set(1 / w, 1, 1); r.rotation.y += -v * dt * 4; });
+      var nb = Math.min(6, Math.round(C3.M / 2)); bloques.forEach(function (b, i) { b.visible = i < nb; b.position.set(-0.3 + (i % 3) * 0.3, 0.37 + Math.floor(i / 3) * 0.21, 0); b.scale.set(0.34 / w * w, 1, 1); });
+      var rozando = run && run.MU > 0 && run.v > 0.3; if (rozando && Math.random() < dt * 30) { var o = chispas[hi++ % chispas.length]; o.v = 0.5; o.vx = 0.8 + Math.random() * 0.8; o.vy = 0.8 + Math.random(); o.m.position.set((260 - 480) * K + 0.3 * w, 0.32, (Math.random() - 0.5) * 0.8); }
+      chispas.forEach(function (o) { if (o.v > 0) { o.v -= dt; o.vy -= 5 * dt; o.m.visible = true; o.m.position.x += o.vx * dt; o.m.position.y += o.vy * dt; } else o.m.visible = false; });
+    });
   }
   var last = 0;
   function frame(ms) { var dt = Math.min(0.05, (ms - last) / 1000); last = ms; simular(dt); dibujar(); requestAnimationFrame(frame); }
