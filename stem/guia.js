@@ -15,7 +15,7 @@ async function guia(e) {
 }
 function vista(e, m, esPropia) {
   var d = $('guia'), li = function (a) { return '<ul>' + a.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'; };
-  var h = '<div class="gh"><b>' + e.icono + ' ' + esc(e.es.n) + ' · Guía Makerspace (' + e.grado + '°)' + (esPropia ? ' <small class="mia">mi versión</small>' : '') + '</b><span><button class="btn sec" type="button" id="gEd">✏️ Editar</button> ' + (esPropia ? '<button class="btn sec" type="button" id="gRes">↩️ Restaurar original</button> ' : '') + '<button class="btn sec" type="button" onclick="window.print()">🖨️ Imprimir</button> <button class="btn" type="button" onclick="document.getElementById(\'guia\').close()">Cerrar</button></span></div><div class="gc">';
+  var h = '<div class="gh"><b>' + e.icono + ' ' + esc(e.es.n) + ' · Guía Makerspace (' + e.grado + '°)' + (esPropia ? ' <small class="mia">mi versión</small>' : '') + '</b><span><button class="btn sec" type="button" id="gEd">✏️ Editar</button> ' + (esPropia ? '<button class="btn sec" type="button" id="gRes">↩️ Restaurar original</button> ' : '') + '<button class="btn sec" type="button" onclick="STEMGUIA.imprimir()">🖨️ Imprimir</button> <button class="btn" type="button" onclick="document.getElementById(\'guia\').close()">Cerrar</button></span></div><div class="gc">';
   h += '<div class="meta"><span>⏱ ' + esc(m.dur) + '</span><span>👥 ' + esc(m.equipo) + '</span><span>📍 ' + esc(m.espacio) + '</span></div>';
   h += '<h3>Objetivo de aprendizaje</h3><div class="ob">' + esc(m.obj) + '</div><h3>Conexión con el laboratorio digital</h3><p style="margin:0;color:var(--muted);line-height:1.55">' + esc(m.lab) + '</p>';
   h += '<h3>Materiales</h3><table><tr><th>Material</th><th>Cantidad</th><th>Nota</th></tr>' + m.mat.map(function (r) { return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>'; }).join('') + '</table>';
@@ -114,5 +114,17 @@ function botonLab() {
   var b = document.createElement('button'); b.id = 'bGuiaLab'; b.type = 'button'; b.className = 'btn-guia'; b.textContent = '🛠️ Guía Makerspace (docente)'; b.onclick = function () { guia(e); };
   var der = document.querySelector('.top .der') || document.querySelector('.top .wrap'); if (der) der.insertBefore(b, der.firstChild);
 }
-window.STEMGUIA = { abrir: guia };
+/* Imprimir: se genera un documento limpio en un iframe oculto (sin fondo, sin desenfoques ni la página detrás) y se imprime una sola vez. */
+var imprimiendo = false;
+function imprimir() {
+  if (imprimiendo) return; var gc = document.querySelector('#guia .gc'), t = document.querySelector('#guia .gh b'); if (!gc) return; imprimiendo = true;
+  var btn = document.querySelector('#guia .gh button[onclick*="imprimir"]'); if (btn) { btn.disabled = true; btn.textContent = 'Preparando…'; }
+  var css = 'body{font:13px/1.5 system-ui,Arial,sans-serif;color:#111;margin:0;padding:0}h1{font-size:19px;margin:0 0 6px}h3{margin:16px 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#036}.meta span{display:inline-block;margin:0 6px 6px 0;padding:3px 9px;border:1px solid #999;border-radius:12px;font-size:12px}.ob{padding:8px 10px;border:1px solid #888;border-radius:8px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #888;padding:5px 7px;text-align:left;vertical-align:top}th{background:#eee}ul,ol{margin:0;padding-left:20px}.paso{border:1px solid #999;border-radius:8px;padding:6px 10px;margin:0 0 8px;page-break-inside:avoid}.paso h4{margin:0 0 3px;font-size:13px}.paso small{margin-left:8px;color:#555;font-weight:400}.mia{font-size:10px;border:1px solid #999;padding:1px 6px;border-radius:8px}p{margin:0}tr{page-break-inside:avoid}.pie{margin-top:14px;font-size:11px;color:#555;text-align:center}@page{margin:14mm}';
+  var fr = document.createElement('iframe'); fr.setAttribute('aria-hidden', 'true'); fr.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
+  var fin = function () { imprimiendo = false; if (btn) { btn.disabled = false; btn.textContent = '🖨️ Imprimir'; } setTimeout(function () { fr.remove(); }, 1500); };
+  fr.onload = function () { try { var w = fr.contentWindow; w.onafterprint = fin; w.focus(); setTimeout(function () { w.print(); setTimeout(fin, 1500); }, 60); } catch (e) { fin(); window.print(); } };
+  fr.srcdoc = '<!doctype html><html lang="es"><head><meta charset="utf-8"><title>' + esc((t ? t.textContent : 'Guía Makerspace')) + '</title><style>' + css + '</style></head><body><h1>' + esc(t ? t.textContent : 'Guía Makerspace') + '</h1>' + gc.innerHTML + '<div class="pie">STEM Labs · Gi School · labs.iscosanchez.com</div></body></html>';
+  document.body.appendChild(fr);
+}
+window.STEMGUIA = { abrir: guia, imprimir: imprimir };
 })();
