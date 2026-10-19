@@ -25,7 +25,7 @@
     if (paso === 1) { if (F < 2) vistos.fBaja = 1; if (F > 8) vistos.fAlta = 1; if (vistos.fBaja && vistos.fAlta) cumplir(1); }
     if (paso === 2) { var d = Math.abs(((FASE % 360) + 360) % 360 - 180); if (d < 8) cumplir(2); }
   }
-  var CY = H / 2, AMP = 150;
+  var CY = 168, AMP = 100, V3 = null, S3 = null;
   function y(x, a, f, ph, t) { return CY - a * AMP * Math.sin(2 * Math.PI * f * x / W - 2.6 * t + ph); }
   function traza(a, f, ph, t, col, ancho, glow) {
     g.save(); g.strokeStyle = col; g.lineWidth = ancho; g.lineJoin = 'round'; if (glow) { g.shadowColor = col; g.shadowBlur = glow; }
@@ -50,7 +50,7 @@
     } else {
       traza(0.6, F, 0, t, 'rgba(127,240,228,.75)', 3, 12); traza(0.6, F, FASE * Math.PI / 180, t, 'rgba(201,168,255,.75)', 3, 12); suma(t);
       var amp = Math.abs(2 * Math.cos(FASE * Math.PI / 360)), est = amp > 1.6 ? 'REFUERZO (constructiva)' : amp < 0.2 ? 'SE ANULAN (destructiva)' : 'SUMA PARCIAL';
-      txt(est, W / 2, H - 20, amp < 0.2 ? '#8be8ae' : '#ffe08a', 'center', 20);
+      txt(est, W / 2, 292, amp < 0.2 ? '#8be8ae' : '#ffe08a', 'center', 20);
       txt('— onda 1', 24, 34, '#7ff0e4'); txt('— onda 2', 24, 58, '#c9a8ff'); txt('— suma', 24, 82, '#ffffff');
     }
     if (paso < 2) { txt('AMPLITUD ' + Math.round(A * 100) + '%', W - 24, 34, '#7ff0e4', 'right'); txt('FRECUENCIA ' + F.toFixed(1) + ' ciclos · ' + Math.round(hz()) + ' Hz', W - 24, 60, '#c9a8ff', 'right'); txt(sonando ? (A > 0.7 ? '🔊 fuerte' : A < 0.25 ? '🔈 suave' : '🔉 medio') + ' · ' + (F > 6.5 ? 'agudo' : F < 3 ? 'grave' : 'medio') : 'sonido apagado', W - 24, 86, '#cfe6ff', 'right'); }
@@ -73,6 +73,24 @@
   }
   function ir(n) { paso = n; if (n === 2) sonido(false); ctl(); pintar(); }
   $('bAnt').onclick = function () { if (paso > 0) ir(paso - 1); }; $('bSig').onclick = function () { if (paso < 2) ir(paso + 1); };
+  /* ---------- superficie del agua en 3D (misma amplitud, frecuencia y desfase) ---------- */
+  if (window.Vista3D) {
+    V3 = Vista3D({ z: 9, fov: 40, auto: 0, fijo: true }); var T = THREE, NX = 150, NZ = 36, W3 = 13.4, D3 = 3.4;
+    var geo = new T.PlaneGeometry(W3, D3, NX, NZ); geo.rotateX(-Math.PI / 2);
+    var mat = new T.MeshStandardMaterial({ color: 0x1f7fd0, emissive: 0x06305a, emissiveIntensity: 0.35, roughness: 0.25, metalness: 0.1, transparent: true, opacity: 0.92, flatShading: false });
+    var agua = new T.Mesh(geo, mat), rej = new T.Mesh(geo, new T.MeshBasicMaterial({ color: 0x7ff0e4, wireframe: true, transparent: true, opacity: 0.12 }));
+    agua.position.set(0, -2.5, 0); rej.position.copy(agua.position); V3.grupo.add(agua, rej); V3.camera.position.set(0, 1.6, 9.2); V3.camera.lookAt(0, -1.9, 0); V3.scene.add(new T.PointLight(0xaee8ff, 1.3, 40)); V3.scene.children[V3.scene.children.length - 1].position.set(2, 5, 6);
+    var pos = geo.attributes.position, base = []; for (var i = 0; i < pos.count; i++) base.push([pos.getX(i), pos.getZ(i)]);
+    S3 = { pos: pos, base: base, geo: geo };
+    V3.anim(function (dt, tt) {
+      var k = 2 * Math.PI * F * 0.32, a = A * 0.2, fase = FASE * Math.PI / 180, I = paso === 2;
+      for (var j = 0; j < pos.count; j++) { var x = base[j][0], z = base[j][1], y;
+        if (!I) y = a * Math.sin(k * (x / W3 * 4) - tt * 4);
+        else { var r1 = Math.hypot(x + 3.4, z), r2 = Math.hypot(x + 3.4, z - 0); y = 0.12 * Math.sin(k * (x / W3 * 4) - tt * 4) + 0.12 * Math.sin(k * (x / W3 * 4) - tt * 4 + fase); }
+        pos.setY(j, y + (I ? 0 : 0) ); }
+      pos.needsUpdate = true; geo.computeVertexNormals();
+    });
+  }
   window.__ondas = { ir: ir, setA: function (v) { A = v; }, setF: function (v) { F = v; }, setFase: function (v) { FASE = v; }, estado: function () { return { hecho: hecho.slice() }; } };
   ctl(); pintar(); requestAnimationFrame(dibujar);
 })();
