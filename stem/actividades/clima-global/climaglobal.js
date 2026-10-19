@@ -24,15 +24,16 @@
     for (var y = 2024; y <= 2100; y++) { var f = y < 2050 ? 1 - (1 - (1 - r / 100)) * 0 - (r / 100) * (y - 2024) / 26 : 1 - r / 100; c += emis * Math.max(0, f) - 0.5 * (b / 100); c = Math.max(380, c); serie.push([y, c, 1.2 + 3.5 * Math.log(c / 420) / Math.LN2]); }
     return serie;
   }
+  var V3 = null, E3 = { dens: 0 };
   function dibTierra() {
     var bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#02050c'); bg.addColorStop(1, '#0a1730'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
     for (var i = 0; i < 50; i++) { g.fillStyle = 'rgba(255,255,255,.6)'; g.fillRect((i * 151) % W, (i * 47) % H, 1.6, 1.6); }
     // sol
     var sh = g.createRadialGradient(80, 230, 5, 80, 230, 140); sh.addColorStop(0, 'rgba(255,230,120,.95)'); sh.addColorStop(1, 'rgba(255,230,120,0)'); g.fillStyle = sh; g.fillRect(0, 90, 220, 280); g.fillStyle = '#ffd95e'; g.beginPath(); g.arc(80, 230, 36, 0, 7); g.fill();
     // atmósfera (capa de gases) y tierra
-    var dens = Math.max(0, Math.min(1, (gas - 200) / 500)); g.strokeStyle = 'rgba(255,150,90,' + (0.15 + dens * 0.5) + ')'; g.lineWidth = 14 + dens * 40; g.beginPath(); g.arc(700, 230, 205 + dens * 20, 0, 7); g.stroke();
-    var tg = g.createRadialGradient(620, 210, 20, 700, 230, 190); tg.addColorStop(0, '#4da3ff'); tg.addColorStop(0.6, '#2b78d0'); tg.addColorStop(1, '#10305e'); g.fillStyle = tg; g.beginPath(); g.arc(700, 230, 190, 0, 7); g.fill();
-    g.fillStyle = '#3fbf6a'; [[640, 170, 40], [740, 280, 50], [690, 330, 28]].forEach(function (c) { g.beginPath(); g.ellipse(c[0], c[1], c[2], c[2] * 0.7, 0.4, 0, 7); g.fill(); });
+    var dens = Math.max(0, Math.min(1, (gas - 200) / 500)); if (V3) { V3.mostrar(paso === 0); E3.dens = dens; } else { g.strokeStyle = 'rgba(255,150,90,' + (0.15 + dens * 0.5) + ')'; g.lineWidth = 14 + dens * 40; g.beginPath(); g.arc(700, 230, 205 + dens * 20, 0, 7); g.stroke(); }
+    if (!V3) { var tg = g.createRadialGradient(620, 210, 20, 700, 230, 190); tg.addColorStop(0, '#4da3ff'); tg.addColorStop(0.6, '#2b78d0'); tg.addColorStop(1, '#10305e'); g.fillStyle = tg; g.beginPath(); g.arc(700, 230, 190, 0, 7); g.fill();
+    g.fillStyle = '#3fbf6a'; [[640, 170, 40], [740, 280, 50], [690, 330, 28]].forEach(function (c) { g.beginPath(); g.ellipse(c[0], c[1], c[2], c[2] * 0.7, 0.4, 0, 7); g.fill(); }); }
     // rayos del Sol (amarillos) y calor reflejado (rojos): más gases → más rebotan hacia abajo
     for (var r = 0; r < 6; r++) { var y0 = 150 + r * 30, ph = (tiempo * 0.5 + r * 0.17) % 1; g.strokeStyle = 'rgba(255,224,130,.8)'; g.lineWidth = 3; g.beginPath(); g.moveTo(120, 230 + (y0 - 230) * 0.3); g.lineTo(120 + ph * 500, 230 + (y0 - 230) * 0.3 + ph * (y0 - 215) * 0.2 * 0); g.stroke(); var px = 140 + ph * 480; g.fillStyle = '#ffe08a'; g.beginPath(); g.arc(px, 230 + (y0 - 230) * 0.3, 5, 0, 7); g.fill(); }
     for (var q = 0; q < 6; q++) { var tt = (tiempo * 0.45 + q / 6) % 1, rx = 780 + Math.cos(q * 1.1) * 40, ry = 120 + q * 20, vuelve = (q / 6) < dens * 1.1; var yy = vuelve ? ry + Math.min(tt, 0.5) * 60 - Math.max(0, tt - 0.5) * 60 : ry - tt * 120; g.fillStyle = vuelve ? '#ff7a5c' : '#ffb49a'; g.globalAlpha = 0.9 - (vuelve ? 0 : tt * 0.7); g.beginPath(); g.arc(rx + (vuelve ? Math.sin(tt * 6) * 8 : 0), yy, 5, 0, 7); g.fill(); g.globalAlpha = 1; }
@@ -78,6 +79,15 @@
   }
   function ir(n) { paso = n; msj = ''; sim = null; if (n === 1) nuevo(); ctl(); pintar(); }
   $('bAnt').onclick = function () { if (paso > 0) ir(paso - 1); }; $('bSig').onclick = function () { if (paso < 2) ir(paso + 1); };
+  /* ---------- Tierra 3D con capa de gases ---------- */
+  if (window.Vista3D) {
+    V3 = Vista3D({ z: 9, fov: 40, auto: 0, fijo: true, luces: false }); var T = THREE, K = 0.01424; V3.mostrar(false); V3.scene.add(new T.AmbientLight(0x223355, 0.8)); var sol = new T.DirectionalLight(0xfff0cc, 1.6); sol.position.set(-8, 2, 6); V3.scene.add(sol);
+    var tex = V3.textura(512, 256, function (c, w, h) { c.fillStyle = '#1d5fb8'; c.fillRect(0, 0, w, h); c.fillStyle = '#3fbf6a'; for (var i = 0; i < 20; i++) { c.beginPath(); c.ellipse(Math.random() * w, 30 + Math.random() * (h - 60), 14 + Math.random() * 44, 8 + Math.random() * 24, Math.random() * 3, 0, 7); c.fill(); } c.fillStyle = '#f4fbff'; c.fillRect(0, 0, w, 14); c.fillRect(0, h - 14, w, 14); });
+    var nub = V3.textura(512, 256, function (c, w, h) { c.clearRect(0, 0, w, h); c.fillStyle = 'rgba(255,255,255,.55)'; for (var i = 0; i < 34; i++) { c.beginPath(); c.ellipse(Math.random() * w, Math.random() * h, 12 + Math.random() * 40, 4 + Math.random() * 10, 0, 0, 7); c.fill(); } });
+    var R = 150 * K, tierra = new T.Mesh(new T.SphereGeometry(R, 64, 48), new T.MeshStandardMaterial({ map: tex, roughness: 0.85, emissive: 0xff5a1a, emissiveIntensity: 0 })), nubes = new T.Mesh(new T.SphereGeometry(R * 1.015, 48, 36), new T.MeshStandardMaterial({ map: nub, transparent: true, depthWrite: false })), aire = new T.Mesh(new T.SphereGeometry(R * 1.1, 48, 36), new T.MeshBasicMaterial({ color: 0x6fb8ff, transparent: true, opacity: 0.18, side: T.BackSide, blending: T.AdditiveBlending, depthWrite: false }));
+    var g3 = new T.Group(); g3.position.set((700 - 480) * K, 0, 0); g3.add(tierra, nubes, aire); V3.grupo.add(g3); var c0 = new T.Color(0x6fb8ff), c1 = new T.Color(0xff8a3a);
+    V3.anim(function (dt) { var d = E3.dens; tierra.rotation.y += dt * 0.12; nubes.rotation.y += dt * 0.16; aire.material.color.copy(c0).lerp(c1, d); aire.material.opacity = 0.14 + d * 0.2; var sc = 1 + d * 0.1; aire.scale.setScalar(sc); tierra.material.emissiveIntensity = d * 0.28; });
+  }
   window.__cg = { ir: ir, setGas: function (v) { gas = v; if (v <= 300) vistos.bajo = 1; if (v >= 400 && v <= 440) vistos.actual = 1; if (v >= 580) vistos.alto = 1; if (vistos.bajo && vistos.actual && vistos.alto) cumplir(0); }, c1: function () { return ronda < 6 ? cola[ronda][1] : null; }, resp: resp, setRed: function (v) { red = v; sim = null; }, setBos: function (v) { bos = v; sim = null; }, simular: function () { sim = [proyectar(red, bos)[0]]; resultado = null; }, final: function (r, b) { var s = proyectar(r, b); return s[76][2]; }, estado: function () { return { hecho: hecho.slice(), resultado: resultado }; } };
   ctl(); pintar(); requestAnimationFrame(frame);
 })();
