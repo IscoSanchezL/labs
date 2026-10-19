@@ -14,7 +14,7 @@ async function backendReal() {
     import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'),
     import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js')
   ]);
-  const app = initializeApp(CONF, 'stem-labs'), auth = A.getAuth(app), db = F.getFirestore(app), prov = new A.GoogleAuthProvider(); prov.setCustomParameters({ prompt: 'select_account' });
+  const app = initializeApp(CONF, 'stem-labs'), auth = A.getAuth(app), db = F.initializeFirestore(app, { experimentalAutoDetectLongPolling: true }), prov = new A.GoogleAuthProvider(); prov.setCustomParameters({ prompt: 'select_account' });
   const ref = (c, id) => F.doc(db, c, id);
   return {
     onSesion: (fn) => A.onAuthStateChanged(auth, (u) => fn(u ? { email: String(u.email || '').toLowerCase(), nombre: u.displayName || '', foto: u.photoURL || '' } : null)),

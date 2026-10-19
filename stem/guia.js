@@ -8,10 +8,15 @@ function esc(t) { return String(t == null ? '' : t).replace(/&/g, '&amp;').repla
 var DOC = function () { return window.DOCENTES; };
 var CUSTOM = {};
 /* ---------- guía Makerspace: vista ---------- */
-async function guia(e) {
-  var d = $('guia'), id = e.id, base = MAKER[id], propia = null;
-  try { propia = await DOC().leerGuia(id); } catch (x) { console.error(x); }
-  CUSTOM[id] = propia; vista(e, propia || base, !!propia); if (d.showModal) { if (!d.open) d.showModal(); } else d.setAttribute('open', '');
+function guia(e) {
+  var d = $('guia'), id = e.id, base = MAKER[id]; CUSTOM[id] = CUSTOM[id] || null;
+  vista(e, CUSTOM[id] || base, !!CUSTOM[id]); if (d.showModal) { if (!d.open) d.showModal(); } else d.setAttribute('open', '');
+  /* La guía se abre al instante; la versión propia del docente se busca en segundo plano (máx. 6 s) */
+  var espera = new Promise(function (ok) { setTimeout(function () { ok('tarde'); }, 6000); });
+  Promise.race([DOC().leerGuia(id), espera]).then(function (propia) {
+    if (propia === 'tarde' || !propia) return; CUSTOM[id] = propia;
+    if (d.open && d.getAttribute('data-id') === id && $('gEd')) vista(e, propia, true);
+  }).catch(function (x) { console.error(x); });
 }
 function vista(e, m, esPropia) {
   var d = $('guia'), li = function (a) { return '<ul>' + a.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'; };
@@ -25,7 +30,7 @@ function vista(e, m, esPropia) {
   h += '<h3>Preguntas para guiar la conversación</h3>' + li(m.preg);
   h += '<h3>Rúbrica (3 niveles)</h3><table><tr><th>Criterio</th><th>Inicia</th><th>Avanza</th><th>Logra</th></tr>' + m.rub.map(function (r) { return '<tr><td><b>' + esc(r[0]) + '</b></td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td><td>' + esc(r[3]) + '</td></tr>'; }).join('') + '</table>';
   h += '<h3>Errores comunes</h3>' + li(m.err) + '<h3>Para ir más lejos</h3>' + li(m.ext) + '</div>';
-  d.innerHTML = h; $('gEd').onclick = function () { editor(e, JSON.parse(JSON.stringify(m)), esPropia); };
+  d.innerHTML = h; d.setAttribute('data-id', e.id); $('gEd').onclick = function () { editor(e, JSON.parse(JSON.stringify(m)), esPropia); };
   if (esPropia) $('gRes').onclick = async function () { if (!confirm('¿Volver a la guía original? Se borran tus cambios de esta actividad.')) return; await DOC().borrarGuia(e.id); CUSTOM[e.id] = null; vista(e, MAKER[e.id], false); };
 }
 /* ---------- guía Makerspace: editor ---------- */
@@ -120,7 +125,7 @@ function imprimir() {
   if (imprimiendo) return; var gc = document.querySelector('#guia .gc'), t = document.querySelector('#guia .gh b'); if (!gc) return; imprimiendo = true;
   var btn = document.querySelector('#guia .gh button[onclick*="imprimir"]'); if (btn) { btn.disabled = true; btn.textContent = 'Preparando…'; }
   var css = 'body{font:13px/1.5 system-ui,Arial,sans-serif;color:#111;margin:0;padding:0}h1{font-size:19px;margin:0 0 6px}h3{margin:16px 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#036}.meta span{display:inline-block;margin:0 6px 6px 0;padding:3px 9px;border:1px solid #999;border-radius:12px;font-size:12px}.ob{padding:8px 10px;border:1px solid #888;border-radius:8px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #888;padding:5px 7px;text-align:left;vertical-align:top}th{background:#eee}ul,ol{margin:0;padding-left:20px}.paso{border:1px solid #999;border-radius:8px;padding:6px 10px;margin:0 0 8px;page-break-inside:avoid}.paso h4{margin:0 0 3px;font-size:13px}.paso small{margin-left:8px;color:#555;font-weight:400}.mia{font-size:10px;border:1px solid #999;padding:1px 6px;border-radius:8px}p{margin:0}tr{page-break-inside:avoid}.pie{margin-top:14px;font-size:11px;color:#555;text-align:center}@page{margin:14mm}';
-  var fr = document.createElement('iframe'); fr.setAttribute('aria-hidden', 'true'); fr.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
+  var fr = document.createElement('iframe'); fr.setAttribute('aria-hidden', 'true'); fr.style.cssText = 'position:fixed;left:-10000px;top:0;width:794px;height:1123px;border:0';
   var fin = function () { imprimiendo = false; if (btn) { btn.disabled = false; btn.textContent = '🖨️ Imprimir'; } setTimeout(function () { fr.remove(); }, 1500); };
   fr.onload = function () { try { var w = fr.contentWindow; w.onafterprint = fin; w.focus(); setTimeout(function () { w.print(); setTimeout(fin, 1500); }, 60); } catch (e) { fin(); window.print(); } };
   fr.srcdoc = '<!doctype html><html lang="es"><head><meta charset="utf-8"><title>' + esc((t ? t.textContent : 'Guía Makerspace')) + '</title><style>' + css + '</style></head><body><h1>' + esc(t ? t.textContent : 'Guía Makerspace') + '</h1>' + gc.innerHTML + '<div class="pie">STEM Labs · Gi School · labs.iscosanchez.com</div></body></html>';
