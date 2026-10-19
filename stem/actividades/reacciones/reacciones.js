@@ -32,15 +32,16 @@
     var n = lista.length, rr = 15 * sc; lista.forEach(function (el, i) { var ang = n === 1 ? 0 : (i / n) * Math.PI * 2 + 0.6, rad = n === 1 ? 0 : (n === 2 ? 11 : 17) * sc; atom(x + Math.cos(ang) * rad, y + Math.sin(ang) * rad, el, el === 'H' || el === 'Na' ? rr * 0.78 : rr); });
   }
   var POS = [];
+  var V3 = null, MOLS = [];
   function dibujar(ms) {
     var dt = Math.min(0.05, (ms - (dibujar.l || ms)) / 1000); dibujar.l = ms; tiempo += dt;
     var e = eqActual(), bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0a1a2e'); bg.addColorStop(1, '#050b14'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
-    var sp = especies(e), nr = e.r.length, tot = sp.length, ok = balanceada(e);
+    var sp = especies(e), nr = e.r.length, tot = sp.length, ok = balanceada(e); MOLS = [];
     txt(e.n, W / 2, 34, '#9db8ff', 'center', 20);
     // especies y flecha
     var colw = (W - 160) / (tot + 0.4), xs = []; for (var i = 0; i < tot; i++) { var extra = i >= nr ? 0.4 * colw : 0; xs.push(80 + colw * (i + 0.5) + extra); }
     POS = xs;
-    sp.forEach(function (s, i) { var cnt = Math.min(co[i], 6), cx = xs[i]; for (var k = 0; k < cnt; k++) { var col = k % 3, row = Math.floor(k / 3); molecula(s, cx - 70 + col * 70 + (rx ? Math.sin(tiempo * 3 + k) * 3 : 0), 104 + row * 70, 1.1); } txt(String(co[i]) + ' ' + s.f, cx, 250, '#fff', 'center', 28); if (i < nr - 1) txt('+', (xs[i] + xs[i + 1]) / 2, 252, '#9db8ff', 'center', 34); if (i >= nr && i < tot - 1) txt('+', (xs[i] + xs[i + 1]) / 2, 252, '#9db8ff', 'center', 34); });
+    sp.forEach(function (s, i) { var cnt = Math.min(co[i], 6), cx = xs[i]; for (var k = 0; k < cnt; k++) { var col = k % 3, row = Math.floor(k / 3); var mx = cx - 70 + col * 70 + (rx ? Math.sin(tiempo * 3 + k) * 3 : 0), my = 104 + row * 70; if (V3) MOLS.push({ f: s.f, a: s.a, x: mx, y: my }); else molecula(s, mx, my, 1.1); } txt(String(co[i]) + ' ' + s.f, cx, 250, '#fff', 'center', 28); if (i < nr - 1) txt('+', (xs[i] + xs[i + 1]) / 2, 252, '#9db8ff', 'center', 34); if (i >= nr && i < tot - 1) txt('+', (xs[i] + xs[i + 1]) / 2, 252, '#9db8ff', 'center', 34); });
     var fx = (xs[nr - 1] + xs[nr]) / 2; g.strokeStyle = ok ? '#8be8ae' : '#9db8ff'; g.lineWidth = 6; g.beginPath(); g.moveTo(fx - 30, 150); g.lineTo(fx + 20, 150); g.stroke(); g.fillStyle = ok ? '#8be8ae' : '#9db8ff'; g.beginPath(); g.moveTo(fx + 36, 150); g.lineTo(fx + 16, 136); g.lineTo(fx + 16, 164); g.fill();
     // libro de átomos
     var L = conteo(e, 'r'), R = conteo(e, 'p'), els = []; Object.keys(L).concat(Object.keys(R)).forEach(function (x) { if (els.indexOf(x) < 0) els.push(x); });
@@ -66,6 +67,26 @@
   }
   function ir(n) { paso = n; idx = 0; msj = ''; rx = null; reiniciar(); ctl(); pintar(); }
   $('bAnt').onclick = function () { if (paso > 0) ir(paso - 1); }; $('bSig').onclick = function () { if (paso < 2) ir(paso + 1); };
+  /* ---------- moléculas 3D (bolas y varillas) en las posiciones del modelo 2D ---------- */
+  if (window.Vista3D) {
+    V3 = Vista3D({ z: 9, fov: 40, auto: 0, fijo: true }); var T = THREE, K = 0.01424, WX = function (x) { return (x - 480) * K; }, WY = function (y) { return (230 - y) * K; };
+    var CE = { H: [0xf4f8ff, 0.15], O: [0xff5a5a, 0.24], N: [0x5a7aff, 0.25], C: [0x8a93a6, 0.26], Na: [0xb07aff, 0.3], Cl: [0x4fd16a, 0.28], Fe: [0xd08a3a, 0.3] }, pool = [];
+    function armar(m) {
+      var g3 = new T.Group(), at = []; Object.keys(m.a).forEach(function (el) { for (var i = 0; i < m.a[el]; i++) at.push(el); });
+      var ci = 0; if (at.length > 2) { var mc = 99; at.forEach(function (el, i) { var c = at.filter(function (x) { return x === el; }).length; if (el !== 'H' && c < mc) { mc = c; ci = i; } }); }
+      var pos = []; if (at.length === 1) pos.push([0, 0, 0]); else if (at.length === 2) pos = [[-0.26, 0, 0], [0.26, 0, 0]]; else { var otros = at.length - 1, k = 0; at.forEach(function (el, i) { if (i === ci) pos[i] = [0, 0, 0]; else { var a = k / otros * Math.PI * 2 + 0.6; pos[i] = [Math.cos(a) * 0.48, Math.sin(a) * 0.48, (k % 2 ? 0.2 : -0.2)]; k++; } }); }
+      at.forEach(function (el, i) { var c = CE[el] || [0xaaaaaa, 0.25], b = new T.Mesh(new T.SphereGeometry(c[1], 20, 14), V3.mat(c[0], 0x111111)); b.position.set(pos[i][0], pos[i][1], pos[i][2]); g3.add(b); if (at.length > 2 && i !== ci) g3.add(V3.cil(new T.Vector3(0, 0, 0), new T.Vector3(pos[i][0], pos[i][1], pos[i][2]), 0.04, V3.mat(0xcfe6ff, 0x445566))); });
+      if (at.length === 2) g3.add(V3.cil(new T.Vector3(pos[0][0], 0, 0), new T.Vector3(pos[1][0], 0, 0), 0.045, V3.mat(0xcfe6ff, 0x445566)));
+      return g3;
+    }
+    V3.anim(function (dt, t) {
+      for (var i = 0; i < Math.max(pool.length, MOLS.length); i++) {
+        var m = MOLS[i], p = pool[i]; if (!m) { if (p) p.g.visible = false; continue; }
+        if (!p || p.f !== m.f) { if (p) V3.grupo.remove(p.g); p = pool[i] = { f: m.f, g: armar(m) }; V3.grupo.add(p.g); }
+        p.g.visible = true; p.g.position.set(WX(m.x), WY(m.y), 0); p.g.rotation.y = t * 0.8 + i; p.g.rotation.x = 0.4 * Math.sin(t * 0.9 + i);
+      }
+    });
+  }
   window.__rea = { ir: ir, resolver: function () { co = eqActual().sol.slice(); }, set: function (a) { co = a; }, reaccionar: reaccionar, bal: function () { return balanceada(eqActual()); }, estado: function () { return { hecho: hecho.slice(), idx: idx, hechasEq: Object.keys(hechasEq) }; } };
   reiniciar(); ctl(); pintar(); requestAnimationFrame(dibujar);
 })();
