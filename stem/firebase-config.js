@@ -1,10 +1,10 @@
 /* Configuración web del proyecto de Firebase de STEM Labs (es pública: la seguridad la dan las reglas de Firestore).
-   Pasos en docs/DOCENTES_FIREBASE.md. Reemplaza los valores PEGA_… por los de tu proyecto. */
+   Pasos en docs/DOCENTES_FIREBASE.md. */
 window.STEM_FIREBASE = {
-  apiKey: 'PEGA_AQUI_TU_API_KEY',
-  authDomain: 'PEGA_TU_PROYECTO.firebaseapp.com',
-  projectId: 'PEGA_TU_PROYECTO',
-  storageBucket: 'PEGA_TU_PROYECTO.firebasestorage.app',
-  messagingSenderId: 'PEGA_NUMERO',
-  appId: 'PEGA_APP_ID'
+  apiKey: 'AIzaSyCAUXParaAVYm4sDFvt0YPsFcdA-2FLGm0',
+  authDomain: 'stem-labs-gi.firebaseapp.com',
+  projectId: 'stem-labs-gi',
+  storageBucket: 'stem-labs-gi.firebasestorage.app',
+  messagingSenderId: '834498788210',
+  appId: '1:834498788210:web:e1eecaf429fafdefbd3beb'
 };
