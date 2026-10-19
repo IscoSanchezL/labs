@@ -11,7 +11,7 @@
   var MUNDOS = { tierra: { n: 'Tierra', g: 9.8, c1: '#0b2a55', c2: '#7fc0ee', suelo: '#2f5d3a', e: '🌍' }, luna: { n: 'Luna', g: 1.62, c1: '#02040a', c2: '#1a2033', suelo: '#6c7380', e: '🌕' }, marte: { n: 'Marte', g: 3.71, c1: '#2a0f0a', c2: '#b4663f', suelo: '#8a4a2c', e: '🔴' }, jupiter: { n: 'Júpiter', g: 24.8, c1: '#2b1a0b', c2: '#d9a066', suelo: '#7a5a3a', e: '🟠' } };
   var paso = 0, hecho = [false, false, false];
   var ang = 45, vel = 30, mundo = 'tierra', guia = true;
-  var S = 4.4, X0 = 44, GY = 400, TW = 5;
+  var S = 4.4, X0 = 44, GY = 400, TW = 5, V3 = null;
   var obj = 100, disparo = null, parts = [], msj = '', aciertos = 0, mundosOk = {}, tiros2 = [], vel2 = null, tiempo = 0;
   var ac = null;
   function tono(f, v, d, tipo) { try { var C = window.AudioContext || window.webkitAudioContext; if (!ac) ac = new C(); if (ac.state === 'suspended') ac.resume(); var o = ac.createOscillator(), gn = ac.createGain(); o.type = tipo || 'sine'; o.frequency.value = f; gn.gain.setValueAtTime(v, ac.currentTime); gn.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + d); o.connect(gn); gn.connect(ac.destination); o.start(); o.stop(ac.currentTime + d); } catch (e) {} }
@@ -77,12 +77,12 @@
   }
   function dibujar(ms) {
     var dt = Math.min(0.05, (ms - (dibujar.l || ms)) / 1000); dibujar.l = ms; sim(dt);
-    fondo(); objetivo(); if (guia && paso !== 1 && !(disparo && !disparo.fin)) guiaTray(); cañon();
+    fondo(); objetivo(); if (guia && paso !== 1 && !(disparo && !disparo.fin)) guiaTray(); if (!V3) cañon();
     if (disparo) {
       var d = disparo; g.save(); g.lineCap = 'round';
       for (var i = 1; i < d.pts.length; i++) { var a = Math.max(0, 1 - (tiempo - d.pts[i][2]) / 3.5); g.strokeStyle = 'rgba(255,224,138,' + a + ')'; g.lineWidth = 3 + a * 3; g.shadowColor = '#ffd95e'; g.shadowBlur = 14; g.beginPath(); g.moveTo(sx(d.pts[i - 1][0]), sy(d.pts[i - 1][1])); g.lineTo(sx(d.pts[i][0]), sy(d.pts[i][1])); g.stroke(); }
       g.restore();
-      if (!d.fin) { g.fillStyle = '#fff'; g.shadowColor = '#ffd95e'; g.shadowBlur = 20; g.beginPath(); g.arc(sx(d.x), sy(d.y), 8, 0, 7); g.fill(); g.shadowBlur = 0; }
+      if (!d.fin && !V3) { g.fillStyle = '#fff'; g.shadowColor = '#ffd95e'; g.shadowBlur = 20; g.beginPath(); g.arc(sx(d.x), sy(d.y), 8, 0, 7); g.fill(); g.shadowBlur = 0; }
     }
     parts.forEach(function (p) { g.globalAlpha = Math.max(0, p.a); g.fillStyle = p.c; g.beginPath(); g.arc(p.x, p.y, 3, 0, 7); g.fill(); }); g.globalAlpha = 1;
     // lecturas
@@ -113,5 +113,20 @@
   $('bAnt').onclick = function () { if (paso > 0) ir(paso - 1); }; $('bSig').onclick = function () { if (paso < 2) ir(paso + 1); };
   window.__tiro = { ir: ir, setAng: function (v) { ang = v; }, setV: function (v) { vel = v; }, setMundo: function (k) { mundo = k; nuevoObjetivo(); }, disparar: disparar, avanzar: function (s) { for (var i = 0; i < s * 40; i++) sim(0.025); }, obj: function () { return obj; }, g: gg,
     apuntar: function () { var s2 = obj * gg() / (vel * vel); if (s2 > 1) return false; ang = Math.round(Math.asin(s2) * 90 / Math.PI); var R = vel * vel * Math.sin(2 * ang * Math.PI / 180) / gg(); return Math.abs(R - obj) <= TW; }, estado: function () { return { hecho: hecho.slice(), msj: msj }; } };
+  /* ---------- cañón y bala en 3D (mismas coordenadas que el modelo 2D) ---------- */
+  if (window.Vista3D) {
+    V3 = Vista3D({ z: 9, fov: 40, auto: 0, fijo: true }); var T = THREE, K = 0.01424, WX = function (x) { return (x - 480) * K; }, WY = function (y) { return (230 - y) * K; };
+    var can = new T.Group(), base = new T.Mesh(new T.SphereGeometry(0.3, 24, 16, 0, Math.PI * 2, 0, Math.PI / 2), V3.mat(0x2a3550, 0x0a1020)), tubo = new T.Group(), barril = new T.Mesh(new T.CylinderGeometry(0.15, 0.2, 0.9, 20), V3.mat(0x9db8ff, 0x1a2a5a)); barril.rotation.z = -Math.PI / 2; barril.position.x = 0.4; var boca = new T.Mesh(new T.TorusGeometry(0.17, 0.045, 10, 20), V3.mat(0x7ff0e4, 0x1a8a80)); boca.rotation.y = Math.PI / 2; boca.position.x = 0.86; tubo.add(barril, boca); can.add(base, tubo);
+    [-0.2, 0.2].forEach(function (z) { var r = new T.Mesh(new T.CylinderGeometry(0.22, 0.22, 0.08, 20), V3.mat(0x5a3a22, 0x1a0a04)); r.rotation.x = Math.PI / 2; r.position.set(-0.05, -0.12, z); can.add(r); }); V3.grupo.add(can);
+    var bola = new T.Mesh(new T.SphereGeometry(0.11, 20, 16), new T.MeshStandardMaterial({ color: 0xfff2c0, emissive: 0xffc860, emissiveIntensity: 0.9, roughness: 0.3 })); bola.visible = false; var luz = new T.PointLight(0xffd080, 1.4, 4); bola.add(luz); V3.grupo.add(bola);
+    var humo = []; for (var i = 0; i < 26; i++) { var h = new T.Mesh(new T.SphereGeometry(0.09, 8, 6), new T.MeshBasicMaterial({ color: 0xd8dde8, transparent: true, opacity: 0 })); V3.grupo.add(h); humo.push({ m: h, v: 0, vx: 0, vy: 0 }); } var hi = 0, ult = null, fin0 = false;
+    V3.anim(function (dt, t) {
+      can.position.set(WX(X0), WY(GY - 12), 0); tubo.rotation.z = ang * Math.PI / 180; var d = disparo;
+      if (d && !d.fin) { bola.visible = true; bola.position.set(WX(sx(d.x)), WY(sy(d.y)), 0); bola.rotation.z += dt * 8; } else bola.visible = false;
+      if (d && d !== ult) { ult = d; for (var k = 0; k < 10; k++) { var o = humo[hi++ % humo.length]; o.v = 0.8; o.vx = 0.6 + Math.random(); o.vy = 0.3 + Math.random() * 0.6; o.m.position.set(can.position.x + 0.8 * Math.cos(ang * Math.PI / 180), can.position.y + 0.8 * Math.sin(ang * Math.PI / 180), 0); } }
+      if (d && d.fin && !fin0) { fin0 = true; for (var j = 0; j < 12; j++) { var q = humo[hi++ % humo.length]; q.v = 0.7; q.vx = (Math.random() - 0.5) * 2; q.vy = Math.random() * 1.4; q.m.position.set(WX(sx(d.x)), WY(GY), 0); } } if (!d || !d.fin) fin0 = false;
+      humo.forEach(function (o) { if (o.v > 0) { o.v -= dt; o.m.position.x += o.vx * dt; o.m.position.y += o.vy * dt; o.m.scale.multiplyScalar(1 + dt * 1.8); o.m.material.opacity = Math.min(0.6, o.v); } else { o.m.material.opacity = 0; o.m.scale.setScalar(1); } });
+    });
+  }
   ctl(); pintar(); nuevoObjetivo(); requestAnimationFrame(dibujar);
 })();
