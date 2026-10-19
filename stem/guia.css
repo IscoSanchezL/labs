@@ -1,0 +1,42 @@
+/* Guía Makerspace y cuenta de docentes (compartido por el catálogo y cada laboratorio) */
+.exp .mk{margin-top:8px;align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid rgba(255,194,122,.6);background:rgba(255,194,122,.12);color:#ffd9a8;font-size:12.5px;cursor:pointer}
+.exp .mk:hover{background:rgba(255,194,122,.24)}
+dialog#guia{width:min(920px,94vw);max-height:92vh;padding:0;border:1px solid var(--edge);border-radius:22px;background:#0b1626;color:var(--text);box-shadow:0 30px 90px rgba(0,0,0,.7)}
+dialog#guia::backdrop{background:rgba(3,8,16,.78);backdrop-filter:blur(4px)}
+#guia .gh{position:sticky;top:0;z-index:2;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:14px 20px;background:#0b1626;border-bottom:1px solid var(--edge)}
+#guia .gh b{font-size:18px}
+#guia .gc{padding:6px 22px 24px;overflow:auto;max-height:calc(92vh - 62px)}
+#guia h3{margin:22px 0 8px;font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+#guia .meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+#guia .meta span{padding:6px 12px;border-radius:999px;background:var(--glass);border:1px solid var(--edge);font-size:13.5px;color:var(--muted)}
+#guia ul,#guia ol{margin:0;padding-left:22px;line-height:1.6;color:var(--muted)}
+#guia table{width:100%;border-collapse:collapse;font-size:14px}
+#guia th,#guia td{padding:8px 10px;border:1px solid var(--edge);text-align:left;vertical-align:top}
+#guia th{background:rgba(255,255,255,.07);color:var(--text)}
+#guia td{color:var(--muted)}
+#guia .paso{margin:0 0 12px;padding:12px 14px;border-radius:14px;border:1px solid var(--edge);background:rgba(255,255,255,.04)}
+#guia .paso h4{margin:0 0 6px;font-size:15.5px;color:var(--text)}
+#guia .paso h4 small{color:#ffd36b;font-weight:400;margin-left:8px}
+#guia .ob{padding:12px 14px;border-radius:14px;background:rgba(79,209,197,.1);border:1px solid rgba(79,209,197,.4);color:var(--text);line-height:1.55}
+
+dialog#docentes{width:min(720px,94vw);max-height:92vh;padding:0;border:1px solid var(--edge);border-radius:22px;background:#0b1626;color:var(--text);box-shadow:0 30px 90px rgba(0,0,0,.7)}
+dialog#docentes::backdrop{background:rgba(3,8,16,.78);backdrop-filter:blur(4px)}
+#docentes .gh,#guia .gh{position:sticky;top:0;z-index:2;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:14px 20px;background:#0b1626;border-bottom:1px solid var(--edge)}
+#docentes .gc{padding:8px 22px 24px;overflow:auto;max-height:calc(92vh - 62px)}
+.nota{color:var(--muted);line-height:1.55}.nota.ok{color:var(--ok)}.nota.mal{color:#ff9fa9}
+.doc{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 12px;margin:0 0 8px;border-radius:12px;border:1px solid var(--edge);background:rgba(255,255,255,.04)}
+.doc small{color:var(--dim)}.doc .ac{display:flex;gap:6px}.doc input{padding:9px 12px;border-radius:10px;border:1px solid var(--edge);background:#08111d;color:var(--text);min-width:200px}
+.gt{margin:16px 0 8px;font-size:14px;color:var(--text)}.vacio2{margin:0 0 8px;color:var(--dim);font-size:13px}
+#guia .mia{margin-left:8px;padding:2px 8px;border-radius:999px;background:rgba(255,211,107,.15);border:1px solid rgba(255,211,107,.5);color:#ffd36b;font-weight:400;font-size:11.5px}
+#guia .ed label{display:block;margin:8px 0 2px;color:var(--muted);font-size:13px}
+#guia .ed input,#guia .ed textarea{width:100%;padding:8px 10px;border-radius:10px;border:1px solid var(--edge);background:#08111d;color:var(--text);font:inherit;font-size:14px;line-height:1.45}
+#guia .ed td{padding:4px}#guia .ed td.x{width:40px;text-align:center}
+#guia .quitar{border:1px solid rgba(255,107,125,.5);background:rgba(255,107,125,.1);color:#ff9fa9;border-radius:8px;padding:4px 9px;cursor:pointer}
+#guia .mas{margin-top:8px}#guia .epaso .fl{display:flex;gap:10px;align-items:flex-end}#guia .epaso .fl label{flex:1}#guia .epaso .fl label:nth-child(2){flex:0 0 90px}
+#guia .nota{padding:10px 12px;border-radius:12px;background:rgba(79,209,197,.08);border:1px solid rgba(79,209,197,.3)}
+@media print{#docentes,#bDoc{display:none!important}}
+@media print{body>*:not(dialog#guia){display:none!important}dialog#guia{position:static;width:100%;max-height:none;border:0;box-shadow:none;background:#fff;color:#000}#guia .gh button{display:none}#guia .gc{max-height:none;overflow:visible}#guia th{background:#eee;color:#000}#guia td,#guia ul,#guia ol,#guia .meta span{color:#222}#guia .ob,#guia .paso{background:#fff;color:#000;border-color:#999}#guia .paso h4{color:#000}#guia h3{color:#000}}
+
+
+.btn-guia{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,194,122,.6);background:rgba(255,194,122,.12);color:#ffd9a8;font-size:14px;cursor:pointer}
+.btn-guia:hover{background:rgba(255,194,122,.24)}
