@@ -224,6 +224,21 @@
       ],
       "url": "actividades/gimun/",
       "nombre_en": "GIMUN: country position"
+    },
+    {
+      "id": "labsnexo",
+      "nombre": "LabsNexo",
+      "grupos": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "apps-escolares"
+      ],
+      "url": "https://labsnexo.iscosanchez.com",
+      "nombre_en": "LabsNexo"
     }
   ]
 }
