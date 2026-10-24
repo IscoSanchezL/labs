@@ -253,24 +253,20 @@ header.top{position:absolute;top:0;left:0;right:0;z-index:5;background:linear-gr
   </form>
 </dialog>
 <dialog id="dpin">
-  <form id="fpin" autocomplete="on">
+  <form id="fpin" method="dialog">
     <h4>Modo administración</h4>
-    <label for="aCorreo">Correo</label>
-    <input id="aCorreo" type="email" autocomplete="username" required maxlength="100">
-    <label for="aPass">Contraseña</label>
-    <input id="aPass" type="password" autocomplete="current-password" required maxlength="100" aria-describedby="pinErr">
-    <div id="pinErr" role="alert" style="min-height:20px;margin-top:8px;font-size:13px;color:#ffb4b4"></div>
-    <div class="acc"><button class="btn sec" type="button" id="pCan">Cancelar</button><button class="btn" type="submit" id="pOk" disabled>Entrar</button></div>
-    <div class="acc"><button class="btn sec" type="button" id="pGoogle" disabled>Entrar con Google</button></div>
+    <p style="margin:0 0 14px;font-size:14px;opacity:.8">Inicia sesión con la cuenta de administrador.</p>
+    <div id="pinErr" role="alert" style="min-height:20px;margin-bottom:8px;font-size:13px;color:#ffb4b4"></div>
+    <div class="acc"><button class="btn sec" type="button" id="pCan">Cancelar</button><button class="btn" type="button" id="pGoogle" disabled>Entrar con Google</button></div>
   </form>
 </dialog>
 <div class="aviso" id="aviso" role="status"></div>
 
 <script src="stem/firebase-config.js"></script>
 <script type="module">
-/* Acceso al modo administración: Firebase Auth (proyecto stem-labs-gi). Solo entra la cuenta del superadministrador. */
+/* Acceso al modo administración: Firebase Auth (proyecto stem-labs-gi). Solo entra la cuenta de Google del superadministrador. */
 const ADMIN='franksanlo@gmail.com', CONF=window.STEM_FIREBASE||{};
-const MSG={'auth/invalid-credential':'Correo o contraseña incorrectos.','auth/wrong-password':'Correo o contraseña incorrectos.','auth/user-not-found':'Correo o contraseña incorrectos.','auth/invalid-email':'Correo no válido.','auth/too-many-requests':'Demasiados intentos. Espera unos minutos.','auth/operation-not-allowed':'Este método no está habilitado en Firebase.','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/network-request-failed':'Sin conexión.'};
+const MSG={'auth/too-many-requests':'Demasiados intentos. Espera unos minutos.','auth/operation-not-allowed':'Este método no está habilitado en Firebase.','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/network-request-failed':'Sin conexión.'};
 const A={ok:false,fn:[],listo:false};
 const avisar=()=>A.fn.forEach(f=>{try{f()}catch(e){console.error(e)}});
 A.onCambio=f=>{A.fn.push(f);if(A.listo)f()};
@@ -281,7 +277,6 @@ try{
   const prov=new M.GoogleAuthProvider();prov.setCustomParameters({prompt:'select_account'});
   const msg=e=>(e&&e.code in MSG)?MSG[e.code]:'No pude iniciar sesión ('+((e&&e.code)||'error')+').';
   A.error='';
-  A.entrar=async(c,p)=>{A.error='';try{await M.signInWithEmailAndPassword(auth,c,p)}catch(e){A.error=msg(e);avisar()}};
   A.google=async()=>{A.error='';try{await M.signInWithPopup(auth,prov)}catch(e){A.error=msg(e);avisar()}};
   A.salir=()=>M.signOut(auth);
   M.onAuthStateChanged(auth,u=>{
@@ -587,7 +582,7 @@ function entrarAdmin(){
 function salirAdmin(){admin=false;datos=clonar(pub);pintar()}
 function estadoAcceso(){
   var A=window.ADMIN_AUTH;if(!A)return;
-  $('pOk').disabled=$('pGoogle').disabled=!A.entrar;
+  $('pGoogle').disabled=!A.google;
   $('pinErr').textContent=A.error||'';
   if(A.ok&&quiere&&!admin){quiere=false;$('dpin').close();entrarAdmin()}
   else if(!A.ok&&admin)salirAdmin();
@@ -600,15 +595,9 @@ conectar();
 function pedirPin(){
   quiere=true;
   if(window.ADMIN_AUTH&&window.ADMIN_AUTH.ok&&!admin){quiere=false;entrarAdmin();return}
-  $('aPass').value='';$('pinErr').textContent=(window.ADMIN_AUTH&&window.ADMIN_AUTH.error)||'';$('dpin').showModal();$('aCorreo').focus();
+  $('pinErr').textContent=(window.ADMIN_AUTH&&window.ADMIN_AUTH.error)||'';$('dpin').showModal();
 }
 $('pCan').onclick=function(){quiere=false;$('dpin').close();if(location.hash==='#admin')history.replaceState(null,'',location.pathname)};
-$('fpin').addEventListener('submit',function(e){
-  e.preventDefault();
-  if(!window.ADMIN_AUTH||!window.ADMIN_AUTH.entrar){$('pinErr').textContent='El inicio de sesión aún no está listo.';return}
-  $('pinErr').textContent='';
-  window.ADMIN_AUTH.entrar($('aCorreo').value.trim(),$('aPass').value);
-});
 $('pGoogle').onclick=function(){$('pinErr').textContent='';window.ADMIN_AUTH.google()};
 $('bAdm').onclick=pedirPin;
 
