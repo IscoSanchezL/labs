@@ -30,3 +30,7 @@ r = await w.fetch(new Request('https://labs.iscosanchez.com/__login', { method: 
 const ck = r.headers.get('Set-Cookie').split(';')[0];
 r = await pedirA('/actividades/typing/', { headers: { Cookie: ck } }); assert.equal(await r.text(), 'DESDE ASSETS /actividades/typing/');
 console.log('Pruebas con ASSETS: bien');
+
+r = await pedirA('/stem/'); assert.equal(r.headers.get('X-Content-Type-Options'), 'nosniff'); assert.ok(r.headers.get('Strict-Transport-Security'));
+r = await pedirA('/'); assert.equal(r.headers.get('Referrer-Policy'), 'strict-origin-when-cross-origin');
+console.log('Cabeceras de seguridad: bien');
