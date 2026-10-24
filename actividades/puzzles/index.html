@@ -7,7 +7,8 @@
 <meta name="description" content="Rompecabezas para primer grado: arma dibujos, gira piezas, une figuras con sus sombras y gana estampas.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Sniglet:wght@400;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='4' width='11' height='11' rx='3' fill='%230A7570'/%3E%3Crect x='17' y='4' width='11' height='11' rx='3' fill='%23B04A06'/%3E%3Crect x='4' y='17' width='11' height='11' rx='3' fill='%23B04A06'/%3E%3Crect x='17' y='17' width='11' height='11' rx='3' fill='%230A7570'/%3E%3C/svg%3E">
 <style>
 :root{
   --bg:#2F4B9A; --bg2:#243C80; --ink:#1C2541; --paper:#FFFFFF;
@@ -163,6 +164,95 @@ table.rec button{border:0;background:#FFE3E3;border-radius:10px;padding:6px 9px;
 .lang.corner{position:absolute;top:12px;right:12px;background:#E3E9F8}
 .lang.corner button{color:var(--ink)}
 .lang.corner button[aria-pressed="true"]{background:var(--ink);color:#fff}
+
+/* ===== Tema laboratorio de cristal (igual que los demás laboratorios) =====
+   Fondo de luz difusa fija y paneles de vidrio esmerilado; modo claro y oscuro. */
+:root{
+  --bg:#E4EEEC; --bg2:#E4EEEC; --ink:#10201F; --muted:#4A5E5C; --line:rgba(16,32,31,.14);
+  --hw:#B04A06; --sw:#07716C; --ok:#14773A; --bad:#B02418; --bad-soft:rgba(255,128,112,.28);
+  --glass:rgba(255,255,255,.52); --glass-hi:rgba(255,255,255,.82); --glass-in:rgba(255,255,255,.55);
+  --glass-line:rgba(255,255,255,.75); --shadow:0 10px 40px rgba(20,60,56,.14);
+  --blob1:rgba(23,184,172,.55); --blob2:rgba(255,140,66,.50); --blob3:rgba(124,110,255,.38);
+  --btn-bg:#10201F; --btn-fg:#F2FAF8;
+  --display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --body:'Figtree','Segoe UI',system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#08100F; --bg2:#08100F; --ink:#E8F3F1; --muted:#9BB1AE; --line:rgba(255,255,255,.14);
+  --hw:#FFA66B; --sw:#58DDD3; --ok:#69DB93; --bad:#FF9588; --bad-soft:rgba(255,100,85,.20);
+  --glass:rgba(30,48,47,.48); --glass-hi:rgba(34,54,53,.88); --glass-in:rgba(255,255,255,.07);
+  --glass-line:rgba(255,255,255,.16); --shadow:0 10px 40px rgba(0,0,0,.45);
+  --blob1:rgba(20,150,140,.45); --blob2:rgba(220,100,40,.34); --blob3:rgba(100,80,230,.34);
+  --btn-bg:#E8F3F1; --btn-fg:#08100F; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#08100F; --bg2:#08100F; --ink:#E8F3F1; --muted:#9BB1AE; --line:rgba(255,255,255,.14);
+  --hw:#FFA66B; --sw:#58DDD3; --ok:#69DB93; --bad:#FF9588; --bad-soft:rgba(255,100,85,.20);
+  --glass:rgba(30,48,47,.48); --glass-hi:rgba(34,54,53,.88); --glass-in:rgba(255,255,255,.07);
+  --glass-line:rgba(255,255,255,.16); --shadow:0 10px 40px rgba(0,0,0,.45);
+  --blob1:rgba(20,150,140,.45); --blob2:rgba(220,100,40,.34); --blob3:rgba(100,80,230,.34);
+  --btn-bg:#E8F3F1; --btn-fg:#08100F; color-scheme:dark}
+body{color:var(--ink);background-image:
+    radial-gradient(520px 420px at 8% 6%,var(--blob1),transparent 70%),
+    radial-gradient(560px 460px at 96% 22%,var(--blob2),transparent 70%),
+    radial-gradient(620px 520px at 40% 104%,var(--blob3),transparent 70%);
+  background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:var(--pat,none)}
+.btn:focus-visible,.lcard:focus-visible,.tileR:focus-visible,.tileS:focus-visible,.wpiece:focus-visible{outline:3px solid var(--sw);outline-offset:3px}
+.glassy,#bar,.total,.lcard,.card,.wincard,.preview,.me,.lang,.rec-wrap,.btn.ghost,.grp button,.who button{-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%)}
+#bar{background:var(--glass);border-bottom:1px solid var(--glass-line);box-shadow:0 4px 24px rgba(20,60,56,.10)}
+.btn{background:var(--btn-bg);color:var(--btn-fg);border:1px solid var(--btn-bg);box-shadow:none;font-weight:800}
+.btn:active{transform:translateY(1px);box-shadow:none}
+.btn.ghost{background:var(--glass-in);color:var(--ink);border-color:var(--glass-line)}
+.btn.big{background:var(--sun);color:#10201F;border-color:var(--sun)}
+.btn.red{background:var(--bad);border-color:var(--bad);color:#fff}
+.lt{box-shadow:0 .06em .18em rgba(20,60,56,.25)}
+.total{background:var(--glass);border:1px solid var(--glass-line)}
+.bar-track{background:var(--glass-in);border:1px solid var(--line)}
+.bar-fill{background:linear-gradient(90deg,var(--hw),var(--sw))}
+.wpiece,.lt{color:#10201F}
+.wpiece .in{inset:19% 26%;text-align:center}
+.wpiece .nm{font-size:clamp(13px,2vw,19px);overflow-wrap:anywhere}
+.wpiece svg{filter:drop-shadow(0 6px 10px rgba(20,60,56,.28))}
+.wpiece .pg{background:rgba(255,255,255,.85);color:#10201F}
+.whead .big{box-shadow:0 6px 18px rgba(20,60,56,.22)}
+.whead p,.sub{color:var(--muted)}
+.lcard{background:var(--glass);border:1px solid var(--glass-line);box-shadow:var(--shadow);color:var(--ink)}
+.lcard small{color:var(--muted)}
+.lcard:hover{transform:translateY(-3px)}
+.lcard .num{box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.board{box-shadow:0 10px 30px rgba(20,60,56,.25)}
+.tileR,.tileS{box-shadow:0 3px 8px rgba(20,60,56,.25)}
+.tileR:hover:not(.ok),.tileS:hover:not(.ok):not(.sel){box-shadow:0 0 0 4px var(--sw),0 3px 8px rgba(20,60,56,.25)}
+.preview{background:var(--glass-hi);border:1px solid var(--glass-line);color:var(--ink);box-shadow:var(--shadow)}
+#win,.ovl{background:rgba(8,16,15,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.card,.wincard{background:var(--glass-hi);color:var(--ink);border:1px solid var(--glass-line);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.35);border-radius:26px}
+.wincard img{border-color:#fff}
+.grp button{background:var(--glass-in);color:var(--ink);border:1px solid var(--glass-line);box-shadow:none}
+.grp button[aria-pressed="true"]{background:var(--btn-bg);color:var(--btn-fg);border-color:var(--btn-bg);box-shadow:none}
+.who button{background:var(--glass-in);color:var(--ink);border:1px solid var(--glass-line);box-shadow:none}
+.who button:hover{border-color:var(--ink)}
+.who button small,.who .empty,.linkbtn{color:var(--muted)}
+.who button.new{background:var(--sun);color:#10201F;border-color:var(--sun)}
+.newbox input,#pinIn{background:var(--glass-in);color:var(--ink);border:1px solid var(--glass-line)}
+.newbox input:focus,#pinIn:focus{border-color:var(--sw)}
+.err{color:var(--bad)}
+.me{background:var(--glass);border:1px solid var(--glass-line);color:var(--ink)}
+.lang{background:var(--glass);border:1px solid var(--glass-line)}
+.lang button{color:var(--ink);font-weight:700}
+.lang button[aria-pressed="true"]{background:var(--btn-bg);color:var(--btn-fg)}
+.lang.corner{background:var(--glass-in)}
+.lang.corner button{color:var(--ink)}
+.lang.corner button[aria-pressed="true"]{background:var(--btn-bg);color:var(--btn-fg)}
+.stk.have{box-shadow:0 5px 14px rgba(20,60,56,.28)}
+.stk.miss{border-color:var(--line);color:var(--muted)}
+.teacher{border-top:2px dashed var(--line)}
+.rec-wrap{background:var(--glass-hi);border:1px solid var(--glass-line)}
+table.rec th{background:var(--glass-in);font-weight:800}
+table.rec th,table.rec td{border-bottom:1px solid var(--line)}
+table.rec button{background:var(--bad-soft)}
+.pinbox{display:grid;gap:12px;justify-items:center}
+#pinIn{font-family:var(--display);font-size:28px;letter-spacing:.3em;text-align:center;width:100%;max-width:260px;padding:12px 16px;border-radius:16px}
 </style>
 </head>
 <body>
@@ -225,6 +315,19 @@ table.rec button{border:0;background:#FFE3E3;border-radius:10px;padding:6px 9px;
       <div class="row"><button class="btn ghost" id="newBack" data-i18n="lg.back">⬅ Volver</button><button class="btn big" id="newGo" data-i18n="lg.go">▶ Empezar</button></div>
     </div>
     <button class="linkbtn" id="loginTeacher" data-i18n="lg.tch">Zona del profe: ver el registro de este computador</button>
+  </div>
+</div>
+
+<div id="pin" class="ovl" role="dialog" aria-modal="true" aria-labelledby="pinH">
+  <div class="card">
+    <div style="font-size:56px" aria-hidden="true">🧑‍🏫</div>
+    <h2 id="pinH"></h2>
+    <p class="lead" id="pinP"></p>
+    <form class="pinbox" id="pinForm" autocomplete="off">
+      <input id="pinIn" type="password" inputmode="numeric" maxlength="12" autocomplete="off" aria-labelledby="pinH">
+      <p class="err" id="pinErr" role="alert"></p>
+      <div class="row"><button class="btn ghost" type="button" id="pinNo"></button><button class="btn big" type="submit" id="pinGo"></button></div>
+    </form>
   </div>
 </div>
 
@@ -989,7 +1092,37 @@ window.addEventListener('pageshow', e => { if (e.persisted) resetAll(false); });
 /* Registro del profe */
 let recFilter = 'Todos';
 const fmtDate = ms => ms ? new Date(ms).toLocaleString(LANG === 'en' ? 'en-US' : 'es-CO', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
-function goTeacher(back) { show('teacher'); setBar(() => t('rec.t'), back, false); renderRecords(); }
+/* PIN docente común: hash SHA-256 de 'hwsw:' + PIN (el mismo de los otros laboratorios).
+   Para cambiarlo: printf 'hwsw:NUEVOPIN' | sha256sum  y pega el resultado aquí. */
+const TEACHER_PIN_HASH = 'a797af90e22df77a7b5f6a8cefc9fd23b12f95503085e4322b745edc5583b796';
+const L2 = (es, en) => LANG === 'en' ? en : es;
+function sha(str) {
+  const enc = new TextEncoder().encode('hwsw:' + str);
+  if (window.crypto && crypto.subtle) return crypto.subtle.digest('SHA-256', enc).then(b => Array.from(new Uint8Array(b)).map(x => ('0' + x.toString(16)).slice(-2)).join(''));
+  let h = 5381; for (let i = 0; i < enc.length; i++) h = ((h << 5) + h + enc[i]) | 0;
+  return Promise.resolve('x' + h);
+}
+let pinBack = null;
+function paintPin() {
+  $('#pinH').textContent = L2('Zona del profe', 'Teacher area');
+  $('#pinP').textContent = L2('Escribe el PIN docente para ver el registro.', 'Type the teacher PIN to see the records.');
+  $('#pinIn').setAttribute('aria-label', L2('PIN docente', 'Teacher PIN'));
+  $('#pinNo').textContent = L2('Cancelar', 'Cancel'); $('#pinGo').textContent = L2('Entrar', 'Enter');
+}
+function openPin(back) {
+  pinBack = back; paintPin(); $('#pinIn').value = ''; $('#pinErr').textContent = '';
+  $('#pin').classList.add('on'); setTimeout(() => $('#pinIn').focus(), 50);
+}
+$('#pinNo').onclick = () => { $('#pin').classList.remove('on'); if (pinBack) pinBack(); };
+$('#pinForm').onsubmit = e => {
+  e.preventDefault();
+  sha($('#pinIn').value.trim()).then(h => {
+    if (h === TEACHER_PIN_HASH) { $('#pin').classList.remove('on'); openTeacher(pinBack); }
+    else { $('#pinErr').textContent = L2('PIN incorrecto.', 'Wrong PIN.'); $('#pinIn').select(); }
+  });
+};
+function goTeacher(back) { openPin(back); }
+function openTeacher(back) { show('teacher'); setBar(() => t('rec.t'), back, false); renderRecords(); }
 function recRows() {
   return Object.values(REG.students).filter(st => recFilter === 'Todos' || st.group === recFilter)
     .sort((a, b) => a.group.localeCompare(b.group) || a.name.localeCompare(b.name, 'es'));
@@ -1041,8 +1174,8 @@ window.addEventListener('resize', () => {
 /* Fondo con piezas */
 (function bgPattern() {
   const d = tracePiece(new SP(), 60, 60, 20, [1, -1, 1, -1]).d;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><path d="${d}" fill="#fff" opacity=".05" transform="translate(10 10) rotate(8 50 50)"/></svg>`;
-  document.body.style.backgroundImage = `url("${toURL(svg)}")`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><path d="${d}" fill="#7AA6A0" opacity=".14" transform="translate(10 10) rotate(8 50 50)"/></svg>`;
+  document.documentElement.style.setProperty('--pat', `url("${toURL(svg)}")`);
 })();
 
 /* Inicio: cargar dibujos */
@@ -1065,6 +1198,7 @@ function onLang() {
   else if (curScreen === 'album') goAlbum();
   else if (curScreen === 'teacher') renderRecords();
   if ($('#win').classList.contains('on')) paintWin();
+  if ($('#pin').classList.contains('on')) paintPin();
   if ($('#login').classList.contains('on')) {
     $('#loginLead').textContent = $('#newBox').hidden ? t('lg.lead') : t('lg.gname', { g: loginGroup });
     renderGroups(); renderWho();
