@@ -82,3 +82,13 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
 .escena canvas{box-shadow:0 0 0 1px rgba(127,240,228,.18),0 16px 50px -20px rgba(0,0,0,.7)}
 @media (prefers-reduced-motion:reduce){.aurora i{animation:none}}
 .cv3{background:transparent!important;position:absolute;z-index:2;border-radius:18px;touch-action:none;cursor:grab}.cv3:active{cursor:grabbing}
+
+/* ===== Modo día (botón ☀️/🌙 de assets/tema.js). Sin elección guardada la página sigue siendo oscura. ===== */
+:root[data-theme="light"]{--bg:#EAF1F7;--text:#0F2233;--muted:#3E5468;--dim:#5E7488;--accent:#07716C;--violet:#5B46C8;--glass:rgba(255,255,255,.66);--glass2:rgba(255,255,255,.88);--edge:rgba(15,34,51,.18);--ok:#14773A;--bad:#B02418;--warn:#9A5800;color-scheme:light}
+:root[data-theme="light"] .aurora{background:radial-gradient(120% 80% at 50% 0%,#D5EEF0 0%,var(--bg) 60%)}
+:root[data-theme="light"] .aurora i{opacity:.32}
+:root[data-theme="light"] .piso{opacity:.14}
+:root[data-theme="light"] .top{border-bottom-color:rgba(15,34,51,.1);background:linear-gradient(rgba(255,255,255,.88),rgba(255,255,255,.4))}
+:root[data-theme="light"] .eyebrow{background:rgba(255,255,255,.75);border-color:rgba(7,113,108,.35)}
+:root[data-theme="light"] .volver:hover{border-color:rgba(7,113,108,.6)}
+:root[data-theme="light"] h1 em{background:linear-gradient(90deg,#07716C,#3D58C9 55%,#7B4FD0);-webkit-background-clip:text;background-clip:text;color:transparent}
