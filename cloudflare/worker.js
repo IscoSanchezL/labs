@@ -55,8 +55,17 @@ button{width:100%;margin-top:14px;padding:11px;border:0;border-radius:8px;backgr
   return new Response(html, { status: estado, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' } });
 }
 
+// Cabeceras de seguridad para todas las respuestas (el navegador no adivina tipos, no filtra la dirección al salir, solo HTTPS)
+const CABECERAS = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'Strict-Transport-Security': 'max-age=31536000' };
+const seguras = (r) => { const s = new Response(r.body, r); for (const k in CABECERAS) s.headers.set(k, CABECERAS[k]); return s; };
+
 export default {
   async fetch(request, env) {
+    return seguras(await responder(request, env));
+  }
+};
+
+async function responder(request, env) {
     if (!env.PASSWORD || !env.COOKIE_SECRET) return new Response('Falta configurar PASSWORD y COOKIE_SECRET', { status: 500 });
     const url = new URL(request.url);
 
@@ -91,4 +100,3 @@ export default {
     }
     return pagina(url.pathname + url.search, '');
   }
-};
