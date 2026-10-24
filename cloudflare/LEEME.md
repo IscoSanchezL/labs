@@ -24,5 +24,6 @@ Desde ahí, cada `git push` a `main` publica solo. El código pegado a mano en e
 - `node cloudflare/prueba.mjs` (lógica del Worker).
 - `npx wrangler dev --local --var PASSWORD:x COOKIE_SECRET:y` (Worker + sitio reales, en local).
 
-## Recomendado
-- Cloudflare → Security → WAF → **Rate limiting** sobre `POST /__login` (p. ej. 10 por minuto por IP).
+## Límite de intentos
+El Worker limita `POST /__login` a **10 intentos por minuto por IP** (binding `LOGIN_LIMITER` en `wrangler.toml`).
+Pasado el límite responde 429 hasta que termine el minuto. No hace falta crear ninguna regla en el WAF.

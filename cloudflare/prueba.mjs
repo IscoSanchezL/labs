@@ -34,3 +34,11 @@ console.log('Pruebas con ASSETS: bien');
 r = await pedirA('/stem/'); assert.equal(r.headers.get('X-Content-Type-Options'), 'nosniff'); assert.ok(r.headers.get('Strict-Transport-Security'));
 r = await pedirA('/'); assert.equal(r.headers.get('Referrer-Policy'), 'strict-origin-when-cross-origin');
 console.log('Cabeceras de seguridad: bien');
+
+// Límite de intentos: tras 3 intentos con el mismo IP, el 4.º recibe 429 (limitador simulado)
+let usados = 0;
+const envL = { ...envA, LOGIN_LIMITER: { limit: async () => ({ success: ++usados <= 3 }) } };
+const intento = () => w.fetch(new Request('https://labs.iscosanchez.com/__login', { method: 'POST', headers: { 'CF-Connecting-IP': '1.2.3.4' }, body: new URLSearchParams({ password: 'mala', next: '/' }) }), envL);
+for (let i = 0; i < 3; i++) assert.equal((await intento()).status, 401);
+r = await intento(); assert.equal(r.status, 429); assert.ok((await r.text()).includes('Demasiados intentos'));
+console.log('Límite de intentos: bien');

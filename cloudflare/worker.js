@@ -75,6 +75,12 @@ async function responder(request, env) {
     if (esPublica(url.pathname) && !url.pathname.startsWith('/__')) return servir(request);
 
     if (url.pathname === '/__login' && request.method === 'POST') {
+      // Límite de intentos por IP (binding LOGIN_LIMITER de wrangler.toml); sin el binding no limita
+      if (env.LOGIN_LIMITER) {
+        const ip = request.headers.get('CF-Connecting-IP') || 'sin-ip';
+        const { success } = await env.LOGIN_LIMITER.limit({ key: ip });
+        if (!success) return pagina('/', 'Demasiados intentos. Espera un minuto e inténtalo de nuevo.', 429);
+      }
       const datos = await request.formData();
       const destino = destinoSeguro(datos.get('next'));
       if (!(await iguales(env.COOKIE_SECRET, String(datos.get('password') || ''), env.PASSWORD))) {
