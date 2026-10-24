@@ -4,6 +4,7 @@
   "type": "module",
   "description": "Código fuente (Vite) de las actividades de labs.iscosanchez.com que lo necesitan. El resultado compilado se publica en /actividades.",
   "scripts": {
+    "build": "node scripts/construir.mjs",
     "dev:estructuras": "vite fuentes/estructuras",
     "build:estructuras": "vite build fuentes/estructuras",
     "test": "node fuentes/estructuras/pruebas/motor.test.mjs",
