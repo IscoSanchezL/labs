@@ -22,6 +22,8 @@ async function sesionValida(request, env) {
   if (!m || Number(m[1]) < Date.now() / 1000) return false;
   return iguales(env.COOKIE_SECRET, m[2], await firmar(env.COOKIE_SECRET, 'sesion:' + m[1]));
 }
+// Rutas abiertas sin contraseña: la sección STEM (por enlace) y los estilos compartidos que ella necesita
+const esPublica = (ruta) => /^\/(stem|assets)(\/|$)/.test(ruta);
 // Solo rutas internas del sitio: evita redirigir a otro dominio tras entrar
 const destinoSeguro = (d) => (typeof d === 'string' && /^\/(?!\/|\\)/.test(d) ? d : '/');
 const esc = (t) => t.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -52,6 +54,8 @@ export default {
   async fetch(request, env) {
     if (!env.PASSWORD || !env.COOKIE_SECRET) return new Response('Falta configurar PASSWORD y COOKIE_SECRET', { status: 500 });
     const url = new URL(request.url);
+
+    if (esPublica(url.pathname) && !url.pathname.startsWith('/__')) return fetch(request);
 
     if (url.pathname === '/__login' && request.method === 'POST') {
       const datos = await request.formData();

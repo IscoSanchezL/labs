@@ -7,6 +7,8 @@ const pedir = (ruta, init = {}) => w.fetch(new Request('https://labs.iscosanchez
 const login = (pass, next = '/stem/') => pedir('/__login', { method: 'POST', body: new URLSearchParams({ password: pass, next }) });
 
 let r = await pedir('/'); assert.equal(r.status, 401); assert.ok(!(await r.text()).includes('SITIO PRIVADO'));
+for (const ruta of ['/stem/', '/stem', '/stem/actividades/adn/index.html', '/assets/lab.css']) { r = await pedir(ruta); assert.equal(r.status, 200, ruta + ' debe ser pública'); }
+for (const ruta of ['/index.html', '/stemx/', '/stem/../proyectos.json', '/actividades/circuitos/', '/']) { r = await pedir(ruta); assert.equal(r.status, 401, ruta + ' debe pedir contraseña'); }
 r = await pedir('/proyectos.json'); assert.equal(r.status, 401);
 r = await login('mala'); assert.equal(r.status, 401);
 r = await login('clave-de-prueba'); assert.equal(r.status, 303); assert.equal(r.headers.get('Location'), '/stem/');

@@ -1,7 +1,9 @@
 # Candado de contraseña para labs.iscosanchez.com
 
 GitHub Pages no puede pedir contraseña, así que este Worker de Cloudflare se pone **delante** del sitio:
-sin la contraseña no se entrega ningún archivo (ni `index.html`, ni `proyectos.json`, ni `/stem/`).
+sin la contraseña no se entrega la portada ni `proyectos.json` ni nada que no sea público.
+
+**Abierto sin contraseña:** `/stem/…` (se entra por enlace) y `/assets/…` (estilos que usa STEM). Se cambia en `esPublica` de `worker.js`.
 
 ## Pasos (una sola vez)
 1. **DNS en Cloudflare** → registro `labs` (CNAME → `iscosanchezl.github.io`) con la nube **naranja (Proxied)**. Si está gris, el Worker no se ejecuta.
