@@ -14,7 +14,7 @@ Workers y Pages → `labs-candado` → **Configuración** → **Compilaciones** 
 - Comando de implementación: `npx wrangler deploy`
 - Directorio raíz: `/`
 
-Desde ahí, cada `git push` a `main` publica solo. El código pegado a mano en el panel se reemplaza por el del repo.
+Desde ahí, cada `git push` a `main` publica solo (compilación en Cloudflare: Workers y Pages → `labs-candado` → Implementaciones). El código pegado a mano en el panel se reemplaza por el del repo.
 
 ## Cambiar la contraseña / cerrar sesiones
 - Cambiar `PASSWORD` no cierra las sesiones abiertas (duran 7 días). Para expulsarlas a todas, cambia también `COOKIE_SECRET`.
