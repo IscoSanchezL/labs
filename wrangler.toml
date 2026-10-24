@@ -1,0 +1,16 @@
+# Worker "labs-candado": exige la contraseña y sirve el sitio desde dist/ (sin depender de GitHub Pages).
+# Secretos PASSWORD y COOKIE_SECRET: se guardan en Cloudflare (no aquí).
+name = "labs-candado"
+main = "cloudflare/worker.js"
+compatibility_date = "2025-01-01"
+routes = [{ pattern = "labs.iscosanchez.com/*", zone_name = "iscosanchez.com" }]
+
+[build]
+command = "node scripts/construir.mjs"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+run_worker_first = true      # el Worker decide primero (contraseña) y luego entrega el archivo
+html_handling = "auto-trailing-slash"
+not_found_handling = "404-page"

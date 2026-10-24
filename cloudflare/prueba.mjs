@@ -19,3 +19,14 @@ r = await pedir('/', { headers: { Cookie: 'labs_sesion=9999999999.' + '0'.repeat
 r = await pedir('/', { headers: { Cookie: 'labs_sesion=1.' + cookie.split('.')[1] } }); assert.equal(r.status, 401, 'cookie vencida');
 r = await login('clave-de-prueba', '//evil.com'); assert.equal(r.headers.get('Location'), '/', 'redirección externa bloqueada');
 console.log('Todas las pruebas pasaron');
+
+// Con binding ASSETS: sirve desde ahí y nunca llama al origen
+globalThis.fetch = async () => { throw new Error('no debe llamar al origen'); };
+const envA = { ...env, ASSETS: { fetch: async (r) => new Response('DESDE ASSETS ' + new URL(r.url).pathname) } };
+const pedirA = (ruta, init = {}) => w.fetch(new Request('https://labs.iscosanchez.com' + ruta, init), envA);
+r = await pedirA('/stem/'); assert.equal(await r.text(), 'DESDE ASSETS /stem/');
+r = await pedirA('/actividades/typing/'); assert.equal(r.status, 401);
+r = await w.fetch(new Request('https://labs.iscosanchez.com/__login', { method: 'POST', body: new URLSearchParams({ password: 'clave-de-prueba', next: '/' }) }), envA);
+const ck = r.headers.get('Set-Cookie').split(';')[0];
+r = await pedirA('/actividades/typing/', { headers: { Cookie: ck } }); assert.equal(await r.text(), 'DESDE ASSETS /actividades/typing/');
+console.log('Pruebas con ASSETS: bien');

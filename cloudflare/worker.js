@@ -60,7 +60,10 @@ export default {
     if (!env.PASSWORD || !env.COOKIE_SECRET) return new Response('Falta configurar PASSWORD y COOKIE_SECRET', { status: 500 });
     const url = new URL(request.url);
 
-    if (esPublica(url.pathname) && !url.pathname.startsWith('/__')) return fetch(request);
+    // Con el binding ASSETS el Worker sirve el sitio él mismo; sin él (versión antigua) pasa al origen
+    const servir = (r) => (env.ASSETS ? env.ASSETS.fetch(r) : fetch(r));
+
+    if (esPublica(url.pathname) && !url.pathname.startsWith('/__')) return servir(request);
 
     if (url.pathname === '/__login' && request.method === 'POST') {
       const datos = await request.formData();
@@ -80,7 +83,7 @@ export default {
       return new Response(null, { status: 303, headers: { Location: '/', 'Set-Cookie': `${COOKIE}=; Max-Age=0; Path=/; Secure; HttpOnly; SameSite=Lax` } });
     }
     if (await sesionValida(request, env)) {
-      const r = await fetch(request); // sin cambios: pasa a GitHub Pages
+      const r = await servir(request);
       const sal = new Response(r.body, r);
       sal.headers.set('Cache-Control', 'private, no-store'); // que ninguna caché compartida guarde páginas protegidas
       sal.headers.set('X-Robots-Tag', 'noindex');
