@@ -1,0 +1,1018 @@
+[
+ {
+  "id": "all-five-trains-arrived-gtmwca",
+  "texto": "All five trains arrived."
+ },
+ {
+  "id": "almost-perfect-the-first-letter-must-eznkmk",
+  "texto": "Almost perfect: the first letter must be a capital."
+ },
+ {
+  "id": "almost-the-answer-is-a-oxyqal",
+  "texto": "Almost. The answer is A"
+ },
+ {
+  "id": "almost-the-answer-is-delete-hmcdt1",
+  "texto": "Almost. The answer is Delete"
+ },
+ {
+  "id": "almost-the-answer-is-enter-fks29g",
+  "texto": "Almost. The answer is Enter"
+ },
+ {
+  "id": "almost-the-answer-is-no-15slhod",
+  "texto": "Almost. The answer is No"
+ },
+ {
+  "id": "almost-the-answer-is-shift-fas95o",
+  "texto": "Almost. The answer is Shift"
+ },
+ {
+  "id": "almost-the-answer-is-space-fbajzs",
+  "texto": "Almost. The answer is Space"
+ },
+ {
+  "id": "almost-the-answer-is-yes-tmjw37",
+  "texto": "Almost. The answer is Yes"
+ },
+ {
+  "id": "can-we-eat-over-the-keyboard-yes-no-gkg358",
+  "texto": "Can we eat over the keyboard? Yes, No"
+ },
+ {
+  "id": "choo-choo-108u77o",
+  "texto": "Choo choo!"
+ },
+ {
+  "id": "congratulations-you-are-now-a-keyboa-1k8anx5",
+  "texto": "Congratulations! You are now a Keyboard Explorer. Check your name and download your diploma."
+ },
+ {
+  "id": "correct-hy87p6",
+  "texto": "Correct!"
+ },
+ {
+  "id": "delete-erases-the-letter-behind-it-s-doxvif",
+  "texto": "Delete. Erases the letter behind. It's the eraser!"
+ },
+ {
+  "id": "do-we-hit-the-keyboard-hard-yes-no-93789r",
+  "texto": "Do we hit the keyboard hard? Yes, No"
+ },
+ {
+  "id": "do-we-wash-our-hands-before-using-th-ph3dit",
+  "texto": "Do we wash our hands before using the computer? Yes, No"
+ },
+ {
+  "id": "do-you-want-to-log-out-your-progress-6ygwya",
+  "texto": "Do you want to log out? Your progress is saved."
+ },
+ {
+  "id": "done-your-diploma-was-downloaded-now-sp346t",
+  "texto": "Done! Your diploma was downloaded. Now log out with the red button."
+ },
+ {
+  "id": "down-arrow-moves-down-it-is-used-a-l-bp8gf0",
+  "texto": "Down arrow. Moves down. It is used a lot in games."
+ },
+ {
+  "id": "enter-goes-down-to-the-next-line-it-nxgxm2",
+  "texto": "Enter. Goes down to the next line. It also means: I'm done!"
+ },
+ {
+  "id": "excellent-you-completed-all-the-miss-1b4byp3",
+  "texto": "Excellent! You completed all the missions."
+ },
+ {
+  "id": "first-type-your-name-18tzf3z",
+  "texto": "First type your name."
+ },
+ {
+  "id": "good-try-lets-play-again-l1rsmq",
+  "texto": "Good try! Lets play again"
+ },
+ {
+  "id": "group-1-a-1gjotka",
+  "texto": "Group 1 A"
+ },
+ {
+  "id": "group-1-b-1gjotk9",
+  "texto": "Group 1 B"
+ },
+ {
+  "id": "group-1-c-1gjotk8",
+  "texto": "Group 1 C"
+ },
+ {
+  "id": "hello-again-you-have-0-of-four-goals-1vb1ba1",
+  "texto": "Hello again! You have 0 of four goals. See what is missing."
+ },
+ {
+  "id": "hello-again-you-have-1-of-four-goals-15l7b6g",
+  "texto": "Hello again! You have 1 of four goals. See what is missing."
+ },
+ {
+  "id": "hello-again-you-have-2-of-four-goals-q5neu3",
+  "texto": "Hello again! You have 2 of four goals. See what is missing."
+ },
+ {
+  "id": "hello-again-you-have-3-of-four-goals-fteqi",
+  "texto": "Hello again! You have 3 of four goals. See what is missing."
+ },
+ {
+  "id": "hello-again-you-have-4-of-four-goals-14q1h0d",
+  "texto": "Hello again! You have 4 of four goals. See what is missing."
+ },
+ {
+  "id": "hello-let-s-get-to-know-the-keyboard-qm3lwl",
+  "texto": "Hello! Let's get to know the keyboard."
+ },
+ {
+  "id": "hi-i-m-teclin-the-keyboard-with-my-k-1zk6h5",
+  "texto": "Hi! I'm Teclín, the keyboard. With my keys you can type letters, numbers and even your name. Will you help me get to know my keys?"
+ },
+ {
+  "id": "it-floated-away-qg3wp2",
+  "texto": "It floated away!"
+ },
+ {
+  "id": "left-arrow-moves-to-the-left-clsdzw",
+  "texto": "Left arrow. Moves to the left."
+ },
+ {
+  "id": "let-s-catch-moles-1cvhzjc",
+  "texto": "Let's catch moles!"
+ },
+ {
+  "id": "let-s-keep-going-bo7ata",
+  "texto": "Let's keep going!"
+ },
+ {
+  "id": "letter-balloons-press-the-balloon-s-xxqwt8",
+  "texto": "Letter balloons. Press the balloon's key before it floats away."
+ },
+ {
+  "id": "letters-we-use-them-to-write-words-10gw5qu",
+  "texto": "Letters. We use them to write words."
+ },
+ {
+  "id": "look-at-the-screen-from-an-arm-s-len-y12xal",
+  "texto": "Look at the screen from an arm's length away."
+ },
+ {
+  "id": "mission-five-press-enter-to-go-to-th-1wnurna",
+  "texto": "Mission five: press Enter to go to the next line."
+ },
+ {
+  "id": "mission-four-press-delete-to-erase-a-nrz4a1",
+  "texto": "Mission four: press delete to erase a letter."
+ },
+ {
+  "id": "mission-one-type-a-letter-1n2arwe",
+  "texto": "Mission one: type a letter."
+ },
+ {
+  "id": "mission-six-hold-down-shift-and-tap-1c9zh77",
+  "texto": "Mission six: hold down Shift and tap a letter."
+ },
+ {
+  "id": "mission-three-press-the-space-bar-it-15r86uv",
+  "texto": "Mission three: press the space bar. It is the longest key."
+ },
+ {
+  "id": "mission-two-type-a-number-they-are-i-gfe9xo",
+  "texto": "Mission two: type a number. They are in the top row."
+ },
+ {
+  "id": "naughty-moles-when-a-mole-pops-up-pr-1rhazcp",
+  "texto": "Naughty moles. When a mole pops up, press its letter fast."
+ },
+ {
+  "id": "numbers-for-counting-and-writing-amo-64qush",
+  "texto": "Numbers. For counting and writing amounts."
+ },
+ {
+  "id": "put-your-feet-on-the-floor-m9rmjd",
+  "texto": "Put your feet on the floor."
+ },
+ {
+  "id": "remember-the-first-letter-is-a-capit-1yfwueo",
+  "texto": "Remember: the first letter is a capital. Delete it and use Shift."
+ },
+ {
+  "id": "right-arrow-moves-to-the-right-cegz6k",
+  "texto": "Right arrow. Moves to the right."
+ },
+ {
+  "id": "shift-hold-it-down-and-tap-a-letter-e5zbne",
+  "texto": "Shift. Hold it down and tap a letter to type it big (a capital letter)."
+ },
+ {
+  "id": "sit-up-straight-with-your-back-again-8r5mrh",
+  "texto": "Sit up straight, with your back against the chair."
+ },
+ {
+  "id": "space-bar-it-is-the-longest-key-it-p-2bd3ci",
+  "texto": "Space bar. It is the longest key. It puts a space between words."
+ },
+ {
+  "id": "special-keys-they-do-magic-jobs-like-k91hce",
+  "texto": "Special keys. They do magic jobs, like deleting or adding spaces."
+ },
+ {
+  "id": "tap-the-keys-softly-like-soap-bubble-1xcu5bs",
+  "texto": "Tap the keys softly, like soap bubbles. We never hit the keyboard."
+ },
+ {
+  "id": "the-letter-aitch-h-is-for-house-16er0eu",
+  "texto": "The letter aitch. H is for house"
+ },
+ {
+  "id": "the-letter-ar-r-is-for-rainbow-1c34n0i",
+  "texto": "The letter ar. R is for rainbow"
+ },
+ {
+  "id": "the-letter-ay-a-is-for-apple-1jt3v3w",
+  "texto": "The letter ay. A is for apple"
+ },
+ {
+  "id": "the-letter-bee-b-is-for-bear-15p01w9",
+  "texto": "The letter bee. B is for bear"
+ },
+ {
+  "id": "the-letter-cue-q-is-for-queen-eydurp",
+  "texto": "The letter cue. Q is for queen"
+ },
+ {
+  "id": "the-letter-dee-d-is-for-dog-1l30oht",
+  "texto": "The letter dee. D is for dog"
+ },
+ {
+  "id": "the-letter-double-you-w-is-for-whale-em193v",
+  "texto": "The letter double you. W is for whale"
+ },
+ {
+  "id": "the-letter-ee-e-is-for-elephant-pohp1j",
+  "texto": "The letter ee. E is for elephant"
+ },
+ {
+  "id": "the-letter-eff-f-is-for-frog-1t8spci",
+  "texto": "The letter eff. F is for frog"
+ },
+ {
+  "id": "the-letter-el-l-is-for-lion-1trkkb0",
+  "texto": "The letter el. L is for lion"
+ },
+ {
+  "id": "the-letter-em-m-is-for-monkey-7vrf7",
+  "texto": "The letter em. M is for monkey"
+ },
+ {
+  "id": "the-letter-en-n-is-for-nose-axtgf",
+  "texto": "The letter en. N is for nose"
+ },
+ {
+  "id": "the-letter-enye-as-in-pinata-rckw8i",
+  "texto": "The letter enye. As in piñata"
+ },
+ {
+  "id": "the-letter-ess-s-is-for-sun-rxcvn7",
+  "texto": "The letter ess. S is for sun"
+ },
+ {
+  "id": "the-letter-ex-as-in-box-1bxybu9",
+  "texto": "The letter ex. As in box"
+ },
+ {
+  "id": "the-letter-eye-i-is-for-ice-cream-yjv7pm",
+  "texto": "The letter eye. I is for ice cream"
+ },
+ {
+  "id": "the-letter-gee-g-is-for-grapes-1v9moqn",
+  "texto": "The letter gee. G is for grapes"
+ },
+ {
+  "id": "the-letter-jay-j-is-for-juice-wfoup1",
+  "texto": "The letter jay. J is for juice"
+ },
+ {
+  "id": "the-letter-kay-k-is-for-kite-19u5lie",
+  "texto": "The letter kay. K is for kite"
+ },
+ {
+  "id": "the-letter-oh-o-is-for-octopus-460tqc",
+  "texto": "The letter oh. O is for octopus"
+ },
+ {
+  "id": "the-letter-pee-p-is-for-penguin-to05z7",
+  "texto": "The letter pee. P is for penguin"
+ },
+ {
+  "id": "the-letter-see-c-is-for-cat-18oz0q3",
+  "texto": "The letter see. C is for cat"
+ },
+ {
+  "id": "the-letter-tee-t-is-for-turtle-sngnoj",
+  "texto": "The letter tee. T is for turtle"
+ },
+ {
+  "id": "the-letter-vee-v-is-for-violin-1walaie",
+  "texto": "The letter vee. V is for violin"
+ },
+ {
+  "id": "the-letter-why-y-is-for-yo-yo-1kdn7j",
+  "texto": "The letter why. Y is for yo-yo"
+ },
+ {
+  "id": "the-letter-you-u-is-for-umbrella-ozqduf",
+  "texto": "The letter you. U is for umbrella"
+ },
+ {
+  "id": "the-letter-zee-z-is-for-zebra-o14awz",
+  "texto": "The letter zee. Z is for zebra"
+ },
+ {
+  "id": "the-number-eight-rj68mg",
+  "texto": "The number eight"
+ },
+ {
+  "id": "the-number-five-1p3k8cj",
+  "texto": "The number five"
+ },
+ {
+  "id": "the-number-four-1p3k9yp",
+  "texto": "The number four"
+ },
+ {
+  "id": "the-number-nine-1p3eg5v",
+  "texto": "The number nine"
+ },
+ {
+  "id": "the-number-one-404y3f",
+  "texto": "The number one"
+ },
+ {
+  "id": "the-number-seven-r6nec4",
+  "texto": "The number seven"
+ },
+ {
+  "id": "the-number-six-404u9p",
+  "texto": "The number six"
+ },
+ {
+  "id": "the-number-three-r78lpt",
+  "texto": "The number three"
+ },
+ {
+  "id": "the-number-two-404vn7",
+  "texto": "The number two"
+ },
+ {
+  "id": "the-number-zero-1p34xul",
+  "texto": "The number zero"
+ },
+ {
+  "id": "the-word-train-type-the-letters-in-o-v3q261",
+  "texto": "The word train. Type the letters in order to fill the wagons."
+ },
+ {
+  "id": "type-another-name-9ti7of",
+  "texto": "Type another name."
+ },
+ {
+  "id": "type-your-name-vyxi1x",
+  "texto": "Type your name."
+ },
+ {
+  "id": "type-3rcd2f",
+  "texto": "Type:"
+ },
+ {
+  "id": "type-bat-198q8ji",
+  "texto": "Type: bat."
+ },
+ {
+  "id": "type-bed-198q4yy",
+  "texto": "Type: bed."
+ },
+ {
+  "id": "type-bee-198q4y3",
+  "texto": "Type: bee."
+ },
+ {
+  "id": "type-boot-1cvspr",
+  "texto": "Type: boot."
+ },
+ {
+  "id": "type-bus-198qhxp",
+  "texto": "Type: bus."
+ },
+ {
+  "id": "type-cat-198l4db",
+  "texto": "Type: cat."
+ },
+ {
+  "id": "type-cow-198l6b6",
+  "texto": "Type: cow."
+ },
+ {
+  "id": "type-cup-198ldqn",
+  "texto": "Type: cup."
+ },
+ {
+  "id": "type-dog-198m0sl",
+  "texto": "Type: dog."
+ },
+ {
+  "id": "type-duck-18ychc",
+  "texto": "Type: duck."
+ },
+ {
+  "id": "type-fish-1a180t",
+  "texto": "Type: fish."
+ },
+ {
+  "id": "type-frog-1ab1ud",
+  "texto": "Type: frog."
+ },
+ {
+  "id": "type-hand-1gzp6y",
+  "texto": "Type: hand."
+ },
+ {
+  "id": "type-hat-198uy9g",
+  "texto": "Type: hat."
+ },
+ {
+  "id": "type-map-198sqdx",
+  "texto": "Type: map."
+ },
+ {
+  "id": "type-moon-1er62y",
+  "texto": "Type: moon."
+ },
+ {
+  "id": "type-pear-1mk5xr",
+  "texto": "Type: pear."
+ },
+ {
+  "id": "type-pig-1991ac7",
+  "texto": "Type: pig."
+ },
+ {
+  "id": "type-star-1ivpbx",
+  "texto": "Type: star."
+ },
+ {
+  "id": "type-sun-198wz9d",
+  "texto": "Type: sun."
+ },
+ {
+  "id": "up-arrow-moves-up-it-is-used-a-lot-i-3gj5gc",
+  "texto": "Up arrow. Moves up. It is used a lot in games."
+ },
+ {
+  "id": "very-good-keep-practicing-1p630d6",
+  "texto": "Very good! Keep practicing"
+ },
+ {
+  "id": "very-good-mission-five-press-enter-t-dk38s",
+  "texto": "Very good! Mission five: press Enter to go to the next line."
+ },
+ {
+  "id": "very-good-mission-four-press-delete-1o82k4z",
+  "texto": "Very good! Mission four: press delete to erase a letter."
+ },
+ {
+  "id": "very-good-mission-six-hold-down-shif-1fc2o09",
+  "texto": "Very good! Mission six: hold down Shift and tap a letter."
+ },
+ {
+  "id": "very-good-mission-three-press-the-sp-1vb7sdp",
+  "texto": "Very good! Mission three: press the space bar. It is the longest key."
+ },
+ {
+  "id": "very-good-mission-two-type-a-number-1o96pee",
+  "texto": "Very good! Mission two: type a number. They are in the top row."
+ },
+ {
+  "id": "wash-your-hands-before-using-the-com-3xpjmu",
+  "texto": "Wash your hands before using the computer."
+ },
+ {
+  "id": "we-do-not-eat-or-drink-near-the-keyb-76ixta",
+  "texto": "We do not eat or drink near the keyboard. Crumbs and water can damage it."
+ },
+ {
+  "id": "well-done-you-logged-out-your-progre-1w658ve",
+  "texto": "Well done! You logged out. Your progress is saved."
+ },
+ {
+  "id": "when-i-finish-i-log-out-with-the-red-zu900",
+  "texto": "When I finish, I log out with the red button: Log out. This way I take care of my work and nobody else uses it."
+ },
+ {
+  "id": "which-key-erases-a-letter-shift-dele-11jyhgh",
+  "texto": "Which key erases a letter? Shift, Delete, Space"
+ },
+ {
+  "id": "which-key-goes-down-to-the-next-line-8s0v",
+  "texto": "Which key goes down to the next line? Delete, Arrow, Enter"
+ },
+ {
+  "id": "which-key-makes-big-letters-shift-en-cez42m",
+  "texto": "Which key makes big letters? Shift, Enter, Number 5"
+ },
+ {
+  "id": "which-key-puts-in-a-space-space-ente-1y4wuw5",
+  "texto": "Which key puts in a space? Space, Enter, Delete"
+ },
+ {
+  "id": "which-one-is-the-letter-a-m-a-5-1nc3wsm",
+  "texto": "Which one is the letter A? M, A, 5"
+ },
+ {
+  "id": "who-are-you-tap-your-group-and-then-xvkywy",
+  "texto": "Who are you? Tap your group and then your name. If it is your first time, tap: I am new."
+ },
+ {
+  "id": "you-are-a-keyboard-champion-1631l2a",
+  "texto": "You are a keyboard champion!"
+ },
+ {
+  "id": "you-caught-0-moles-1uqgqdo",
+  "texto": "You caught 0 moles."
+ },
+ {
+  "id": "you-caught-0-of-ten-balloons-7xf5h8",
+  "texto": "You caught 0 of ten balloons."
+ },
+ {
+  "id": "you-caught-1-moles-2mw6lp",
+  "texto": "You caught 1 moles."
+ },
+ {
+  "id": "you-caught-1-of-ten-balloons-1a2kyot",
+  "texto": "You caught 1 of ten balloons."
+ },
+ {
+  "id": "you-caught-10-moles-1cls83h",
+  "texto": "You caught 10 moles."
+ },
+ {
+  "id": "you-caught-10-of-ten-balloons-1axa1ot",
+  "texto": "You caught 10 of ten balloons."
+ },
+ {
+  "id": "you-caught-11-moles-15o8pwc",
+  "texto": "You caught 11 moles."
+ },
+ {
+  "id": "you-caught-12-moles-1q5h96n",
+  "texto": "You caught 12 moles."
+ },
+ {
+  "id": "you-caught-13-moles-1e70nvi",
+  "texto": "You caught 13 moles."
+ },
+ {
+  "id": "you-caught-14-moles-lo1i7t",
+  "texto": "You caught 14 moles."
+ },
+ {
+  "id": "you-caught-15-moles-eqi00o",
+  "texto": "You caught 15 moles."
+ },
+ {
+  "id": "you-caught-16-moles-z7qjaz",
+  "texto": "You caught 16 moles."
+ },
+ {
+  "id": "you-caught-17-moles-n99xzu",
+  "texto": "You caught 17 moles."
+ },
+ {
+  "id": "you-caught-18-moles-vg5zat",
+  "texto": "You caught 18 moles."
+ },
+ {
+  "id": "you-caught-19-moles-oimh3o",
+  "texto": "You caught 19 moles."
+ },
+ {
+  "id": "you-caught-2-moles-484mdq",
+  "texto": "You caught 2 moles."
+ },
+ {
+  "id": "you-caught-2-of-ten-balloons-53lxry",
+  "texto": "You caught 2 of ten balloons."
+ },
+ {
+  "id": "you-caught-20-moles-1fllpby",
+  "texto": "You caught 20 moles."
+ },
+ {
+  "id": "you-caught-21-moles-sot6xr",
+  "texto": "You caught 21 moles."
+ },
+ {
+  "id": "you-caught-22-moles-121wo8s",
+  "texto": "You caught 22 moles."
+ },
+ {
+  "id": "you-caught-23-moles-f545ul",
+  "texto": "You caught 23 moles."
+ },
+ {
+  "id": "you-caught-24-moles-onuzga",
+  "texto": "You caught 24 moles."
+ },
+ {
+  "id": "you-caught-25-moles-1r2h23",
+  "texto": "You caught 25 moles."
+ },
+ {
+  "id": "you-caught-26-moles-b45yd4",
+  "texto": "You caught 26 moles."
+ },
+ {
+  "id": "you-caught-27-moles-1n8hhy1",
+  "texto": "You caught 27 moles."
+ },
+ {
+  "id": "you-caught-28-moles-yfzgja",
+  "texto": "You caught 28 moles."
+ },
+ {
+  "id": "you-caught-29-moles-bj6y53",
+  "texto": "You caught 29 moles."
+ },
+ {
+  "id": "you-caught-3-moles-g6l7ov",
+  "texto": "You caught 3 moles."
+ },
+ {
+  "id": "you-caught-3-of-ten-balloons-1j6jexr",
+  "texto": "You caught 3 of ten balloons."
+ },
+ {
+  "id": "you-caught-30-moles-1ut75dr",
+  "texto": "You caught 30 moles."
+ },
+ {
+  "id": "you-caught-31-moles-1o14tum",
+  "texto": "You caught 31 moles."
+ },
+ {
+  "id": "you-caught-32-moles-1maf7el",
+  "texto": "You caught 32 moles."
+ },
+ {
+  "id": "you-caught-33-moles-1ahfsrg",
+  "texto": "You caught 33 moles."
+ },
+ {
+  "id": "you-caught-34-moles-13vgfi3",
+  "texto": "You caught 34 moles."
+ },
+ {
+  "id": "you-caught-35-moles-x3e3yy",
+  "texto": "You caught 35 moles."
+ },
+ {
+  "id": "you-caught-36-moles-vcohix",
+  "texto": "You caught 36 moles."
+ },
+ {
+  "id": "you-caught-37-moles-jjp2vs",
+  "texto": "You caught 37 moles."
+ },
+ {
+  "id": "you-caught-38-moles-1dnkwl3",
+  "texto": "You caught 38 moles."
+ },
+ {
+  "id": "you-caught-39-moles-16vil1y",
+  "texto": "You caught 39 moles."
+ },
+ {
+  "id": "you-caught-4-moles-13sq0i0",
+  "texto": "You caught 4 moles."
+ },
+ {
+  "id": "you-caught-4-of-ten-balloons-1in5ed4",
+  "texto": "You caught 4 of ten balloons."
+ },
+ {
+  "id": "you-caught-40-moles-132dke0",
+  "texto": "You caught 40 moles."
+ },
+ {
+  "id": "you-caught-5-moles-1aq9ip5",
+  "texto": "You caught 5 moles."
+ },
+ {
+  "id": "you-caught-5-of-ten-balloons-lr75ll",
+  "texto": "You caught 5 of ten balloons."
+ },
+ {
+  "id": "you-caught-6-moles-1cbhyh6",
+  "texto": "You caught 6 moles."
+ },
+ {
+  "id": "you-caught-6-of-ten-balloons-1ftc6nu",
+  "texto": "You caught 6 of ten balloons."
+ },
+ {
+  "id": "you-caught-7-moles-1o9yjsb",
+  "texto": "You caught 7 moles."
+ },
+ {
+  "id": "you-caught-7-of-ten-balloons-uv5luj",
+  "texto": "You caught 7 of ten balloons."
+ },
+ {
+  "id": "you-caught-8-moles-1dkuhl0",
+  "texto": "You caught 8 moles."
+ },
+ {
+  "id": "you-caught-8-of-ten-balloons-1im16yc",
+  "texto": "You caught 8 of ten balloons."
+ },
+ {
+  "id": "you-caught-9-moles-1kidzs5",
+  "texto": "You caught 9 moles."
+ },
+ {
+  "id": "you-caught-9-of-ten-balloons-lq2y6t",
+  "texto": "You caught 9 of ten balloons."
+ },
+ {
+  "id": "you-finished-the-challenge-you-got-0-5j72qg",
+  "texto": "You finished the challenge! You got 0 correct answers. You can go to your diploma now."
+ },
+ {
+  "id": "you-finished-the-challenge-you-got-1-j0h1q1",
+  "texto": "You finished the challenge! You got 1 correct answers. You can go to your diploma now."
+ },
+ {
+  "id": "you-finished-the-challenge-you-got-2-4g9wey",
+  "texto": "You finished the challenge! You got 2 correct answers. You can go to your diploma now."
+ },
+ {
+  "id": "you-finished-the-challenge-you-got-3-1h9ovjv",
+  "texto": "You finished the challenge! You got 3 correct answers. You can go to your diploma now."
+ },
+ {
+  "id": "you-finished-the-challenge-you-got-4-iuxfdo",
+  "texto": "You finished the challenge! You got 4 correct answers. You can go to your diploma now."
+ },
+ {
+  "id": "you-finished-the-challenge-you-got-5-wc7ed9",
+  "texto": "You finished the challenge! You got 5 correct answers. You can go to your diploma now."
+ },
+ {
+  "id": "you-finished-the-challenge-you-got-6-hs0926",
+  "texto": "You finished the challenge! You got 6 correct answers. You can go to your diploma now."
+ },
+ {
+  "id": "you-finished-the-challenge-you-got-7-1ulf873",
+  "texto": "You finished the challenge! You got 7 correct answers. You can go to your diploma now."
+ },
+ {
+  "id": "you-finished-the-challenge-you-got-8-dcr5ao",
+  "texto": "You finished the challenge! You got 8 correct answers. You can go to your diploma now."
+ },
+ {
+  "id": "you-typed-your-name-very-well-17xhah3",
+  "texto": "You typed your name very well!"
+ },
+ {
+  "id": "aitch-2t940i",
+  "texto": "aitch"
+ },
+ {
+  "id": "ar-3hmba",
+  "texto": "ar"
+ },
+ {
+  "id": "ay-3hmbh",
+  "texto": "ay"
+ },
+ {
+  "id": "bat-choo-choo-p4umaa",
+  "texto": "bat! Choo choo!"
+ },
+ {
+  "id": "bed-choo-choo-1wwyi12",
+  "texto": "bed! Choo choo!"
+ },
+ {
+  "id": "bee-375jzb",
+  "texto": "bee"
+ },
+ {
+  "id": "bee-choo-choo-1211vuv",
+  "texto": "bee! Choo choo!"
+ },
+ {
+  "id": "boot-choo-choo-1tk2akz",
+  "texto": "boot! Choo choo!"
+ },
+ {
+  "id": "bus-choo-choo-89zugx",
+  "texto": "bus! Choo choo!"
+ },
+ {
+  "id": "cat-choo-choo-1tbm30z",
+  "texto": "cat! Choo choo!"
+ },
+ {
+  "id": "cow-choo-choo-1uxanku",
+  "texto": "cow! Choo choo!"
+ },
+ {
+  "id": "cue-375l4m",
+  "texto": "cue"
+ },
+ {
+  "id": "cup-choo-choo-14dqv7",
+  "texto": "cup! Choo choo!"
+ },
+ {
+  "id": "dee-375bvl",
+  "texto": "dee"
+ },
+ {
+  "id": "dog-choo-choo-1ruq1mx",
+  "texto": "dog! Choo choo!"
+ },
+ {
+  "id": "double-you-xz502b",
+  "texto": "double you"
+ },
+ {
+  "id": "duck-choo-choo-1qv1zj0",
+  "texto": "duck! Choo choo!"
+ },
+ {
+  "id": "ee-3hm79",
+  "texto": "ee"
+ },
+ {
+  "id": "eff-375clc",
+  "texto": "eff"
+ },
+ {
+  "id": "eight-2qf836",
+  "texto": "eight"
+ },
+ {
+  "id": "el-3hm7g",
+  "texto": "el"
+ },
+ {
+  "id": "em-3hm7h",
+  "texto": "em"
+ },
+ {
+  "id": "en-3hm7i",
+  "texto": "en"
+ },
+ {
+  "id": "enye-yisolu",
+  "texto": "enye"
+ },
+ {
+  "id": "ess-375d28",
+  "texto": "ess"
+ },
+ {
+  "id": "ex-3hm7s",
+  "texto": "ex"
+ },
+ {
+  "id": "eye-375d4s",
+  "texto": "eye"
+ },
+ {
+  "id": "fish-choo-choo-szw4y9",
+  "texto": "fish! Choo choo!"
+ },
+ {
+  "id": "five-yiwgt5",
+  "texto": "five"
+ },
+ {
+  "id": "four-yiwf57",
+  "texto": "four"
+ },
+ {
+  "id": "frog-choo-choo-1vpkh95",
+  "texto": "frog! Choo choo!"
+ },
+ {
+  "id": "gee-375hk2",
+  "texto": "gee"
+ },
+ {
+  "id": "hand-choo-choo-1d07ffq",
+  "texto": "hand! Choo choo!"
+ },
+ {
+  "id": "hat-choo-choo-1ajaguw",
+  "texto": "hat! Choo choo!"
+ },
+ {
+  "id": "jay-375qt3",
+  "texto": "jay"
+ },
+ {
+  "id": "kay-375rjq",
+  "texto": "kay"
+ },
+ {
+  "id": "map-choo-choo-1smn2ah",
+  "texto": "map! Choo choo!"
+ },
+ {
+  "id": "moon-choo-choo-1su7x2e",
+  "texto": "moon! Choo choo!"
+ },
+ {
+  "id": "nine-yj28zt",
+  "texto": "nine"
+ },
+ {
+  "id": "oh-3hmjm",
+  "texto": "oh"
+ },
+ {
+  "id": "one-375ny9",
+  "texto": "one"
+ },
+ {
+  "id": "pear-choo-choo-ar3coz",
+  "texto": "pear! Choo choo!"
+ },
+ {
+  "id": "pee-375shh",
+  "texto": "pee"
+ },
+ {
+  "id": "pig-choo-choo-t0v8yj",
+  "texto": "pig! Choo choo!"
+ },
+ {
+  "id": "see-375y5y",
+  "texto": "see"
+ },
+ {
+  "id": "seven-38fdu6",
+  "texto": "seven"
+ },
+ {
+  "id": "six-375yg7",
+  "texto": "six"
+ },
+ {
+  "id": "star-choo-choo-15qgqpd",
+  "texto": "star! Choo choo!"
+ },
+ {
+  "id": "sun-choo-choo-1yvqv2l",
+  "texto": "sun! Choo choo!"
+ },
+ {
+  "id": "tee-375pbl",
+  "texto": "tee"
+ },
+ {
+  "id": "three-312f6z",
+  "texto": "three"
+ },
+ {
+  "id": "two-375ovd",
+  "texto": "two"
+ },
+ {
+  "id": "vee-375u9f",
+  "texto": "vee"
+ },
+ {
+  "id": "why-375v43",
+  "texto": "why"
+ },
+ {
+  "id": "you-375zvq",
+  "texto": "you"
+ },
+ {
+  "id": "zee-37645b",
+  "texto": "zee"
+ },
+ {
+  "id": "zero-yjhq87",
+  "texto": "zero"
+ }
+]
