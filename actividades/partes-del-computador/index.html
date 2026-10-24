@@ -21,7 +21,7 @@
   --glass-line:rgba(255,255,255,.75); --shadow:0 10px 40px rgba(20,60,56,.14);
   --blob1:rgba(23,184,172,.55); --blob2:rgba(255,140,66,.50); --blob3:rgba(124,110,255,.38);
   --btn-bg:#10201F; --btn-fg:#F2FAF8;
-  --wall:#CFE6E3; --floor:#E3D3B0; --tint:rgba(255,255,255,.55); --soft:var(--muted);
+  --wall:#CFE6E3; --floor:#E3D3B0; --wall-hi:#E6F5F2; --wall-lo:#BAD6D2; --floor-hi:#EADBB8; --floor-lo:#C9B48A; --sky-hi:#9EE0F5; --sky-lo:#D8F3FB; --win-frame:#FFFFFF; --lamp:rgba(255,246,200,.55); --tint:rgba(255,255,255,.55); --soft:var(--muted);
   --f-display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
   --f-body:'Figtree','Segoe UI',system-ui,sans-serif;
   --f-mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
@@ -35,7 +35,7 @@
   --glass:rgba(30,48,47,.48); --glass-hi:rgba(40,62,61,.70); --glass-in:rgba(255,255,255,.07);
   --glass-line:rgba(255,255,255,.16); --shadow:0 10px 40px rgba(0,0,0,.45);
   --blob1:rgba(20,150,140,.45); --blob2:rgba(220,100,40,.34); --blob3:rgba(100,80,230,.34);
-  --btn-bg:#E8F3F1; --btn-fg:#08100F; --wall:#1D3837; --floor:#33302A; --tint:rgba(255,255,255,.07); color-scheme:dark}}
+  --btn-bg:#E8F3F1; --btn-fg:#08100F; --wall:#1D3837; --floor:#33302A; --wall-hi:#26494A; --wall-lo:#142A2B; --floor-hi:#3B372E; --floor-lo:#25221C; --sky-hi:#16224A; --sky-lo:#2C3C78; --win-frame:#9BB1AE; --lamp:rgba(160,190,255,.22); --tint:rgba(255,255,255,.07); color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#08100F; --ink:#E8F3F1; --muted:#9BB1AE; --line:rgba(255,255,255,.14);
   --hw:#FFA66B; --hw-soft:rgba(255,140,66,.22); --sw:#58DDD3; --sw-soft:rgba(40,200,190,.20);
@@ -44,7 +44,7 @@
   --glass:rgba(30,48,47,.48); --glass-hi:rgba(40,62,61,.70); --glass-in:rgba(255,255,255,.07);
   --glass-line:rgba(255,255,255,.16); --shadow:0 10px 40px rgba(0,0,0,.45);
   --blob1:rgba(20,150,140,.45); --blob2:rgba(220,100,40,.34); --blob3:rgba(100,80,230,.34);
-  --btn-bg:#E8F3F1; --btn-fg:#08100F; --wall:#1D3837; --floor:#33302A; --tint:rgba(255,255,255,.07); color-scheme:dark}
+  --btn-bg:#E8F3F1; --btn-fg:#08100F; --wall:#1D3837; --floor:#33302A; --wall-hi:#26494A; --wall-lo:#142A2B; --floor-hi:#3B372E; --floor-lo:#25221C; --sky-hi:#16224A; --sky-lo:#2C3C78; --win-frame:#9BB1AE; --lamp:rgba(160,190,255,.22); --tint:rgba(255,255,255,.07); color-scheme:dark}
 
 *,*::before,*::after{box-sizing:border-box}
 html{min-height:100%; scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -132,6 +132,38 @@ th{font-family:var(--f-mono); font-size:12px; text-transform:uppercase; letter-s
 td.c,th.c{text-align:center}
 .intro{color:var(--muted); margin:8px 0 18px; max-width:62ch}
 
+/* encabezado compacto */
+.wrap{position:relative}
+.langbar{position:absolute;top:0;right:0;margin:0;z-index:3}
+#v-app header{margin-bottom:10px;padding-top:6px}
+#v-app h1{font-size:clamp(28px,4.2vw,40px)}
+#v-app .lead{font-size:16px;margin-top:4px}
+#v-app .me{justify-content:flex-end}
+#v-app .me .tab{min-height:44px;padding:8px 14px;font-size:16px}
+@media (max-width:760px){.langbar{position:static;margin-bottom:10px}}
+
+/* cuerpo y relieve */
+.btn{background-image:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,0) 55%);box-shadow:0 4px 0 rgba(10,22,51,.28),0 10px 18px rgba(20,60,56,.2);transition:transform .1s,box-shadow .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(10,22,51,.28),0 3px 8px rgba(20,60,56,.2)}
+.btn.alt,.btn.ghost{background-image:none;box-shadow:0 3px 0 rgba(10,22,51,.14),0 8px 16px rgba(20,60,56,.12)}
+.tab{box-shadow:0 3px 0 rgba(10,22,51,.12)}
+.mcard{box-shadow:0 5px 0 rgba(10,22,51,.12),0 12px 24px rgba(20,60,56,.12);transition:transform .12s,box-shadow .12s}
+.mcard:hover:not(.locked){transform:translateY(-3px)}
+.mcard .num{box-shadow:0 3px 0 rgba(10,22,51,.18)}
+.mcard .me{filter:drop-shadow(0 4px 3px rgba(10,22,51,.28))}
+.choice{box-shadow:0 5px 0 rgba(10,22,51,.16),0 12px 24px rgba(20,60,56,.14);transition:transform .12s,box-shadow .12s,background .15s}
+.choice:hover:not(:disabled){transform:translateY(-4px)}
+.choice:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 rgba(10,22,51,.16)}
+.choice .ce{filter:drop-shadow(0 5px 4px rgba(10,22,51,.3))}
+.choice.right{box-shadow:0 5px 0 var(--ok),0 0 28px var(--ok-soft)}
+.emoji,.qemoji{filter:drop-shadow(0 6px 5px rgba(10,22,51,.28))}
+.dot{box-shadow:0 2px 0 rgba(10,22,51,.16);background:var(--glass-in)}
+.dot.on{box-shadow:0 2px 0 rgba(10,22,51,.2),0 0 12px var(--ok-soft)}
+.scene{box-shadow:var(--shadow),0 0 0 6px var(--glass-in)}
+.caption{background:linear-gradient(180deg,var(--glass-hi),var(--glass-in))}
+.care{box-shadow:inset 0 2px 6px rgba(10,22,51,.08)}
+.starcount{box-shadow:0 3px 0 rgba(10,22,51,.14),0 0 18px var(--sun-soft)}
+
 /* juego */
 main{display:grid; gap:18px; align-items:start}
 main.withscene{grid-template-columns:1.6fr 1fr}
@@ -142,7 +174,7 @@ main.full .scene{display:none}
 .scene{overflow:hidden}
 .caption{font-family:var(--f-display); font-weight:800; font-size:22px; padding:12px 18px; border-bottom:1px solid var(--glass-line); background:var(--glass-in)}
 .scene svg{display:block; width:100%; height:auto; max-width:100%}
-.wall{fill:var(--wall)} .floor{fill:var(--floor)}
+.wall{fill:url(#wallG)} .floor{fill:url(#floorG)}
 
 .part{cursor:pointer}
 .part .body{transform-box:fill-box; transform-origin:50% 100%}
@@ -223,6 +255,23 @@ main.full .scene{display:none}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--wall-hi)"/><stop offset="1" style="stop-color:var(--wall-lo)"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--floor-hi)"/><stop offset="1" style="stop-color:var(--floor-lo)"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EDBE86"/><stop offset=".5" stop-color="#D9A066"/><stop offset="1" stop-color="#C58B52"/></linearGradient>
+  <linearGradient id="deskF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B97B40"/><stop offset="1" stop-color="#8E5A2C"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sky-hi)"/><stop offset="1" style="stop-color:var(--sky-lo)"/></linearGradient>
+  <linearGradient id="lightG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--lamp)"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <radialGradient id="sunG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFF6C2"/><stop offset="1" stop-color="#FFF6C2" stop-opacity="0"/></radialGradient>
+  <filter id="pdepth" x="-8%" y="-8%" width="118%" height="132%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="1.8" result="bl"/>
+    <feSpecularLighting in="bl" surfaceScale="4" specularConstant=".7" specularExponent="18" lighting-color="#ffffff" result="sp"><feDistantLight azimuth="235" elevation="55"/></feSpecularLighting>
+    <feComposite in="sp" in2="SourceAlpha" operator="in" result="hi"/>
+    <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="sb"/><feOffset in="sb" dx="2" dy="7" result="so"/>
+    <feFlood flood-color="#0a1633" flood-opacity=".3"/><feComposite in2="so" operator="in" result="sh"/>
+    <feMerge><feMergeNode in="sh"/><feMergeNode in="SourceGraphic"/><feMergeNode in="hi"/></feMerge>
+  </filter>
+</defs></svg>
 <div class="wrap">
   <div class="langbar"><div id="lang" class="lang" data-i18n-attr="aria-label:ui.langLabel" aria-label="Idioma / Language"></div></div>
 
@@ -257,13 +306,11 @@ main.full .scene{display:none}
       <div class="me">
         <span class="chip" id="who-chip"></span>
         <span class="chip starcount" id="starcount" data-i18n-attr="aria-label:ui.stars" aria-label="Estrellas">⭐ 0</span>
+        <button class="tab" id="bMap" data-i18n="ui.map">🗺️ Misiones</button>
+        <button class="tab" id="bSound" aria-pressed="true">🔊 Sonido: sí</button>
+        <button class="link" id="switch-user" type="button" data-i18n="app.switch">Cambiar de estudiante</button>
       </div>
     </header>
-    <div class="toolbar">
-      <button class="tab" id="bMap" data-i18n="ui.map">🗺️ Misiones</button>
-      <button class="tab" id="bSound" aria-pressed="true">🔊 Sonido: sí</button>
-      <button class="link" id="switch-user" type="button" data-i18n="app.switch">Cambiar de estudiante</button>
-    </div>
     <div id="nosave" class="warn" hidden data-i18n="nosave">Este navegador no permite guardar datos. Puedes jugar, pero tu avance se perderá al cerrar la página.</div>
     <nav id="tabs" data-i18n-attr="aria-label:ui.missionsNav" aria-label="Misiones"></nav>
     <div class="meter" aria-hidden="true"><i id="meter"></i></div>
@@ -276,10 +323,24 @@ main.full .scene{display:none}
       <svg id="svgMesa" viewBox="0 0 1000 720" role="img" data-i18n-attr="aria-label:svg.mesa" aria-label="Escritorio con un computador de mesa y sus partes">
         <rect class="wall" x="0" y="0" width="1000" height="690"/>
         <rect class="floor" x="0" y="690" width="1000" height="30"/>
-        <rect x="20" y="400" width="960" height="92" rx="10" fill="#D9A066"/>
-        <rect x="20" y="488" width="960" height="32" rx="8" fill="#A96F38"/>
-        <rect x="70" y="518" width="34" height="172" fill="#A96F38"/>
-        <rect x="896" y="518" width="34" height="172" fill="#A96F38"/>
+        <g class="room" pointer-events="none" aria-hidden="true">
+          <polygon points="76,236 244,236 560,600 300,600" fill="url(#lightG)"/>
+          <rect x="52" y="44" width="204" height="208" rx="12" fill="var(--win-frame)" opacity=".95"/>
+          <rect x="66" y="58" width="176" height="180" rx="5" fill="url(#skyG)"/>
+          <circle cx="196" cy="108" r="46" fill="url(#sunG)"/>
+          <g fill="#fff" opacity=".9"><circle cx="110" cy="150" r="14"/><circle cx="130" cy="144" r="18"/><circle cx="152" cy="152" r="13"/><rect x="110" y="150" width="42" height="14" rx="6"/></g>
+          <rect x="150" y="58" width="8" height="180" fill="var(--win-frame)"/><rect x="66" y="144" width="176" height="8" fill="var(--win-frame)"/>
+          <rect x="44" y="250" width="220" height="14" rx="6" fill="var(--win-frame)"/><rect x="44" y="262" width="220" height="5" rx="2.5" fill="rgba(10,22,51,.18)"/>
+          <circle cx="880" cy="96" r="44" fill="#fff" stroke="#2E3A55" stroke-width="7"/>
+          <circle cx="880" cy="96" r="44" fill="none" stroke="rgba(10,22,51,.12)" stroke-width="2" transform="translate(2 4)"/>
+          <g stroke="#2E3A55" stroke-width="5" stroke-linecap="round"><line x1="880" y1="96" x2="880" y2="68"/><line x1="880" y1="96" x2="900" y2="107"/></g>
+          <circle cx="880" cy="96" r="5" fill="#E5484D"/>
+          <rect x="0" y="662" width="1000" height="28" fill="rgba(255,255,255,.4)"/><rect x="0" y="662" width="1000" height="4" fill="rgba(255,255,255,.6)"/><rect x="0" y="686" width="1000" height="4" fill="rgba(10,22,51,.14)"/>
+        </g>
+        <rect x="20" y="400" width="960" height="92" rx="10" fill="url(#deskG)"/><rect x="26" y="402" width="948" height="5" rx="2.5" fill="rgba(255,255,255,.38)"/>
+        <rect x="20" y="488" width="960" height="32" rx="8" fill="url(#deskF)"/>
+        <rect x="70" y="518" width="34" height="172" fill="url(#deskF)"/>
+        <rect x="896" y="518" width="34" height="172" fill="url(#deskF)"/>
 
         <g class="part" data-id="cortapicos" tabindex="0" role="button" data-i18n-attr="aria-label:a.cortapicos" aria-label="Cortapicos">
           <rect class="halo" x="344" y="626" width="312" height="72" rx="22" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="14 10"/>
@@ -290,7 +351,7 @@ main.full .scene{display:none}
           <rect x="936" y="600" width="40" height="56" rx="6" fill="#FFFFFF" stroke="#1F2A44" stroke-width="3"/>
           <circle cx="956" cy="628" r="7" fill="#1F2A44"/>
           <path d="M640 664 C780 664 880 628 950 628" stroke="#2E3A55" stroke-width="5" fill="none" stroke-linecap="round"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <rect x="360" y="640" width="280" height="44" rx="14" fill="#F4F6F8" stroke="#1F2A44" stroke-width="4"/>
             <rect x="382" y="650" width="36" height="24" rx="8" fill="#DDE3EA"/><circle cx="394" cy="662" r="3" fill="#1F2A44"/><circle cx="406" cy="662" r="3" fill="#1F2A44"/>
             <rect x="442" y="650" width="36" height="24" rx="8" fill="#DDE3EA"/><circle cx="454" cy="662" r="3" fill="#1F2A44"/><circle cx="466" cy="662" r="3" fill="#1F2A44"/>
@@ -303,7 +364,7 @@ main.full .scene{display:none}
 
         <g class="part" data-id="impresora" tabindex="0" role="button" data-i18n-attr="aria-label:a.impresora" aria-label="Impresora">
           <rect class="halo" x="26" y="246" width="198" height="200" rx="22" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="14 10"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <rect x="72" y="262" width="104" height="66" fill="#FFFFFF" stroke="#B8C2CC" stroke-width="3"/>
             <line x1="86" y1="280" x2="160" y2="280" stroke="#B8C2CC" stroke-width="4"/>
             <line x1="86" y1="296" x2="146" y2="296" stroke="#B8C2CC" stroke-width="4"/>
@@ -318,11 +379,11 @@ main.full .scene{display:none}
         <g class="part" data-id="parlantes" tabindex="0" role="button" data-i18n-attr="aria-label:a.parlantes" aria-label="Parlantes">
           <rect class="halo" x="220" y="258" width="88" height="174" rx="20" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="14 10"/>
           <rect class="halo" x="672" y="258" width="88" height="174" rx="20" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="14 10"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <rect x="232" y="270" width="64" height="150" rx="14" fill="#7B5CD6"/>
             <circle cx="264" cy="308" r="15" fill="#4A3596"/><circle cx="264" cy="372" r="24" fill="#4A3596"/><circle cx="264" cy="372" r="9" fill="#B7A6F0"/>
           </g>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <rect x="684" y="270" width="64" height="150" rx="14" fill="#7B5CD6"/>
             <circle cx="716" cy="308" r="15" fill="#4A3596"/><circle cx="716" cy="372" r="24" fill="#4A3596"/><circle cx="716" cy="372" r="9" fill="#B7A6F0"/>
           </g>
@@ -332,7 +393,7 @@ main.full .scene{display:none}
 
         <g class="part" data-id="monitor" tabindex="0" role="button" data-i18n-attr="aria-label:a.monitor" aria-label="Monitor">
           <rect class="halo" x="306" y="96" width="368" height="330" rx="26" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="14 10"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <rect x="470" y="356" width="40" height="50" fill="#5A6478"/>
             <ellipse cx="490" cy="410" rx="72" ry="11" fill="#5A6478"/>
             <rect x="320" y="110" width="340" height="252" rx="18" fill="#2E3A55"/>
@@ -347,7 +408,7 @@ main.full .scene{display:none}
 
         <g class="part" data-id="camara" tabindex="0" role="button" data-i18n-attr="aria-label:a.camara" aria-label="Cámara web">
           <rect class="halo" x="446" y="68" width="88" height="52" rx="22" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="10 8"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <rect x="478" y="102" width="24" height="14" rx="3" fill="#2E3A55"/>
             <rect x="458" y="78" width="64" height="30" rx="15" fill="#2E3A55"/>
             <circle cx="486" cy="93" r="10" fill="#7FD3F7" stroke="#1F2A44" stroke-width="4"/>
@@ -359,7 +420,7 @@ main.full .scene{display:none}
 
         <g class="part" data-id="torre" tabindex="0" role="button" data-i18n-attr="aria-label:a.torre" aria-label="Torre o CPU">
           <rect class="halo" x="776" y="166" width="168" height="288" rx="24" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="14 10"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <rect x="790" y="180" width="140" height="262" rx="14" fill="#FF6B5B"/>
             <rect x="810" y="208" width="100" height="14" rx="5" fill="#C94A3D"/>
             <rect x="810" y="234" width="100" height="14" rx="5" fill="#C94A3D"/>
@@ -374,7 +435,7 @@ main.full .scene{display:none}
 
         <g class="part" data-id="teclado" tabindex="0" role="button" data-i18n-attr="aria-label:a.teclado" aria-label="Teclado">
           <rect class="halo" x="306" y="424" width="358" height="80" rx="18" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="14 10"/>
-          <g class="body" id="kbMesa">
+          <g class="body" filter="url(#pdepth)" id="kbMesa">
             <rect x="320" y="436" width="330" height="56" rx="10" fill="#FFC93C" stroke="#D9A21E" stroke-width="3"/>
           </g>
           <rect x="310" y="428" width="350" height="72" fill="transparent"/>
@@ -382,7 +443,7 @@ main.full .scene{display:none}
 
         <g class="part" data-id="mouse" tabindex="0" role="button" data-i18n-attr="aria-label:a.mouse" aria-label="Mouse">
           <rect class="halo" x="684" y="420" width="72" height="84" rx="18" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="14 10"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <ellipse cx="720" cy="462" rx="24" ry="32" fill="#FFFFFF" stroke="#2E3A55" stroke-width="4"/>
             <line x1="720" y1="431" x2="720" y2="456" stroke="#2E3A55" stroke-width="3"/>
             <rect x="715" y="439" width="10" height="13" rx="5" fill="#FF6B5B"/>
@@ -395,10 +456,24 @@ main.full .scene{display:none}
       <svg id="svgPort" viewBox="0 0 1000 720" role="img" data-i18n-attr="aria-label:svg.port" aria-label="Mesa con un portátil y sus partes" style="display:none">
         <rect class="wall" x="0" y="0" width="1000" height="690"/>
         <rect class="floor" x="0" y="690" width="1000" height="30"/>
-        <rect x="30" y="596" width="940" height="56" rx="10" fill="#D9A066"/>
-        <rect x="30" y="648" width="940" height="26" rx="8" fill="#A96F38"/>
-        <rect x="80" y="672" width="30" height="18" fill="#A96F38"/>
-        <rect x="890" y="672" width="30" height="18" fill="#A96F38"/>
+        <g class="room" pointer-events="none" aria-hidden="true">
+          <polygon points="76,236 244,236 560,600 300,600" fill="url(#lightG)"/>
+          <rect x="52" y="44" width="204" height="208" rx="12" fill="var(--win-frame)" opacity=".95"/>
+          <rect x="66" y="58" width="176" height="180" rx="5" fill="url(#skyG)"/>
+          <circle cx="196" cy="108" r="46" fill="url(#sunG)"/>
+          <g fill="#fff" opacity=".9"><circle cx="110" cy="150" r="14"/><circle cx="130" cy="144" r="18"/><circle cx="152" cy="152" r="13"/><rect x="110" y="150" width="42" height="14" rx="6"/></g>
+          <rect x="150" y="58" width="8" height="180" fill="var(--win-frame)"/><rect x="66" y="144" width="176" height="8" fill="var(--win-frame)"/>
+          <rect x="44" y="250" width="220" height="14" rx="6" fill="var(--win-frame)"/><rect x="44" y="262" width="220" height="5" rx="2.5" fill="rgba(10,22,51,.18)"/>
+          <circle cx="880" cy="96" r="44" fill="#fff" stroke="#2E3A55" stroke-width="7"/>
+          <circle cx="880" cy="96" r="44" fill="none" stroke="rgba(10,22,51,.12)" stroke-width="2" transform="translate(2 4)"/>
+          <g stroke="#2E3A55" stroke-width="5" stroke-linecap="round"><line x1="880" y1="96" x2="880" y2="68"/><line x1="880" y1="96" x2="900" y2="107"/></g>
+          <circle cx="880" cy="96" r="5" fill="#E5484D"/>
+          <rect x="0" y="662" width="1000" height="28" fill="rgba(255,255,255,.4)"/><rect x="0" y="662" width="1000" height="4" fill="rgba(255,255,255,.6)"/><rect x="0" y="686" width="1000" height="4" fill="rgba(10,22,51,.14)"/>
+        </g>
+        <rect x="30" y="596" width="940" height="56" rx="10" fill="url(#deskG)"/><rect x="36" y="598" width="928" height="5" rx="2.5" fill="rgba(255,255,255,.38)"/>
+        <rect x="30" y="648" width="940" height="26" rx="8" fill="url(#deskF)"/>
+        <rect x="80" y="672" width="30" height="18" fill="url(#deskF)"/>
+        <rect x="890" y="672" width="30" height="18" fill="url(#deskF)"/>
 
         <!-- base (no se toca) -->
         <rect x="250" y="398" width="500" height="22" rx="8" fill="#3E475A"/>
@@ -407,7 +482,7 @@ main.full .scene{display:none}
 
         <g class="part" data-id="p_pantalla" tabindex="0" role="button" data-i18n-attr="aria-label:a.p_pantalla" aria-label="Pantalla del portátil">
           <rect class="halo" x="236" y="46" width="528" height="366" rx="30" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="14 10"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <rect x="250" y="60" width="500" height="340" rx="22" fill="#5A6478"/>
             <rect x="274" y="94" width="452" height="286" rx="8" fill="#7FD3F7"/>
             <circle class="eye" cx="440" cy="222" r="14" fill="#1F2A44"/>
@@ -419,7 +494,7 @@ main.full .scene{display:none}
 
         <g class="part" data-id="p_camara" tabindex="0" role="button" data-i18n-attr="aria-label:a.p_camara" aria-label="Cámara web del portátil">
           <rect class="halo" x="470" y="60" width="62" height="32" rx="16" fill="#FFF6C2" stroke="#FFC93C" stroke-width="5" stroke-dasharray="8 6"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <circle cx="496" cy="76" r="8" fill="#1F2A44"/>
             <circle cx="496" cy="76" r="3.5" fill="#7FD3F7"/>
             <circle cx="514" cy="76" r="3.5" fill="#3DBE7A"/>
@@ -429,7 +504,7 @@ main.full .scene{display:none}
 
         <g class="part" data-id="p_teclado" tabindex="0" role="button" data-i18n-attr="aria-label:a.p_teclado" aria-label="Teclado del portátil">
           <polygon class="halo" points="290,422 710,422 744,508 256,508" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="14 10"/>
-          <g class="body" id="kbPort">
+          <g class="body" filter="url(#pdepth)" id="kbPort">
             <polygon points="300,430 700,430 730,500 270,500" fill="#2E3A55"/>
           </g>
           <polygon points="296,426 704,426 736,504 264,504" fill="transparent"/>
@@ -438,15 +513,15 @@ main.full .scene{display:none}
         <g class="part" data-id="p_parlantes" tabindex="0" role="button" data-i18n-attr="aria-label:a.p_parlantes" aria-label="Parlantes del portátil">
           <rect class="halo" x="246" y="436" width="50" height="66" rx="12" fill="#FFF6C2" stroke="#FFC93C" stroke-width="5" stroke-dasharray="8 6"/>
           <rect class="halo" x="706" y="436" width="50" height="66" rx="12" fill="#FFF6C2" stroke="#FFC93C" stroke-width="5" stroke-dasharray="8 6"/>
-          <g class="body" id="spkL"></g>
-          <g class="body" id="spkR"></g>
+          <g class="body" filter="url(#pdepth)" id="spkL"></g>
+          <g class="body" filter="url(#pdepth)" id="spkR"></g>
           <rect x="242" y="432" width="56" height="74" fill="transparent"/>
           <rect x="704" y="432" width="56" height="74" fill="transparent"/>
         </g>
 
         <g class="part" data-id="p_bateria" tabindex="0" role="button" data-i18n-attr="aria-label:a.p_bateria" aria-label="Batería del portátil">
           <rect class="halo" x="190" y="504" width="208" height="68" rx="14" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="14 10"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <rect x="200" y="514" width="176" height="48" rx="8" fill="#3DBE7A" fill-opacity=".22" stroke="#23874F" stroke-width="3" stroke-dasharray="8 6"/>
             <rect x="376" y="528" width="10" height="20" rx="3" fill="#23874F"/>
             <rect x="210" y="522" width="48" height="32" rx="4" fill="#3DBE7A"/>
@@ -458,7 +533,7 @@ main.full .scene{display:none}
 
         <g class="part" data-id="p_touchpad" tabindex="0" role="button" data-i18n-attr="aria-label:a.p_touchpad" aria-label="Panel táctil">
           <polygon class="halo" points="420,504 580,504 594,574 406,574" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="12 8"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <polygon points="430,512 570,512 582,566 418,566" fill="#C5CCDA" stroke="#7A8499" stroke-width="3"/>
             <line x1="421" y1="552" x2="579" y2="552" stroke="#7A8499" stroke-width="3"/>
             <line x1="500" y1="552" x2="500" y2="566" stroke="#7A8499" stroke-width="3"/>
@@ -468,7 +543,7 @@ main.full .scene{display:none}
 
         <g class="part" data-id="p_puertos" tabindex="0" role="button" data-i18n-attr="aria-label:a.p_puertos" aria-label="Puertos del portátil">
           <rect class="halo" x="148" y="572" width="126" height="32" rx="12" fill="#FFF6C2" stroke="#FFC93C" stroke-width="5" stroke-dasharray="8 6"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <rect x="160" y="584" width="28" height="10" rx="2" fill="#1F2A44"/>
             <rect x="198" y="584" width="28" height="10" rx="2" fill="#1F2A44"/>
             <circle cx="238" cy="589" r="5" fill="#1F2A44"/>
@@ -481,7 +556,7 @@ main.full .scene{display:none}
           <rect class="halo" x="836" y="580" width="140" height="80" rx="16" fill="#FFF6C2" stroke="#FFC93C" stroke-width="6" stroke-dasharray="12 8"/>
           <path d="M856 590 C826 604 826 626 852 628" stroke="#2E3A55" stroke-width="6" fill="none" stroke-linecap="round"/>
           <path d="M952 628 L1000 628" stroke="#2E3A55" stroke-width="6" fill="none"/>
-          <g class="body">
+          <g class="body" filter="url(#pdepth)">
             <rect x="852" y="608" width="100" height="40" rx="10" fill="#2E3A55"/>
             <path d="M896 616 l-8 12 h10 l-6 12" stroke="#FFC93C" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
             <circle cx="936" cy="620" r="5" fill="#3DBE7A"/>
