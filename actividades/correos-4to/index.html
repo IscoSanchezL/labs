@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Misión: Cartero Digital. Actividad de cierre sobre el uso del correo electrónico.">
+<title>Misión: Cartero Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#1D3557;
+    --blue-light:#2E4E7E;
+    --red:#E63946;
+    --gold:#F4A261;
+    --green:#2A9D8F;
+    --bg:#F1F5F9;
+    --card:#FFFFFF;
+    --ink:#1B2430;
+    --line:#D7DFE8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    font-family:'Nunito',sans-serif;
+    color:var(--ink);
+    line-height:1.5;
+  }
+  h1,h2,h3,.brand{font-family:'Fredoka',sans-serif;}
+
+  /* ---- Header: sello postal ---- */
+  header{
+    background:var(--blue);
+    color:#fff;
+    padding:28px 20px 34px;
+    position:relative;
+    text-align:center;
+  }
+  header .brand{
+    font-size:1rem;
+    letter-spacing:.4px;
+    color:var(--gold);
+    margin:0 0 6px;
+  }
+  header h1{
+    margin:0 0 8px;
+    font-size:clamp(1.6rem,4vw,2.3rem);
+  }
+  header p{
+    margin:0 auto;
+    max-width:560px;
+    color:#DCE5F0;
+    font-size:.98rem;
+  }
+  .stamp{
+    position:absolute;
+    top:18px; right:22px;
+    width:64px;height:64px;
+    background:#fff;
+    border:2px solid #E9EDF2;
+    border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    transform:rotate(6deg);
+    box-shadow:0 4px 10px rgba(0,0,0,.25);
+    -webkit-mask-image: radial-gradient(circle 4px at 8px 8px, transparent 4px, black 4.5px),
+                         radial-gradient(circle 4px at calc(100% - 8px) 8px, transparent 4px, black 4.5px),
+                         radial-gradient(circle 4px at 8px calc(100% - 8px), transparent 4px, black 4.5px),
+                         radial-gradient(circle 4px at calc(100% - 8px) calc(100% - 8px), transparent 4px, black 4.5px);
+    mask-image: radial-gradient(circle 4px at 8px 8px, transparent 4px, black 4.5px),
+                radial-gradient(circle 4px at calc(100% - 8px) 8px, transparent 4px, black 4.5px),
+                radial-gradient(circle 4px at 8px calc(100% - 8px), transparent 4px, black 4.5px),
+                radial-gradient(circle 4px at calc(100% - 8px) calc(100% - 8px), transparent 4px, black 4.5px);
+    font-size:1.7rem;
+  }
+
+  /* ---- progreso ---- */
+  .progress-wrap{
+    max-width:760px;margin:-16px auto 0;padding:0 20px;position:relative;z-index:2;
+  }
+  .progress-bar{
+    background:var(--card);
+    border-radius:999px;
+    padding:6px;
+    display:flex;
+    gap:6px;
+    box-shadow:0 6px 18px rgba(29,53,87,.12);
+  }
+  .progress-bar .seg{
+    flex:1;height:10px;border-radius:999px;background:var(--line);transition:background .3s;
+  }
+  .progress-bar .seg.done{background:var(--green);}
+
+  main{max-width:760px;margin:0 auto;padding:34px 20px 70px;}
+
+  .card{
+    background:var(--card);
+    border-radius:16px;
+    padding:26px 24px;
+    margin-bottom:26px;
+    box-shadow:0 4px 14px rgba(29,53,87,.08);
+    border-top:5px solid var(--blue);
+  }
+  .card.reto2{border-top-color:var(--red);}
+  .card.reto3{border-top-color:var(--green);}
+
+  .card-head{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px;flex-wrap:wrap;
+  }
+  .card-head h2{margin:0;font-size:1.25rem;color:var(--blue);}
+  .time-pill{
+    background:var(--bg);
+    color:var(--blue);
+    font-weight:700;
+    font-size:.8rem;
+    padding:5px 12px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .card > .intro{color:#4A5568;font-size:.95rem;margin:6px 0 18px;}
+
+  /* preguntas quiz */
+  .q{margin-bottom:20px;padding-bottom:18px;border-bottom:1px dashed var(--line);}
+  .q:last-child{border-bottom:none;margin-bottom:4px;padding-bottom:0;}
+  .q p.qtext{font-weight:700;margin:0 0 10px;}
+  .opts{display:grid;gap:8px;}
+  .opt{
+    display:block;
+    text-align:left;
+    background:var(--bg);
+    border:2px solid transparent;
+    border-radius:10px;
+    padding:10px 14px;
+    cursor:pointer;
+    font-family:'Nunito',sans-serif;
+    font-size:.95rem;
+    color:var(--ink);
+    transition:.15s;
+  }
+  .opt:hover{border-color:var(--blue-light);}
+  .opt.correct{background:#DFF5EF;border-color:var(--green);}
+  .opt.wrong{background:#FBE4E2;border-color:var(--red);}
+  .opt[disabled]{cursor:default;}
+  .fb{font-size:.85rem;margin-top:8px;padding:8px 10px;border-radius:8px;display:none;}
+  .fb.show{display:block;}
+  .fb.ok{background:#DFF5EF;color:#1B6B5D;}
+  .fb.no{background:#FBE4E2;color:#9C2B23;}
+
+  /* correos - reto 2 */
+  .mail{
+    background:var(--bg);
+    border-radius:12px;
+    padding:16px 16px 14px;
+    margin-bottom:16px;
+  }
+  .mail-meta{font-size:.82rem;color:#5B6B7E;margin-bottom:8px;}
+  .mail-meta b{color:var(--ink);}
+  .mail-body{font-size:.92rem;white-space:pre-line;margin-bottom:12px;}
+  .mail label{
+    display:flex;gap:8px;align-items:flex-start;font-size:.88rem;margin-bottom:6px;cursor:pointer;
+  }
+  .mail input[type=checkbox]{margin-top:3px;}
+  .check-btn,.primary-btn{
+    background:var(--blue);
+    color:#fff;
+    border:none;
+    padding:9px 18px;
+    border-radius:999px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:'Nunito',sans-serif;
+    font-size:.88rem;
+  }
+  .check-btn:hover,.primary-btn:hover{background:var(--blue-light);}
+  .mail-fb{font-size:.85rem;margin-top:10px;padding:8px 10px;border-radius:8px;display:none;}
+  .mail-fb.show{display:block;}
+
+  /* reto 3 formulario */
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-weight:700;font-size:.88rem;margin-bottom:4px;color:var(--blue);}
+  .field input, .field textarea{
+    width:100%;
+    border:2px solid var(--line);
+    border-radius:10px;
+    padding:10px 12px;
+    font-family:'Nunito',sans-serif;
+    font-size:.95rem;
+    resize:vertical;
+  }
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--blue-light);}
+  .checklist{list-style:none;padding:0;margin:16px 0;display:grid;gap:8px;}
+  .checklist li{
+    display:flex;gap:8px;align-items:center;font-size:.88rem;
+    padding:8px 10px;border-radius:8px;background:var(--bg);color:#5B6B7E;
+  }
+  .checklist li.ok{background:#DFF5EF;color:#1B6B5D;font-weight:700;}
+  .checklist li .dot{width:9px;height:9px;border-radius:50%;background:#C4CEDA;flex:none;}
+  .checklist li.ok .dot{background:var(--green);}
+
+  /* cierre */
+  #cierre{display:none;}
+  #cierre .card{border-top-color:var(--gold);text-align:center;}
+  #cierre .score{
+    font-family:'Fredoka',sans-serif;
+    font-size:2.4rem;
+    color:var(--blue);
+    margin:6px 0;
+  }
+  .badges{display:flex;justify-content:center;gap:14px;margin:18px 0;flex-wrap:wrap;}
+  .badge{
+    width:74px;
+    text-align:center;
+    font-size:.75rem;
+    color:#5B6B7E;
+    opacity:.35;
+    transition:.3s;
+  }
+  .badge.earned{opacity:1;}
+  .badge .ic{
+    width:52px;height:52px;border-radius:50%;
+    background:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.5rem;
+    margin:0 auto 6px;
+    border:2px solid var(--line);
+  }
+  .badge.earned .ic{background:#FFF3E0;border-color:var(--gold);}
+
+  footer{
+    text-align:center;color:#8896A6;font-size:.78rem;padding:0 20px 30px;
+  }
+
+  .lang{position:absolute;top:18px;left:22px;display:flex;border:2px solid rgba(255,255,255,.55);border-radius:999px;overflow:hidden;}
+  .lang button{background:transparent;color:#fff;border:none;padding:4px 12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;}
+  .lang button[aria-pressed="true"]{background:var(--gold);color:var(--blue);}
+  .lang button:focus-visible{outline:2px solid #fff;outline-offset:-2px;}
+
+  @media(max-width:480px){
+    .lang{top:14px;left:14px;}
+    .stamp{width:52px;height:52px;font-size:1.4rem;top:14px;right:14px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="lang" id="lang" role="group" aria-label="Idioma / Language">
+    <button type="button" data-l="es">ES</button><button type="button" data-l="en">EN</button>
+  </div>
+  <div class="stamp">
+    <svg viewBox="0 0 48 48" width="38" height="38" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="7" y="12" width="34" height="24" rx="3" fill="#fff" stroke="#1D3557" stroke-width="2.2"/>
+      <path d="M7 13.5L24 26l17 -12.5" fill="none" stroke="#1D3557" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="24" y="30.5" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="15" fill="#F4A261">&#64;</text>
+    </svg>
+  </div>
+  <p class="brand" data-i18n="brand"></p>
+  <h1 data-i18n="titulo"></h1>
+  <p data-i18n="hdrIntro"></p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-bar">
+    <div class="seg" id="seg1"></div>
+    <div class="seg" id="seg2"></div>
+    <div class="seg" id="seg3"></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- RETO 1: QUIZ -->
+  <section class="card" id="reto1">
+    <div class="card-head">
+      <h2 data-i18n="r1h"></h2>
+      <span class="time-pill">⏱ <span data-i18n="min10"></span></span>
+    </div>
+    <p class="intro" data-i18n="r1intro"></p>
+    <p id="quizCounter" style="font-size:.85rem;font-weight:700;color:var(--blue);margin:-8px 0 16px;"></p>
+
+    <div class="q" data-q="1">
+      <p class="qtext"><span data-i18n="q1">x</span></p>
+      <div class="opts">
+        <button class="opt" data-correct="false" data-i18n="q1o1"></button>
+        <button class="opt" data-correct="true" data-i18n="q1o2"></button>
+        <button class="opt" data-correct="false" data-i18n="q1o3"></button>
+      </div>
+      <div class="fb"></div>
+    </div>
+
+    <div class="q" data-q="2">
+      <p class="qtext"><span data-i18n="q2">x</span></p>
+      <div class="opts">
+        <button class="opt" data-correct="true" data-i18n="q2o1"></button>
+        <button class="opt" data-correct="false" data-i18n="q2o2"></button>
+        <button class="opt" data-correct="false" data-i18n="q2o3"></button>
+      </div>
+      <div class="fb"></div>
+    </div>
+
+    <div class="q" data-q="3">
+      <p class="qtext"><span data-i18n="q3">x</span></p>
+      <div class="opts">
+        <button class="opt" data-correct="false" data-i18n="q3o1"></button>
+        <button class="opt" data-correct="true" data-i18n="q3o2"></button>
+        <button class="opt" data-correct="false" data-i18n="q3o3"></button>
+      </div>
+      <div class="fb"></div>
+    </div>
+
+    <div class="q" data-q="4">
+      <p class="qtext"><span data-i18n="q4">x</span></p>
+      <div class="opts">
+        <button class="opt" data-correct="true" data-i18n="q4o1"></button>
+        <button class="opt" data-correct="false" data-i18n="q4o2"></button>
+        <button class="opt" data-correct="false" data-i18n="q4o3"></button>
+      </div>
+      <div class="fb"></div>
+    </div>
+
+    <div class="q" data-q="5">
+      <p class="qtext"><span data-i18n="q5">x</span></p>
+      <div class="opts">
+        <button class="opt" data-correct="false" data-i18n="q5o1"></button>
+        <button class="opt" data-correct="true" data-i18n="q5o2"></button>
+        <button class="opt" data-correct="false" data-i18n="q5o3"></button>
+      </div>
+      <div class="fb"></div>
+    </div>
+
+    <div class="q" data-q="6">
+      <p class="qtext"><span data-i18n="q6">x</span></p>
+      <div class="opts">
+        <button class="opt" data-correct="false" data-i18n="q6o1"></button>
+        <button class="opt" data-correct="true" data-i18n="q6o2"></button>
+        <button class="opt" data-correct="false" data-i18n="q6o3"></button>
+      </div>
+      <div class="fb"></div>
+    </div>
+
+    <button class="primary-btn" id="btnReto1" onclick="goTo(2)" disabled style="opacity:.4;cursor:not-allowed;"></button>
+  </section>
+
+  <!-- RETO 2: DETECTIVE -->
+  <section class="card reto2" id="reto2" style="display:none;">
+    <div class="card-head">
+      <h2 data-i18n="r2h"></h2>
+      <span class="time-pill">⏱ <span data-i18n="min20"></span></span>
+    </div>
+    <p class="intro" data-i18n="r2intro"></p>
+
+    <div class="mail" data-mail="A">
+      <div class="mail-meta"><b data-i18n="to"></b> <span data-i18n="mAto"></span><br><b data-i18n="subj"></b> <span data-i18n="mAs"></span></div>
+      <div class="mail-body" data-i18n="mAb"></div>
+      <label><input type="checkbox" data-opt="asunto"> <span data-i18n="oNoSubj"></span></label>
+      <label><input type="checkbox" data-opt="correo"> <span data-i18n="oBadAddrAt"></span></label>
+      <label><input type="checkbox" data-opt="saludo"> <span data-i18n="oNoGreet"></span></label>
+      <label><input type="checkbox" data-opt="nada"> <span data-i18n="oPerfect"></span></label>
+      <button class="check-btn" onclick="checkMail('A',['asunto','correo','saludo'])" data-i18n="review"></button>
+      <div class="mail-fb"></div>
+    </div>
+
+    <div class="mail" data-mail="B">
+      <div class="mail-meta"><b data-i18n="to"></b> <span data-i18n="mBto"></span><br><b data-i18n="subj"></b> <span data-i18n="mBs"></span></div>
+      <div class="mail-body" data-i18n="mBb"></div>
+      <label><input type="checkbox" data-opt="asunto"> <span data-i18n="oNoSubj"></span></label>
+      <label><input type="checkbox" data-opt="correo"> <span data-i18n="oBadAddr"></span></label>
+      <label><input type="checkbox" data-opt="saludo"> <span data-i18n="oNoGreet"></span></label>
+      <label><input type="checkbox" data-opt="nada"> <span data-i18n="oPerfect"></span></label>
+      <button class="check-btn" onclick="checkMail('B',['nada'])" data-i18n="review"></button>
+      <div class="mail-fb"></div>
+    </div>
+
+    <div class="mail" data-mail="C">
+      <div class="mail-meta"><b data-i18n="to"></b> <span data-i18n="mCto"></span><br><b data-i18n="subj"></b> <span data-i18n="mCs"></span></div>
+      <div class="mail-body" data-i18n="mCb"></div>
+      <label><input type="checkbox" data-opt="asunto"> <span data-i18n="oSubjVague"></span></label>
+      <label><input type="checkbox" data-opt="correo"> <span data-i18n="oBadAddr"></span></label>
+      <label><input type="checkbox" data-opt="saludo"> <span data-i18n="oRude"></span></label>
+      <label><input type="checkbox" data-opt="nada"> <span data-i18n="oPerfect"></span></label>
+      <button class="check-btn" onclick="checkMail('C',['asunto','saludo'])" data-i18n="review"></button>
+      <div class="mail-fb"></div>
+    </div>
+
+    <div class="mail" data-mail="D">
+      <div class="mail-meta"><b data-i18n="to"></b> <span data-i18n="mDto"></span><br><b data-i18n="subj"></b> <span data-i18n="mDs"></span></div>
+      <div class="mail-body" data-i18n="mDb"></div>
+      <label><input type="checkbox" data-opt="asunto"> <span data-i18n="oNoSubj"></span></label>
+      <label><input type="checkbox" data-opt="correo"> <span data-i18n="oBadAddrAt"></span></label>
+      <label><input type="checkbox" data-opt="saludo"> <span data-i18n="oNoBye"></span></label>
+      <label><input type="checkbox" data-opt="nada"> <span data-i18n="oPerfect"></span></label>
+      <button class="check-btn" onclick="checkMail('D',['correo','saludo'])" data-i18n="review"></button>
+      <div class="mail-fb"></div>
+    </div>
+
+    <div class="mail" data-mail="E">
+      <div class="mail-meta"><b data-i18n="to"></b> <span data-i18n="mEto"></span><br><b data-i18n="subj"></b> <span data-i18n="mEs"></span></div>
+      <div class="mail-body" data-i18n="mEb"></div>
+      <label><input type="checkbox" data-opt="asunto"> <span data-i18n="oSubjVague"></span></label>
+      <label><input type="checkbox" data-opt="correo"> <span data-i18n="oBadAddrAt"></span></label>
+      <label><input type="checkbox" data-opt="saludo"> <span data-i18n="oNoGreet"></span></label>
+      <label><input type="checkbox" data-opt="nada"> <span data-i18n="oPerfect"></span></label>
+      <button class="check-btn" onclick="checkMail('E',['correo'])" data-i18n="review"></button>
+      <div class="mail-fb"></div>
+    </div>
+
+    <div class="mail" data-mail="F">
+      <div class="mail-meta"><b data-i18n="to"></b> <span data-i18n="mFto"></span><br><b data-i18n="subj"></b> <span data-i18n="mFs"></span></div>
+      <div class="mail-body" data-i18n="mFb"></div>
+      <label><input type="checkbox" data-opt="asunto"> <span data-i18n="oSubjVague"></span></label>
+      <label><input type="checkbox" data-opt="correo"> <span data-i18n="oBadAddr"></span></label>
+      <label><input type="checkbox" data-opt="saludo"> <span data-i18n="oRudeBye"></span></label>
+      <label><input type="checkbox" data-opt="nada"> <span data-i18n="oPerfect"></span></label>
+      <button class="check-btn" onclick="checkMail('F',['asunto','saludo'])" data-i18n="review"></button>
+      <div class="mail-fb"></div>
+    </div>
+
+    <button class="primary-btn" onclick="goTo(3)" data-i18n="toR3"></button>
+  </section>
+
+  <!-- RETO 3: ESCRIBIR CORREO -->
+  <section class="card reto3" id="reto3" style="display:none;">
+    <div class="card-head">
+      <h2 data-i18n="r3h"></h2>
+      <span class="time-pill">⏱ <span data-i18n="min12"></span></span>
+    </div>
+    <p class="intro" data-i18n="r3intro"></p>
+
+    <div class="field">
+      <label for="para" data-i18n="to"></label>
+      <input type="text" id="para" data-i18n-attr="placeholder:phTo">
+    </div>
+    <div class="field">
+      <label for="asunto" data-i18n="subj"></label>
+      <input type="text" id="asunto" data-i18n-attr="placeholder:phSubj">
+    </div>
+    <div class="field">
+      <label for="cuerpo" data-i18n="msg"></label>
+      <textarea id="cuerpo" rows="6" data-i18n-attr="placeholder:phBody"></textarea>
+    </div>
+
+    <ul class="checklist" id="checklist">
+      <li id="c-intro"><span class="dot"></span> <span data-i18n="ck0"></span></li>
+      <li id="c-para"><span class="dot"></span> <span data-i18n="ck1"></span></li>
+      <li id="c-asunto"><span class="dot"></span> <span data-i18n="ck2"></span></li>
+      <li id="c-saludo"><span class="dot"></span> <span data-i18n="ck3"></span></li>
+      <li id="c-despedida"><span class="dot"></span> <span data-i18n="ck4"></span></li>
+      <li id="c-largo"><span class="dot"></span> <span data-i18n="ck5"></span></li>
+    </ul>
+
+    <button class="primary-btn" id="btnRevisar" onclick="revisarCorreo()"></button>
+    <p class="review-note" id="reviewNote" style="display:none;color:#5B6B7E;font-size:.85rem;margin-top:10px;" data-i18n="reviewNote"></p>
+    <button class="primary-btn" id="btnContinuar" style="display:none;margin-top:10px;background:var(--green);" onclick="finish()" data-i18n="seeBadge"></button>
+  </section>
+
+  <!-- CIERRE -->
+  <section id="cierre">
+    <div class="card">
+      <h2 data-i18n="doneH"></h2>
+      <p data-i18n="doneScore"></p>
+      <div class="score" id="finalScore">0 / 6</div>
+      <div class="badges">
+        <div class="badge" id="badge1"><div class="ic">🧠</div><span data-i18n="b1"></span></div>
+        <div class="badge" id="badge2"><div class="ic">🕵️</div><span data-i18n="b2"></span></div>
+        <div class="badge" id="badge3"><div class="ic">✍️</div><span data-i18n="b3"></span></div>
+      </div>
+      <p style="color:#5B6B7E;font-size:.9rem;" data-i18n="showTeacher"></p>
+    </div>
+
+    <div class="card" style="border-top-color:var(--green);text-align:left;">
+      <h3 style="margin-top:0;color:var(--blue);" data-i18n="recapH"></h3>
+      <p style="font-size:.85rem;color:#5B6B7E;" data-i18n="recapP"></p>
+      <div class="mail" style="margin-bottom:0;">
+        <div class="mail-meta"><b data-i18n="to"></b> <span id="rvPara"></span><br><b data-i18n="subj"></b> <span id="rvAsunto"></span></div>
+        <div class="mail-body" id="rvCuerpo"></div>
+      </div>
+      <ul class="checklist" id="checklistReview"></ul>
+    </div>
+  </section>
+
+</main>
+
+<footer data-i18n="footer"></footer>
+<script>
+  /* ---- i18n (es / en) ---- */
+  const I18N = {
+    es: {
+      titulo:'Misión: Cartero Digital',
+      descripcion:'Misión: Cartero Digital. Actividad de cierre sobre el uso del correo electrónico para 4° grado.',
+      brand:'TECNOLOGÍA · 4° GRADO',
+      hdrIntro:'Ya aprendiste a usar el correo electrónico. Ahora demuéstralo cumpliendo 3 retos. ¡Tienes 45 minutos!',
+      min10:'10 min', min20:'20 min', min12:'12 min',
+      r1h:'Reto 1 · Lo que ya sabes', r1intro:'Elige la respuesta correcta. Puedes intentarlo hasta acertar.',
+      correctas:'Correctas: {n}/{t}',
+      q1:'1. ¿Qué campo del correo indica a quién se lo envías?', q1o1:'Asunto', q1o2:'Para / Destinatario', q1o3:'CC',
+      q2:'2. ¿Para qué sirve el campo "Asunto"?', q2o1:'Para resumir en pocas palabras de qué trata el correo', q2o2:'Para escribir la contraseña', q2o3:'Para poner el nombre del destinatario',
+      q3:'3. ¿Cuál de estos es un buen ejemplo de asunto?', q3o1:'hola', q3o2:'Tarea de Ciencias - entrega viernes', q3o3:'(vacío, sin escribir nada)',
+      q4:'4. Antes de enviar un correo, siempre debes revisar...', q4o1:'Que el destinatario, el asunto y la ortografía estén correctos', q4o2:'Que tenga muchos emojis', q4o3:'Nada, se envía directo',
+      q5:'5. ¿Está bien compartir tu contraseña del correo con un compañero?', q5o1:'Sí, si es tu amigo', q5o2:'No, la contraseña es solo mía', q5o3:'Sí, si el profesor lo pide por chat',
+      q6:'6. Te llega un correo de alguien desconocido con un enlace raro. ¿Qué haces?', q6o1:'Hago clic para ver qué es', q6o2:'No hago clic y le aviso a un adulto', q6o3:'Lo reenvío a mis amigos',
+      fbOk:'¡Correcto!', fbNo:'Casi. Intenta con otra opción.',
+      btn1Done:'¡Completo! Continuar al Reto 2 →', btn1Wait:'Continuar al Reto 2 → ({n}/{t})',
+      r2h:'Reto 2 · Detective de correos',
+      r2intro:'Lee cada correo. Marca las casillas de lo que está <b>mal</b> (puede haber más de una, o ninguna) y presiona "Revisar".',
+      to:'Para:', subj:'Asunto:', msg:'Mensaje:', review:'Revisar', empty:'(vacío)',
+      oNoSubj:'Falta el asunto', oBadAddrAt:'El destinatario no es un correo válido (falta @ y dominio)', oBadAddr:'El destinatario no es un correo válido',
+      oNoGreet:'Falta un saludo y despedida apropiados', oPerfect:'Este correo está perfecto', oSubjVague:'El asunto no explica el tema',
+      oRude:'Falta un saludo y el tono es grosero', oNoBye:'Falta la despedida', oRudeBye:'Falta un saludo, despedida y el tono es grosero',
+      mAto:'profe.laura', mAs:'<i>(vacío)</i>', mAb:'hola profe necesito la tarea de mañana',
+      mBto:'mama@correo.com', mBs:'Permiso salida pedagógica', mBb:'Buenas tardes mamá,\n\nMañana tenemos salida pedagógica al museo. Necesito que firmes el permiso, por favor.\n\nGracias,\nIsabella',
+      mCto:'compañero123@correo.com', mCs:'oe', mCb:'dame la tarea ya!!! apurate',
+      mDto:'biblioteca escolar', mDs:'Consulta sobre libro', mDb:'Hola, quisiera saber si tienen el libro de dinosaurios disponible.',
+      mEto:'secretaria@colegio,com', mEs:'Solicitud de certificado', mEb:'Buenos días,\n\nNecesito el certificado de estudio para mi mamá. ¿Me lo pueden enviar esta semana?\n\nMuchas gracias,\nSofía',
+      mFto:'juan.perez@correo.com', mFs:'URGENTE!!!', mFb:'AYUDAME CON LA TAREA AHORA MISMO',
+      mailRight:'¡Bien visto! Identificaste los problemas correctos.', mailPerfectRight:'¡Exacto! Este correo está bien escrito.',
+      mailWrong:'Revisa de nuevo: hay algo que no marcaste (o marcaste de más).', mailPerfectWrong:'Vuelve a mirar: este correo en realidad está bien escrito.',
+      toR3:'Continuar al Reto 3 →',
+      r3h:'Reto 3 · Tu propio correo',
+      r3intro:'Escríbele un correo real a franciscos@gi.edu.co contándole algo que aprendiste esta semana, y anexa el pantallazo en el Google Classroom, en la tarea asignada.',
+      phTo:'nombre@correo.com', phSubj:'Escribe un asunto claro', phBody:'Empieza con un saludo, cuenta lo que aprendiste y termina con una despedida',
+      ck0:'REVISA CADA PUNTO Y VERIFICA SI LOS COMPLETASTE',
+      ck1:'El destinatario tiene formato de correo (usa @ y un dominio)', ck2:'Escribiste un asunto', ck3:'El mensaje empieza con un saludo',
+      ck4:'El mensaje termina con una despedida', ck5:'El mensaje explica algo con al menos una idea completa',
+      btnRevisar:'Revisar mi correo ✉️', btnRevisar2:'Volver a revisar 🔄',
+      reviewNote:'Mira arriba cuáles puntos quedaron en verde. Corrige lo que quieras y presiona "Revisar" de nuevo, o continúa cuando estés conforme.',
+      seeBadge:'Ver mi insignia →',
+      doneH:'¡Misión cumplida!', doneScore:'Puntaje del Reto 1 (quiz):',
+      b1:'Sabelotodo del correo', b2:'Detective de correos', b3:'Redactor(a) digital',
+      showTeacher:'Muéstrale esta pantalla a Mr. para que revise tu correo del Reto 3.',
+      recapH:'Repaso de tu correo (Reto 3)', recapP:'Así quedó tu correo y tu checklist. No necesitas volver a llenarlo.',
+      noWrite:'(sin escribir)',
+      footer:'Actividad de cierre · Uso del correo electrónico · 4° grado'
+    },
+    en: {
+      titulo:'Mission: Digital Mail Carrier',
+      descripcion:'Mission: Digital Mail Carrier. A closing activity about using email for 4th grade.',
+      brand:'TECHNOLOGY · 4TH GRADE',
+      hdrIntro:'You have already learned how to use email. Now prove it by completing 3 challenges. You have 45 minutes!',
+      min10:'10 min', min20:'20 min', min12:'12 min',
+      r1h:'Challenge 1 · What you already know', r1intro:'Choose the correct answer. You can keep trying until you get it right.',
+      correctas:'Correct: {n}/{t}',
+      q1:'1. Which email field shows who you are sending it to?', q1o1:'Subject', q1o2:'To / Recipient', q1o3:'CC',
+      q2:'2. What is the "Subject" field for?', q2o1:'To sum up in a few words what the email is about', q2o2:'To write your password', q2o3:'To put the recipient\'s name',
+      q3:'3. Which of these is a good example of a subject?', q3o1:'hi', q3o2:'Science homework - due Friday', q3o3:'(empty, nothing written)',
+      q4:'4. Before sending an email, you should always check...', q4o1:'That the recipient, the subject and the spelling are correct', q4o2:'That it has lots of emojis', q4o3:'Nothing, just send it',
+      q5:'5. Is it OK to share your email password with a classmate?', q5o1:'Yes, if they are your friend', q5o2:'No, my password is only mine', q5o3:'Yes, if the teacher asks for it in a chat',
+      q6:'6. You get an email from a stranger with a strange link. What do you do?', q6o1:'I click it to see what it is', q6o2:'I do not click it and I tell an adult', q6o3:'I forward it to my friends',
+      fbOk:'Correct!', fbNo:'Almost. Try another option.',
+      btn1Done:'Done! Continue to Challenge 2 →', btn1Wait:'Continue to Challenge 2 → ({n}/{t})',
+      r2h:'Challenge 2 · Email detective',
+      r2intro:'Read each email. Tick the boxes for what is <b>wrong</b> (there can be more than one, or none) and press "Check".',
+      to:'To:', subj:'Subject:', msg:'Message:', review:'Check', empty:'(empty)',
+      oNoSubj:'The subject is missing', oBadAddrAt:'The recipient is not a valid email address (missing @ and domain)', oBadAddr:'The recipient is not a valid email address',
+      oNoGreet:'A proper greeting and goodbye are missing', oPerfect:'This email is perfect', oSubjVague:'The subject does not explain the topic',
+      oRude:'A greeting is missing and the tone is rude', oNoBye:'The goodbye is missing', oRudeBye:'A greeting and goodbye are missing and the tone is rude',
+      mAto:'teacher.laura', mAs:'<i>(empty)</i>', mAb:'hi teacher i need tomorrow\'s homework',
+      mBto:'mom@email.com', mBs:'Field trip permission slip', mBb:'Good afternoon Mom,\n\nTomorrow we have a field trip to the museum. I need you to sign the permission slip, please.\n\nThank you,\nIsabella',
+      mCto:'classmate123@email.com', mCs:'yo', mCb:'gimme the homework now!!! hurry up',
+      mDto:'school library', mDs:'Question about a book', mDb:'Hi, I would like to know if you have the dinosaur book available.',
+      mEto:'secretary@school,com', mEs:'Certificate request', mEb:'Good morning,\n\nI need the enrollment certificate for my mom. Could you send it to me this week?\n\nThank you very much,\nSofia',
+      mFto:'juan.perez@email.com', mFs:'URGENT!!!', mFb:'HELP ME WITH THE HOMEWORK RIGHT NOW',
+      mailRight:'Well spotted! You found the right problems.', mailPerfectRight:'Exactly! This email is well written.',
+      mailWrong:'Check again: there is something you did not tick (or you ticked too many).', mailPerfectWrong:'Look again: this email is actually well written.',
+      toR3:'Continue to Challenge 3 →',
+      r3h:'Challenge 3 · Your own email',
+      r3intro:'Write a real email to franciscos@gi.edu.co telling about something you learned this week, and attach the screenshot in Google Classroom, in the assigned task.',
+      phTo:'name@email.com', phSubj:'Write a clear subject', phBody:'Start with a greeting, tell what you learned and finish with a goodbye',
+      ck0:'CHECK EACH POINT AND SEE IF YOU COMPLETED IT',
+      ck1:'The recipient has an email format (uses @ and a domain)', ck2:'You wrote a subject', ck3:'The message starts with a greeting',
+      ck4:'The message ends with a goodbye', ck5:'The message explains something with at least one complete idea',
+      btnRevisar:'Check my email ✉️', btnRevisar2:'Check again 🔄',
+      reviewNote:'Look above to see which points turned green. Fix what you want and press "Check" again, or continue when you are happy with it.',
+      seeBadge:'See my badge →',
+      doneH:'Mission accomplished!', doneScore:'Challenge 1 score (quiz):',
+      b1:'Email know-it-all', b2:'Email detective', b3:'Digital writer',
+      showTeacher:'Show this screen to your teacher so they can check your email from Challenge 3.',
+      recapH:'Review of your email (Challenge 3)', recapP:'This is how your email and checklist turned out. You do not need to fill it in again.',
+      noWrite:'(nothing written)',
+      footer:'Closing activity · Using email · 4th grade'
+    }
+  };
+
+  let LANG = 'es';
+  function detectLang(){
+    let s = null;
+    try { s = localStorage.getItem('labs-lang'); } catch(e){}
+    if (s === 'es' || s === 'en') return s;
+    return (navigator.language || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
+  }
+  function t(k, v){
+    let s = I18N[LANG][k];
+    if (s === undefined) s = I18N.es[k] !== undefined ? I18N.es[k] : k;
+    if (v) for (const x in v) s = s.split('{'+x+'}').join(v[x]);
+    return s;
+  }
+  function applyLang(){
+    document.documentElement.lang = LANG;
+    document.querySelectorAll('[data-i18n]').forEach(e => { e.innerHTML = t(e.getAttribute('data-i18n')); });
+    document.querySelectorAll('[data-i18n-attr]').forEach(e => {
+      e.getAttribute('data-i18n-attr').split(';').forEach(par => { const p = par.split(':'); if (p.length === 2) e.setAttribute(p[0].trim(), t(p[1].trim())); });
+    });
+    document.title = t('titulo');
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', t('descripcion'));
+    document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.getAttribute('data-l') === LANG)));
+    // texto dinámico
+    document.querySelectorAll('.q .fb.show').forEach(fb => { fb.textContent = t(fb.dataset.k); });
+    document.querySelectorAll('.mail .mail-fb.show').forEach(fb => { fb.textContent = t(fb.dataset.k); });
+    updateQuizProgress();
+    document.getElementById('btnRevisar').textContent = t(revisado ? 'btnRevisar2' : 'btnRevisar');
+    if (document.getElementById('cierre').style.display === 'block') fillRecap();
+  }
+  function setLang(l){
+    LANG = l;
+    try { localStorage.setItem('labs-lang', l); } catch(e){}
+    applyLang();
+  }
+
+  let score = 0;
+  let mailsOk = 0;
+  let revisado = false;
+  const totalQ = 6;
+
+  document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.getAttribute('data-l'))));
+
+  document.querySelectorAll('.q').forEach(q=>{
+    const opts = q.querySelectorAll('.opt');
+    const fb = q.querySelector('.fb');
+    opts.forEach(opt=>{
+      opt.addEventListener('click', ()=>{
+        if(opt.disabled) return;
+        fb.classList.remove('ok','no');
+        if(opt.dataset.correct === 'true'){
+          opt.classList.add('correct');
+          opts.forEach(o=>o.disabled=true);
+          fb.dataset.k = 'fbOk';
+          fb.classList.add('show','ok');
+        } else {
+          opt.classList.add('wrong');
+          fb.dataset.k = 'fbNo';
+          fb.classList.add('show','no');
+        }
+        fb.textContent = t(fb.dataset.k);
+        updateQuizProgress();
+      });
+    });
+  });
+
+  function updateQuizProgress(){
+    const solved = document.querySelectorAll('.q .opt.correct').length;
+    score = solved;
+    document.getElementById('quizCounter').textContent = t('correctas', {n:solved, t:totalQ});
+    const btn = document.getElementById('btnReto1');
+    if(solved >= totalQ){
+      document.getElementById('seg1').classList.add('done');
+      btn.disabled = false;
+      btn.style.opacity = 1;
+      btn.style.cursor = 'pointer';
+      btn.textContent = t('btn1Done');
+    } else {
+      btn.disabled = true;
+      btn.style.opacity = .4;
+      btn.style.cursor = 'not-allowed';
+      btn.textContent = t('btn1Wait', {n:solved, t:totalQ});
+    }
+  }
+
+  function goTo(step){
+    document.getElementById('reto1').style.display = step===1 ? 'block':'none';
+    document.getElementById('reto2').style.display = step===2 ? 'block':'none';
+    document.getElementById('reto3').style.display = step===3 ? 'block':'none';
+    if(step>=2) document.getElementById('seg1').classList.add('done');
+    if(step>=3) document.getElementById('seg2').classList.add('done');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function checkMail(id, correctOpts){
+    const mail = document.querySelector('.mail[data-mail="'+id+'"]');
+    const boxes = mail.querySelectorAll('input[type=checkbox]');
+    const fb = mail.querySelector('.mail-fb');
+    let picked = [];
+    boxes.forEach(b=>{ if(b.checked) picked.push(b.dataset.opt); });
+    const isRight = picked.length === correctOpts.length && picked.every(p=>correctOpts.includes(p));
+    const perfect = correctOpts[0]==='nada';
+    boxes.forEach(b=>b.disabled=true);
+    fb.classList.add('show');
+    if(isRight){
+      fb.style.background = '#DFF5EF'; fb.style.color = '#1B6B5D';
+      fb.dataset.k = perfect ? 'mailPerfectRight' : 'mailRight';
+      if(!mail.dataset.done){ mailsOk++; mail.dataset.done = '1'; }
+    } else {
+      fb.style.background = '#FFF3E0'; fb.style.color = '#8A5A00';
+      fb.dataset.k = perfect ? 'mailPerfectWrong' : 'mailWrong';
+    }
+    fb.textContent = t(fb.dataset.k);
+  }
+
+  let emailChecks = {paraOk:false, asuntoOk:false, saludoOk:false, despedidaOk:false, largoOk:false};
+
+  function revisarCorreo(){
+    const para = document.getElementById('para').value.trim();
+    const asunto = document.getElementById('asunto').value.trim();
+    const cuerpo = document.getElementById('cuerpo').value.trim().toLowerCase();
+
+    emailChecks.paraOk = /\S+@\S+\.\S+/.test(para);
+    emailChecks.asuntoOk = asunto.length > 2;
+    // se aceptan saludos y despedidas en ambos idiomas
+    const saludos = ['hola','buenos días','buenas tardes','buenas noches','estimad','hello','hi ','hi,','hey','dear','good morning','good afternoon','good evening','greetings'];
+    const despedidas = ['gracias','saludos','atentamente','chao','adiós','cuídate','thank','thanks','regards','sincerely','bye','goodbye','see you','take care','best wishes','yours'];
+    emailChecks.saludoOk = saludos.some(s=>cuerpo.includes(s));
+    emailChecks.despedidaOk = despedidas.some(s=>cuerpo.includes(s));
+    emailChecks.largoOk = cuerpo.split(' ').length >= 8;
+
+    setCheck('c-para', emailChecks.paraOk);
+    setCheck('c-asunto', emailChecks.asuntoOk);
+    setCheck('c-saludo', emailChecks.saludoOk);
+    setCheck('c-despedida', emailChecks.despedidaOk);
+    setCheck('c-largo', emailChecks.largoOk);
+
+    document.getElementById('reviewNote').style.display = 'block';
+    document.getElementById('btnContinuar').style.display = 'inline-block';
+    revisado = true;
+    document.getElementById('btnRevisar').textContent = t('btnRevisar2');
+  }
+
+  function setCheck(id, ok){
+    const li = document.getElementById(id);
+    li.classList.toggle('ok', ok);
+  }
+
+  function fillRecap(){
+    document.getElementById('rvPara').textContent = document.getElementById('para').value.trim() || t('noWrite');
+    document.getElementById('rvAsunto').textContent = document.getElementById('asunto').value.trim() || t('noWrite');
+    document.getElementById('rvCuerpo').textContent = document.getElementById('cuerpo').value.trim() || t('noWrite');
+  }
+
+  function finish(){
+    document.getElementById('seg3').classList.add('done');
+    document.getElementById('finalScore').textContent = score + ' / ' + totalQ;
+
+    if(score >= 5) document.getElementById('badge1').classList.add('earned');
+    if(mailsOk >= 5) document.getElementById('badge2').classList.add('earned');
+    if(emailChecks.paraOk && emailChecks.asuntoOk && emailChecks.saludoOk && emailChecks.despedidaOk) document.getElementById('badge3').classList.add('earned');
+
+    // copiar el correo y checklist al panel de repaso, sin que el estudiante deba volver a llenarlo
+    document.getElementById('checklistReview').innerHTML = document.getElementById('checklist').innerHTML;
+    document.getElementById('reto3').style.display = 'none';
+    document.getElementById('cierre').style.display = 'block';
+    applyLang();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  LANG = detectLang();
+  applyLang();
+</script>
+
+</body>
+</html>

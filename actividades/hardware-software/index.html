@@ -1,0 +1,1010 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Laboratorio HW/SW</title>
+<meta name="description" content="Actividades interactivas para aprender qué es hardware y software.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='6' width='20' height='20' rx='4' fill='%230A7570'/%3E%3Crect x='11' y='11' width='10' height='10' rx='2' fill='%23B8500A'/%3E%3C/svg%3E">
+<style>
+/* Diseño: laboratorio de cristal. Fondo de luz difusa fija, paneles de vidrio esmerilado encima. */
+:root{
+  --bg:#E4EEEC; --ink:#10201F; --muted:#4A5E5C; --line:rgba(16,32,31,.14);
+  --hw:#B04A06; --hw-soft:rgba(255,163,102,.32); --sw:#07716C; --sw-soft:rgba(86,214,204,.30);
+  --ok:#14773A; --ok-soft:rgba(94,214,138,.28); --bad:#B02418; --bad-soft:rgba(255,128,112,.28);
+  --glass:rgba(255,255,255,.52); --glass-hi:rgba(255,255,255,.78); --glass-in:rgba(255,255,255,.55);
+  --glass-line:rgba(255,255,255,.75); --shadow:0 10px 40px rgba(20,60,56,.14);
+  --blob1:rgba(23,184,172,.55); --blob2:rgba(255,140,66,.50); --blob3:rgba(124,110,255,.38);
+  --btn-bg:#10201F; --btn-fg:#F2FAF8;
+  --f-display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --f-body:'Figtree','Segoe UI',system-ui,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#08100F; --ink:#E8F3F1; --muted:#9BB1AE; --line:rgba(255,255,255,.14);
+  --hw:#FFA66B; --hw-soft:rgba(255,140,66,.22); --sw:#58DDD3; --sw-soft:rgba(40,200,190,.20);
+  --ok:#69DB93; --ok-soft:rgba(60,200,110,.20); --bad:#FF9588; --bad-soft:rgba(255,100,85,.20);
+  --glass:rgba(30,48,47,.48); --glass-hi:rgba(40,62,61,.70); --glass-in:rgba(255,255,255,.07);
+  --glass-line:rgba(255,255,255,.16); --shadow:0 10px 40px rgba(0,0,0,.45);
+  --blob1:rgba(20,150,140,.45); --blob2:rgba(220,100,40,.34); --blob3:rgba(100,80,230,.34);
+  --btn-bg:#E8F3F1; --btn-fg:#08100F; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#08100F; --ink:#E8F3F1; --muted:#9BB1AE; --line:rgba(255,255,255,.14);
+  --hw:#FFA66B; --hw-soft:rgba(255,140,66,.22); --sw:#58DDD3; --sw-soft:rgba(40,200,190,.20);
+  --ok:#69DB93; --ok-soft:rgba(60,200,110,.20); --bad:#FF9588; --bad-soft:rgba(255,100,85,.20);
+  --glass:rgba(30,48,47,.48); --glass-hi:rgba(40,62,61,.70); --glass-in:rgba(255,255,255,.07);
+  --glass-line:rgba(255,255,255,.16); --shadow:0 10px 40px rgba(0,0,0,.45);
+  --blob1:rgba(20,150,140,.45); --blob2:rgba(220,100,40,.34); --blob3:rgba(100,80,230,.34);
+  --btn-bg:#E8F3F1; --btn-fg:#08100F; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{min-height:100%}
+body{margin:0;min-height:100vh;background-color:var(--bg);color:var(--ink);font:16px/1.5 var(--f-body);
+  background-image:
+    radial-gradient(520px 420px at 8% 6%,var(--blob1),transparent 70%),
+    radial-gradient(560px 460px at 96% 22%,var(--blob2),transparent 70%),
+    radial-gradient(620px 520px at 40% 104%,var(--blob3),transparent 70%);
+  background-attachment:fixed;
+  padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));
+  padding-block:calc(20px + env(safe-area-inset-top,0px)) calc(48px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:920px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);line-height:1.1;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,6vw,46px);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(22px,4vw,30px);font-weight:800}
+h3{font-size:18px;font-weight:600}
+p{margin:0}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--sw);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.hw{color:var(--hw)} .sw{color:var(--sw)}
+[hidden]{display:none!important}
+
+/* vidrio */
+.glass,.panel,.tab,.opt,.app,.step,.card-big,.brief,.goals li,.who input,.ramsel button,.mis button{
+  -webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%)}
+.panel,.gcard{background:var(--glass);border:1px solid var(--glass-line);border-radius:20px;
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.35);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%)}
+.panel{padding:clamp(16px,4vw,30px)}
+.gcard{padding:clamp(20px,5vw,36px)}
+
+header{display:flex;flex-wrap:wrap;gap:16px 24px;align-items:end;justify-content:space-between;margin-bottom:20px}
+.lead{color:var(--muted);max-width:52ch;margin-top:8px}
+.me{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{display:inline-flex;gap:8px;align-items:center;padding:8px 14px;border-radius:999px;background:var(--glass);border:1px solid var(--glass-line);font-weight:700;font-size:14px;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.link{background:none;border:0;padding:6px 4px;color:var(--muted);text-decoration:underline;font-size:14px}
+.link:hover{color:var(--ink)}
+
+nav{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin-bottom:10px;scrollbar-width:thin}
+.tab{flex:0 0 auto;display:flex;align-items:center;gap:8px;background:var(--glass);border:1px solid var(--glass-line);border-radius:12px;padding:9px 14px;font-weight:700;font-size:14px}
+.tab .n{font-family:var(--f-mono);font-size:12px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--glass-in);color:var(--muted);border:1px solid var(--line)}
+.tab[aria-selected="true"]{background:var(--glass-hi);border-color:var(--ink)}
+.tab.done .n{background:var(--ok);color:#fff;border-color:var(--ok)}
+.meter{height:8px;background:var(--glass-in);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:18px}
+.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--hw),var(--sw));width:0;transition:width .4s}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.panel[hidden]{display:none}
+.intro{color:var(--muted);margin:8px 0 20px;max-width:62ch}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{border:1px solid var(--btn-bg);background:var(--btn-bg);color:var(--btn-fg);border-radius:12px;padding:11px 18px;font-weight:700}
+.btn.ghost{background:var(--glass-in);color:var(--ink);border-color:var(--glass-line)}
+.btn.danger{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.fb{margin-top:16px;padding:12px 14px;border-radius:12px;font-size:15px;border:1px solid var(--line)}
+.fb.ok{background:var(--ok-soft)} .fb.bad{background:var(--bad-soft)}
+.fb b{display:block}
+.fb.ok b{color:var(--ok)} .fb.bad b{color:var(--bad)}
+.tag{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;border-radius:6px;font-weight:700}
+.tag.hw{background:var(--hw-soft);color:var(--hw)} .tag.sw{background:var(--sw-soft);color:var(--sw)}
+input[type=text],input[type=password]{background:var(--glass-in);border:1px solid var(--glass-line);border-radius:12px;padding:12px 14px;font-size:16px;width:100%;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+label.f{display:grid;gap:6px;font-size:14px;color:var(--muted);font-weight:500}
+
+.langbar{display:flex;justify-content:flex-end;margin-bottom:10px}
+.lang{display:inline-flex}
+.lang button{border:1px solid var(--glass-line);background:var(--glass);padding:7px 14px;font-weight:700;font-size:14px;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.lang button:first-child{border-radius:999px 0 0 999px}
+.lang button:last-child{border-radius:0 999px 999px 0;border-left:0}
+.lang button[aria-pressed="true"]{background:var(--btn-bg);color:var(--btn-fg);border-color:var(--btn-bg)}
+
+/* acceso */
+.login{max-width:480px;margin:6vh auto 0;display:grid;gap:18px}
+.login .err{color:var(--bad);font-size:14px;min-height:20px}
+.warn{background:var(--hw-soft);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:14px;margin-bottom:14px}
+
+/* 1 clasificador */
+.deckbar{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:10px}
+.card-big{border:1.5px dashed var(--ink);border-radius:16px;padding:32px 16px;text-align:center;font-family:var(--f-display);font-weight:800;font-size:clamp(26px,6vw,40px);margin-bottom:16px;min-height:112px;display:grid;place-items:center;background:var(--glass-in)}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pick button{border-radius:14px;padding:18px 10px;font-weight:800;font-size:18px;border:1.5px solid}
+.pick .b-hw{background:var(--hw-soft);border-color:var(--hw);color:var(--hw)}
+.pick .b-sw{background:var(--sw-soft);border-color:var(--sw);color:var(--sw)}
+.pick small{display:block;font-weight:500;font-size:13px;color:var(--muted)}
+.pick button:disabled{opacity:.45;cursor:default}
+.result{text-align:center;padding:12px 0}
+.result .big{font-family:var(--f-display);font-size:56px;font-weight:800}
+
+/* 2 armar pc */
+.mis{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.mis button{border:1px solid var(--glass-line);background:var(--glass-in);border-radius:999px;padding:7px 14px;font-weight:700;font-size:14px}
+.mis button[aria-pressed="true"]{background:var(--btn-bg);color:var(--btn-fg);border-color:var(--btn-bg)}
+.mis button.done::after{content:" ✓"}
+.brief{background:var(--glass-in);border:1px solid var(--glass-line);border-radius:14px;padding:12px 14px;margin-bottom:16px}
+.swlist{margin-top:6px;font-size:14px;color:var(--muted)}
+.parts{display:grid;gap:14px;margin-bottom:16px}
+.part h3{display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:6px}
+.part h3 span{font-family:var(--f-body);font-weight:500;font-size:13px;color:var(--muted)}
+.opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.opt{border:1px solid var(--glass-line);background:var(--glass-in);border-radius:12px;padding:10px;text-align:left;min-width:0}
+.opt b{display:block;font-size:14px;overflow-wrap:anywhere}
+.opt .mono{font-size:13px;color:var(--muted)}
+.opt[aria-pressed="true"]{border-color:var(--hw);background:var(--hw-soft);box-shadow:inset 0 0 0 1px var(--hw)}
+.budget{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
+.bar{height:12px;border-radius:6px;background:var(--glass-in);border:1px solid var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--sw);transition:width .3s,background .3s}
+.bar i.over{background:var(--bad)}
+.checks{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px;font-size:15px}
+.checks li{display:flex;gap:8px}
+.checks .m{font-family:var(--f-mono);font-weight:700}
+
+/* 3 ram */
+.ramsel{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
+.ramsel button{border:1px solid var(--glass-line);background:var(--glass-in);border-radius:12px;padding:8px 16px;font-family:var(--f-mono);font-weight:700}
+.ramsel button[aria-pressed="true"]{background:var(--hw);border-color:var(--hw);color:#fff}
+.apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:16px}
+.app{display:flex;align-items:center;gap:10px;border:1px solid var(--glass-line);border-radius:12px;padding:10px 12px;background:var(--glass-in);text-align:left}
+.app[aria-pressed="true"]{background:var(--sw-soft);border-color:var(--sw)}
+.app .gb{margin-left:auto;font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.app .sq{width:14px;height:14px;border:2px solid var(--muted);border-radius:4px;flex:none}
+.app[aria-pressed="true"] .sq{background:var(--sw);border-color:var(--sw)}
+.ramviz{display:flex;height:34px;border-radius:10px;overflow:hidden;background:var(--glass-in);margin:8px 0 6px;border:1px solid var(--line)}
+.ramviz i{display:block;height:100%;transition:width .3s}
+.speed{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin-top:14px}
+.goals{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px}
+.goals li{display:flex;gap:10px;padding:10px 12px;border:1px solid var(--glass-line);background:var(--glass-in);border-radius:12px;font-size:15px}
+.goals li.on{background:var(--ok-soft);border-color:var(--ok)}
+.goals .m{font-family:var(--f-mono);font-weight:700;flex:none}
+
+/* 4 recorrido */
+.steps{display:grid;gap:8px;margin-bottom:16px}
+.step{display:flex;gap:10px;align-items:center;justify-content:space-between;text-align:left;border:1px solid var(--glass-line);background:var(--glass-in);border-radius:12px;padding:12px 14px}
+.step.used{opacity:.35;pointer-events:none}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.line{list-style:none;padding:0 0 0 18px;margin:0;border-left:3px solid var(--line);display:grid;gap:10px}
+.line li{position:relative;padding:8px 12px;background:var(--glass-in);border:1px solid var(--glass-line);border-radius:10px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.line li::before{content:"";position:absolute;left:-26px;top:50%;width:11px;height:11px;margin-top:-5px;border-radius:50%;background:var(--ok)}
+
+/* 5 quiz */
+.q{margin-bottom:6px}
+.q .opts{grid-template-columns:1fr}
+.q .opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.q .opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.qc{font-size:13px;color:var(--muted);margin-bottom:6px}
+.cert{border:1.5px solid var(--ink);border-radius:18px;padding:24px;text-align:center;background:var(--glass-in)}
+.cert .big{font-family:var(--f-display);font-weight:800;font-size:clamp(24px,5vw,34px);margin:6px 0}
+
+/* docente */
+.tbl-wrap{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+th{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+td.c{text-align:center}
+.stack{display:grid;gap:12px}
+
+/* entrada/salida, binario, preguntas numéricas */
+.pick4{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pick4 button{border-radius:14px;padding:16px 10px;font-weight:800;font-size:16px;border:1.5px solid var(--glass-line);background:var(--glass-in)}
+.pick4 .b-e{background:var(--sw-soft);border-color:var(--sw);color:var(--sw)}
+.pick4 .b-s{background:var(--hw-soft);border-color:var(--hw);color:var(--hw)}
+.pick4 .b-es{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.pick4 .b-a{background:var(--glass-hi);border-color:var(--ink)}
+.pick4 button:disabled{opacity:.45;cursor:default}
+.qrow{display:grid;gap:6px}
+.qrow label{font-weight:500}
+.qrow input{max-width:220px;font-family:var(--f-mono)}
+.bits{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;margin-bottom:14px}
+.bit{display:grid;gap:6px;justify-items:center;padding:10px 0;border-radius:12px;border:1px solid var(--glass-line);background:var(--glass-in)}
+.bit .bv{font-size:12px;color:var(--muted)}
+.bit .bb{font-size:26px;font-weight:700}
+.bit[aria-pressed="true"]{background:var(--sw-soft);border-color:var(--sw)}
+.bit[aria-pressed="true"] .bb{color:var(--sw)}
+.binout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;padding:12px 14px;border-radius:14px;border:1px solid var(--glass-line);background:var(--glass-in)}
+.binout .lbl{font-size:12px;color:var(--muted)}
+.big2{font-size:24px;font-weight:700;overflow-wrap:anywhere}
+@media (max-width:420px){.bit .bb{font-size:20px}.bit .bv{font-size:10px}}
+
+.known-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;max-height:320px;overflow-y:auto}
+.known{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--glass-line);background:var(--glass-in);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);min-width:0}
+.known:hover{border-color:var(--ink)}
+.known .kn{font-weight:700;overflow-wrap:anywhere}
+.known .kp{font-size:13px;color:var(--sw);flex:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="langbar"><div id="lang" class="lang" role="group" data-i18n-attr="aria-label:langLabel" aria-label="Idioma / Language"></div></div>
+
+  <!-- ACCESO -->
+  <section id="v-login" class="login" hidden>
+    <div>
+      <h1 data-i18n="h1"><span class="hw">Hard</span>ware y <span class="sw">Soft</span>ware</h1>
+      <p class="lead" data-i18n="loginLead">Un laboratorio con ocho estaciones para clasificar, calcular, armar y diagnosticar. Tu avance se guarda con tu nombre.</p>
+    </div>
+    <form id="login-form" class="gcard stack" autocomplete="off">
+      <label class="f" for="nombre"><span data-i18n="nameLabel">Escribe tu nombre completo</span>
+        <input id="nombre" type="text" data-i18n-attr="placeholder:namePh" placeholder="Ejemplo: Ana Pérez" maxlength="40" required>
+      </label>
+      <div class="err" id="login-err" role="alert"></div>
+      <button class="btn" type="submit" data-i18n="enter">Entrar al laboratorio</button>
+      <p style="font-size:13px;color:var(--muted)" data-i18n="nameHelp">Escribe siempre el nombre igual para continuar donde lo dejaste. Si es la primera vez, empiezas desde cero.</p>
+    </form>
+    <div id="known" class="gcard stack" hidden>
+      <h2 style="font-size:22px" data-i18n="known">¿Ya empezaste? Toca tu nombre</h2>
+      <div id="known-list" class="known-list"></div>
+    </div>
+    <div><button class="link" id="open-teacher" type="button" data-i18n="teacher">Modo docente</button></div>
+  </section>
+
+  <!-- APP -->
+  <div id="v-app" hidden>
+    <header>
+      <div>
+        <h1 data-i18n="h1"><span class="hw">Hard</span>ware y <span class="sw">Soft</span>ware</h1>
+        <p class="lead" data-i18n="appLead">Completa las ocho estaciones y consigue tu certificado del laboratorio, con nivel Bronce, Plata u Oro.</p>
+      </div>
+      <div class="me">
+        <span class="chip" id="who-chip"></span>
+        <button class="link" id="switch-user" type="button" data-i18n="switchUser">Cambiar de estudiante</button>
+        <button class="link" id="reset-me" type="button" data-i18n="resetMe">Reiniciar mi avance</button>
+      </div>
+    </header>
+    <div id="reset-me-box" class="fb bad" hidden style="margin:0 0 14px">
+      <b data-i18n="resetQ">¿Borrar todo tu avance?</b>
+      <div class="row" style="margin-top:8px"><button class="btn danger" id="reset-me-yes" type="button" data-i18n="resetYes">Sí, empezar de cero</button><button class="btn ghost" id="reset-me-no" type="button" data-i18n="cancel">Cancelar</button></div>
+    </div>
+    <div id="nosave" class="warn" hidden data-i18n="nosave">Este navegador no permite guardar datos. Puedes jugar, pero tu avance se perderá al cerrar la página.</div>
+    <nav id="tabs" role="tablist" data-i18n-attr="aria-label:stationsLabel" aria-label="Estaciones"></nav>
+    <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+    <main id="panels"></main>
+  </div>
+
+  <!-- DOCENTE -->
+  <section id="v-teacher" hidden>
+    <header>
+      <div><h1 data-i18n="tTitle">Modo docente</h1><p class="lead" data-i18n="tLead">Avance de los estudiantes que usaron este dispositivo.</p></div>
+      <button class="btn ghost" id="close-teacher" type="button" data-i18n="back">Volver</button>
+    </header>
+    <div class="panel" id="teacher-body"></div>
+  </section>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var $=function(s,r){return (r||document).querySelector(s)};
+  var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+  var shuffle=function(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a};
+
+  /* ================= IDIOMA (es / en) =================
+     Idioma en localStorage 'labs-lang'. T(es,en) elige el texto en línea (datos y pantallas dibujadas por JS);
+     t(clave,vars) y data-i18n / data-i18n-attr sirven para el HTML estático. */
+  var LANG_KEY='labs-lang';
+  function readLang(){
+    var s=null;try{s=localStorage.getItem(LANG_KEY)}catch(e){}
+    if(s==='es'||s==='en')return s;
+    return String(navigator.language||'es').toLowerCase().indexOf('en')===0?'en':'es';
+  }
+  var LANG=readLang();
+  var T=function(es,en){return LANG==='en'?en:es};
+  var STR={
+    titulo:['Laboratorio HW/SW','HW/SW Lab'],
+    descripcion:['Actividades interactivas para aprender qué es hardware y software.','Interactive activities to learn what hardware and software are.'],
+    h1:['<span class="hw">Hard</span>ware y <span class="sw">Soft</span>ware','<span class="hw">Hard</span>ware and <span class="sw">Soft</span>ware'],
+    langLabel:['Idioma / Language','Idioma / Language'],
+    loginLead:['Un laboratorio con ocho estaciones para clasificar, calcular, armar y diagnosticar. Tu avance se guarda con tu nombre.','A lab with eight stations to sort, calculate, build and diagnose. Your progress is saved under your name.'],
+    nameLabel:['Escribe tu nombre completo','Type your full name'],
+    namePh:['Ejemplo: Ana Pérez','Example: Anna Smith'],
+    enter:['Entrar al laboratorio','Enter the lab'],
+    nameHelp:['Escribe siempre el nombre igual para continuar donde lo dejaste. Si es la primera vez, empiezas desde cero.','Always type your name the same way to continue where you left off. If it is your first time, you start from zero.'],
+    known:['¿Ya empezaste? Toca tu nombre','Already started? Tap your name'],
+    teacher:['Modo docente','Teacher mode'],
+    appLead:['Completa las ocho estaciones y consigue tu certificado del laboratorio, con nivel Bronce, Plata u Oro.','Complete the eight stations and earn your lab certificate, at Bronze, Silver or Gold level.'],
+    switchUser:['Cambiar de estudiante','Switch student'],
+    resetMe:['Reiniciar mi avance','Restart my progress'],
+    resetQ:['¿Borrar todo tu avance?','Erase all your progress?'],
+    resetYes:['Sí, empezar de cero','Yes, start over'],
+    cancel:['Cancelar','Cancel'],
+    nosave:['Este navegador no permite guardar datos. Puedes jugar, pero tu avance se perderá al cerrar la página.','This browser does not allow saving data. You can play, but your progress will be lost when you close the page.'],
+    stationsLabel:['Estaciones','Stations'],
+    tTitle:['Modo docente','Teacher mode'],
+    tLead:['Avance de los estudiantes que usaron este dispositivo.','Progress of the students who used this device.'],
+    back:['Volver','Back'],
+    errShort:['Escribe tu nombre completo, mínimo 3 letras.','Type your full name, at least 3 letters.'],
+    errLetters:['El nombre debe tener letras.','The name must contain letters.']
+  };
+  function t(k,v){
+    var p=STR[k],s=p?p[LANG==='en'?1:0]:k;
+    if(v)for(var x in v)s=s.split('{'+x+'}').join(v[x]);
+    return s;
+  }
+  function applyStatic(){
+    document.documentElement.lang=LANG;
+    document.title=t('titulo');
+    var meta=document.querySelector('meta[name="description"]');if(meta)meta.setAttribute('content',t('descripcion'));
+    $$('[data-i18n]').forEach(function(e){e.innerHTML=t(e.getAttribute('data-i18n'))});
+    $$('[data-i18n-attr]').forEach(function(e){
+      e.getAttribute('data-i18n-attr').split(';').forEach(function(par){var p=par.split(':');if(p.length===2)e.setAttribute(p[0].trim(),t(p[1].trim()))});
+    });
+    $$('.lang button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-l')===LANG))});
+  }
+  (function(){
+    var c=$('#lang');
+    [['es','ES'],['en','EN']].forEach(function(x){
+      var b=document.createElement('button');b.type='button';b.setAttribute('data-l',x[0]);b.textContent=x[1];
+      b.addEventListener('click',function(){setLang(x[0],b)});c.appendChild(b);
+    });
+  })();
+
+  /* ================= ALMACENAMIENTO POR ESTUDIANTE =================
+     Todo vive en este navegador (localStorage). Cada estudiante tiene su ficha,
+     identificada por su nombre normalizado. Nada se comparte entre fichas. */
+  /* PIN docente común para todos los equipos: hash SHA-256 de 'hwsw:' + PIN.
+     Para cambiarlo: printf 'hwsw:NUEVOPIN' | sha256sum  y pega el resultado aquí. */
+  var TEACHER_PIN_HASH='a797af90e22df77a7b5f6a8cefc9fd23b12f95503085e4322b745edc5583b796';
+  var DB_KEY='hwsw-lab-v3';
+  var db={v:2,pin:null,profiles:{}}, canSave=true;
+  try{
+    var raw=localStorage.getItem(DB_KEY);
+    if(raw){var parsed=JSON.parse(raw);if(parsed&&parsed.v===2&&parsed.profiles)db=parsed}
+    localStorage.setItem('hwsw-test','1');localStorage.removeItem('hwsw-test');
+  }catch(e){canSave=false}
+  function persist(){if(!canSave)return;try{localStorage.setItem(DB_KEY,JSON.stringify(db))}catch(e){canSave=false;$('#nosave').hidden=false}}
+  function keyOf(name){return name.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/\s+/g,' ').trim()}
+  function cleanName(n){return n.replace(/\s+/g,' ').trim()}
+  function newProfile(name){return {name:name,done:{},pc:{},ramg:{},io:{},bin:{},flow:{},best:{cl:0,io:0,diag:0,quiz:0},t:Date.now()}}
+
+  var cur=null; // ficha del estudiante activo
+  var curView='login';
+
+  /* ================= DATOS (textos en es / en; la lógica usa índices e ids, nunca el texto) ================= */
+  var stations,ITEMS,IOB,IOA,IOQ,BT,PARTS,MIS,APPS,SEQ,CASES,QS;
+  function buildData(){
+    stations=[
+      {id:'clasifica',t:T('Clasifica','Sort it')},
+      {id:'io',t:T('Entrada y salida','Input and output')},
+      {id:'binario',t:T('Binario','Binary')},
+      {id:'arma',t:T('Arma tu PC','Build your PC')},
+      {id:'ram',t:T('Memoria RAM','RAM memory')},
+      {id:'clic',t:T('Cómo funciona','How it works')},
+      {id:'diag',t:T('Diagnóstico','Diagnosis')},
+      {id:'quiz',t:T('Reto final','Final challenge')}
+    ];
+    ITEMS=[
+      [T('Teclado','Keyboard'),'hw',T('Lo puedes tocar. Es un dispositivo de entrada: le envía letras al computador.','You can touch it. It is an input device: it sends letters to the computer.')],
+      [T('Windows','Windows'),'sw',T('Es un sistema operativo: un conjunto de instrucciones. No lo puedes tocar.','It is an operating system: a set of instructions. You cannot touch it.')],
+      [T('Memoria RAM','RAM memory'),'hw',T('Es un chip físico donde el computador guarda lo que está usando en este momento.','It is a physical chip where the computer keeps what it is using right now.')],
+      [T('Google Chrome','Google Chrome'),'sw',T('Es un programa. Lo instalas, lo abres y lo desinstalas.','It is a program. You install it, open it and uninstall it.')],
+      [T('Procesador (CPU)','Processor (CPU)'),'hw',T('Es el chip que ejecuta las instrucciones. El cerebro del equipo.','It is the chip that runs the instructions. The brain of the computer.')],
+      [T('WhatsApp','WhatsApp'),'sw',T('Es una aplicación. Vive dentro del teléfono o el computador, pero no es una pieza.','It is an app. It lives inside the phone or the computer, but it is not a part.')],
+      [T('Disco SSD','SSD drive'),'hw',T('Guarda programas y archivos, pero él mismo es una pieza que puedes sostener en la mano.','It stores programs and files, but it is itself a part you can hold in your hand.')],
+      [T('Antivirus','Antivirus'),'sw',T('Es un programa que vigila a otros programas.','It is a program that watches over other programs.')],
+      [T('Pantalla','Screen'),'hw',T('Es un dispositivo de salida: muestra lo que el computador procesa.','It is an output device: it shows what the computer processes.')],
+      [T('Minecraft','Minecraft'),'sw',T('Es un videojuego, o sea, un programa. Para correrlo necesita hardware.','It is a video game, which means it is a program. To run it, it needs hardware.')],
+      [T('BIOS / firmware','BIOS / firmware'),'sw',T('Es un truco clásico: vive dentro de un chip, pero lo que guarda son instrucciones. Es software.','It is a classic trick: it lives inside a chip, but what it stores is instructions. It is software.')],
+      [T('Archivo de Word','Word file'),'sw',T('Un documento es información digital. Se guarda en hardware, pero no es una pieza física.','A document is digital information. It is saved on hardware, but it is not a physical part.')],
+      [T('Impresora 3D','3D printer'),'hw',T('Es una máquina física. Lo que la guía, el archivo del modelo, sí es software.','It is a physical machine. What guides it, the model file, is software.')],
+      [T('Driver de la impresora','Printer driver'),'sw',T('Un driver es software que le enseña al sistema operativo cómo hablar con una pieza de hardware.','A driver is software that teaches the operating system how to talk to a piece of hardware.')],
+      [T('Placa madre','Motherboard'),'hw',T('Es la tarjeta donde se conectan el procesador, la RAM y casi todo lo demás.','It is the board where the processor, the RAM and almost everything else connect.')],
+      [T('Google Drive','Google Drive'),'sw',T('Es un servicio de software. Tus archivos están guardados en computadores físicos de otra empresa, pero Drive en sí es un programa.','It is a software service. Your files are stored on physical computers owned by another company, but Drive itself is a program.')],
+      [T('Fuente de poder','Power supply'),'hw',T('Convierte la electricidad de la pared en la que usan las piezas. Es una pieza física.','It converts the electricity from the wall into the kind the parts use. It is a physical part.')],
+      [T('Android','Android'),'sw',T('Es un sistema operativo para celulares y tabletas.','It is an operating system for phones and tablets.')],
+      [T('Tarjeta de red Wi-Fi','Wi-Fi network card'),'hw',T('Es la pieza que recibe y envía las señales de internet.','It is the part that receives and sends internet signals.')],
+      [T('Programa en Python','Python program'),'sw',T('Un programa que tú escribes también es software: son instrucciones.','A program that you write is also software: it is instructions.')],
+      [T('Memoria USB','USB flash drive'),'hw',T('Es una pieza de almacenamiento que puedes llevar en el bolsillo.','It is a storage part you can carry in your pocket.')],
+      [T('Consola PlayStation','PlayStation console'),'hw',T('Es un computador especializado en juegos. Los juegos que corre son software.','It is a computer specialized in games. The games it runs are software.')],
+      [T('Actualización del sistema','System update'),'sw',T('Es un paquete de instrucciones nuevas para el sistema operativo.','It is a package of new instructions for the operating system.')],
+      [T('Cable HDMI','HDMI cable'),'hw',T('Lleva la imagen del computador a la pantalla. Es una pieza física.','It carries the image from the computer to the screen. It is a physical part.')]
+    ];
+    ITEMS.forEach(function(x,i){x.i=i});
+    IOB={e:T('Entrada','Input'),s:T('Salida','Output'),es:T('Entrada y salida','Input and output'),a:T('Almacenamiento','Storage')};
+    IOA=[
+      [T('Teclado','Keyboard'),'e',T('Envía letras al computador.','It sends letters to the computer.')],
+      [T('Micrófono','Microphone'),'e',T('Convierte tu voz en datos que entran al computador.','It turns your voice into data that enters the computer.')],
+      [T('Escáner','Scanner'),'e',T('Convierte un papel en una imagen digital que entra al computador.','It turns a sheet of paper into a digital image that enters the computer.')],
+      [T('Cámara web','Webcam'),'e',T('Captura imagen y la manda al computador.','It captures an image and sends it to the computer.')],
+      [T('Parlantes','Speakers'),'s',T('Convierten datos en sonido.','They turn data into sound.')],
+      [T('Impresora','Printer'),'s',T('Convierte datos en papel. Solo recibe, no envía información propia.','It turns data into paper. It only receives, it does not send its own information.')],
+      [T('Proyector','Projector'),'s',T('Muestra la imagen del computador sobre una pared.','It shows the computer image on a wall.')],
+      [T('Pantalla táctil','Touchscreen'),'es',T('Muestra la imagen (salida) y detecta tus dedos (entrada).','It shows the image (output) and detects your fingers (input).')],
+      [T('Auriculares con micrófono','Headset with microphone'),'es',T('Reproducen sonido (salida) y captan tu voz (entrada).','They play sound (output) and pick up your voice (input).')],
+      [T('Disco SSD','SSD drive'),'a',T('Guarda datos de forma permanente, aunque se apague el equipo.','It stores data permanently, even when the computer is turned off.')],
+      [T('Memoria USB','USB flash drive'),'a',T('Almacenamiento que puedes llevar de un computador a otro.','Storage you can carry from one computer to another.')],
+      [T('Tarjeta microSD','microSD card'),'a',T('Almacenamiento pequeño que usan celulares y cámaras.','Small storage used by phones and cameras.')]
+    ];
+    IOA.forEach(function(x,i){x.i=i});
+    IOQ=[
+      [T('1 GB equivale a ¿cuántos MB? (usa 1 GB = 1024 MB)','How many MB are in 1 GB? (use 1 GB = 1024 MB)'),1024,T('Cada paso de unidad (KB, MB, GB, TB) multiplica por 1024.','Each unit step (KB, MB, GB, TB) multiplies by 1024.')],
+      [T('Una foto pesa 4 MB. ¿Cuántas fotos caben en 1 GB?','A photo is 4 MB. How many photos fit in 1 GB?'),256,T('1024 MB ÷ 4 MB = 256 fotos.','1024 MB ÷ 4 MB = 256 photos.')],
+      [T('¿Cuántos GB tiene 2 TB? (1 TB = 1024 GB)','How many GB are in 2 TB? (1 TB = 1024 GB)'),2048,T('2 × 1024 = 2048 GB.','2 × 1024 = 2048 GB.')],
+      [T('Una memoria USB de 32 GB. Cada película pesa 4 GB. ¿Cuántas películas caben?','A 32 GB USB flash drive. Each movie is 4 GB. How many movies fit?'),8,T('32 ÷ 4 = 8 películas.','32 ÷ 4 = 8 movies.')],
+      [T('3 GB equivalen a ¿cuántos MB?','How many MB are in 3 GB?'),3072,T('3 × 1024 = 3072 MB.','3 × 1024 = 3072 MB.')],
+      [T('Un disco de 512 GB tiene 100 GB ocupados. ¿Cuántos GB quedan libres?','A 512 GB drive has 100 GB used. How many GB are free?'),412,T('512 − 100 = 412 GB.','512 − 100 = 412 GB.')]
+    ];
+    BT=[[5,T('Forma el número 5','Make the number 5')],[13,T('Forma el número 13','Make the number 13')],[42,T('Forma el número 42','Make the number 42')],[100,T('Forma el número 100','Make the number 100')],[200,T('Forma el número 200','Make the number 200')],[65,T('Forma la letra A (el código de la A es 65)','Make the letter A (the code for A is 65)')],[72,T('Forma la letra H (el código de la H es 72)','Make the letter H (the code for H is 72)')]];
+    PARTS=[
+      {k:'mobo',n:T('Placa madre','Motherboard'),why:T('La placa madre conecta todo. Su socket debe coincidir con el del procesador.','The motherboard connects everything. Its socket must match the processor socket.'),o:[['Socket A',70,{s:'A'}],['Socket B',130,{s:'B'}]]},
+      {k:'cpu',n:T('Procesador','Processor'),why:T('El procesador ejecuta cada instrucción. Si es lento, todo el equipo se atrasa.','The processor runs every instruction. If it is slow, the whole computer falls behind.'),o:[[T('Básico 2 núcleos · Socket A','Basic 2 cores · Socket A'),90,{s:'A',w:65,c:1}],[T('Medio 6 núcleos · Socket A','Mid-range 6 cores · Socket A'),180,{s:'A',w:95,c:2}],[T('Pro 12 núcleos · Socket B','Pro 12 cores · Socket B'),350,{s:'B',w:170,c:3}]]},
+      {k:'ram',n:T('Memoria RAM','RAM memory'),why:T('La RAM guarda lo que estás usando. Con poca, los programas abiertos se pelean por el espacio.','The RAM holds what you are using. With too little, open programs fight for space.'),o:[['8 GB',25],['16 GB',45],['32 GB',90]]},
+      {k:'disk',n:T('Almacenamiento','Storage'),why:T('El disco guarda programas y archivos. Uno lento tarda en encender y en abrir todo.','The drive stores programs and files. A slow one takes a long time to start up and open everything.'),o:[['HDD 1 TB',40],['SSD 512 GB',60],['SSD NVMe 1 TB',110]]},
+      {k:'gpu',n:T('Tarjeta gráfica','Graphics card'),why:T('La tarjeta gráfica dibuja imágenes. Los juegos y el video la exigen mucho.','The graphics card draws images. Games and video demand a lot from it.'),o:[[T('Integrada · 0 W','Integrated · 0 W'),0,{w:0}],[T('Gama media · 150 W','Mid-range · 150 W'),200,{w:150}],[T('Gama alta · 300 W','High-end · 300 W'),450,{w:300}]]},
+      {k:'psu',n:T('Fuente de poder','Power supply'),why:T('La fuente entrega la electricidad. Si no alcanza, el equipo se apaga o no enciende.','The power supply delivers the electricity. If it is not enough, the computer shuts down or does not turn on.'),o:[['450 W',40,{w:450}],['650 W',65,{w:650}],['850 W',95,{w:850}]]},
+      {k:'cool',n:T('Enfriamiento del procesador','Processor cooling'),why:T('Un procesador potente se calienta mucho. Sin buen enfriamiento se baja la velocidad o se apaga.','A powerful processor gets very hot. Without good cooling it slows down or shuts off.'),o:[[T('Ventilador básico','Basic fan'),15,{c:1}],[T('Torre de aire','Air tower cooler'),40,{c:2}],[T('Líquido','Liquid cooling'),90,{c:3}]]}
+    ];
+    MIS=[
+      {n:T('Estudiante','Student'),budget:400,txt:T('Quieres navegar con muchas pestañas, escribir tareas en Word y entrar a clases por Zoom.','You want to browse with lots of tabs, write homework in Word and join classes on Zoom.'),sw:T('Chrome · Word · Zoom','Chrome · Word · Zoom'),req:{cpu:0,ram:0,disk:1,gpu:0}},
+      {n:T('Gamer','Gamer'),budget:1000,txt:T('Quieres jugar un videojuego moderno en calidad alta mientras tienes Discord abierto.','You want to play a modern video game on high quality while Discord is open.'),sw:T('Videojuego 3D · Discord · Chrome','3D video game · Discord · Chrome'),req:{cpu:1,ram:1,disk:1,gpu:2}},
+      {n:T('Editor de video','Video editor'),budget:1200,txt:T('Editas videos en 4K con un programa profesional y necesitas exportarlos rápido.','You edit 4K videos with a professional program and need to export them fast.'),sw:T('Editor de video 4K · Navegador · Música','4K video editor · Browser · Music'),req:{cpu:2,ram:2,disk:2,gpu:1}}
+    ];
+    APPS=[['chrome',T('Chrome con 10 pestañas','Chrome with 10 tabs'),2.0,'#4FA3E0'],['word','Word',0.8,'#3B6FD0'],['zoom','Zoom',1.0,'#7B8CF0'],['music',T('Música','Music'),0.5,'#D9578F'],['photo',T('Editor de fotos','Photo editor'),3.0,'#2FB38C'],['game',T('Videojuego 3D','3D video game'),4.0,'#E0782F'],['vm',T('Máquina virtual','Virtual machine'),4.0,'#C9A227'],['video',T('Editor de video','Video editor'),5.0,'#8D5CD6']];
+    SEQ=[
+      {t:T('Encender el PC','Turn on the PC'),s:[
+        [T('Presionas el botón de encendido','You press the power button'),'hw',T('El botón cierra un circuito y le pide energía a la fuente.','The button closes a circuit and asks the power supply for energy.')],
+        [T('La fuente de poder reparte electricidad a la placa madre y a las piezas','The power supply sends electricity to the motherboard and the parts'),'hw',T('Sin electricidad ninguna pieza puede trabajar.','Without electricity no part can work.')],
+        [T('El firmware (BIOS/UEFI) revisa que la RAM, el procesador y el disco funcionen','The firmware (BIOS/UEFI) checks that the RAM, the processor and the drive work'),'sw',T('Esta revisión se llama POST. El firmware es software guardado en un chip.','This check is called POST. Firmware is software stored on a chip.')],
+        [T('El firmware busca el disco que tiene el sistema operativo','The firmware looks for the drive that holds the operating system'),'sw',T('Decide desde dónde arrancar el equipo.','It decides where to start the computer from.')],
+        [T('El sistema operativo se copia del disco a la RAM','The operating system is copied from the drive to the RAM'),'sw',T('Desde ese momento el sistema operativo manda en el equipo.','From that moment on, the operating system is in charge of the computer.')],
+        [T('El sistema operativo carga los drivers del teclado, la pantalla y la red','The operating system loads the drivers for the keyboard, the screen and the network'),'sw',T('Los drivers enseñan al sistema cómo usar cada pieza.','Drivers teach the system how to use each part.')],
+        [T('La pantalla muestra el escritorio y el equipo espera tus órdenes','The screen shows the desktop and the computer waits for your commands'),'hw',T('Ya puedes abrir programas.','Now you can open programs.')]
+      ]},
+      {t:T('Abrir un programa','Open a program'),s:[
+        [T('Haces doble clic en el ícono del programa con el mouse','You double-click the program icon with the mouse'),'hw',T('El mouse es hardware de entrada: convierte tu mano en una señal.','The mouse is input hardware: it turns your hand movement into a signal.')],
+        [T('El sistema operativo detecta el clic y decide qué hacer','The operating system detects the click and decides what to do'),'sw',T('El sistema operativo es el software que coordina todo.','The operating system is the software that coordinates everything.')],
+        [T('El disco SSD entrega los archivos del programa','The SSD drive delivers the program files'),'hw',T('Los programas viven guardados en el disco.','Programs are stored on the drive.')],
+        [T('La RAM recibe una copia del programa para tenerla a mano','The RAM receives a copy of the program to keep it close at hand'),'hw',T('La RAM es la mesa de trabajo: rápida pero temporal.','The RAM is the workbench: fast but temporary.')],
+        [T('El procesador ejecuta las instrucciones del programa','The processor runs the instructions of the program'),'hw',T('La CPU lee las instrucciones del software una por una, millones por segundo.','The CPU reads the software instructions one by one, millions per second.')],
+        [T('La tarjeta gráfica dibuja la imagen de la ventana','The graphics card draws the image of the window'),'hw',T('La GPU transforma los datos en píxeles.','The GPU turns data into pixels.')],
+        [T('La pantalla muestra la ventana del programa','The screen shows the program window'),'hw',T('La pantalla es hardware de salida: muestra el resultado.','The screen is output hardware: it shows the result.')]
+      ]},
+      {t:T('Guardar un archivo','Save a file'),s:[
+        [T('Escribes tu tarea con el teclado','You type your homework with the keyboard'),'hw',T('El teclado envía cada letra como un número.','The keyboard sends each letter as a number.')],
+        [T('Word recibe las letras y las muestra en la hoja','Word receives the letters and shows them on the page'),'sw',T('Word es el software que interpreta lo que escribes.','Word is the software that interprets what you type.')],
+        [T('El texto queda en la RAM, que es temporal','The text stays in the RAM, which is temporary'),'hw',T('Si en este momento se va la luz, lo escrito se pierde.','If the power goes out right now, what you typed is lost.')],
+        [T('Presionas Guardar y el sistema operativo recibe la orden','You press Save and the operating system receives the order'),'sw',T('El sistema operativo es quien maneja el disco.','The operating system is the one that manages the drive.')],
+        [T('El sistema operativo manda los datos al SSD','The operating system sends the data to the SSD'),'sw',T('Le indica al disco dónde y cómo escribir.','It tells the drive where and how to write.')],
+        [T('El SSD escribe los datos de forma permanente','The SSD writes the data permanently'),'hw',T('El archivo queda guardado aunque apagues el equipo.','The file stays saved even if you turn off the computer.')],
+        [T('Apagas el PC: la RAM se vacía pero el archivo sigue en el SSD','You turn off the PC: the RAM empties but the file is still on the SSD'),'hw',T('La RAM es volátil, el almacenamiento no.','RAM is volatile, storage is not.')]
+      ]}
+    ];
+    CASES=[
+      {sym:T('El PC tarda cinco minutos en encender y los programas abren lentísimo. Tiene un disco duro mecánico (HDD) de hace diez años.','The PC takes five minutes to start and programs open extremely slowly. It has a ten-year-old mechanical hard drive (HDD).'),type:'hw',ex:T('Un HDD mecánico es muy lento comparado con un SSD. El problema está en una pieza.','A mechanical HDD is very slow compared to an SSD. The problem is in a part.'),sols:[[T('Cambiar el HDD por un SSD','Replace the HDD with an SSD'),1],[T('Instalar un segundo antivirus','Install a second antivirus'),0],[T('Comprar un mouse nuevo','Buy a new mouse'),0]]},
+      {sym:T('Aparece una ventana que dice que tus archivos fueron bloqueados y que debes pagar para recuperarlos.','A window appears saying your files were locked and you must pay to get them back.'),type:'sw',ex:T('Es un programa malicioso (ransomware). El hardware está bien.','It is a malicious program (ransomware). The hardware is fine.'),sols:[[T('Pagar lo que piden','Pay what they ask'),0],[T('Desconectar el equipo de internet y analizarlo con un antivirus, pidiendo ayuda a un adulto','Disconnect the computer from the internet and scan it with an antivirus, asking an adult for help'),1],[T('Cambiar la pantalla','Replace the screen'),0]]},
+      {sym:T('El teclado USB no escribe nada, ni en el bloc de notas ni en ningún otro programa. El mouse funciona bien.','The USB keyboard types nothing, not in Notepad and not in any other program. The mouse works fine.'),type:'hw',ex:T('Si no funciona en ningún programa, lo más probable es que la pieza o su conexión estén dañadas.','If it does not work in any program, most likely the part or its connection is damaged.'),sols:[[T('Probarlo en otro puerto USB u otro computador, y cambiarlo si no responde','Try it on another USB port or another computer, and replace it if it does not respond'),1],[T('Reinstalar Windows','Reinstall Windows'),0],[T('Comprar más RAM','Buy more RAM'),0]]},
+      {sym:T('Un programa se cierra solo cuando abres un archivo grande. El Administrador de tareas muestra la RAM al 99 %.','A program closes by itself when you open a large file. Task Manager shows the RAM at 99%.'),type:'hw',ex:T('La memoria RAM instalada no alcanza para lo que se le pide. Agregar RAM lo resuelve de fondo.','The installed RAM is not enough for what is being asked of it. Adding RAM solves it at the root.'),sols:[[T('Agregar más memoria RAM y cerrar programas que no uses','Add more RAM and close programs you are not using'),1],[T('Cambiar el fondo de pantalla','Change the wallpaper'),0],[T('Comprar un cable HDMI nuevo','Buy a new HDMI cable'),0]]},
+      {sym:T('Después de una actualización, la impresora ya no imprime. El cable está bien conectado y la impresora enciende.','After an update, the printer no longer prints. The cable is plugged in properly and the printer turns on.'),type:'sw',ex:T('La pieza funciona, pero el sistema perdió el driver que le enseña a comunicarse con ella.','The part works, but the system lost the driver that teaches it how to communicate with it.'),sols:[[T('Reinstalar o actualizar el driver de la impresora','Reinstall or update the printer driver'),1],[T('Comprar otra impresora','Buy another printer'),0],[T('Cambiar la fuente de poder','Replace the power supply'),0]]},
+      {sym:T('El PC se apaga solo cuando juegas y el ventilador suena muy fuerte. Por las rejillas sale aire muy caliente.','The PC shuts down by itself when you play and the fan is very loud. Very hot air comes out of the vents.'),type:'hw',ex:T('Es sobrecalentamiento: polvo o mal enfriamiento. Las piezas se apagan para no quemarse.','It is overheating: dust or poor cooling. The parts shut down so they do not burn.'),sols:[[T('Limpiar el polvo y revisar el ventilador o el enfriamiento del procesador','Clean the dust and check the fan or the processor cooling'),1],[T('Instalar más juegos','Install more games'),0],[T('Cambiar el teclado','Replace the keyboard'),0]]},
+      {sym:T('Solo ese computador no tiene internet. Los celulares conectados al mismo Wi-Fi sí navegan.','Only that computer has no internet. Phones connected to the same Wi-Fi can browse.'),type:'sw',ex:T('El router funciona. Lo más probable es una configuración o un driver de red en ese computador.','The router works. Most likely it is a setting or a network driver on that computer.'),sols:[[T('Reiniciar el adaptador de red y actualizar su driver','Restart the network adapter and update its driver'),1],[T('Reemplazar el router','Replace the router'),0],[T('Comprar un monitor nuevo','Buy a new monitor'),0]]},
+      {sym:T('La pantalla está negra, pero la luz del PC está encendida y se oyen los ventiladores.','The screen is black, but the PC light is on and you can hear the fans.'),type:'hw',ex:T('El equipo enciende, así que lo primero es revisar la conexión del monitor.','The computer turns on, so the first thing to do is check the monitor connection.'),sols:[[T('Revisar que el cable HDMI y el monitor estén bien conectados y encendidos','Check that the HDMI cable and the monitor are properly connected and turned on'),1],[T('Reinstalar todos los programas','Reinstall all the programs'),0],[T('Borrar los archivos','Delete the files'),0]]}
+    ];
+    QS=[
+      [T('¿Cuál de estos es software?','Which of these is software?'),[T('Memoria RAM','RAM memory'),T('Un editor de fotos','A photo editor'),T('El teclado','The keyboard')],1,T('Un editor de fotos es un programa. Los otros dos son piezas físicas.','A photo editor is a program. The other two are physical parts.')],
+      [T('Escribes un trabajo en Word sin guardarlo y se va la luz. ¿Qué pasa con el texto?','You write an assignment in Word without saving it and the power goes out. What happens to the text?'),[T('Se pierde, porque estaba en la RAM, que es temporal','It is lost, because it was in the RAM, which is temporary'),T('Se guarda solo en el SSD','It is saved on its own to the SSD'),T('Se guarda dentro del procesador','It is saved inside the processor')],0,T('La RAM es volátil: pierde su contenido sin electricidad. El SSD conserva lo que se guardó.','RAM is volatile: it loses its content without electricity. The SSD keeps what was saved.')],
+      [T('¿Cuántos bits tiene un byte?','How many bits are in a byte?'),['4','8','16'],1,T('8 bits forman un byte.','8 bits make a byte.')],
+      [T('El número binario 1010 equivale, en decimal, a...','The binary number 1010 is equal, in decimal, to...'),['8','10','12'],1,'8 + 0 + 2 + 0 = 10.'],
+      [T('En computación, ¿cuántos MB hay en 1 GB?','In computing, how many MB are in 1 GB?'),['100','1000','1024'],2,T('Cada salto de unidad se multiplica por 1024.','Each unit step is multiplied by 1024.')],
+      [T('Un escáner es un dispositivo de...','A scanner is a device for...'),[T('Entrada','Input'),T('Salida','Output'),T('Almacenamiento','Storage')],0,T('Convierte un papel en datos que entran al computador.','It turns a sheet of paper into data that enters the computer.')],
+      [T('Al encender el PC, ¿qué hace primero el firmware BIOS/UEFI?','When you turn on the PC, what does the BIOS/UEFI firmware do first?'),[T('Revisa el hardware y busca el sistema operativo','It checks the hardware and looks for the operating system'),T('Instala programas nuevos','It installs new programs'),T('Dibuja el escritorio','It draws the desktop')],0,T('Hace la revisión POST y luego arranca el sistema operativo.','It runs the POST check and then starts the operating system.')],
+      [T('Un driver es...','A driver is...'),[T('Una pieza que conecta el mouse','A part that connects the mouse'),T('Un software que le enseña al sistema operativo a usar una pieza de hardware','Software that teaches the operating system how to use a piece of hardware'),T('Un tipo de memoria','A type of memory')],1,T('Sin el driver correcto, la pieza puede estar bien y aun así no funcionar.','Without the right driver, the part can be fine and still not work.')],
+      [T('Tu PC tiene 4 GB de RAM y abres programas que suman 6 GB. ¿Qué ocurre?','Your PC has 4 GB of RAM and you open programs that add up to 6 GB. What happens?'),[T('El PC se apaga','The PC shuts down'),T('Usa el disco como apoyo y se vuelve muy lento','It uses the drive as backup and becomes very slow'),T('Funciona más rápido','It works faster')],1,T('El disco es mucho más lento que la RAM, y eso se nota.','The drive is much slower than the RAM, and you can tell.')],
+      [T('¿Cuál de estas piezas NO es de almacenamiento?','Which of these parts is NOT storage?'),['SSD',T('Memoria USB','USB flash drive'),T('Procesador','Processor')],2,T('El procesador ejecuta instrucciones, no guarda archivos.','The processor runs instructions, it does not store files.')],
+      [T('Un procesador Socket B no se puede instalar en una placa Socket A porque...','A Socket B processor cannot be installed on a Socket A motherboard because...'),[T('Es cuestión de colores','It is a matter of colors'),T('Las piezas deben ser compatibles físicamente','The parts must be physically compatible'),T('El software no lo permite','The software does not allow it')],1,T('El socket es la forma y los contactos del enchufe. Deben coincidir.','The socket is the shape and the contacts of the connector. They must match.')],
+      [T('La tarjeta gráfica se encarga principalmente de...','The graphics card is mainly in charge of...'),[T('Guardar documentos','Storing documents'),T('Dibujar imágenes y video','Drawing images and video'),T('Dar electricidad al equipo','Supplying electricity to the computer')],1,T('La GPU transforma datos en imágenes.','The GPU turns data into images.')],
+      [T('Quieres editar videos en 4K. ¿Qué combinación mejora más el rendimiento?','You want to edit 4K videos. Which combination improves performance the most?'),[T('Más RAM, mejor procesador y mejor tarjeta gráfica','More RAM, a better processor and a better graphics card'),T('Un teclado nuevo','A new keyboard'),T('Una pantalla más pequeña','A smaller screen')],0,T('La edición de video exige mucha RAM, CPU y GPU.','Video editing demands a lot of RAM, CPU and GPU.')],
+      [T('¿Cuál es el orden correcto al encender un PC?','What is the correct order when turning on a PC?'),[T('Sistema operativo, firmware, escritorio','Operating system, firmware, desktop'),T('Firmware, sistema operativo, escritorio','Firmware, operating system, desktop'),T('Escritorio, firmware, sistema operativo','Desktop, firmware, operating system')],1,T('Primero el firmware revisa y arranca, luego carga el sistema operativo y al final aparece el escritorio.','First the firmware checks and starts up, then the operating system loads and finally the desktop appears.')],
+      [T('El archivo tarea.docx, ¿es hardware o software?','The file homework.docx: is it hardware or software?'),[T('Hardware, porque está en el disco','Hardware, because it is on the drive'),T('Software: es información digital, aunque el disco que la guarda es hardware','Software: it is digital information, even though the drive that stores it is hardware'),T('Ninguno de los dos','Neither one')],1,T('El disco es la pieza. El archivo es información que vive en ella.','The drive is the part. The file is information that lives on it.')]
+    ];
+  }
+  buildData();
+  var current='clasifica';
+  var tabsEl=$('#tabs'), panelsEl=$('#panels');
+
+  /* ================= VISTAS ================= */
+  function view(v){
+    curView=v;
+    $('#v-login').hidden=v!=='login';
+    $('#v-app').hidden=v!=='app';
+    $('#v-teacher').hidden=v!=='teacher';
+    if(v==='login')drawKnown();
+    window.scrollTo(0,0);
+  }
+
+  /* ================= ACCESO ================= */
+  var loginErr=null; // clave de STR del error mostrado
+  function paintLoginErr(){$('#login-err').textContent=loginErr?t(loginErr):''}
+  function drawKnown(){
+    var keys=Object.keys(db.profiles).sort(function(a,b){return db.profiles[a].name.localeCompare(db.profiles[b].name,LANG)});
+    $('#known').hidden=!keys.length;
+    $('#known-list').innerHTML=keys.map(function(k){
+      var p=db.profiles[k],n=stations.filter(function(s){return p.done&&p.done[s.id]}).length;
+      return '<button type="button" class="known" data-k="'+esc(k)+'"><span class="kn">'+esc(p.name)+'</span><span class="kp mono">'+n+'/'+stations.length+'</span></button>';
+    }).join('');
+  }
+  $('#known-list').addEventListener('click',function(e){
+    var b=e.target.closest('[data-k]');if(b&&db.profiles[b.getAttribute('data-k')])startSession(b.getAttribute('data-k'));
+  });
+  $('#login-form').addEventListener('submit',function(e){
+    e.preventDefault();
+    var name=cleanName($('#nombre').value);
+    if(name.length<3){loginErr='errShort';paintLoginErr();return}
+    if(!/[a-zA-ZÀ-ÿ]/.test(name)){loginErr='errLetters';paintLoginErr();return}
+    loginErr=null;paintLoginErr();
+    var k=keyOf(name);
+    if(!db.profiles[k]){db.profiles[k]=newProfile(name);persist()}
+    startSession(k);
+  });
+  $('#switch-user').addEventListener('click',function(){cur=null;$('#nombre').value='';view('login');$('#nombre').focus()});
+  $('#reset-me').addEventListener('click',function(){$('#reset-me-box').hidden=false});
+  $('#reset-me-no').addEventListener('click',function(){$('#reset-me-box').hidden=true});
+  $('#reset-me-yes').addEventListener('click',function(){
+    var k=keyOf(cur.name);db.profiles[k]=newProfile(cur.name);persist();
+    $('#reset-me-box').hidden=true;startSession(k);
+  });
+
+  /* ================= ESTACIONES ================= */
+  function touch(){cur.t=Date.now();persist()}
+  function markDone(id){if(cur.done[id])return;cur.done[id]=true;touch();drawTabs()}
+  function drawTabs(){
+    tabsEl.innerHTML=stations.map(function(s,i){
+      var d=cur&&cur.done[s.id];
+      return '<button class="tab'+(d?' done':'')+'" role="tab" id="tab-'+s.id+'" data-go="'+s.id+'" aria-selected="'+(s.id===current)+'" aria-controls="p-'+s.id+'"><span class="n">'+(d?'✓':i+1)+'</span>'+s.t+'</button>';
+    }).join('');
+    var c=cur?stations.filter(function(s){return cur.done[s.id]}).length:0;
+    $('#meter').style.width=(c/stations.length*100)+'%';
+  }
+  function show(id){
+    current=id;
+    $$('.panel',panelsEl).forEach(function(p){p.hidden=p.id!=='p-'+id});
+    drawTabs();
+    var t=$('#tab-'+id);if(t&&t.scrollIntoView)t.scrollIntoView({block:'nearest',inline:'center'});
+    if(id==='quiz')renderQuiz();
+  }
+  tabsEl.addEventListener('click',function(e){var b=e.target.closest('[data-go]');if(b)show(b.getAttribute('data-go'))});
+
+  panelsEl.innerHTML=stations.map(function(s){return '<section class="panel" id="p-'+s.id+'" role="tabpanel" aria-labelledby="tab-'+s.id+'" hidden></section>'}).join('');
+  var P=function(id){return $('#p-'+id)};
+
+  /* ---------- 1. CLASIFICA ---------- */
+  var CL_PASS=19;
+  var cl={deck:[],i:0,ok:0,locked:false,right:false};
+  function clStart(){cl.deck=shuffle(ITEMS);cl.i=0;cl.ok=0;cl.locked=false;clDraw()}
+  function clDraw(){
+    var el=P('clasifica');
+    var head='<h2>'+T('¿Hardware o software?','Hardware or software?')+'</h2><p class="intro">'+T('Hardware es lo que puedes tocar. Software son las instrucciones que le dicen al hardware qué hacer. Hay casos difíciles: piensa si lo que ves es una pieza o es información e instrucciones.','Hardware is what you can touch. Software is the instructions that tell the hardware what to do. There are tricky cases: think about whether what you see is a part or is information and instructions.')+'</p>';
+    if(cl.i>=cl.deck.length){
+      if(cl.ok>cur.best.cl){cur.best.cl=cl.ok;touch()}
+      if(cl.ok>=CL_PASS)markDone('clasifica');
+      el.innerHTML=head+'<div class="result"><div class="big mono">'+cl.ok+'/'+cl.deck.length+'</div><p>'+(cl.ok>=CL_PASS?T('Estación completada. Ya distingues muy bien lo físico de lo lógico.','Station complete. You can now tell the physical from the logical very well.'):T('Necesitas al menos '+CL_PASS+' aciertos para completar la estación. Inténtalo de nuevo.','You need at least '+CL_PASS+' correct answers to complete the station. Try again.'))+'</p></div><div class="row" style="justify-content:center;margin-top:16px"><button class="btn" data-act="cl-restart">'+T('Jugar otra vez','Play again')+'</button></div>';
+      return;
+    }
+    var it=cl.deck[cl.i],note='';
+    if(cl.locked){
+      note='<div class="fb '+(cl.right?'ok':'bad')+'" role="status"><b>'+(cl.right?T('Correcto','Correct'):T('Casi','Almost'))+' · <span class="tag '+it[1]+'">'+(it[1]==='hw'?'Hardware':'Software')+'</span></b>'+esc(it[2])+'</div><div class="row" style="margin-top:14px"><button class="btn" data-act="cl-next" id="cl-next">'+(cl.i+1>=cl.deck.length?T('Ver resultado','See result'):T('Siguiente','Next'))+'</button></div>';
+    }
+    el.innerHTML=head+
+      '<div class="deckbar"><span>'+T('Tarjeta '+(cl.i+1)+' de '+cl.deck.length,'Card '+(cl.i+1)+' of '+cl.deck.length)+'</span><span class="mono">'+T('Aciertos: ','Correct: ')+cl.ok+'</span></div>'+
+      '<div class="card-big">'+esc(it[0])+'</div>'+
+      '<div class="pick"><button class="b-hw" data-act="cl" data-v="hw"'+(cl.locked?' disabled':'')+'>Hardware<small>'+T('Se toca','You can touch it')+'</small></button><button class="b-sw" data-act="cl" data-v="sw"'+(cl.locked?' disabled':'')+'>Software<small>'+T('Se ejecuta','It runs')+'</small></button></div>'+note;
+  }
+  P('clasifica').addEventListener('click',function(e){
+    var b=e.target.closest('[data-act]');if(!b)return;
+    var a=b.getAttribute('data-act');
+    if(a==='cl-restart'){clStart();return}
+    if(a==='cl'&&!cl.locked){
+      var it=cl.deck[cl.i],right=b.getAttribute('data-v')===it[1];
+      if(right)cl.ok++;
+      cl.locked=true;cl.right=right;
+      clDraw();
+      var n=$('#cl-next');if(n)n.focus();
+    }
+    if(a==='cl-next'){cl.i++;cl.locked=false;clDraw()}
+  });
+
+  /* ---------- 2. ENTRADA, SALIDA Y ALMACENAMIENTO ---------- */
+  var io={part:'a',deck:[],i:0,ok:0,locked:false,right:false,ans:[],chk:null};
+  function ioStart(){io.part='a';io.deck=shuffle(IOA);io.i=0;io.ok=0;io.locked=false;io.ans=IOQ.map(function(){return ''});io.chk=null;ioDraw()}
+  function ioDraw(){
+    var el=P('io');
+    var h='<h2>'+T('Entrada, salida y almacenamiento','Input, output and storage')+'</h2><p class="intro">'+T('Los dispositivos se clasifican por el camino que sigue la información: hacia el computador, desde el computador, en ambos sentidos o hacia un lugar donde se guarda.','Devices are sorted by the path the information follows: into the computer, out of the computer, both ways, or to a place where it is stored.')+'</p>';
+    h+='<div class="mis" role="group" aria-label="'+T('Parte','Part')+'"><button data-act="io-part" data-p="a" aria-pressed="'+(io.part==='a')+'"'+(cur.io.a?' class="done"':'')+'>'+T('Parte A · Clasificar','Part A · Sort')+'</button><button data-act="io-part" data-p="b" aria-pressed="'+(io.part==='b')+'"'+(cur.io.b?' class="done"':'')+'>'+T('Parte B · Cuántos GB caben','Part B · How many GB fit')+'</button></div>';
+    if(io.part==='a'){
+      if(io.i>=io.deck.length){
+        if(io.ok>cur.best.io){cur.best.io=io.ok;touch()}
+        var okA=io.ok>=10;
+        if(okA&&!cur.io.a){cur.io.a=true;touch()}
+        h+='<div class="result"><div class="big mono">'+io.ok+'/'+io.deck.length+'</div><p>'+(okA?T('Parte A superada. Necesitas aprobar también la parte B.','Part A passed. You also need to pass part B.'):T('Necesitas 10 aciertos para superar la parte A.','You need 10 correct answers to pass part A.'))+'</p></div><div class="row" style="justify-content:center"><button class="btn" data-act="io-restart">'+T('Repetir parte A','Repeat part A')+'</button></div>';
+        checkIO();
+      }else{
+        var it=io.deck[io.i];
+        h+='<div class="deckbar"><span>'+T('Dispositivo '+(io.i+1)+' de '+io.deck.length,'Device '+(io.i+1)+' of '+io.deck.length)+'</span><span class="mono">'+T('Aciertos: ','Correct: ')+io.ok+'</span></div><div class="card-big">'+esc(it[0])+'</div>';
+        h+='<div class="pick4">'+Object.keys(IOB).map(function(k){return '<button class="b-'+k+'" data-act="io" data-v="'+k+'"'+(io.locked?' disabled':'')+'>'+IOB[k]+'</button>'}).join('')+'</div>';
+        if(io.locked)h+='<div class="fb '+(io.right?'ok':'bad')+'" role="status"><b>'+(io.right?T('Correcto','Correct'):T('Casi','Almost'))+' · '+IOB[it[1]]+'</b>'+esc(it[2])+'</div><div class="row" style="margin-top:14px"><button class="btn" data-act="io-next" id="io-next">'+(io.i+1>=io.deck.length?T('Ver resultado','See result'):T('Siguiente','Next'))+'</button></div>';
+      }
+    }else{
+      h+='<p class="intro" style="margin-bottom:12px">'+T('Usa 1 KB = 1024 B, 1 MB = 1024 KB, 1 GB = 1024 MB y 1 TB = 1024 GB. Escribe solo números.','Use 1 KB = 1024 B, 1 MB = 1024 KB, 1 GB = 1024 MB and 1 TB = 1024 GB. Type numbers only.')+'</p><form id="io-form" class="stack">';
+      IOQ.forEach(function(q,i){
+        var st=io.chk?io.chk[i]:null;
+        h+='<div class="qrow"><label for="st-'+i+'">'+(i+1)+'. '+q[0]+'</label><input id="st-'+i+'" type="text" inputmode="numeric" autocomplete="off" value="'+esc(io.ans[i])+'">'+(st===null?'':'<div class="fb '+(st?'ok':'bad')+'" role="status"><b>'+(st?T('Correcto','Correct'):T('Revisa tu cuenta','Check your math'))+'</b>'+(st?'':T('Pista: ','Hint: '))+esc(q[2])+'</div>')+'</div>';
+      });
+      h+='<div class="row"><button class="btn" type="submit">'+T('Revisar respuestas','Check answers')+'</button></div></form>';
+      if(io.chk){var n=io.chk.filter(Boolean).length;h+='<div class="fb '+(n>=5?'ok':'bad')+'" role="status"><b>'+T(n+' de '+IOQ.length+' correctas',n+' of '+IOQ.length+' correct')+'</b>'+(n>=5?T('Parte B superada.','Part B passed.'):T('Necesitas 5 correctas. Corrige y vuelve a revisar.','You need 5 correct. Fix them and check again.'))+'</div>'}
+    }
+    el.innerHTML=h;
+  }
+  function checkIO(){if(cur.io.a&&cur.io.b)markDone('io')}
+  P('io').addEventListener('click',function(e){
+    var b=e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act');
+    if(a==='io-part'){saveAns();io.part=b.getAttribute('data-p');ioDraw()}
+    if(a==='io-restart'){io.deck=shuffle(IOA);io.i=0;io.ok=0;io.locked=false;ioDraw()}
+    if(a==='io'&&!io.locked){
+      var it=io.deck[io.i],right=b.getAttribute('data-v')===it[1];
+      if(right)io.ok++;io.locked=true;io.right=right;
+      ioDraw();
+      var n=$('#io-next');if(n)n.focus();
+    }
+    if(a==='io-next'){io.i++;io.locked=false;ioDraw()}
+  });
+  function saveAns(){IOQ.forEach(function(q,i){var f=$('#st-'+i);if(f)io.ans[i]=f.value})}
+  P('io').addEventListener('submit',function(e){
+    e.preventDefault();saveAns();
+    io.chk=IOQ.map(function(q,i){return parseInt(String(io.ans[i]).replace(/[^\d]/g,''),10)===q[1]});
+    var n=io.chk.filter(Boolean).length;
+    if(n>=5&&!cur.io.b){cur.io.b=true;touch()}
+    ioDraw();checkIO();
+  });
+
+  /* ---------- 3. BINARIO ---------- */
+  var BV=[128,64,32,16,8,4,2,1];
+  var bin={bits:[0,0,0,0,0,0,0,0]};
+  function binStart(){bin.bits=[0,0,0,0,0,0,0,0]}
+  function binVal(){return bin.bits.reduce(function(s,b,i){return s+b*BV[i]},0)}
+  function initialCode(){var c=cur.name.normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().charAt(0);return c&&c.charCodeAt(0)<128?c:'A'}
+  function binDraw(){
+    var v=binVal(),ch=(v>=33&&v<=126)?String.fromCharCode(v):'';
+    var ch2=false;
+    BT.forEach(function(t){if(t[0]===v&&!cur.bin['t'+t[0]]){cur.bin['t'+t[0]]=true;ch2=true}});
+    if(ch2){touch();if(BT.every(function(t){return cur.bin['t'+t[0]]}))markDone('binario')}
+    var ini=initialCode(),ic=ini.charCodeAt(0),ib=('00000000'+ic.toString(2)).slice(-8);
+    var h='<h2>'+T('El idioma de las máquinas','The language of machines')+'</h2><p class="intro">'+T('Un computador solo entiende dos estados: encendido (1) y apagado (0). Cada interruptor es un <b>bit</b> y 8 bits forman un <b>byte</b>. Cada posición vale el doble que la de su derecha. Activa los interruptores y suma sus valores.','A computer only understands two states: on (1) and off (0). Each switch is a <b>bit</b> and 8 bits make a <b>byte</b>. Each position is worth double the one to its right. Turn the switches on and add up their values.')+'</p>';
+    h+='<div class="bits" role="group" aria-label="'+T('Interruptores de bits','Bit switches')+'">'+bin.bits.map(function(b,i){return '<button class="bit" data-act="bit" data-i="'+i+'" aria-pressed="'+(b===1)+'" aria-label="'+T('Valor '+BV[i]+', '+(b?'encendido':'apagado'),'Value '+BV[i]+', '+(b?'on':'off'))+'"><span class="bv mono">'+BV[i]+'</span><span class="bb mono">'+b+'</span></button>'}).join('')+'</div>';
+    h+='<div class="binout"><div><span class="lbl">'+T('Binario','Binary')+'</span><div class="mono big2">'+bin.bits.join('')+'</div></div><div><span class="lbl">'+T('Decimal','Decimal')+'</span><div class="mono big2">'+v+'</div></div><div><span class="lbl">'+T('Como letra (ASCII)','As a letter (ASCII)')+'</span><div class="mono big2">'+(ch?esc(ch):'·')+'</div></div></div>';
+    h+='<div class="row" style="margin:12px 0"><button class="btn ghost" data-act="bin-clear">'+T('Apagar todos','Turn all off')+'</button></div>';
+    h+='<ul class="goals">'+BT.map(function(t){var d=cur.bin['t'+t[0]];return '<li class="'+(d?'on':'')+'"><span class="m">'+(d?'OK':'--')+'</span><span>'+t[1]+'</span></li>'}).join('')+'</ul>';
+    h+='<div class="fb ok" style="margin-top:16px"><b>'+T('Dato curioso','Fun fact')+'</b>'+T('La primera letra de tu nombre, '+esc(ini)+', se guarda en el computador como el número '+ic+', o sea <span class="mono">'+ib+'</span> en binario. Prueba a formarla.','The first letter of your name, '+esc(ini)+', is stored in the computer as the number '+ic+', which is <span class="mono">'+ib+'</span> in binary. Try to make it.')+'</div>';
+    P('binario').innerHTML=h;
+  }
+  P('binario').addEventListener('click',function(e){
+    var b=e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act');
+    if(a==='bit'){var i=+b.getAttribute('data-i');bin.bits[i]=bin.bits[i]?0:1;binDraw();var n=$('#p-binario .bit[data-i="'+i+'"]');if(n)n.focus()}
+    if(a==='bin-clear'){binStart();binDraw()}
+  });
+
+  /* ---------- 4. ARMA TU PC ---------- */
+  /* x: s=socket, w=vatios que consume o entrega, c=nivel de enfriamiento */
+  var pc={m:0,sel:[],test:false};
+  function emptySel(){var o={};PARTS.forEach(function(p){o[p.k]=null});return o}
+  function pcStart(){pc.m=0;pc.test=false;pc.sel=MIS.map(emptySel)}
+  function part(k){return PARTS.filter(function(p){return p.k===k})[0]}
+  function pcCost(){var s=pc.sel[pc.m],t=0;PARTS.forEach(function(p){if(s[p.k]!==null)t+=p.o[s[p.k]][1]});return t}
+  function pcX(k){var s=pc.sel[pc.m][k];return s===null?null:(part(k).o[s][2]||{})}
+  function pcWatts(){var c=pcX('cpu'),g=pcX('gpu');return 100+(c?c.w:0)+(g?g.w:0)}
+  function pcDraw(res){
+    var m=MIS[pc.m],s=pc.sel[pc.m],cost=pcCost(),over=cost>m.budget;
+    var h='<h2>'+T('Arma tu PC','Build your PC')+'</h2><p class="intro">'+T('Ahora el equipo tiene siete piezas y deben ser compatibles entre sí. Cada misión trae un presupuesto y un software que debe correr bien. Si algo no encaja, el PC ni siquiera enciende.','Now the computer has seven parts and they must be compatible with each other. Each mission comes with a budget and software that must run well. If something does not fit, the PC will not even turn on.')+'</p>';
+    h+='<div class="mis" role="group" aria-label="'+T('Misión','Mission')+'">'+MIS.map(function(x,i){return '<button data-act="pc-m" data-i="'+i+'" aria-pressed="'+(i===pc.m)+'"'+(cur.pc[i]?' class="done"':'')+'>'+x.n+'</button>'}).join('')+'</div>';
+    h+='<div class="brief"><b>'+T('Misión: ','Mission: ')+m.n+'</b><p>'+m.txt+'</p><p class="swlist">'+T('Software que va a correr: ','Software it will run: ')+m.sw+'</p></div>';
+    h+='<div class="parts">'+PARTS.map(function(p){
+      return '<div class="part"><h3>'+p.n+'<span>'+(s[p.k]===null?T('sin elegir','not chosen'):T('elegido','chosen'))+'</span></h3><div class="opts">'+p.o.map(function(o,j){
+        return '<button class="opt" data-act="pc-o" data-k="'+p.k+'" data-j="'+j+'" aria-pressed="'+(s[p.k]===j)+'"><b>'+o[0]+'</b><span class="mono">$'+o[1]+'</span></button>';
+      }).join('')+'</div></div>';
+    }).join('')+'</div>';
+    var psx=pcX('psu');
+    h+='<div class="budget"><span>'+T('Gastado','Spent')+'</span><span class="mono"><b>$'+cost+'</b> '+T('de','of')+' $'+m.budget+'</span></div><div class="bar"><i class="'+(over?'over':'')+'" style="width:'+Math.min(100,cost/m.budget*100)+'%"></i></div>';
+    h+='<div class="budget" style="margin-top:12px"><span>'+T('Consumo estimado del equipo','Estimated power use of the computer')+'</span><span class="mono"><b>'+pcWatts()+' W</b>'+(psx?T(' · fuente ',' · power supply ')+psx.w+' W':'')+'</span></div>';
+    var ready=PARTS.every(function(p){return s[p.k]!==null});
+    h+='<div class="row" style="margin-top:16px"><button class="btn" data-act="pc-test"'+(ready?'':' disabled')+'>'+T('Encender el PC','Turn on the PC')+'</button><button class="btn ghost" data-act="pc-reset">'+T('Limpiar','Clear')+'</button></div>';
+    h+=res||'';
+    P('arma').innerHTML=h;
+  }
+  function pcTest(){
+    var m=MIS[pc.m],s=pc.sel[pc.m],cost=pcCost(),bad=0,li='';
+    pc.test=true;
+    function row(ok,title,txt){if(!ok)bad++;li+='<li><span class="m" style="color:var(--'+(ok?'ok':'bad')+')">'+(ok?'OK':'XX')+'</span><span><b>'+title+'.</b> '+txt+'</span></li>'}
+    var mb=pcX('mobo'),cp=pcX('cpu'),ps=pcX('psu'),co=pcX('cool'),need=pcWatts();
+    row(mb.s===cp.s,T('Compatibilidad','Compatibility'),T('La placa madre es '+mb.s+' y el procesador es '+cp.s+'. '+(mb.s===cp.s?'Encajan.':'No encajan: el procesador no se puede instalar.'),'The motherboard is '+mb.s+' and the processor is '+cp.s+'. '+(mb.s===cp.s?'They fit.':'They do not fit: the processor cannot be installed.')));
+    row(ps.w>=need,T('Fuente de poder','Power supply'),T('El equipo necesita unos '+need+' W y la fuente entrega '+ps.w+' W. '+(ps.w>=need?'Alcanza.':'No alcanza: el PC se apagaría o no encendería.'),'The computer needs about '+need+' W and the power supply delivers '+ps.w+' W. '+(ps.w>=need?'It is enough.':'It is not enough: the PC would shut down or not turn on.')));
+    row(co.c>=cp.c,T('Enfriamiento','Cooling'),T('El procesador elegido '+(co.c>=cp.c?'se mantiene fresco.':'se sobrecalienta y baja su velocidad.'),'The processor you chose '+(co.c>=cp.c?'stays cool.':'overheats and slows down.')));
+    ['cpu','ram','disk','gpu'].forEach(function(k){
+      var p=part(k),ok=s[k]>=m.req[k];
+      row(ok,p.n+' ('+p.o[s[k]][0]+')',ok?T('Suficiente para esta misión.','Enough for this mission.'):T('Cuello de botella. ','Bottleneck. ')+p.why);
+    });
+    var over=cost>m.budget,win=!bad&&!over;
+    if(win){cur.pc[pc.m]=true;touch();if(Object.keys(cur.pc).length===MIS.length)markDone('arma')}
+    var head=win?'<b>'+T('El PC enciende y todo corre fluido','The PC turns on and everything runs smoothly')+'</b>'+T('Cumples la misión con $'+(m.budget-cost)+' de sobra.','You complete the mission with $'+(m.budget-cost)+' to spare.'):
+      over?'<b>'+T('Te pasaste del presupuesto por $'+(cost-m.budget),'You went over budget by $'+(cost-m.budget))+'</b>'+(bad?T('Además, alguna pieza falla.','Also, a part is failing.'):T('Tus piezas servirían, pero no alcanza el dinero. Busca dónde ahorrar.','Your parts would work, but you do not have enough money. Look for where to save.')):
+      '<b>'+T('El PC no funciona bien','The PC does not work well')+'</b>'+T('Revisa las piezas marcadas con XX.','Check the parts marked with XX.');
+    pcDraw('<div class="fb '+(win?'ok':'bad')+'" role="status">'+head+'<ul class="checks">'+li+'</ul></div>');
+  }
+  P('arma').addEventListener('click',function(e){
+    var b=e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act');
+    if(a==='pc-m'){pc.m=+b.getAttribute('data-i');pc.test=false;pcDraw()}
+    if(a==='pc-o'){pc.sel[pc.m][b.getAttribute('data-k')]=+b.getAttribute('data-j');pc.test=false;pcDraw()}
+    if(a==='pc-reset'){pc.sel[pc.m]=emptySel();pc.test=false;pcDraw()}
+    if(a==='pc-test')pcTest();
+  });
+
+  /* ---------- 5. RAM ---------- */
+  var OS_GB=2;
+  var ram={size:8,on:{}};
+  function ramStart(){ram.size=8;ram.on={}}
+  function ramDraw(){
+    var used=OS_GB,segs='<i style="width:'+Math.min(100,OS_GB/ram.size*100)+'%;background:var(--muted)" title="'+T('Sistema operativo','Operating system')+'"></i>',acc=OS_GB,count=0;
+    APPS.forEach(function(a){if(ram.on[a[0]]){count++;used+=a[2];var w=Math.max(0,Math.min(ram.size-acc,a[2]));acc+=a[2];segs+='<i style="width:'+(w/ram.size*100)+'%;background:'+a[3]+'" title="'+esc(a[1])+'"></i>'}});
+    var over=used>ram.size, pct=Math.round(used/ram.size*100);
+    var speed=over?Math.max(5,Math.round(100-(used-ram.size)/ram.size*120)):(pct>85?85:100);
+    var status=over?T('La RAM se llenó. El sistema operativo manda datos al disco, que es mucho más lento. El equipo se arrastra.','The RAM is full. The operating system sends data to the drive, which is much slower. The computer crawls.'):pct>85?T('Casi lleno. Un programa más y vas a sentir lentitud.','Almost full. One more program and you will feel the slowdown.'):T('Todo cabe en la RAM. El equipo responde rápido.','Everything fits in the RAM. The computer responds fast.');
+    var g=cur.ramg, ch=false;
+    if(ram.size===8&&ram.on.chrome&&ram.on.zoom&&ram.on.word&&!over&&!g.g1){g.g1=true;ch=true}
+    if(ram.size===8&&ram.on.game&&ram.on.chrome&&over&&!g.g2){g.g2=true;ch=true}
+    if(ram.on.game&&ram.on.video&&!over&&!g.g3){g.g3=true;ch=true}
+    if(ram.size===16&&count>=4&&speed===100&&!g.g4){g.g4=true;ch=true}
+    if(ram.size===4&&ram.on.vm&&over&&!g.g5){g.g5=true;ch=true}
+    if(ch){touch();if(g.g1&&g.g2&&g.g3&&g.g4&&g.g5)markDone('ram')}
+    var h='<h2>'+T('Memoria RAM en vivo','RAM memory live')+'</h2><p class="intro">'+T('Cada programa que abres ocupa un pedazo de la RAM mientras está corriendo. Cambia la cantidad de RAM instalada, abre y cierra programas, y mira qué pasa. Cuando la RAM se llena, el sistema usa el disco como apoyo y todo se vuelve lento.','Each program you open takes up a piece of the RAM while it is running. Change the amount of installed RAM, open and close programs, and see what happens. When the RAM fills up, the system uses the drive as backup and everything becomes slow.')+'</p>';
+    h+='<div class="ramsel" role="group" aria-label="'+T('RAM instalada','Installed RAM')+'"><span>'+T('RAM instalada:','Installed RAM:')+'</span>'+[4,8,16,32].map(function(n){return '<button data-act="ram-s" data-n="'+n+'" aria-pressed="'+(ram.size===n)+'">'+n+' GB</button>'}).join('')+'</div>';
+    h+='<div class="apps" role="group" aria-label="'+T('Programas','Programs')+'">'+APPS.map(function(a){return '<button class="app" data-act="ram-a" data-id="'+a[0]+'" aria-pressed="'+(!!ram.on[a[0]])+'"><span class="sq"></span>'+a[1]+'<span class="gb">'+a[2].toFixed(1)+' GB</span></button>'}).join('')+'</div>';
+    h+='<div class="budget"><span>'+T('Uso de RAM','RAM usage')+' <span style="color:var(--muted)">'+T('(el sistema operativo ya usa '+OS_GB+' GB)','(the operating system already uses '+OS_GB+' GB)')+'</span></span><span class="mono"><b style="color:var(--'+(over?'bad':'ink')+')">'+used.toFixed(1)+'</b> / '+ram.size+' GB</span></div>';
+    h+='<div class="ramviz" aria-hidden="true">'+segs+'</div>';
+    h+='<div class="fb '+(over?'bad':'ok')+'" role="status" style="margin-top:8px">'+status+'</div>';
+    h+='<div class="speed"><span>'+T('Velocidad','Speed')+'</span><div class="bar"><i class="'+(over?'over':'')+'" style="width:'+speed+'%"></i></div><span class="mono">'+speed+'%</span></div>';
+    h+='<ul class="goals">'+[
+      [g.g1,T('Con 8 GB, abre Chrome, Word y Zoom a la vez sin llenar la RAM.','With 8 GB, open Chrome, Word and Zoom at the same time without filling the RAM.')],
+      [g.g2,T('Con 8 GB, abre el videojuego y Chrome, y suma otro programa hasta que el equipo se ponga lento.','With 8 GB, open the video game and Chrome, and add another program until the computer slows down.')],
+      [g.g3,T('Abre el videojuego y el editor de video al mismo tiempo sin pasarte. ¿Cuánta RAM hace falta?','Open the video game and the video editor at the same time without going over. How much RAM do you need?')],
+      [g.g4,T('Con 16 GB, abre al menos 4 programas y mantén la velocidad al 100 %.','With 16 GB, open at least 4 programs and keep the speed at 100%.')],
+      [g.g5,T('Con 4 GB, abre la máquina virtual y comprueba qué le pasa al equipo.','With 4 GB, open the virtual machine and see what happens to the computer.')]
+    ].map(function(x){return '<li class="'+(x[0]?'on':'')+'"><span class="m">'+(x[0]?'OK':'--')+'</span><span>'+x[1]+'</span></li>'}).join('')+'</ul>';
+    P('ram').innerHTML=h;
+  }
+  P('ram').addEventListener('click',function(e){
+    var b=e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act');
+    if(a==='ram-s'){ram.size=+b.getAttribute('data-n');ramDraw()}
+    if(a==='ram-a'){var id=b.getAttribute('data-id');ram.on[id]=!ram.on[id];ramDraw()}
+  });
+
+  /* ---------- 6. CÓMO FUNCIONA (secuencias) ---------- */
+  var fl={seq:0,next:0,order:[]};
+  function flStart(){fl.seq=0;flReset()}
+  function flReset(){fl.next=0;fl.order=shuffle(SEQ[fl.seq].s.map(function(_,i){return i}))}
+  function flDraw(msg){
+    var S=SEQ[fl.seq].s;
+    var h='<h2>'+T('¿Cómo funciona por dentro?','How does it work inside?')+'</h2><p class="intro">'+T('Hardware y software se pasan el trabajo uno al otro. Elige un proceso y toca los pasos en el orden en que ocurren, del primero al último.','Hardware and software pass the work to each other. Choose a process and tap the steps in the order they happen, from first to last.')+'</p>';
+    h+='<div class="mis" role="group" aria-label="'+T('Proceso','Process')+'">'+SEQ.map(function(x,i){return '<button data-act="fl-seq" data-i="'+i+'" aria-pressed="'+(i===fl.seq)+'"'+(cur.flow[i]?' class="done"':'')+'>'+x.t+'</button>'}).join('')+'</div>';
+    if(fl.next<S.length){
+      h+='<div class="steps">'+fl.order.map(function(i){return '<button class="step'+(i<fl.next?' used':'')+'" data-act="fl" data-i="'+i+'"><span>'+S[i][0]+'</span></button>'}).join('')+'</div>';
+    }
+    if(msg)h+='<div class="fb bad" role="status">'+msg+'</div>';
+    if(fl.next>0){
+      h+='<h3 style="margin:18px 0 10px">'+T('Tu línea de tiempo','Your timeline')+'</h3><ol class="line">'+S.slice(0,fl.next).map(function(f){return '<li><span>'+f[0]+'<br><small style="color:var(--muted)">'+f[2]+'</small></span><span class="tag '+f[1]+'">'+(f[1]==='hw'?'HW':'SW')+'</span></li>'}).join('')+'</ol>';
+    }
+    if(fl.next===S.length){
+      var nh=S.filter(function(f){return f[1]==='hw'}).length;
+      if(!cur.flow[fl.seq]){cur.flow[fl.seq]=true;touch();if(SEQ.every(function(_,i){return cur.flow[i]}))markDone('clic')}
+      h+='<div class="fb ok" role="status"><b>'+T('Orden perfecto','Perfect order')+'</b>'+T('En este proceso participaron '+nh+' pasos de hardware y '+(S.length-nh)+' de software. Sin hardware el software no tiene dónde correr, y sin software el hardware no sabe qué hacer.','This process involved '+nh+' hardware steps and '+(S.length-nh)+' software steps. Without hardware the software has nowhere to run, and without software the hardware does not know what to do.')+'</div><div class="row" style="margin-top:14px"><button class="btn ghost" data-act="fl-reset">'+T('Repetir','Repeat')+'</button></div>';
+    }
+    P('clic').innerHTML=h;
+  }
+  P('clic').addEventListener('click',function(e){
+    var b=e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act');
+    if(a==='fl-seq'){fl.seq=+b.getAttribute('data-i');flReset();flDraw()}
+    if(a==='fl-reset'){flReset();flDraw()}
+    if(a==='fl'){
+      var i=+b.getAttribute('data-i');
+      if(i===fl.next){fl.next++;flDraw()}
+      else{flDraw(T('Ese paso todavía no toca. Piensa qué tiene que ocurrir justo antes.','That step does not come yet. Think about what has to happen right before.'))}
+    }
+  });
+
+  /* ---------- 7. DIAGNÓSTICO ---------- */
+  /* dg.deck guarda índices (caso y orden de soluciones), así el idioma se puede cambiar sin perder el avance */
+  var dg={deck:[],i:0,pts:0,t:null,s:null};
+  function dgCase(d){var c=CASES[d.ci];return {sym:c.sym,type:c.type,ex:c.ex,sols:d.so.map(function(k){return c.sols[k]})}}
+  function dgStart(){dg.deck=shuffle(CASES.map(function(_,i){return i})).slice(0,6).map(function(ci){return {ci:ci,so:shuffle(CASES[ci].sols.map(function(_,k){return k}))}});dg.i=0;dg.pts=0;dg.t=null;dg.s=null;dgDraw()}
+  function dgDraw(){
+    var h='<h2>'+T('Diagnóstico técnico','Technical diagnosis')+'</h2><p class="intro">'+T('Eres el técnico del laboratorio. Para cada caso, primero decide si el problema es de hardware o de software, y luego elige la solución correcta. Cada paso vale un punto.','You are the lab technician. For each case, first decide whether the problem is hardware or software, and then choose the right solution. Each step is worth one point.')+'</p>';
+    if(dg.i>=dg.deck.length){
+      if(dg.pts>cur.best.diag){cur.best.diag=dg.pts;touch()}
+      var ok=dg.pts>=9;if(ok)markDone('diag');
+      h+='<div class="result"><div class="big mono">'+dg.pts+'/'+(dg.deck.length*2)+'</div><p>'+(ok?T('Estación completada. Diagnosticas como un técnico.','Station complete. You diagnose like a technician.'):T('Necesitas 9 puntos. Repasa las pistas y vuelve a intentarlo.','You need 9 points. Review the hints and try again.'))+'</p></div><div class="row" style="justify-content:center;margin-top:16px"><button class="btn" data-act="dg-restart">'+T('Nuevos casos','New cases')+'</button></div>';
+      P('diag').innerHTML=h;return;
+    }
+    var c=dgCase(dg.deck[dg.i]);
+    h+='<div class="deckbar"><span>'+T('Caso '+(dg.i+1)+' de '+dg.deck.length,'Case '+(dg.i+1)+' of '+dg.deck.length)+'</span><span class="mono">'+T('Puntos: ','Points: ')+dg.pts+'</span></div><div class="brief"><b>'+T('Síntoma','Symptom')+'</b><p>'+c.sym+'</p></div>';
+    h+='<h3 style="margin-bottom:8px">'+T('1. ¿Qué tipo de problema es?','1. What type of problem is it?')+'</h3><div class="pick">'+['hw','sw'].map(function(k){return '<button class="b-'+k+'" data-act="dg-t" data-v="'+k+'"'+(dg.t!==null?' disabled':'')+'>'+(k==='hw'?'Hardware':'Software')+'</button>'}).join('')+'</div>';
+    if(dg.t!==null){
+      var r=dg.t===c.type;
+      h+='<div class="fb '+(r?'ok':'bad')+'" role="status"><b>'+(r?T('Tipo correcto','Correct type'):T('Era '+(c.type==='hw'?'hardware':'software'),'It was '+(c.type==='hw'?'hardware':'software')))+'</b>'+esc(c.ex)+'</div>';
+      h+='<h3 style="margin:18px 0 8px">'+T('2. ¿Qué solución aplicas?','2. What solution do you apply?')+'</h3><div class="opts" style="grid-template-columns:1fr">'+c.sols.map(function(sl,j){
+        var cls='opt';if(dg.s!==null){if(sl[1])cls+=' right';else if(j===dg.s)cls+=' wrong'}
+        return '<button class="'+cls+'" data-act="dg-s" data-j="'+j+'"'+(dg.s!==null?' disabled':'')+'><b>'+sl[0]+'</b></button>';
+      }).join('')+'</div>';
+      if(dg.s!==null)h+='<div class="row" style="margin-top:14px"><button class="btn" data-act="dg-next" id="dg-next">'+(dg.i+1>=dg.deck.length?T('Ver resultado','See result'):T('Siguiente caso','Next case'))+'</button></div>';
+    }
+    P('diag').innerHTML=h;
+    var n=$('#dg-next');if(n)n.focus();
+  }
+  P('diag').addEventListener('click',function(e){
+    var b=e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act');
+    var c=dg.deck[dg.i]&&dgCase(dg.deck[dg.i]);
+    if(a==='dg-restart'){dgStart()}
+    if(a==='dg-t'&&dg.t===null){dg.t=b.getAttribute('data-v');if(dg.t===c.type)dg.pts++;dgDraw()}
+    if(a==='dg-s'&&dg.s===null){dg.s=+b.getAttribute('data-j');if(c.sols[dg.s][1])dg.pts++;dgDraw()}
+    if(a==='dg-next'){dg.i++;dg.t=null;dg.s=null;dgDraw()}
+  });
+
+  /* ---------- 8. RETO FINAL ---------- */
+  var QPASS=11;
+  var qz={order:[],i:0,ok:0,ans:null,fin:false};
+  function qzStart(){qz={order:shuffle(QS.map(function(_,i){return i})),i:0,ok:0,ans:null,fin:false}}
+  function renderQuiz(){
+    var el=P('quiz'),h='<h2>'+T('Reto final','Final challenge')+'</h2><p class="intro">'+T('Quince preguntas sobre todo lo que viste en el laboratorio. Las preguntas salen en orden distinto cada vez.','Fifteen questions about everything you saw in the lab. The questions come in a different order each time.')+'</p>';
+    if(qz.fin){
+      var good=qz.ok>=QPASS;
+      if(qz.ok>cur.best.quiz){cur.best.quiz=qz.ok;touch()}
+      if(good)markDone('quiz');
+      var all=stations.every(function(s){return cur.done[s.id]});
+      var lvl=qz.ok===15?T('Oro','Gold'):qz.ok>=13?T('Plata','Silver'):T('Bronce','Bronze');
+      h+='<div class="cert"><span class="tag '+(good?'sw':'hw')+'">'+(good?T('Nivel ','Level ')+lvl:T('Casi','Almost'))+'</span><div class="big mono">'+qz.ok+'/'+QS.length+'</div><p>'+(good?(all?T('<b>'+esc(cur.name)+'</b> completó las ocho estaciones del laboratorio de hardware y software con nivel <b>'+lvl+'</b>.','<b>'+esc(cur.name)+'</b> completed the eight stations of the hardware and software lab at <b>'+lvl+'</b> level.'):T('Buen resultado, '+esc(cur.name)+'. Te faltan estaciones por completar en la barra de arriba.','Good result, '+esc(cur.name)+'. You still have stations to complete in the bar above.')):T('Necesitas '+QPASS+' aciertos. Repasa las estaciones y vuelve a intentarlo.','You need '+QPASS+' correct answers. Review the stations and try again.'))+'</p></div><div class="row" style="justify-content:center;margin-top:16px"><button class="btn" data-act="q-restart">'+T('Repetir reto','Repeat challenge')+'</button></div>';
+      el.innerHTML=h;return;
+    }
+    var q=QS[qz.order[qz.i]];
+    h+='<div class="q"><div class="qc">'+T('Pregunta '+(qz.i+1)+' de '+QS.length,'Question '+(qz.i+1)+' of '+QS.length)+'</div><h3 style="margin-bottom:12px">'+q[0]+'</h3><div class="opts">'+q[1].map(function(o,j){
+      var cls='opt';if(qz.ans!==null){if(j===q[2])cls+=' right';else if(j===qz.ans)cls+=' wrong'}
+      return '<button class="'+cls+'" data-act="q" data-j="'+j+'"'+(qz.ans!==null?' disabled':'')+'><b>'+o+'</b></button>';
+    }).join('')+'</div></div>';
+    if(qz.ans!==null){
+      var r=qz.ans===q[2];
+      h+='<div class="fb '+(r?'ok':'bad')+'" role="status"><b>'+(r?T('Correcto','Correct'):T('No exactamente','Not exactly'))+'</b>'+q[3]+'</div><div class="row" style="margin-top:14px"><button class="btn" data-act="q-next" id="q-next">'+(qz.i+1>=QS.length?T('Ver resultado','See result'):T('Siguiente','Next'))+'</button></div>';
+    }
+    el.innerHTML=h;
+    var n=$('#q-next');if(n)n.focus();
+  }
+  P('quiz').addEventListener('click',function(e){
+    var b=e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act');
+    if(a==='q'&&qz.ans===null){qz.ans=+b.getAttribute('data-j');if(qz.ans===QS[qz.order[qz.i]][2])qz.ok++;renderQuiz()}
+    if(a==='q-next'){qz.i++;qz.ans=null;if(qz.i>=QS.length)qz.fin=true;renderQuiz()}
+    if(a==='q-restart'){qzStart();renderQuiz()}
+  });
+
+  /* ================= INICIO DE SESIÓN DE UN ESTUDIANTE ================= */
+  function whoChip(){$('#who-chip').innerHTML=T('Hola, ','Hello, ')+'<span>'+esc(cur.name)+'</span>'}
+  function startSession(k){
+    cur=db.profiles[k];
+    cur.done=cur.done||{};cur.pc=cur.pc||{};cur.ramg=cur.ramg||{};cur.io=cur.io||{};cur.bin=cur.bin||{};cur.flow=cur.flow||{};cur.best=cur.best||{};
+    ['cl','io','diag','quiz'].forEach(function(k){cur.best[k]=cur.best[k]||0});
+    whoChip();
+    $('#nosave').hidden=canSave;
+    $('#reset-me-box').hidden=true;
+    qzStart();
+    clStart();ioStart();binStart();binDraw();pcStart();pcDraw();ramStart();ramDraw();flStart();flDraw();dgStart();
+    view('app');
+    var first=stations.filter(function(s){return !cur.done[s.id]})[0];
+    show(first?first.id:'quiz');
+  }
+
+  /* ================= MODO DOCENTE ================= */
+  function sha(str){
+    var enc=new TextEncoder().encode('hwsw:'+str);
+    if(window.crypto&&crypto.subtle){
+      return crypto.subtle.digest('SHA-256',enc).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('')});
+    }
+    var h=5381;for(var i=0;i<enc.length;i++)h=((h<<5)+h+enc[i])|0;
+    return Promise.resolve('x'+h);
+  }
+  var tUnlocked=false, tMsg='';
+  function tDraw(){
+    var el=$('#teacher-body'),h='';
+    if(!TEACHER_PIN_HASH&&!db.pin){
+      h+='<h2>'+T('Crea tu PIN docente','Create your teacher PIN')+'</h2><p class="intro">'+T('Protege el reinicio de datos para que los estudiantes no puedan borrar el avance. Usa al menos 4 dígitos.','Protect the data reset so students cannot erase the progress. Use at least 4 digits.')+'</p><form id="t-setpin" class="stack" style="max-width:340px"><label class="f" for="t-pin-new">'+T('Nuevo PIN','New PIN')+'<input id="t-pin-new" type="password" inputmode="numeric" autocomplete="off" maxlength="12"></label><button class="btn" type="submit">'+T('Guardar PIN','Save PIN')+'</button></form>';
+    }else if(!tUnlocked){
+      h+='<h2>'+T('Ingresa tu PIN','Enter your PIN')+'</h2><form id="t-login" class="stack" style="max-width:340px;margin-top:14px"><label class="f" for="t-pin">'+T('PIN docente','Teacher PIN')+'<input id="t-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="12"></label><button class="btn" type="submit">'+T('Entrar','Enter')+'</button></form>';
+    }else{
+      var keys=Object.keys(db.profiles).sort(function(a,b){return db.profiles[a].name.localeCompare(db.profiles[b].name,LANG)});
+      h+='<h2>'+T('Estudiantes en este dispositivo','Students on this device')+'</h2>';
+      if(!keys.length)h+='<p class="intro">'+T('Todavía nadie ha usado el laboratorio en este dispositivo.','Nobody has used the lab on this device yet.')+'</p>';
+      else{
+        h+='<div class="tbl-wrap"><table><thead><tr><th>'+T('Nombre','Name')+'</th>'+stations.map(function(s,i){return '<th class="c" title="'+s.t+'">E'+(i+1)+'</th>'}).join('')+'<th class="c">Total</th><th>'+T('Último uso','Last used')+'</th><th></th></tr></thead><tbody>';
+        keys.forEach(function(k){
+          var p=db.profiles[k],n=stations.filter(function(s){return p.done&&p.done[s.id]}).length;
+          h+='<tr><td><b>'+esc(p.name)+'</b></td>'+stations.map(function(s){return '<td class="c">'+(p.done&&p.done[s.id]?'<span class="sw">✓</span>':'<span style="color:var(--muted)">·</span>')+'</td>'}).join('')+'<td class="c mono">'+n+'/'+stations.length+'</td><td class="mono">'+new Date(p.t).toLocaleDateString(LANG)+'</td><td><button class="link" data-act="t-del" data-k="'+esc(k)+'">'+T('Borrar','Delete')+'</button></td></tr>';
+        });
+        h+='</tbody></table></div><p style="font-size:13px;color:var(--muted)">'+stations.map(function(x,i){return 'E'+(i+1)+' '+x.t}).join(' · ')+'</p>';
+      }
+      h+='<div class="row" style="margin:16px 0"><button class="btn ghost" data-act="t-csv"'+(keys.length?'':' disabled')+'>'+T('Descargar CSV','Download CSV')+'</button></div>';
+      h+='<div class="fb bad" style="margin-top:20px"><b>'+T('Nuevo grado','New class')+'</b>'+T('Borra el avance de todos los estudiantes de este dispositivo para empezar con un grupo nuevo. No se puede deshacer.','Erases the progress of all students on this device to start with a new group. This cannot be undone.')+'<form id="t-wipe" class="row" style="margin-top:10px"><input id="t-wipe-in" type="text" placeholder="'+T('Escribe BORRAR','Type DELETE')+'" autocomplete="off" style="max-width:200px"><button class="btn danger" type="submit">'+T('Borrar todo','Erase everything')+'</button></form></div>';
+      h+=''+(TEACHER_PIN_HASH?'':'<details style="margin-top:16px"><summary style="cursor:pointer;color:var(--muted)">'+T('Cambiar PIN','Change PIN')+'</summary><form id="t-chpin" class="row" style="margin-top:10px"><input id="t-pin-ch" type="password" inputmode="numeric" placeholder="'+T('Nuevo PIN','New PIN')+'" autocomplete="off" maxlength="12" style="max-width:200px"><button class="btn ghost" type="submit">'+T('Guardar','Save')+'</button></form></details>')+'';
+    }
+    if(tMsg)h+='<div class="fb ok" role="status">'+tMsg+'</div>';
+    el.innerHTML=h;tMsg='';
+  }
+  function tErr(msg){var e=$('#teacher-body');var d=document.createElement('div');d.className='fb bad';d.setAttribute('role','alert');d.textContent=msg;e.appendChild(d)}
+  $('#open-teacher').addEventListener('click',function(){tUnlocked=false;tMsg='';tDraw();view('teacher')});
+  $('#close-teacher').addEventListener('click',function(){tUnlocked=false;view(cur?'app':'login')});
+  $('#teacher-body').addEventListener('submit',function(e){
+    e.preventDefault();var id=e.target.id;
+    if(id==='t-setpin'||id==='t-chpin'){
+      var v=$(id==='t-setpin'?'#t-pin-new':'#t-pin-ch').value.trim();
+      if(!/^\d{4,12}$/.test(v)){tDraw();tErr(T('El PIN debe tener entre 4 y 12 números.','The PIN must have between 4 and 12 digits.'));return}
+      sha(v).then(function(hh){db.pin=hh;persist();tUnlocked=true;tMsg=T('PIN guardado.','PIN saved.');tDraw()});
+    }
+    if(id==='t-login'){
+      sha($('#t-pin').value.trim()).then(function(hh){if(hh===(TEACHER_PIN_HASH||db.pin)){tUnlocked=true;tDraw()}else{tDraw();tErr(T('PIN incorrecto.','Wrong PIN.'))}});
+    }
+    if(id==='t-wipe'){
+      var wv=$('#t-wipe-in').value.trim().toUpperCase();
+      if(wv!=='BORRAR'&&wv!=='DELETE'){tErr(T('Escribe la palabra BORRAR para confirmar.','Type the word DELETE to confirm.'));return}
+      db.profiles={};persist();cur=null;tMsg=T('Listo. El laboratorio quedó vacío para el nuevo grado.','Done. The lab is now empty for the new class.');tDraw();
+    }
+  });
+  $('#teacher-body').addEventListener('click',function(e){
+    var b=e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act');
+    if(a==='t-del'){var k=b.getAttribute('data-k');if(db.profiles[k]){var nm=db.profiles[k].name;if(cur&&keyOf(cur.name)===k)cur=null;delete db.profiles[k];persist();tMsg=T('Se borró el avance de '+esc(nm)+'.','Progress of '+esc(nm)+' was erased.');tDraw()}}
+    if(a==='t-csv'){
+      var rows=[[T('Nombre','Name')].concat(stations.map(function(s){return s.t}),T(['Estaciones completas','Mejor clasificacion (de 24)','Mejor entrada/salida (de 12)','Mejor diagnostico (de 12)','Mejor reto final (de 15)','Ultimo uso'],['Stations completed','Best sorting (out of 24)','Best input/output (out of 12)','Best diagnosis (out of 12)','Best final challenge (out of 15)','Last used']))];
+      Object.keys(db.profiles).forEach(function(k){
+        var p=db.profiles[k],n=0,r=[p.name];
+        stations.forEach(function(s){var d=p.done&&p.done[s.id];if(d)n++;r.push(d?T('Si','Yes'):'No')});
+        r.push(n,(p.best&&p.best.cl)||0,(p.best&&p.best.io)||0,(p.best&&p.best.diag)||0,(p.best&&p.best.quiz)||0,new Date(p.t).toISOString().slice(0,10));
+        rows.push(r);
+      });
+      var csv='﻿'+rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"'}).join(',')}).join('\r\n');
+      try{
+        var url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+        var a2=document.createElement('a');a2.href=url;a2.download='avance-laboratorio.csv';document.body.appendChild(a2);a2.click();a2.remove();
+        setTimeout(function(){URL.revokeObjectURL(url)},2000);
+      }catch(err){tErr(T('Este navegador no permitió la descarga.','This browser did not allow the download.'))}
+    }
+  });
+
+  /* ================= CAMBIO DE IDIOMA ================= */
+  function remap(arr,src){return arr.map(function(it){return src[it.i]})}
+  function setLang(l,btn){
+    if(l===LANG)return;
+    LANG=l;try{localStorage.setItem(LANG_KEY,l)}catch(e){}
+    buildData();
+    cl.deck=remap(cl.deck,ITEMS);io.deck=remap(io.deck,IOA);
+    applyStatic();paintLoginErr();
+    drawTabs();
+    if(curView==='login')drawKnown();
+    if(cur){
+      whoChip();saveAns();
+      clDraw();ioDraw();binDraw();
+      pcDraw();if(pc.test)pcTest();
+      ramDraw();flDraw();dgDraw();
+      if(current==='quiz')renderQuiz();
+    }
+    if(curView==='teacher')tDraw();
+    if(btn)btn.focus();
+  }
+
+  /* ================= ARRANQUE ================= */
+  applyStatic();
+  drawTabs();
+  view('login');
+})();
+</script>
+</body>
+</html>

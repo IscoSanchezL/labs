@@ -1,0 +1,475 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Anti-Phishing Lab</title>
+<meta name="description" content="Laboratorio interactivo para aprender a detectar correos, SMS y mensajes de phishing.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#050810;--s1:#0c1220;--s2:#111a2e;--s3:#182342;--bd:#1a2844;--bdh:#253660;--tx:#e8edf8;--tm:#8b9dc3;--td:#4a5e85;--blue:#4f8ff7;--indigo:#7c6ff7;--violet:#a855f7;--cyan:#22d3ee;--rose:#f43f5e;--rose-s:rgba(244,63,94,.1);--green:#34d399;--green-s:rgba(52,211,153,.1);--r:14px}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--tx);font-family:Inter,system-ui,sans-serif;line-height:1.6;overflow-x:hidden;min-height:100vh}
+canvas#particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+.glass{background:rgba(12,18,32,.65);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(79,143,247,.08)}
+
+/* TOPBAR */
+.top{position:sticky;top:0;z-index:60;height:54px;display:flex;align-items:center;padding:0 clamp(14px,3vw,32px);gap:10px;background:rgba(5,8,16,.7);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid rgba(79,143,247,.1)}
+.top .logo{display:flex;align-items:center;gap:8px;margin-right:auto}
+.top .logo-ic{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--violet));display:flex;align-items:center;justify-content:center;font-size:13px}
+.top .logo b{font-size:14px;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav{display:flex;gap:3px}.nav-b{background:none;border:none;color:var(--td);cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;padding:5px 11px;border-radius:99px;transition:.3s;display:flex;align-items:center;gap:5px}
+.nav-b:hover{color:var(--tm)}.nav-b.on{background:rgba(79,143,247,.12);color:var(--blue)}.nav-b .d{width:5px;height:5px;border-radius:50%;background:currentColor}
+@media(max-width:640px){.nav-b .lb{display:none}}
+
+/* LAYOUT */
+main{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:clamp(20px,4vw,48px) clamp(14px,3.5vw,32px) 100px}
+.scr{display:none;opacity:0;transform:translateY(24px) scale(.98)}.scr.on{display:block;animation:up .55s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes up{to{opacity:1;transform:translateY(0) scale(1)}}
+
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--cyan);background:rgba(34,211,238,.08);padding:4px 12px;border-radius:99px;margin-bottom:14px;letter-spacing:.03em}
+.pill::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--cyan);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h2.hd{font-size:clamp(26px,4.5vw,38px);font-weight:800;letter-spacing:-.03em;line-height:1.08;max-width:600px}
+.grad-text{background:linear-gradient(135deg,var(--blue),var(--cyan),var(--violet));background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradShift 4s ease infinite}
+@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.desc{color:var(--tm);font-size:14.5px;max-width:520px;margin-top:10px}
+
+/* GLOW BORDER CARDS */
+.glow-card{position:relative;border-radius:var(--r);overflow:hidden;background:var(--s1)}
+.glow-card::before{content:'';position:absolute;inset:-1px;border-radius:var(--r);background:linear-gradient(135deg,var(--blue),var(--violet),var(--cyan));z-index:-1;opacity:.5;transition:opacity .4s}
+.glow-card:hover::before{opacity:1}
+.glow-card-inner{background:var(--s1);border-radius:calc(var(--r) - 1px);padding:clamp(20px,3vw,32px);margin:1px;position:relative}
+
+/* TILT */
+.tilt{transition:transform .2s ease}
+
+/* INTRO */
+.intro-g{display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(28px,5vw,60px);align-items:center;min-height:62vh}
+@media(max-width:860px){.intro-g{grid-template-columns:1fr}}
+.intro-g h1{font-size:clamp(36px,6.5vw,60px);font-weight:900;letter-spacing:-.04em;line-height:1.02}
+.intro-g h1 .hl{background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.intro-p{color:var(--tm);font-size:16px;margin-top:16px;max-width:460px}
+.typewriter{overflow:hidden;white-space:nowrap;border-right:2px solid var(--cyan);animation:typing 2.8s steps(44) 1s forwards,cursor .7s step-end infinite;width:0;max-width:100%;display:inline-block;vertical-align:bottom;font-weight:700;color:var(--cyan);font-size:clamp(14px,2.5vw,18px);margin-top:12px}
+@keyframes typing{to{width:100%}}@keyframes cursor{50%{border-color:transparent}}
+.cta{margin-top:28px;display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--blue),var(--indigo));color:#fff;border:none;padding:14px 28px;border-radius:var(--r);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:.25s;position:relative;overflow:hidden}
+.cta::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.15));opacity:0;transition:.3s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(79,143,247,.35)}.cta:hover::after{opacity:1}
+.cta svg{width:18px;height:18px}
+
+.dossier{border-radius:var(--r)}.dossier .glow-card-inner{padding:24px 22px}
+.dossier-hd{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;color:var(--blue);letter-spacing:.08em;margin-bottom:14px}
+.dossier-r{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd);font-size:13.5px;color:var(--tm);align-items:flex-start}
+.dossier-r:last-child{border-bottom:none}
+.dossier-n{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--blue),var(--indigo));display:flex;align-items:center;justify-content:center;flex:none;font-size:10px;font-weight:700;color:#fff}
+.dossier-r b{color:var(--tx)}
+
+/* LEARN */
+.slide-w{margin-top:24px}.slide{display:none}.slide.on{display:block;animation:up .4s ease forwards}
+.sl-card{border-radius:var(--r)}.sl-inner{padding:clamp(22px,3.5vw,36px)}
+.sl-inner h3{font-size:clamp(20px,3vw,28px);font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+.sl-inner p{color:var(--tm);font-size:14.5px;margin-bottom:12px;max-width:640px}
+.analogy{background:rgba(79,143,247,.06);border-left:3px solid var(--blue);border-radius:0 var(--r) var(--r) 0;padding:16px 20px;margin:16px 0;font-size:14.5px;color:var(--tm)}.analogy b{color:var(--tx)}
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:18px}
+.tc{border-radius:var(--r);padding:16px;transition:.35s;cursor:default;opacity:0;transform:translateY(14px);background:var(--s2);border:1px solid var(--bd)}.tc.vis{opacity:1;transform:translateY(0)}.tc:hover{border-color:var(--bdh);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.tc .ti{font-size:22px;margin-bottom:6px}.tc .tn{font-weight:700;font-size:13.5px;margin-bottom:3px}.tc .td{font-size:12px;color:var(--tm)}
+.reveal-b{margin-top:14px;display:inline-flex;align-items:center;gap:6px;background:rgba(79,143,247,.1);color:var(--blue);border:1px solid rgba(79,143,247,.2);padding:9px 16px;border-radius:var(--r);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:.25s}
+.reveal-b:hover{background:rgba(79,143,247,.18);border-color:rgba(79,143,247,.35)}.reveal-b.gone{display:none}
+.sl-nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px;gap:10px}
+.sl-dots{display:flex;gap:5px}.sl-dots span{width:7px;height:7px;border-radius:50%;background:var(--s3);transition:.3s}.sl-dots span.on{background:var(--blue);width:20px;border-radius:4px}
+.btn-m{background:linear-gradient(135deg,var(--blue),var(--indigo));color:#fff;border:none;padding:11px 22px;border-radius:var(--r);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:7px}
+.btn-m:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(79,143,247,.3)}.btn-m:disabled{opacity:.35;cursor:default;transform:none;box-shadow:none}
+.btn-o{background:var(--s2);color:var(--tm);border:1px solid var(--bd);padding:10px 18px;border-radius:var(--r);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:.25s}
+.btn-o:hover{border-color:var(--bdh);color:var(--tx)}.btn-o:disabled{opacity:.25;cursor:default}
+
+/* EXPLORE */
+.ex-g{display:grid;grid-template-columns:1.35fr .65fr;gap:clamp(16px,2.5vw,26px);margin-top:24px;align-items:start}
+@media(max-width:900px){.ex-g{grid-template-columns:1fr}}
+.tracker{display:flex;align-items:center;gap:10px;margin:10px 0 18px}
+.tbar{flex:1;max-width:200px;height:4px;background:var(--s3);border-radius:99px;overflow:hidden}
+.tfill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--violet));border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.ttxt{font-size:11px;color:var(--td);font-family:'JetBrains Mono',monospace}
+.mail{border-radius:var(--r);overflow:hidden}
+.mh{background:var(--s2);padding:14px 18px;border-bottom:1px solid var(--bd)}
+.mh-f{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;color:var(--rose);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.mh-s{font-size:12px;color:var(--td);margin-top:3px;font-style:italic}
+.mb{padding:20px 22px;font-size:14.5px;line-height:1.65;color:var(--tm)}.mb p{margin-bottom:12px}
+.hs{display:inline-flex;width:20px;height:20px;border-radius:5px;background:linear-gradient(135deg,var(--blue),var(--indigo));color:#fff;font-size:10px;font-weight:700;align-items:center;justify-content:center;cursor:pointer;border:none;margin-left:3px;position:relative;top:-1px;transition:.2s;box-shadow:0 0 0 0 rgba(79,143,247,.4);animation:pulse2 2s infinite}
+.hs:hover{transform:scale(1.2)}.hs.found{background:linear-gradient(135deg,var(--violet),var(--rose));animation:none}
+@keyframes pulse2{0%,100%{box-shadow:0 0 0 0 rgba(79,143,247,.4)}50%{box-shadow:0 0 0 6px rgba(79,143,247,0)}}
+.ev{border-bottom:1.5px dashed var(--td);transition:.4s}.ev.found{background:rgba(168,85,247,.12);border-bottom:2px solid var(--violet);border-radius:3px;padding:1px 3px}
+.side{border-radius:var(--r);position:sticky;top:70px}.side-inner{padding:18px 20px}
+.side h3{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.side h3::before{content:'';width:3px;height:14px;border-radius:2px;background:linear-gradient(var(--blue),var(--violet))}
+.rvb{min-height:76px;margin-bottom:14px}.rv-t{font-weight:700;color:var(--tx);font-size:13.5px;margin-bottom:4px}.rv-d{font-size:12.5px;color:var(--tm)}
+.rv-ph{color:var(--td);font-size:12.5px;font-style:italic}
+.cl{list-style:none;border-top:1px solid var(--bd);padding-top:12px}
+.cl li{max-height:0;overflow:hidden;opacity:0;padding:0;margin:0;font-size:12px;color:var(--tx);transition:max-height .01s,opacity .01s}
+.cl li.show{display:flex;align-items:center;gap:8px;max-height:40px;overflow:visible;opacity:1;padding:5px 0;animation:fadeIn .4s ease}
+.cl li .ck{width:16px;height:16px;border-radius:4px;background:linear-gradient(135deg,var(--blue),var(--indigo));flex:none;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff}
+@keyframes fadeIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+.act-r{margin-top:22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hint-m{font-size:12px;color:var(--td)}
+
+/* PRACTICE */
+.pr-g{display:grid;grid-template-columns:230px 1fr;gap:clamp(12px,2vw,22px);margin-top:22px}
+@media(max-width:820px){.pr-g{grid-template-columns:1fr}}
+.inb{display:flex;flex-direction:column;gap:4px;max-height:68vh;overflow-y:auto;padding-right:3px}
+.inb::-webkit-scrollbar{width:2px}.inb::-webkit-scrollbar-thumb{background:var(--bd);border-radius:99px}
+.ib{display:flex;gap:8px;align-items:center;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px;cursor:pointer;text-align:left;font-family:inherit;color:var(--tm);transition:.25s;flex:none}
+.ib:hover{border-color:var(--bdh);transform:translateX(3px)}.ib.on{border-color:var(--blue);background:rgba(79,143,247,.06);box-shadow:0 0 20px rgba(79,143,247,.08)}
+.ib .em{font-size:15px;flex:none}.ib .inf{overflow:hidden;flex:1}.ib .inf b{display:block;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ib .inf span{display:block;font-size:10.5px;color:var(--td);margin-top:1px}
+.ib .st{margin-left:auto;flex:none;opacity:0;transition:.3s;font-size:12px}.ib .st.v{opacity:1;color:var(--green)}
+.rdr{border-radius:var(--r);overflow:hidden;position:relative}
+.rdr-c{padding:12px 18px 0;font-size:11px;color:var(--td);font-family:'JetBrains Mono',monospace}
+.rdr-b{padding:18px 22px;font-size:14.5px;line-height:1.65;color:var(--tm)}
+.rdr-b.shown .rm{background:var(--rose-s);border-bottom:2px solid var(--rose);border-radius:3px;padding:1px 3px;transition:.4s}
+.chs{padding:0 18px 18px;display:flex;gap:10px;flex-wrap:wrap}
+.ch{flex:1;min-width:140px;padding:12px 14px;border-radius:var(--r);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid var(--bd);background:var(--s2);color:var(--tx);transition:.25s;position:relative;overflow:hidden}
+.ch::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.05));opacity:0;transition:.3s}
+.ch:hover{border-color:var(--bdh)}.ch:hover::after{opacity:1}
+.ch.sp{border-color:var(--rose);background:var(--rose-s);box-shadow:0 0 20px rgba(244,63,94,.1)}.ch.sl{border-color:var(--green);background:var(--green-s);box-shadow:0 0 20px rgba(52,211,153,.1)}
+.seal{position:absolute;top:14px;right:20px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;padding:5px 14px;border:2.5px solid currentColor;border-radius:4px;transform:rotate(-8deg) scale(0);opacity:0;pointer-events:none}
+.seal.pop{animation:sp .5s cubic-bezier(.2,1.5,.4,1) forwards}
+.seal.s-p{color:var(--rose);text-shadow:0 0 12px rgba(244,63,94,.5)}.seal.s-l{color:var(--green);text-shadow:0 0 12px rgba(52,211,153,.5)}
+@keyframes sp{0%{transform:rotate(-8deg) scale(2.5);opacity:0}60%{transform:rotate(-8deg) scale(.92);opacity:1}100%{transform:rotate(-8deg) scale(1);opacity:1}}
+.shake{animation:shake .4s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+.exp{margin:0 18px 18px;padding:14px 18px;border-radius:var(--r);font-size:13px;display:none}
+.exp.v{display:block;animation:fadeIn .4s ease}.exp.ep{background:var(--rose-s);color:#fca5a5}.exp.el{background:var(--green-s);color:#6ee7b7}
+.exp .et{font-weight:700;font-size:13.5px;display:block;margin-bottom:5px}.exp ul{padding-left:16px;margin:0}.exp li{margin-bottom:3px}
+.nxt-r{display:flex;justify-content:flex-end;margin-top:16px}
+
+/* RECAP */
+.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:20px}@media(max-width:600px){.sg{grid-template-columns:1fr}}
+.si{display:flex;gap:10px;align-items:center;border-radius:var(--r);padding:12px 14px;cursor:pointer;font-size:13px;color:var(--tm);transition:.3s;background:var(--s1);border:1px solid var(--bd)}
+.si:hover{border-color:var(--bdh);transform:translateY(-1px)}.si .sn{width:24px;height:24px;border-radius:6px;background:var(--s3);display:flex;align-items:center;justify-content:center;flex:none;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;color:var(--td);transition:.3s}
+.si.mk{border-color:var(--blue);background:rgba(79,143,247,.06);box-shadow:0 0 16px rgba(79,143,247,.08)}.si.mk .sn{background:linear-gradient(135deg,var(--blue),var(--indigo));color:#fff}.si.mk{color:var(--tx)}
+.hw{border-radius:var(--r);margin-top:28px}.hw-inner{padding:clamp(22px,3.5vw,34px)}
+.hw h3{font-size:clamp(17px,2.5vw,20px);font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+.hw-s{list-style:none;counter-reset:hw}.hw-s li{counter-increment:hw;display:flex;gap:12px;padding:9px 0;border-bottom:1px solid var(--bd);font-size:13.5px;color:var(--tm);align-items:flex-start}.hw-s li:last-child{border-bottom:none}
+.hw-s li::before{content:counter(hw);width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--cyan),var(--blue));display:flex;align-items:center;justify-content:center;flex:none;font-size:10px;font-weight:700;color:#fff}.hw-s li b{color:var(--tx)}
+.fin{margin-top:30px;border-radius:var(--r);padding:32px clamp(18px,3.5vw,36px);text-align:center;position:relative;overflow:hidden;background:var(--s1);border:1px solid var(--bd)}
+.fin::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--violet),var(--rose),var(--cyan));background-size:300% 100%;animation:gs 5s linear infinite}
+@keyframes gs{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+.fin h3{font-size:clamp(18px,3vw,24px);font-weight:800}.fin p{color:var(--td);font-size:13px;margin-top:6px}
+.rst-a{text-align:center;margin-top:22px}.rst-b{background:none;border:none;color:var(--td);font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit}
+.lang{display:flex;border:1px solid rgba(79,143,247,.35);border-radius:99px;overflow:hidden;flex:none}
+.lang button{background:none;border:none;color:var(--tm);font-family:inherit;font-size:12px;font-weight:700;padding:5px 10px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:rgba(79,143,247,.2);color:var(--blue)}
+.lang button:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+</style></head><body>
+<canvas id="particles"></canvas>
+<header class="top">
+  <div class="logo"><div class="logo-ic">🛡️</div><b data-i18n="logo"></b></div>
+  <div class="lang" id="lang" role="group" aria-label="Idioma / Language"><button type="button" data-l="es">ES</button><button type="button" data-l="en">EN</button></div>
+  <nav class="nav" id="nav">
+    <button class="nav-b on" data-s="intro" data-i18n-attr="aria-label:navIntro"><span class="d"></span></button>
+    <button class="nav-b" data-s="learn"><span class="d"></span><span class="lb" data-i18n="navLearn"></span></button>
+    <button class="nav-b" data-s="explore"><span class="d"></span><span class="lb" data-i18n="navExplore"></span></button>
+    <button class="nav-b" data-s="practice"><span class="d"></span><span class="lb" data-i18n="navPractice"></span></button>
+    <button class="nav-b" data-s="recap"><span class="d"></span><span class="lb" data-i18n="navRecap"></span></button>
+  </nav>
+</header>
+<main>
+<!-- INTRO -->
+<section class="scr on" id="s-intro"><div class="intro-g"><div>
+  <div class="pill" data-i18n="introPill"></div>
+  <h1 data-i18n="introH1"></h1>
+  <p class="intro-p" data-i18n="introP"></p>
+  <div class="typewriter" id="tw"></div>
+  <br><button class="cta" id="btnStart"><span data-i18n="start"></span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+</div><div class="dossier glow-card"><div class="glow-card-inner">
+  <div class="dossier-hd" data-i18n="routeHd"></div>
+  <div class="dossier-r"><span class="dossier-n">1</span><span data-i18n="route1"></span></div>
+  <div class="dossier-r"><span class="dossier-n">2</span><span data-i18n="route2"></span></div>
+  <div class="dossier-r"><span class="dossier-n">3</span><span data-i18n="route3"></span></div>
+  <div class="dossier-r"><span class="dossier-n">4</span><span data-i18n="route4"></span></div>
+</div></div></div></section>
+
+<!-- LEARN -->
+<section class="scr" id="s-learn"><div class="pill" data-i18n="step1"></div><h2 class="hd"><span class="grad-text" data-i18n="learnH"></span></h2>
+<div class="slide-w" id="slW"></div>
+<div class="sl-nav"><button class="btn-o" id="sPrv" disabled data-i18n="prev"></button><div class="sl-dots" id="sDts"></div><button class="btn-m" id="sNxt" data-i18n="next"></button></div>
+</section>
+
+<!-- EXPLORE -->
+<section class="scr" id="s-explore"><div class="pill" data-i18n="step2"></div><h2 class="hd"><span class="grad-text" data-i18n="exploreH"></span></h2>
+<p class="desc" data-i18n="exploreDesc"></p>
+<div class="tracker"><div class="tbar"><div class="tfill" id="tF"></div></div><span class="ttxt" id="tT">0 / 7</span></div>
+<div class="ex-g">
+  <div class="mail glow-card"><div class="glow-card-inner" style="padding:0;margin:0;border-radius:calc(var(--r) - 1px);overflow:hidden">
+    <div class="mh"><div class="mh-f"><span data-i18n="from"></span> <span data-i18n="eFrom"></span> <button class="hs" data-c="sender">1</button></div><div class="mh-s"><span data-i18n="subject"></span> <span data-i18n="eSubj"></span></div></div>
+    <div class="mb">
+      <p><span class="ev" data-c="greeting" data-i18n="eGreeting"></span><button class="hs" data-c="greeting">2</button><span data-i18n="eP1a"></span><span class="ev" data-c="urgency" data-i18n="eUrgency"></span><button class="hs" data-c="urgency">3</button><span data-i18n="eP1b"></span><span class="ev" data-c="threat" data-i18n="eThreat"></span><button class="hs" data-c="threat">4</button>.</p>
+      <p><span data-i18n="eP2a"></span><span class="ev" data-c="datareq" data-i18n="eData"></span><button class="hs" data-c="datareq">5</button>:</p>
+      <p style="color:var(--blue)">🔗 <span class="ev" data-c="link" data-i18n="eLink"></span><button class="hs" data-c="link">6</button></p>
+      <p><span data-i18n="eP3a"></span><span class="ev" data-c="sig" data-i18n="eSig"></span><button class="hs" data-c="sig">7</button></p>
+    </div>
+  </div></div>
+  <aside class="side glow-card"><div class="glow-card-inner side-inner">
+    <h3 data-i18n="evidence"></h3>
+    <div class="rvb" id="rvB"><p class="rv-ph" data-i18n="rvPh"></p></div>
+    <ul class="cl" id="cL">
+      <li data-c="sender"><span class="ck">✓</span><span data-i18n="cl_sender"></span></li>
+      <li data-c="greeting"><span class="ck">✓</span><span data-i18n="cl_greeting"></span></li>
+      <li data-c="urgency"><span class="ck">✓</span><span data-i18n="cl_urgency"></span></li>
+      <li data-c="threat"><span class="ck">✓</span><span data-i18n="cl_threat"></span></li>
+      <li data-c="datareq"><span class="ck">✓</span><span data-i18n="cl_datareq"></span></li>
+      <li data-c="link"><span class="ck">✓</span><span data-i18n="cl_link"></span></li>
+      <li data-c="sig"><span class="ck">✓</span><span data-i18n="cl_sig"></span></li>
+    </ul>
+  </div></aside>
+</div>
+<div class="act-r"><button class="btn-m" data-go="practice" data-i18n="toPractice"></button><span class="hint-m" id="hM" data-i18n="hintAny"></span></div>
+</section>
+
+<!-- PRACTICE -->
+<section class="scr" id="s-practice"><div class="pill" data-i18n="step3"></div><h2 class="hd"><span class="grad-text" data-i18n="practiceH"></span></h2>
+<p class="desc" data-i18n="practiceDesc"></p>
+<div class="pr-g"><div class="inb" id="inbox"></div><div>
+  <div class="rdr glow-card" id="rdr"><div class="glow-card-inner" style="padding:0;margin:0;border-radius:calc(var(--r) - 1px);overflow:hidden">
+    <div class="rdr-c" id="rC"></div><div class="mh" id="rH"></div><div class="rdr-b" id="rB"></div>
+    <div class="chs"><button class="ch" id="cP" data-i18n="isPhish"></button><button class="ch" id="cOk" data-i18n="isSafe"></button></div>
+    <div class="exp" id="eB"></div>
+  </div></div>
+  <div class="nxt-r"><button class="btn-m" data-go="recap" data-i18n="toRecap"></button></div>
+</div></div></section>
+
+<!-- RECAP -->
+<section class="scr" id="s-recap"><div class="pill" data-i18n="step4"></div><h2 class="hd"><span class="grad-text" data-i18n="recapH"></span></h2>
+<p class="desc" data-i18n="recapDesc"></p>
+<div class="sg" id="sgG"></div>
+<div class="hw glow-card"><div class="glow-card-inner hw-inner">
+  <h3 data-i18n="hwH"></h3><ul class="hw-s" id="hwS"></ul>
+</div></div>
+<div class="fin"><h3 data-i18n="finH"></h3><p data-i18n="finP"></p></div>
+<div class="rst-a"><button class="rst-b" id="btnRst" data-i18n="reset"></button></div>
+</section>
+</main>
+
+<script>
+/* I18N (es / en) */
+var I18N={
+es:{
+titulo:'Anti-Phishing Lab',
+descripcion:'Laboratorio interactivo para aprender a detectar correos, SMS y mensajes de phishing.',
+logo:'Anti-Phishing Lab',navIntro:'Inicio',navLearn:'Aprende',navExplore:'Explora',navPractice:'Practica',navRecap:'Cierre',
+introPill:'Actividad práctica',introH1:'Laboratorio<br><span class="hl">Anti Phishing</span>',
+introP:'Cada día llegan correos, mensajes y SMS que parecen reales pero esconden una trampa. Aquí vas a entrenar tu ojo para detectarlos.',
+tw:'Aprende a detectar mensajes falsos.',start:'Comenzar',routeHd:'RUTA DE LA ACTIVIDAD',
+route1:'<b>Aprende</b> Qué es el phishing y qué formas tiene.',route2:'<b>Explora</b> Analiza un correo sospechoso pieza por pieza.',
+route3:'<b>Practica</b> Decide si confiarías en 10 mensajes reales.',route4:'<b>Cierre</b> Tu checklist de señales + tarea para casa.',
+step1:'Paso 1 de 4',step2:'Paso 2 de 4',step3:'Paso 3 de 4',step4:'Paso 4 de 4',
+learnH:'¿Qué es el phishing?',prev:'← Anterior',next:'Siguiente →',toExplore:'Ir a explorar →',
+sl1h:'',sl1a:'<b>Imagina un pescador</b> lanzando un anzuelo con carnada. El phishing (que suena como "fishing", pescar en inglés) funciona igual: alguien se hace pasar por una persona o empresa de confianza para que "muerdas el anzuelo" y entregues tus datos, tu dinero o tus contraseñas.',
+sl1b:'Tres ingredientes que casi siempre usan:',
+t1n:'Suplantación',t1d:'Se hacen pasar por alguien real: tu banco, tu jefe, una marca.',
+t2n:'Urgencia o emoción',t2d:'Te meten miedo o entusiasmo para que no pienses.',
+t3n:'Acción rápida',t3d:'Quieren que hagas clic, llenes un formulario o respondas ya.',
+sl2h:'No solo llega por correo',sl2p:'El phishing tiene varias caras. Puede llegarte por cualquier canal:',
+k1n:'Email Phishing',k1d:'El clásico: correos falsos que imitan a empresas o instituciones reales.',
+k2n:'Smishing',k2d:'SMS falsos con enlaces: entregas, cobros, premios o alertas bancarias.',
+k3n:'Vishing',k3d:'Llamadas donde alguien se hace pasar por tu banco o soporte técnico.',
+k4n:'Redes y WhatsApp',k4d:'Mensajes directos con premios, ofertas o "alertas de seguridad".',
+k5n:'Spear Phishing',k5d:'Ataques personalizados: usan tu nombre o datos reales para sonar creíbles.',
+k6n:'QR Phishing',k6d:'Códigos QR en stickers, folletos o correos que te llevan a sitios falsos.',
+showNext:'Mostrar siguiente tipo ↓',
+sl3h:'Lo que viene ahora',sl3a:'En la siguiente sección vas a inspeccionar un correo sospechoso pieza por pieza, descubriendo exactamente qué lo delata.',
+sl3b:'Después recibirás <b>10 mensajes reales</b> (correos, SMS y WhatsApp) y vas a decidir en cuáles confiarías y en cuáles no.',
+sl3c:'<b>No hay puntaje ni evaluación.</b> Es solo práctica para entrenar tu instinto. Lo importante es que al final puedas reconocer las señales cuando te lleguen al celular de verdad.',
+exploreH:'Bajo la lupa',exploreDesc:'Toca cada número dentro del correo para analizar esa parte.',
+from:'De:',subject:'Asunto:',eFrom:'soporte@bancoo-seguro.com',eSubj:'¡Tu cuenta será suspendida!',
+eGreeting:'Estimado cliente',eP1a:', hemos detectado actividad sospechosa en su cuenta bancaria. Verifique su identidad dentro de ',eUrgency:'las próximas 24 horas',
+eP1b:', de lo contrario su cuenta ',eThreat:'será bloqueada permanentemente',eP2a:'Ingrese ahora y confirme su ',eData:'número de tarjeta y clave dinámica',
+eLink:'www.bancoo-seguro-verificacion.com/login',eP3a:'Atte. ',eSig:'Departamento de Seguridad',
+evidence:'Panel de evidencia',rvPh:'Toca un número para analizar esa parte.',
+cl_sender:'Remitente falso',cl_greeting:'Saludo genérico',cl_urgency:'Urgencia artificial',cl_threat:'Amenaza de bloqueo',cl_datareq:'Solicitud de datos',cl_link:'Enlace sospechoso',cl_sig:'Firma sin nombre',
+toPractice:'Continuar a la práctica →',hintAny:'Avanza cuando quieras.',hintAll:'¡Encontraste las 7!',
+clues:{
+sender:{t:'Remitente falso',d:'"bancoo-seguro.com" no es el dominio real de ningún banco. Usa una letra de más para parecerse a uno conocido.'},
+greeting:{t:'Saludo genérico',d:'"Estimado cliente": un banco que ya tiene tus datos te saludaría por tu nombre.'},
+urgency:{t:'Urgencia artificial',d:'Te da solo 24 horas para que actúes rápido, sin dejarte pensar.'},
+threat:{t:'Amenaza de bloqueo',d:'Anuncia una consecuencia grave (bloqueo permanente) para meter miedo.'},
+datareq:{t:'Solicitud de datos',d:'Pide número de tarjeta y clave dinámica. Ningún banco solicita esto por correo.'},
+link:{t:'Enlace sospechoso',d:'El dominio del enlace no coincide con el sitio oficial del banco.'},
+sig:{t:'Firma sin nombre',d:'"Departamento de Seguridad" no es una persona real, solo un cargo genérico.'}},
+practiceH:'Bandeja de práctica',practiceDesc:'Lee cada mensaje y decide. Luego descubre por qué.',
+isPhish:'🎣 Es phishing',isSafe:'✅ Es confiable',toRecap:'Ir al cierre →',
+chEmail:'Correo',chWA:'WhatsApp',chSMS:'SMS',msgN:'Mensaje {n} de {t}',
+sealP:'PHISHING',sealL:'CONFIABLE',whyP:'Por qué es phishing',whyL:'Por qué es confiable',
+diff:'Tu elección fue distinta. Mira las razones:',
+recapH:'Tu checklist de señales',recapDesc:'Marca las que ya tienes claras.',
+hwH:'📋 Tarea para la próxima clase',finH:'Antes de hacer clic, respira y verifica.',finP:'Fin del expediente.',reset:'Reiniciar para el siguiente grupo',
+sigs:['Urgencia o amenazas ("tu cuenta será bloqueada")','Enlaces con dominios raros o mal escritos','Errores de ortografía o redacción extraña','Remitente desconocido o con dominio falso','Piden datos personales, bancarios o contraseñas','Premios u ofertas "demasiado buenas"','Saludos genéricos ("Estimado cliente")','Archivos adjuntos inesperados','Presión para actuar de inmediato','Pequeñas diferencias en el logo o nombre','Te piden reenviar el mensaje o compartirlo','Te prohíben verificar por otro canal'],
+hw:['<b>Busca un mensaje real sospechoso</b> que hayas recibido alguna vez en tu correo, WhatsApp o SMS. Si no encuentras uno, pídele a un familiar que te muestre alguno.','<b>Toma un pantallazo</b> del mensaje (borrando datos personales sensibles).','<b>Identifica y anota al menos 3 señales</b> de la lista que vimos hoy que estén presentes en ese mensaje.','<b>Comparte con el grupo</b> en la próxima clase: muestra el pantallazo y explica qué lo delata.','<b>Bonus:</b> si encuentras un caso de un tipo de phishing diferente a los que vimos (QR phishing, vishing por llamada, spear phishing dirigido), trae la evidencia y cuéntanos cómo lo identificaste.'],
+msgs:{
+m1:{from:'soporte@bancoo-seguro.com',subj:'¡Tu cuenta será suspendida!',body:'Estimado cliente, hemos detectado actividad sospechosa. Verifique su identidad dentro de <mark class="rm">las próximas 24 horas</mark> o su cuenta <mark class="rm">será bloqueada permanentemente</mark>.<br><br>Confirme su <mark class="rm">número de tarjeta y clave dinámica</mark>:<br>🔗 <mark class="rm">www.bancoo-seguro-verificacion.com/login</mark>',w:['Plazo de 24 horas para generar presión','Amenaza de bloqueo permanente','Pide tarjeta y clave dinámica','Enlace con dominio falso']},
+m2:{from:'contacto@tuempresa.com',subj:'Recordatorio: reunión mañana',body:'Hola equipo, les recuerdo que mañana a las 10:00 a.m. tenemos la reunión de seguimiento del proyecto.<br><br>Nos vemos en la sala de siempre. Si no pueden asistir, me avisan por este correo o por el chat interno.<br><br>¡Saludos!<br>Laura',w:['Remitente del dominio real de la empresa','No pide contraseñas ni datos','Sin enlaces ni urgencia','Firmado por una persona real']},
+m3:{from:'+57 300 000 0000',subj:null,body:'¡FELICIDADES! 🎉 <mark class="rm">Fuiste seleccionado</mark> para ganar un iPhone 15 Pro Max.<br>🔗 <mark class="rm">bit.ly/premio-apple-2025</mark><br><br><mark class="rm">Solo tienes 30 minutos.</mark><br><mark class="rm">Comparte con 5 contactos</mark> para duplicar tus chances.',w:['Premio que nadie concursó','Enlace acortado imposible de verificar','Urgencia artificial de 30 minutos','Pide reenviar, típico de cadenas']},
+m4:{from:'rrhh@miempresa-corp.net',subj:'Actualización urgente de nómina',body:'Estimado colaborador, confirme sus datos bancarios <mark class="rm">antes de las 3:00 p.m. de HOY</mark> o su <mark class="rm">pago quedará retenido</mark>.<br><br>Ingrese con su <mark class="rm">usuario y contraseña corporativa</mark>:<br>🔗 <mark class="rm">formularios-nomina.net/actualizar</mark><br><br><mark class="rm">No responda este correo.</mark>',w:['Dominio "-corp.net" que no es de la empresa','Amenaza directa sobre el salario','Pide usuario y contraseña','Bloquea verificación: "no responda"']},
+m5:{from:'Coordinadora-Envios',subj:null,body:'Su paquete no pudo ser entregado. <mark class="rm">Debe pagar $25.000 de arancel</mark> para reprogramar:<br>🔗 <mark class="rm">envios-colombia.info/pago</mark>',w:['Cobro inesperado que nadie pidió','Dominio ".info" no oficial','Remitente genérico sin nombre real']},
+m6:{from:'info@netflix.com',subj:'Tu factura mensual',body:'Hola, tu suscripción se renovó exitosamente. Puedes revisar tu factura ingresando desde la app o en netflix.com con tu usuario habitual.<br><br>Gracias por ser parte de Netflix.',w:['No incluye enlaces para hacer clic','No pide contraseñas ni datos bancarios','Invita a entrar al sitio oficial por tu cuenta','Sin amenazas ni plazos']},
+m7:{from:'Bancolombia-Alerta',subj:null,body:'Bancolombia informa: se ha realizado una <mark class="rm">compra por $890.000</mark> con su tarjeta. Si no la reconoce, <mark class="rm">ingrese aqui para cancelarla</mark>:<br>🔗 <mark class="rm">bancolombia-seguridad.co/cancelar</mark>',w:['Dominio falso: Bancolombia no usa ese enlace','Apela al miedo por una compra que no hiciste','Si fuera real, dirían que llames a la línea oficial']},
+m8:{from:'+57 312 555 1234',subj:null,body:'Hola, soy del soporte de WhatsApp. Tu cuenta <mark class="rm">fue reportada por actividad inusual</mark>. Necesitamos que nos envíes el <mark class="rm">código de 6 dígitos</mark> que te llegará por SMS para verificar tu identidad. Si no lo haces en <mark class="rm">10 minutos, tu cuenta será eliminada</mark>.',w:['WhatsApp nunca te escribe por chat pidiendo códigos','El código de 6 dígitos es para robar tu cuenta','Urgencia extrema: "10 minutos"','Amenaza de eliminar tu cuenta']},
+m9:{from:'security@micros0ft-support.com',subj:'Actividad inusual en tu cuenta',body:'Hemos detectado un inicio de sesión desde <mark class="rm">Moscú, Rusia</mark>. Si no fuiste tú, <mark class="rm">haz clic ahora para proteger tu cuenta</mark>:<br>🔗 <mark class="rm">micros0ft-support.com/verify</mark><br><br>Si no verificas en <mark class="rm">2 horas</mark>, no podremos garantizar la seguridad de tus archivos.',w:['El dominio usa un cero en vez de la "o": micros0ft','La ubicación exótica (Moscú) busca asustar','Enlace que no es microsoft.com','Plazo de 2 horas para presionar']},
+m10:{from:'DIAN-Colombia',subj:null,body:'DIAN: Usted tiene una <mark class="rm">deuda tributaria pendiente por $1.250.000</mark>. Si no regulariza su situación en <mark class="rm">48 horas</mark>, se iniciará proceso de <mark class="rm">embargo preventivo</mark>. Ingrese a:<br>🔗 <mark class="rm">dian-pagos.co/deuda</mark>',w:['La DIAN no cobra por SMS con enlaces','Dominio falso: el real es dian.gov.co','Amenaza de embargo para generar pánico','Monto específico para sonar creíble']}
+}},
+en:{
+titulo:'Anti-Phishing Lab',
+descripcion:'Interactive lab to learn how to spot phishing emails, SMS and messages.',
+logo:'Anti-Phishing Lab',navIntro:'Home',navLearn:'Learn',navExplore:'Explore',navPractice:'Practice',navRecap:'Wrap-up',
+introPill:'Hands-on activity',introH1:'Anti-Phishing<br><span class="hl">Lab</span>',
+introP:'Every day emails, messages and texts arrive that look real but hide a trap. Here you will train your eye to spot them.',
+tw:'Learn to spot fake messages.',start:'Start',routeHd:'ACTIVITY ROUTE',
+route1:'<b>Learn</b> What phishing is and the forms it takes.',route2:'<b>Explore</b> Analyze a suspicious email piece by piece.',
+route3:'<b>Practice</b> Decide whether you would trust 10 real-looking messages.',route4:'<b>Wrap-up</b> Your checklist of warning signs + homework.',
+step1:'Step 1 of 4',step2:'Step 2 of 4',step3:'Step 3 of 4',step4:'Step 4 of 4',
+learnH:'What is phishing?',prev:'← Previous',next:'Next →',toExplore:'Go explore →',
+sl1h:'',sl1a:'<b>Imagine a fisherman</b> casting a baited hook. Phishing (it sounds like "fishing") works the same way: someone pretends to be a trusted person or company so that you "take the bait" and hand over your data, your money or your passwords.',
+sl1b:'Three ingredients they almost always use:',
+t1n:'Impersonation',t1d:'They pretend to be someone real: your bank, your boss, a brand.',
+t2n:'Urgency or emotion',t2d:'They scare you or excite you so you do not think.',
+t3n:'Quick action',t3d:'They want you to click, fill in a form or reply right now.',
+sl2h:'It does not only come by email',sl2p:'Phishing has many faces. It can reach you through any channel:',
+k1n:'Email Phishing',k1d:'The classic: fake emails that imitate real companies or institutions.',
+k2n:'Smishing',k2d:'Fake text messages with links: deliveries, charges, prizes or bank alerts.',
+k3n:'Vishing',k3d:'Phone calls where someone pretends to be your bank or tech support.',
+k4n:'Social media and WhatsApp',k4d:'Direct messages with prizes, offers or "security alerts".',
+k5n:'Spear Phishing',k5d:'Personalized attacks: they use your name or real details to sound believable.',
+k6n:'QR Phishing',k6d:'QR codes on stickers, flyers or emails that take you to fake sites.',
+showNext:'Show next type ↓',
+sl3h:'What comes next',sl3a:'In the next section you will inspect a suspicious email piece by piece, finding out exactly what gives it away.',
+sl3b:'Then you will receive <b>10 real-looking messages</b> (emails, texts and WhatsApp) and decide which ones you would trust and which ones you would not.',
+sl3c:'<b>There is no score and no test.</b> It is just practice to train your instinct. What matters is that in the end you can recognize the signs when they really reach your phone.',
+exploreH:'Under the magnifying glass',exploreDesc:'Tap each number inside the email to analyze that part.',
+from:'From:',subject:'Subject:',eFrom:'support@secure-bannk.com',eSubj:'Your account will be suspended!',
+eGreeting:'Dear customer',eP1a:', we have detected suspicious activity on your bank account. Verify your identity within ',eUrgency:'the next 24 hours',
+eP1b:', otherwise your account ',eThreat:'will be permanently blocked',eP2a:'Log in now and confirm your ',eData:'card number and dynamic key',
+eLink:'www.secure-bannk-verification.com/login',eP3a:'Sincerely, ',eSig:'Security Department',
+evidence:'Evidence panel',rvPh:'Tap a number to analyze that part.',
+cl_sender:'Fake sender',cl_greeting:'Generic greeting',cl_urgency:'Artificial urgency',cl_threat:'Threat of blocking',cl_datareq:'Request for data',cl_link:'Suspicious link',cl_sig:'Signature with no name',
+toPractice:'Continue to practice →',hintAny:'Move on whenever you want.',hintAll:'You found all 7!',
+clues:{
+sender:{t:'Fake sender',d:'"secure-bannk.com" is not the real domain of any bank. It adds an extra letter to look like a well-known one.'},
+greeting:{t:'Generic greeting',d:'"Dear customer": a bank that already has your details would greet you by your name.'},
+urgency:{t:'Artificial urgency',d:'It gives you only 24 hours to act fast, without letting you think.'},
+threat:{t:'Threat of blocking',d:'It announces a serious consequence (permanent blocking) to scare you.'},
+datareq:{t:'Request for data',d:'It asks for your card number and dynamic key. No bank asks for this by email.'},
+link:{t:'Suspicious link',d:'The link\'s domain does not match the bank\'s official website.'},
+sig:{t:'Signature with no name',d:'"Security Department" is not a real person, just a generic job title.'}},
+practiceH:'Practice inbox',practiceDesc:'Read each message and decide. Then find out why.',
+isPhish:'🎣 It\'s phishing',isSafe:'✅ It\'s trustworthy',toRecap:'Go to wrap-up →',
+chEmail:'Email',chWA:'WhatsApp',chSMS:'SMS',msgN:'Message {n} of {t}',
+sealP:'PHISHING',sealL:'TRUSTWORTHY',whyP:'Why it is phishing',whyL:'Why it is trustworthy',
+diff:'Your choice was different. See the reasons:',
+recapH:'Your checklist of warning signs',recapDesc:'Mark the ones you already understand.',
+hwH:'📋 Homework for the next class',finH:'Before you click, breathe and verify.',finP:'End of the case file.',reset:'Reset for the next group',
+sigs:['Urgency or threats ("your account will be blocked")','Links with strange or misspelled domains','Spelling mistakes or odd wording','Unknown sender or fake domain','They ask for personal data, bank details or passwords','Prizes or offers that are "too good to be true"','Generic greetings ("Dear customer")','Unexpected attachments','Pressure to act immediately','Small differences in the logo or name','They ask you to forward or share the message','They forbid you from checking through another channel'],
+hw:['<b>Find a real suspicious message</b> that you have ever received in your email, WhatsApp or SMS. If you cannot find one, ask a family member to show you one.','<b>Take a screenshot</b> of the message (hiding any sensitive personal data).','<b>Identify and write down at least 3 warning signs</b> from the list we saw today that appear in that message.','<b>Share with the group</b> in the next class: show the screenshot and explain what gives it away.','<b>Bonus:</b> if you find a case of a type of phishing different from the ones we saw (QR phishing, vishing by phone call, targeted spear phishing), bring the evidence and tell us how you identified it.'],
+msgs:{
+m1:{from:'support@secure-bannk.com',subj:'Your account will be suspended!',body:'Dear customer, we have detected suspicious activity. Verify your identity within <mark class="rm">the next 24 hours</mark> or your account <mark class="rm">will be permanently blocked</mark>.<br><br>Confirm your <mark class="rm">card number and dynamic key</mark>:<br>🔗 <mark class="rm">www.secure-bannk-verification.com/login</mark>',w:['A 24-hour deadline to create pressure','Threat of permanent blocking','Asks for card and dynamic key','Link with a fake domain']},
+m2:{from:'contact@yourcompany.com',subj:'Reminder: meeting tomorrow',body:'Hi team, a reminder that tomorrow at 10:00 a.m. we have the project follow-up meeting.<br><br>See you in the usual room. If you cannot attend, let me know by this email or on the internal chat.<br><br>Best wishes!<br>Laura',w:['Sender from the company\'s real domain','Does not ask for passwords or data','No links and no urgency','Signed by a real person']},
+m3:{from:'+57 300 000 0000',subj:null,body:'CONGRATULATIONS! 🎉 <mark class="rm">You have been selected</mark> to win an iPhone 15 Pro Max.<br>🔗 <mark class="rm">bit.ly/apple-prize-2025</mark><br><br><mark class="rm">You only have 30 minutes.</mark><br><mark class="rm">Share with 5 contacts</mark> to double your chances.',w:['A prize in a contest nobody entered','Shortened link that is impossible to verify','Artificial urgency of 30 minutes','Asks you to forward it, typical of chain messages']},
+m4:{from:'hr@mycompany-corp.net',subj:'Urgent payroll update',body:'Dear employee, confirm your bank details <mark class="rm">before 3:00 p.m. TODAY</mark> or your <mark class="rm">payment will be withheld</mark>.<br><br>Log in with your <mark class="rm">corporate username and password</mark>:<br>🔗 <mark class="rm">payroll-forms.net/update</mark><br><br><mark class="rm">Do not reply to this email.</mark>',w:['"-corp.net" domain that does not belong to the company','Direct threat about your salary','Asks for username and password','Blocks verification: "do not reply"']},
+m5:{from:'Coordinadora-Envios',subj:null,body:'Your package could not be delivered. <mark class="rm">You must pay a $25,000 customs fee</mark> to reschedule:<br>🔗 <mark class="rm">envios-colombia.info/pago</mark>',w:['Unexpected charge that nobody asked for','".info" domain that is not official','Generic sender with no real name']},
+m6:{from:'info@netflix.com',subj:'Your monthly invoice',body:'Hi, your subscription was renewed successfully. You can check your invoice by logging in from the app or at netflix.com with your usual username.<br><br>Thank you for being part of Netflix.',w:['Has no links to click','Does not ask for passwords or bank details','Invites you to go to the official site on your own','No threats or deadlines']},
+m7:{from:'Bancolombia-Alerta',subj:null,body:'Bancolombia reports: a <mark class="rm">purchase of $890,000</mark> was made with your card. If you do not recognize it, <mark class="rm">log in here to cancel it</mark>:<br>🔗 <mark class="rm">bancolombia-seguridad.co/cancelar</mark>',w:['Fake domain: Bancolombia does not use that link','Plays on fear about a purchase you did not make','If it were real, they would tell you to call the official phone line']},
+m8:{from:'+57 312 555 1234',subj:null,body:'Hi, I am from WhatsApp support. Your account <mark class="rm">was reported for unusual activity</mark>. We need you to send us the <mark class="rm">6-digit code</mark> that will arrive by SMS to verify your identity. If you do not do it in <mark class="rm">10 minutes, your account will be deleted</mark>.',w:['WhatsApp never writes to you in a chat asking for codes','The 6-digit code is used to steal your account','Extreme urgency: "10 minutes"','Threat of deleting your account']},
+m9:{from:'security@micros0ft-support.com',subj:'Unusual activity on your account',body:'We have detected a login from <mark class="rm">Moscow, Russia</mark>. If it was not you, <mark class="rm">click now to protect your account</mark>:<br>🔗 <mark class="rm">micros0ft-support.com/verify</mark><br><br>If you do not verify within <mark class="rm">2 hours</mark>, we cannot guarantee the safety of your files.',w:['The domain uses a zero instead of the letter "o": micros0ft','The exotic location (Moscow) is meant to scare you','Link that is not microsoft.com','A 2-hour deadline to pressure you']},
+m10:{from:'DIAN-Colombia',subj:null,body:'DIAN: You have an <mark class="rm">outstanding tax debt of $1,250,000</mark>. If you do not settle it within <mark class="rm">48 hours</mark>, a <mark class="rm">preventive seizure</mark> process will begin. Log in at:<br>🔗 <mark class="rm">dian-pagos.co/deuda</mark>',w:['The DIAN (Colombia\'s tax agency) does not collect by SMS with links','Fake domain: the real one is dian.gov.co','Threat of seizure to create panic','A specific amount to sound believable']}
+}}};
+var LANG='es';
+function detectLang(){var s=null;try{s=localStorage.getItem('labs-lang')}catch(e){}if(s==='es'||s==='en')return s;return(navigator.language||'es').toLowerCase().indexOf('en')===0?'en':'es'}
+function t(k,v){var s=I18N[LANG][k];if(s===undefined)s=I18N.es[k]!==undefined?I18N.es[k]:k;if(v)for(var x in v)s=s.split('{'+x+'}').join(v[x]);return s}
+var onLang=[];
+function applyLang(){
+  document.documentElement.lang=LANG;
+  document.querySelectorAll('[data-i18n]').forEach(function(e){e.innerHTML=t(e.getAttribute('data-i18n'))});
+  document.querySelectorAll('[data-i18n-attr]').forEach(function(e){e.getAttribute('data-i18n-attr').split(';').forEach(function(par){var p=par.split(':');if(p.length===2)e.setAttribute(p[0].trim(),t(p[1].trim()))})});
+  document.title=t('titulo');
+  var meta=document.querySelector('meta[name="description"]');if(meta)meta.setAttribute('content',t('descripcion'));
+  document.querySelectorAll('.lang button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-l')===LANG))});
+  onLang.forEach(function(f){f()});
+}
+function setLang(l){LANG=l;try{localStorage.setItem('labs-lang',l)}catch(e){}applyLang()}
+LANG=detectLang();
+</script>
+<script>
+(function(){
+/* PARTICLES */
+var cv=document.getElementById('particles'),cx=cv.getContext('2d'),pts=[];
+function resizeCv(){cv.width=window.innerWidth;cv.height=window.innerHeight}
+resizeCv();window.addEventListener('resize',resizeCv);
+for(var i=0;i<60;i++)pts.push({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*1.5+.5,dx:(Math.random()-.5)*.3,dy:(Math.random()-.5)*.3,o:Math.random()*.3+.1});
+function drawPts(){cx.clearRect(0,0,cv.width,cv.height);pts.forEach(function(p){cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fillStyle='rgba(79,143,247,'+p.o+')';cx.fill();p.x+=p.dx;p.y+=p.dy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0});
+pts.forEach(function(a,i){pts.forEach(function(b,j){if(j<=i)return;var d=Math.hypot(a.x-b.x,a.y-b.y);if(d<120){cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.strokeStyle='rgba(79,143,247,'+(1-d/120)*.06+')';cx.stroke()}})});requestAnimationFrame(drawPts)}
+drawPts();
+
+/* TILT */
+document.querySelectorAll('.glow-card').forEach(function(c){
+  c.addEventListener('mousemove',function(e){var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform='perspective(600px) rotateY('+x*6+'deg) rotateX('+(-y*6)+'deg)'});
+  c.addEventListener('mouseleave',function(){c.style.transform='perspective(600px) rotateY(0) rotateX(0)'});
+});
+
+/* NAV */
+var steps=['intro','learn','explore','practice','recap'];
+function go(s){steps.forEach(function(id){var e=document.getElementById('s-'+id);e.classList.remove('on');e.style.display='none'});var t=document.getElementById('s-'+s);t.style.display='block';void t.offsetWidth;t.classList.add('on');document.querySelectorAll('.nav-b').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-s')===s)});window.scrollTo({top:0,behavior:'smooth'})}
+document.getElementById('nav').addEventListener('click',function(e){var b=e.target.closest('.nav-b');if(!b)return;var s=b.getAttribute('data-s');if(s==='intro')return;go(s)});
+document.getElementById('btnStart').addEventListener('click',function(){go('learn')});
+document.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(){go(b.getAttribute('data-go'))})});
+
+/* TYPEWRITER */
+var twEl=document.getElementById('tw');var twI=0;
+function typeW(){var tx=t('tw');if(twI<=tx.length){twEl.textContent=tx.substring(0,twI);twI++;setTimeout(typeW,50)}else{twEl.style.borderRight='none'}}
+setTimeout(typeW,800);
+onLang.push(function(){if(twI>t('tw').length)twEl.textContent=t('tw')});
+
+/* LEARN SLIDES */
+function T(k){return 'data-i18n="'+k+'"'}
+function tcard(i,n,d,vis){return '<div class="tc'+(vis?' vis':'')+'"><div class="ti">'+i+'</div><div class="tn" '+T(n)+'></div><div class="td" '+T(d)+'></div></div>'}
+var slides=[
+  {h:'sl1h',c:'<div class="analogy" '+T('sl1a')+'></div><p '+T('sl1b')+'></p><div class="tg">'+tcard('🎭','t1n','t1d',1)+tcard('⏰','t2n','t2d',1)+tcard('🖱️','t3n','t3d',1)+'</div>'},
+  {h:'sl2h',c:'<p '+T('sl2p')+'></p><div class="tg" id="tG">'+tcard('✉️','k1n','k1d')+tcard('📱','k2n','k2d')+tcard('📞','k3n','k3d')+tcard('💬','k4n','k4d')+tcard('🎯','k5n','k5d')+tcard('📷','k6n','k6d')+'</div><button class="reveal-b" id="rvTB" '+T('showNext')+'></button>'},
+  {h:'sl3h',c:'<p '+T('sl3a')+'></p><p '+T('sl3b')+'></p><div class="analogy" '+T('sl3c')+'></div>'}
+];
+var sI=0,slW=document.getElementById('slW'),sDt=document.getElementById('sDts');
+function buildSl(){slW.innerHTML='';sDt.innerHTML='';slides.forEach(function(s,i){var d=document.createElement('div');d.className='slide'+(i===0?' on':'');d.innerHTML='<div class="sl-card glow-card"><div class="glow-card-inner sl-inner"><h3 '+T(s.h)+'></h3>'+s.c+'</div></div>';slW.appendChild(d);var dot=document.createElement('span');dot.className=i===0?'on':'';sDt.appendChild(dot)})}
+var tI=0;
+function initTC(){var g=document.getElementById('tG');if(!g)return;var cs=g.querySelectorAll('.tc');tI=0;cs.forEach(function(c){c.classList.remove('vis')});if(cs.length>0){cs[0].classList.add('vis');tI=1}var b=document.getElementById('rvTB');if(b){b.classList.remove('gone');b.onclick=function(){if(tI>=cs.length){b.classList.add('gone');return}cs[tI].classList.add('vis');tI++;if(tI>=cs.length)b.classList.add('gone')}}}
+function showSl(i){sI=i;slW.querySelectorAll('.slide').forEach(function(s,j){s.classList.toggle('on',j===i);s.style.display=j===i?'block':'none'});sDt.querySelectorAll('span').forEach(function(d,j){d.classList.toggle('on',j===i)});document.getElementById('sPrv').disabled=i===0;var isL=i===slides.length-1;var nb=document.getElementById('sNxt');nb.setAttribute('data-i18n',isL?'toExplore':'next');nb.textContent=t(isL?'toExplore':'next');nb.onclick=function(){isL?go('explore'):showSl(i+1)};if(i===1)setTimeout(initTC,100)}
+buildSl();showSl(0);
+document.getElementById('sPrv').addEventListener('click',function(){if(sI>0)showSl(sI-1)});
+
+/* EXPLORE */
+var fd={},lastClue=null,hAll=false,tot=7;
+function showClue(){var rb=document.getElementById('rvB');if(!lastClue){rb.innerHTML='<p class="rv-ph" data-i18n="rvPh">'+t('rvPh')+'</p>';return}var c=I18N[LANG].clues[lastClue];rb.innerHTML='<div class="rv-t">'+c.t+'</div><div class="rv-d">'+c.d+'</div>'}
+function reveal(id){if(!I18N.es.clues[id]||fd[id])return;fd[id]=true;lastClue=id;document.querySelectorAll('.hs[data-c="'+id+'"]').forEach(function(e){e.classList.add('found')});document.querySelectorAll('.ev[data-c="'+id+'"]').forEach(function(e){e.classList.add('found')});showClue();var li=document.querySelector('#cL li[data-c="'+id+'"]');if(li)li.classList.add('show');var n=Object.keys(fd).length;document.getElementById('tT').textContent=n+' / '+tot;document.getElementById('tF').style.width=(n/tot*100)+'%';if(n===tot){hAll=true;setHint()}}
+function setHint(){var h=document.getElementById('hM');var k=hAll?'hintAll':'hintAny';h.setAttribute('data-i18n',k);h.textContent=t(k)}
+document.querySelectorAll('.hs').forEach(function(h){h.addEventListener('click',function(){reveal(h.getAttribute('data-c'))})});
+onLang.push(showClue);
+
+/* PRACTICE */
+var msgs=[
+  {id:'m1',ch:'chEmail',ic:'✉️',v:'p'},{id:'m2',ch:'chEmail',ic:'✉️',v:'l'},{id:'m3',ch:'chWA',ic:'💬',v:'p'},{id:'m4',ch:'chEmail',ic:'✉️',v:'p'},{id:'m5',ch:'chSMS',ic:'📱',v:'p'},
+  {id:'m6',ch:'chEmail',ic:'✉️',v:'l'},{id:'m7',ch:'chSMS',ic:'📱',v:'p'},{id:'m8',ch:'chWA',ic:'💬',v:'p'},{id:'m9',ch:'chEmail',ic:'✉️',v:'p'},{id:'m10',ch:'chSMS',ic:'📱',v:'p'}
+];
+function mx(m){return I18N[LANG].msgs[m.id]}
+var ans={},cur=0;
+function bInb(){var el=document.getElementById('inbox');el.innerHTML='';msgs.forEach(function(m,i){var x=mx(m);var b=document.createElement('button');b.className='ib'+(i===cur?' on':'');b.innerHTML='<span class="em">'+m.ic+'</span><span class="inf"><b>'+x.from+'</b><span>'+t(m.ch)+(x.subj?' · '+x.subj:'')+'</span></span><span class="st'+(ans[m.id]?' v':'')+'">✓</span>';b.addEventListener('click',function(){cur=i;rMsg()});el.appendChild(b)})}
+function rMsg(){bInb();var m=msgs[cur],x=mx(m);document.getElementById('rC').textContent=t('msgN',{n:cur+1,t:msgs.length});document.getElementById('rH').innerHTML='<div class="mh-f">'+t('from')+' '+x.from+'</div>'+(x.subj?'<div class="mh-s">'+t('subject')+' '+x.subj+'</div>':'');var b=document.getElementById('rB');b.innerHTML=x.body;b.classList.remove('shown');document.getElementById('cP').className='ch';document.getElementById('cOk').className='ch';var e=document.getElementById('eB');e.className='exp';e.innerHTML='';var o=document.querySelector('.seal');if(o)o.remove();if(ans[m.id])sR(m,ans[m.id])}
+function sR(m,pick){var x=mx(m);document.getElementById('rB').classList.add('shown');if(pick==='p')document.getElementById('cP').classList.add('sp');if(pick==='l')document.getElementById('cOk').classList.add('sl');var s=document.createElement('div');s.className='seal '+(m.v==='p'?'s-p':'s-l')+' pop';s.textContent=t(m.v==='p'?'sealP':'sealL');document.querySelector('.rdr .glow-card-inner').appendChild(s);if(m.v==='p'&&pick!==m.v){var rd=document.getElementById('rdr');rd.classList.add('shake');setTimeout(function(){rd.classList.remove('shake')},500)}var e=document.getElementById('eB');var mt=pick===m.v;var nt=mt?'':'<p style="margin:0 0 5px;font-style:italic;opacity:.8">'+t('diff')+'</p>';e.className='exp v '+(m.v==='p'?'ep':'el');e.innerHTML='<span class="et">'+t(m.v==='p'?'whyP':'whyL')+'</span>'+nt+'<ul>'+x.w.map(function(y){return'<li>'+y+'</li>'}).join('')+'</ul>'}
+document.getElementById('cP').addEventListener('click',function(){var m=msgs[cur];if(ans[m.id])return;ans[m.id]='p';sR(m,'p');bInb()});
+document.getElementById('cOk').addEventListener('click',function(){var m=msgs[cur];if(ans[m.id])return;ans[m.id]='l';sR(m,'l');bInb()});
+rMsg();
+onLang.push(rMsg);
+
+/* RECAP */
+var sg=document.getElementById('sgG');I18N.es.sigs.forEach(function(s,i){var c=document.createElement('div');c.className='si';c.innerHTML='<span class="sn">'+(i+1)+'</span><span></span>';c.addEventListener('click',function(){c.classList.toggle('mk')});sg.appendChild(c)});
+var hwE=document.getElementById('hwS');I18N.es.hw.forEach(function(){hwE.appendChild(document.createElement('li'))});
+function fillLists(){sg.querySelectorAll('.si').forEach(function(c,i){c.lastChild.textContent=I18N[LANG].sigs[i]});hwE.querySelectorAll('li').forEach(function(li,i){li.innerHTML=I18N[LANG].hw[i]})}
+fillLists();onLang.push(fillLists);
+
+/* RESET */
+document.getElementById('btnRst').addEventListener('click',function(){fd={};ans={};cur=0;lastClue=null;hAll=false;document.querySelectorAll('.found,.on,.show').forEach(function(e){e.classList.remove('found','on','show')});showClue();document.getElementById('tT').textContent='0 / '+tot;document.getElementById('tF').style.width='0%';setHint();document.querySelectorAll('.si.mk').forEach(function(e){e.classList.remove('mk')});showSl(0);rMsg();go('intro');twI=0;setTimeout(typeW,800)});
+
+document.querySelectorAll('.lang button').forEach(function(b){b.addEventListener('click',function(){setLang(b.getAttribute('data-l'))})});
+applyLang();
+})();
+</script></body></html>
