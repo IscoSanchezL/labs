@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caso: Detective de Carpetas</title>
+<meta name="description" content="Clase de 20 minutos: descomprime una carpeta desordenada, identifica cada archivo y ubícalo donde corresponde.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E9F0F6;
+    --card:#FFFFFF;
+    --soft:#F2F6FA;
+    --line:#D9E3EC;
+    --ink:#2E3A46;
+    --ink-soft:#5C6B78;
+    --blue:#4A7CA8;
+    --blue-deep:#2F5A82;
+    --blue-pale:#DCE9F2;
+    --gray:#8A99A5;
+    --gray-pale:#E7ECF0;
+    --ok:#2F7D5B;
+    --ok-pale:#E6F2EC;
+    --warn:#B4532A;
+    --warn-pale:#FBF0EA;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+
+  body{
+    background:var(--bg);
+    font-family:'Inter', sans-serif;
+    color:var(--ink);
+    padding:40px 16px 80px;
+    min-height:100vh;
+  }
+
+  :focus-visible{outline:3px solid var(--blue); outline-offset:2px;}
+
+  .sr-only{
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
+
+  .dossier{
+    max-width:820px;
+    margin:0 auto;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:0 24px 48px rgba(47,90,130,0.12);
+    overflow:hidden;
+  }
+
+  header{
+    position:relative;
+    padding:44px 48px 28px;
+    background:linear-gradient(180deg, var(--blue-pale) 0%, var(--card) 100%);
+    border-bottom:1px solid var(--line);
+  }
+
+  .folder-icon{
+    width:46px; height:36px;
+    border-radius:6px;
+    background:var(--blue);
+    position:relative;
+    margin-bottom:18px;
+  }
+  .folder-icon::before{
+    content:'';
+    position:absolute;
+    top:-9px; left:0;
+    width:22px; height:10px;
+    background:var(--blue);
+    border-radius:6px 6px 0 0;
+  }
+
+  h1{
+    font-family:'Poppins', sans-serif;
+    font-weight:700;
+    font-size:38px;
+    line-height:1.2;
+    margin:0 0 16px;
+    color:var(--blue-deep);
+  }
+
+  .lede{
+    font-size:16px;
+    line-height:1.65;
+    color:var(--ink-soft);
+    max-width:58ch;
+    margin:0 0 26px;
+  }
+
+  .meta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .meta-cell{
+    flex:1 1 150px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px 16px;
+  }
+  .meta-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:var(--gray);
+    letter-spacing:0.05em;
+    margin-bottom:4px;
+  }
+  .meta-value{
+    font-size:15px;
+    font-weight:600;
+    color:var(--blue-deep);
+  }
+
+  section{
+    padding:34px 48px;
+    border-bottom:1px solid var(--line);
+  }
+  section:last-of-type{border-bottom:none;}
+
+  h2{
+    font-family:'Poppins', sans-serif;
+    font-weight:600;
+    font-size:20px;
+    margin:0 0 16px;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  h2 .num{
+    width:28px; height:28px;
+    border-radius:8px;
+    background:var(--blue-pale);
+    color:var(--blue-deep);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+
+  .obj-text{font-size:15.5px; line-height:1.65; color:var(--ink-soft); max-width:64ch;}
+
+  /* Botones */
+  .btn{
+    font:600 13.5px 'Inter', sans-serif;
+    padding:9px 14px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--blue-deep);
+    cursor:pointer;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .btn:hover{background:var(--blue-pale); border-color:var(--blue);}
+  .btn.primary{background:var(--blue-deep); border-color:var(--blue-deep); color:#fff;}
+  .btn.primary:hover{background:var(--blue);}
+  .btn.ghost{background:transparent; border-color:transparent; color:var(--ink-soft);}
+  .btn.ghost:hover{background:var(--soft); border-color:var(--line);}
+  .btn.small{padding:6px 11px; font-size:12.5px;}
+  .btn:disabled{opacity:.45; cursor:not-allowed;}
+
+  /* Casillas */
+  .tick-input{
+    -webkit-appearance:none; appearance:none;
+    flex-shrink:0;
+    width:18px; height:18px;
+    margin:0;
+    border-radius:5px;
+    border:1.5px solid var(--blue);
+    background:var(--blue-pale);
+    display:grid; place-content:center;
+    cursor:pointer;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .tick-input::after{
+    content:'';
+    width:9px; height:5px;
+    border-left:2px solid #fff;
+    border-bottom:2px solid #fff;
+    transform:translateY(-1px) rotate(-45deg);
+    opacity:0;
+  }
+  .tick-input:checked{background:var(--blue-deep); border-color:var(--blue-deep);}
+  .tick-input:checked::after{opacity:1;}
+
+  /* Materiales */
+  .materials{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 24px;
+  }
+  .tick{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    cursor:pointer;
+    font-size:14.5px;
+    line-height:1.55;
+    color:var(--ink-soft);
+  }
+  .tick .tick-input{margin-top:2px;}
+  .tick .tick-input:checked + span{color:var(--gray); text-decoration:line-through;}
+  .mat-hint{margin:16px 0 0; font-size:13px; color:var(--ink-soft);}
+
+  /* Cronómetro */
+  .timer{
+    background:var(--soft);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px 20px;
+    margin-bottom:16px;
+  }
+  .timer-main{display:flex; align-items:center; gap:18px; flex-wrap:wrap;}
+  .timer-clock{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:40px;
+    line-height:1;
+    color:var(--blue-deep);
+    font-variant-numeric:tabular-nums;
+  }
+  .timer.warn .timer-clock{color:var(--warn);}
+  .timer-step{font-weight:600; font-size:15px;}
+  .timer-total{font-size:13px; color:var(--ink-soft); margin-top:3px;}
+  .progress{
+    height:8px;
+    border-radius:99px;
+    background:var(--gray-pale);
+    overflow:hidden;
+    margin:14px 0;
+  }
+  .progress-fill{
+    height:100%;
+    width:0;
+    background:var(--blue);
+    border-radius:99px;
+    transition:width .3s ease;
+  }
+  .timer-actions{display:flex; flex-wrap:wrap; gap:8px;}
+
+  .tl-tools{display:flex; justify-content:flex-end; margin-bottom:8px;}
+
+  /* Pasos */
+  .timeline{display:flex; flex-direction:column; gap:10px;}
+  .step{
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--card);
+    overflow:hidden;
+    transition:border-color .2s ease;
+  }
+  .step.current{border-color:var(--blue);}
+  .step-row{display:flex; align-items:stretch;}
+  .step.open .step-row{background:var(--blue-pale);}
+  .step-check{display:flex; align-items:center; padding:0 0 0 16px; cursor:pointer;}
+  .step-head{
+    flex:1;
+    min-width:0;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:14px 18px 14px 14px;
+    cursor:pointer;
+    user-select:none;
+    background:transparent;
+    border:0;
+    font:inherit;
+    color:inherit;
+    text-align:left;
+    transition:background .15s ease;
+  }
+  .step-head:hover{background:rgba(74,124,168,0.08);}
+  .step-head:focus-visible{outline-offset:-3px;}
+  .step-clock{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    font-weight:600;
+    color:var(--blue-deep);
+    background:var(--card);
+    border:1px solid var(--blue);
+    border-radius:8px;
+    padding:4px 8px;
+    white-space:nowrap;
+    min-width:56px;
+    text-align:center;
+  }
+  .step-title{
+    font-weight:600;
+    font-size:15px;
+    color:var(--ink);
+    flex:1;
+  }
+  .step.done .step-title{color:var(--gray); text-decoration:line-through;}
+  .step.done .step-clock{color:var(--gray); border-color:var(--line);}
+  .step-status{
+    display:none;
+    font-size:11.5px;
+    font-weight:600;
+    color:#fff;
+    background:var(--blue);
+    border-radius:99px;
+    padding:2px 10px;
+    white-space:nowrap;
+  }
+  .timeline.running .step.current .step-status{display:inline-block;}
+  .step-caret{
+    color:var(--gray);
+    font-size:14px;
+    transition:transform .2s ease;
+  }
+  .step.open .step-caret{transform:rotate(90deg); color:var(--blue-deep);}
+  .step-body{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .25s ease;
+  }
+  .step.open .step-body{grid-template-rows:1fr; border-top:1px solid var(--line);}
+  .step-body-wrap{
+    overflow:hidden;
+    min-height:0;
+    visibility:hidden;
+    transition:visibility 0s linear .25s;
+  }
+  .step.open .step-body-wrap{visibility:visible; transition-delay:0s;}
+  .step-body-inner{
+    padding:16px 18px 18px 120px;
+    font-size:14px;
+    line-height:1.6;
+    color:var(--ink-soft);
+  }
+  .answer-label{display:block; margin-top:14px; font-weight:600; font-size:13px; color:var(--ink);}
+  .answer{
+    display:block;
+    width:100%;
+    min-height:84px;
+    margin-top:6px;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    font:14px/1.5 'Inter', sans-serif;
+    color:var(--ink);
+    background:#fff;
+    resize:vertical;
+  }
+  .answer-note{margin:6px 0 0; font-size:12px; color:var(--gray);}
+
+  .tips{
+    background:var(--soft);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:18px 20px;
+    font-size:14.5px;
+    line-height:1.6;
+    color:var(--ink-soft);
+  }
+  .tips ul{margin:0; padding-left:18px;}
+  .tips li{margin-bottom:8px;}
+  .tips li:last-child{margin-bottom:0;}
+
+  /* Modo detective */
+  .detective-bar{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px 14px;
+    margin-bottom:14px;
+  }
+  .score{font-weight:600; font-size:14px; color:var(--blue-deep);}
+  .progress.small{width:120px; height:6px; margin:0;}
+  .spacer{flex:1;}
+  .case-msg{margin:12px 0 0; font-size:14px; font-weight:600; color:var(--ok); min-height:1.2em;}
+
+  .table-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:12px;}
+  table{
+    width:100%;
+    min-width:640px;
+    border-collapse:collapse;
+    font-size:13.5px;
+  }
+  th, td{
+    border:1px solid var(--line);
+    border-top:0; border-left:0;
+    padding:10px 12px;
+    text-align:left;
+    vertical-align:top;
+  }
+  th:last-child, td:last-child{border-right:0;}
+  tbody tr:last-child td{border-bottom:0;}
+  th{
+    background:var(--blue-deep);
+    color:#fff;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:11.5px;
+    letter-spacing:0.03em;
+  }
+  tr:nth-child(even) td{background:var(--soft);}
+  td.action{color:var(--blue-deep); font-weight:600;}
+  td.locked{color:var(--gray);}
+  tr.ok td{background:var(--ok-pale) !important;}
+  tr.bad td{background:var(--warn-pale) !important;}
+  tr.is-discard.ok td, tr.is-discard.rev td{background:var(--gray-pale) !important;}
+  tr.rev td{background:var(--blue-pale) !important;}
+  tr.is-discard td.action{color:var(--ink-soft);}
+
+  .pick{
+    width:100%;
+    min-width:150px;
+    padding:8px 10px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    font:500 13.5px 'Inter', sans-serif;
+    color:var(--ink);
+    background:#fff;
+    cursor:pointer;
+  }
+  .pick:disabled{cursor:default; color:var(--ink-soft); background:var(--soft);}
+  .fb{margin-top:6px; font-size:12.5px; line-height:1.4; min-height:1em;}
+  .fb.ok{color:var(--ok); font-weight:600;}
+  .fb.bad{color:var(--warn);}
+  .fb.rev{color:var(--ink-soft);}
+
+  /* Solución */
+  .solution-caption{
+    font-size:14.5px;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin:0 0 18px;
+    max-width:64ch;
+  }
+  #solBody{margin-top:18px;}
+  .sol-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:640px){ .sol-grid{grid-template-columns:1fr;} }
+  :root{--c-doc:#4A7CA8; --c-img:#B08D57; --c-xls:#5E9578; --c-bin:#9AA7B2;}
+  .sol-card{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--card); padding-bottom:6px;}
+  .sol-head{display:flex; align-items:center; gap:10px; padding:12px 16px; background:var(--blue-pale); color:var(--blue-deep); font-family:'Poppins',sans-serif; font-weight:600; font-size:15px;}
+  .sol-head::before{content:''; width:22px; height:17px; border-radius:4px; background:var(--fc);}
+  .sol-card.bin .sol-head{background:var(--gray-pale); color:var(--ink-soft);}
+  .sol-file{display:flex; justify-content:space-between; align-items:center; gap:10px; margin:10px 12px; padding:9px 12px; background:var(--soft); border-radius:10px; font-weight:600; font-size:13px; overflow-wrap:anywhere;}
+  .sol-badge{flex:none; font-size:10.5px; font-weight:700; color:#fff; background:var(--fc); padding:2px 8px; border-radius:6px;}
+  .sol-note{margin:4px 14px 8px; font-size:12px; color:var(--ink-soft);}
+  .case-note{margin:10px 0 0; font-size:12.5px; color:var(--ink-soft);}
+  .lang{position:absolute; top:16px; right:16px; display:inline-flex;}
+  .lang button{font:inherit; font-size:12.5px; font-weight:600; cursor:pointer; padding:6px 12px; border:1px solid var(--line); background:var(--card); color:var(--ink-soft);}
+  .lang button:first-child{border-radius:999px 0 0 999px;}
+  .lang button:last-child{border-radius:0 999px 999px 0; border-left:0;}
+  .lang button[aria-pressed="true"]{background:var(--blue-deep); border-color:var(--blue-deep); color:#fff;}
+
+  footer{
+    padding:20px 48px 34px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--gray);
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+
+  /* Enlaces, guía rápida y teclas */
+  .meta-value a{color:var(--blue-deep); text-decoration:underline; text-underline-offset:3px;}
+  a.btn{display:inline-block; text-decoration:none; margin-top:12px;}
+  kbd{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    background:var(--soft);
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:1px 5px;
+    white-space:nowrap;
+  }
+  .guide{
+    margin-top:16px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--card);
+    overflow:hidden;
+  }
+  .guide summary{
+    cursor:pointer;
+    padding:14px 18px;
+    font-weight:600;
+    font-size:15px;
+    color:var(--blue-deep);
+    list-style:none;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .guide summary::-webkit-details-marker{display:none;}
+  .guide summary::before{content:'▸'; color:var(--gray); font-size:14px; transition:transform .2s ease;}
+  .guide[open] summary{background:var(--blue-pale);}
+  .guide[open] summary::before{transform:rotate(90deg); color:var(--blue-deep);}
+  .guide-body{padding:16px 18px 18px;}
+  .guide-body p{margin:0 0 14px; font-size:13.5px; line-height:1.65; color:var(--ink-soft);}
+  .guide table{min-width:560px;}
+  .guide td:first-child{font-weight:600; color:var(--ink);}
+
+  @media (max-width:620px){
+    header{padding:36px 24px 24px;}
+    section{padding:26px 24px;}
+    footer{padding:18px 24px 28px;}
+    h1{font-size:29px;}
+    .materials{grid-template-columns:1fr;}
+    .step-body-inner{padding-left:24px;}
+    .timer-clock{font-size:34px;}
+    .step-head{gap:10px;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *, *::before, *::after{transition:none !important; animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="dossier">
+
+  <header>
+    <div class="lang" id="lang" role="group" data-i18n-attr="aria-label:langLabel" aria-label="Idioma / Language"></div>
+    <div class="folder-icon"></div>
+    <h1 data-i18n="h1">Detective de Carpetas</h1>
+    <p class="lede" data-i18n="lede"></p>
+
+    <div class="meta-row">
+      <div class="meta-cell"><div class="meta-label" data-i18n="mDurL"></div><div class="meta-value" data-i18n="mDurV"></div></div>
+      <div class="meta-cell"><div class="meta-label" data-i18n="mModL"></div><div class="meta-value" data-i18n="mModV"></div></div>
+      <div class="meta-cell"><div class="meta-label" data-i18n="mFmtL"></div><div class="meta-value" data-i18n="mFmtV"></div></div>
+      <div class="meta-cell"><div class="meta-label" data-i18n="mFileL"></div><div class="meta-value"><a id="zipLink" href="Caso_Detective.zip" download>Caso_Detective.zip</a></div></div>
+    </div>
+  </header>
+
+  <section>
+    <h2><span class="num">1</span> <span data-i18n="h2a"></span></h2>
+    <p class="obj-text" data-i18n="obj"></p>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span> <span data-i18n="h2b"></span></h2>
+    <ul class="materials" id="materials">
+      <li><label class="tick"><input type="checkbox" class="tick-input"><span data-i18n="mat1"></span></label></li>
+      <li><label class="tick"><input type="checkbox" class="tick-input"><span data-i18n="mat2"></span></label></li>
+      <li><label class="tick"><input type="checkbox" class="tick-input"><span data-i18n="mat3"></span></label></li>
+      <li><label class="tick"><input type="checkbox" class="tick-input"><span data-i18n="mat4"></span></label></li>
+    </ul>
+    <p class="mat-hint" id="matHint" aria-live="polite"></p>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span> <span data-i18n="h2c"></span></h2>
+
+    <div class="timer" id="timerBox" role="group" data-i18n-attr="aria-label:timerLabel">
+      <div class="timer-main">
+        <div class="timer-clock" id="clock">02:00</div>
+        <div>
+          <div class="timer-step" id="timerStep"></div>
+          <div class="timer-total" id="timerTotal"></div>
+        </div>
+      </div>
+      <div class="progress" id="progress" role="progressbar" data-i18n-attr="aria-label:progLabel" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="timer-actions">
+        <button type="button" class="btn primary" id="btnStart"></button>
+        <button type="button" class="btn" id="btnNext" data-i18n="btnNext"></button>
+        <button type="button" class="btn ghost" id="btnResetStep" data-i18n="btnResetStep"></button>
+      </div>
+    </div>
+
+    <div class="tl-tools">
+      <button type="button" class="btn small ghost" id="btnToggleAll"></button>
+    </div>
+    <div class="timeline" id="timeline"></div>
+    <details class="guide">
+      <summary data-i18n="gSum"></summary>
+      <div class="guide-body">
+        <p data-i18n="gIntro"></p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-i18n="gAct"></th><th>Windows</th><th>Mac</th></tr></thead>
+            <tbody>
+              <tr><td data-i18n="g1a"></td><td data-i18n="g1w"></td><td data-i18n="g1m"></td></tr>
+              <tr><td data-i18n="g2a"></td><td data-i18n="g2w"></td><td data-i18n="g2m"></td></tr>
+              <tr><td data-i18n="g3a"></td><td data-i18n="g3w"></td><td data-i18n="g3m"></td></tr>
+              <tr><td data-i18n="g4a"></td><td data-i18n="g4w"></td><td data-i18n="g4m"></td></tr>
+              <tr><td data-i18n="g5a"></td><td data-i18n="g5w"></td><td data-i18n="g5m"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+    <div class="sr-only" id="live" aria-live="polite"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">4</span> <span data-i18n="h2d"></span></h2>
+    <p class="solution-caption" data-i18n="detCap"></p>
+
+    <div class="detective-bar">
+      <span class="score" id="score" aria-live="polite"></span>
+      <div class="progress small" aria-hidden="true"><div class="progress-fill" id="scoreFill"></div></div>
+      <span class="spacer"></span>
+      <button type="button" class="btn small" id="btnReveal"></button>
+      <button type="button" class="btn small ghost" id="btnCaseReset" data-i18n="reset"></button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th data-i18n="thFile"></th><th data-i18n="thType"></th><th data-i18n="thIn"></th><th data-i18n="thName"></th></tr>
+        </thead>
+        <tbody id="caseBody"></tbody>
+      </table>
+    </div>
+    <p class="case-note" id="caseNote" data-i18n="caseNote"></p>
+    <p class="case-msg" id="caseMsg" aria-live="polite"></p>
+  </section>
+
+  <section>
+    <h2><span class="num">5</span> <span data-i18n="h2e"></span></h2>
+    <div class="tips">
+      <ul>
+        <li data-i18n="rule1"></li>
+        <li data-i18n="rule2"></li>
+        <li data-i18n="rule3"></li>
+        <li data-i18n="rule4"></li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">6</span> <span data-i18n="h2f"></span></h2>
+    <button type="button" class="btn" id="solToggle" aria-expanded="false" aria-controls="solBody"></button>
+    <div id="solBody" hidden>
+      <p class="solution-caption" data-i18n="solCap"></p>
+      <div class="sol-grid" id="solGrid"></div>
+    </div>
+  </section>
+
+  <footer>
+    <span data-i18n="caseId">Caso 2026-DC-01</span>
+    <button type="button" class="btn small ghost" id="btnResetAll"></button>
+  </footer>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const KEY = 'detective-carpetas-2026-DC-01';
+  const LANG_KEY = 'labs-lang';
+  const $ = (id) => document.getElementById(id);
+
+  /* ---------- Idioma (es / en) ---------- */
+  const TX = {
+    titulo: ['Caso: Detective de Carpetas', 'Case: Folder Detective'],
+    descripcion: ['Clase de 20 minutos: descomprime una carpeta desordenada, identifica cada archivo y ubícalo donde corresponde.', '20-minute class: unzip a messy folder, identify each file and put it where it belongs.'],
+    langLabel: ['Idioma / Language', 'Idioma / Language'],
+    h1: ['Detective de Carpetas', 'Folder Detective'],
+    lede: ['Hoy van a resolver un caso real: descomprimir una carpeta desordenada, identificar cada archivo y ubicarlo donde corresponde. Hay algo ahí adentro que no debería estar.', 'Today you are going to solve a real case: unzip a messy folder, identify each file and put it where it belongs. There is something in there that should not be.'],
+    mDurL: ['DURACIÓN', 'DURATION'], mDurV: ['20 minutos', '20 minutes'],
+    mModL: ['MODALIDAD', 'FORMAT'], mModV: ['100% virtual', '100% online'],
+    mFmtL: ['FORMATO', 'WORK MODE'], mFmtV: ['Individual', 'Individual'],
+    mFileL: ['ARCHIVO', 'FILE'],
+    h2a: ['Objetivo de clase', 'Class goal'],
+    obj: ['Al terminar, van a poder reconocer un archivo por su extensión, saber en qué carpeta va cada tipo de documento y detectar cuándo algo simplemente debe eliminarse en lugar de guardarse.', 'By the end, you will be able to recognize a file by its extension, know which folder each type of document goes in, and tell when something should simply be deleted instead of saved.'],
+    h2b: ['Lo que necesitan', 'What you need'],
+    mat1: ['El archivo Caso_Detective.zip (se descarga desde esta página)', 'The Detective_Case.zip file (you download it from this page)'],
+    mat2: ['Su computador', 'Your computer'],
+    mat3: ['Un documento o papel, para realizar anotaciones', 'A document or a sheet of paper, to take notes'],
+    mat4: ['Veinte minutos sin interrupciones', 'Twenty minutes without interruptions'],
+    matAll: ['Todo listo. Ya pueden empezar el caso.', 'All set. You can start the case now.'],
+    matSome: ['{n} de {m} listos. Marquen lo que ya tienen.', '{n} of {m} ready. Check what you already have.'],
+    h2c: ['Cómo vamos a trabajar', 'How we are going to work'],
+    timerLabel: ['Cronómetro de la clase', 'Class timer'],
+    progLabel: ['Pasos completados', 'Steps completed'],
+    btnNext: ['Paso terminado', 'Step done'],
+    btnResetStep: ['Reiniciar paso', 'Reset step'],
+    btnStart: ['Iniciar', 'Start'], btnPause: ['Pausar', 'Pause'], btnResume: ['Reanudar', 'Resume'], btnDone: ['Completado', 'Completed'],
+    expandAll: ['Expandir todos', 'Expand all'], collapseAll: ['Contraer todos', 'Collapse all'],
+    inProgress: ['En curso', 'In progress'],
+    markDone: ['Marcar como hecho: {t}', 'Mark as done: {t}'],
+    closed: ['Caso cerrado', 'Case closed'],
+    closedSub: ['Completaron todos los pasos.', 'You completed all the steps.'],
+    stepOf: ['Paso {n} de {m}: {t}', 'Step {n} of {m}: {t}'],
+    left: ['Quedan {t} de clase', '{t} left in class'],
+    annLast: ['Último paso completado. Caso cerrado.', 'Last step completed. Case closed.'],
+    annNext: ['Paso {n} terminado. Sigue: {t}.', 'Step {n} done. Next: {t}.'],
+    s1t: ['Conocemos el caso', 'We meet the case'],
+    s1b: ['Un compañero se fue de vacaciones y dejó su carpeta totalmente desorganizada. Hoy la ordenamos nosotros.', 'A classmate went on vacation and left their folder completely messy. Today we are going to organize it.'],
+    s2t: ['Descargamos y descomprimimos', 'We download and unzip'],
+    s2b: ['Descarguen el zip desde esta página y extráiganlo en su computador. En la Guía rápida, más abajo, está cómo hacerlo en Windows y en Mac.', 'Download the zip from this page and extract it on your computer. The Quick guide below explains how to do it on Windows and Mac.'],
+    s2x: ['Descargar Caso_Detective.zip', 'Download Detective_Case.zip'],
+    s3t: ['Exploramos e identificamos', 'We explore and identify'],
+    s3b: ['Activen la vista de extensiones (.pdf, .docx, .xlsx…) y revisen cada archivo: qué tipo es, a qué categoría pertenece y si hay algo que no debería estar ahí. Pueden practicar en el Modo detective de la sección 4.', 'Turn on the extensions view (.pdf, .docx, .xlsx…) and check each file: what type it is, which category it belongs to and whether something should not be there. You can practice in the Detective mode in section 4.'],
+    s4t: ['Reorganizamos', 'We reorganize'],
+    s4b: ['Crean las carpetas que necesiten, mueven cada archivo a su lugar y renombran los que tengan nombres poco claros. Si no recuerdan cómo, abran la Guía rápida.', 'Create the folders you need, move each file to its place and rename the ones with unclear names. If you do not remember how, open the Quick guide.'],
+    s5t: ['Verificamos juntos', 'We check together'],
+    s5b: ['Dos o tres personas comparten pantalla para mostrar cómo les quedó la carpeta. Comparamos aciertos con la solución.', 'Two or three people share their screen to show how their folder turned out. We compare our answers with the solution.'],
+    s6t: ['Cerramos con una pregunta', 'We close with a question'],
+    s6b: ['¿Por qué es importante mantener los archivos organizados y bien nombrados?', 'Why is it important to keep files organized and well named?'],
+    ansLabel: ['Tu respuesta', 'Your answer'],
+    ansPh: ['Escribe aquí lo que piensas...', 'Write here what you think...'],
+    ansNote: ['Se guarda solo en este navegador.', 'It is saved only in this browser.'],
+    gSum: ['Guía rápida: cómo se hace en tu computador', 'Quick guide: how to do it on your computer'],
+    gIntro: ['<strong>Antes de empezar, activa la vista de extensiones</strong> para ver si un archivo termina en .pdf, .docx, .xlsx o .jpg.<br>Windows 11: pestaña <em>Ver → Mostrar → Extensiones de nombre de archivo</em>. Windows 10: pestaña <em>Vista</em> y marca <em>Extensiones de nombre de archivo</em>. Mac: en Finder, <em>Configuración → Avanzado → Mostrar todas las extensiones de nombre de archivo</em>.', '<strong>Before you start, turn on the extensions view</strong> to see whether a file ends in .pdf, .docx, .xlsx or .jpg.<br>Windows 11: <em>View → Show → File name extensions</em> tab. Windows 10: <em>View</em> tab and check <em>File name extensions</em>. Mac: in Finder, <em>Settings → Advanced → Show all filename extensions</em>.'],
+    gAct: ['Acción', 'Action'],
+    g1a: ['Descomprimir el zip', 'Unzip the zip file'],
+    g1w: ['Clic derecho sobre el .zip → <em>Extraer todo…</em> → <em>Extraer</em>', 'Right-click the .zip → <em>Extract All…</em> → <em>Extract</em>'],
+    g1m: ['Doble clic sobre el .zip', 'Double-click the .zip'],
+    g2a: ['Crear una carpeta', 'Create a folder'],
+    g2w: ['Clic derecho en un espacio vacío → <em>Nuevo → Carpeta</em>, o <kbd>Ctrl</kbd>+<kbd>Mayús</kbd>+<kbd>N</kbd>', 'Right-click an empty space → <em>New → Folder</em>, or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd>'],
+    g2m: ['<kbd>Cmd</kbd>+<kbd>Mayús</kbd>+<kbd>N</kbd> dentro de la ventana de Finder', '<kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd> inside the Finder window'],
+    g3a: ['Renombrar', 'Rename'],
+    g3w: ['Selecciona el archivo y pulsa <kbd>F2</kbd>', 'Select the file and press <kbd>F2</kbd>'],
+    g3m: ['Selecciona el archivo y pulsa <kbd>Retorno</kbd>', 'Select the file and press <kbd>Return</kbd>'],
+    g4a: ['Mover a una carpeta', 'Move to a folder'],
+    g4w: ['Arrástralo a la carpeta, o <kbd>Ctrl</kbd>+<kbd>X</kbd> y luego <kbd>Ctrl</kbd>+<kbd>V</kbd> dentro de la carpeta', 'Drag it to the folder, or <kbd>Ctrl</kbd>+<kbd>X</kbd> and then <kbd>Ctrl</kbd>+<kbd>V</kbd> inside the folder'],
+    g4m: ['Arrástralo a la carpeta, o <kbd>Cmd</kbd>+<kbd>C</kbd> y luego <kbd>Opción</kbd>+<kbd>Cmd</kbd>+<kbd>V</kbd> dentro de la carpeta', 'Drag it to the folder, or <kbd>Cmd</kbd>+<kbd>C</kbd> and then <kbd>Option</kbd>+<kbd>Cmd</kbd>+<kbd>V</kbd> inside the folder'],
+    g5a: ['Eliminar', 'Delete'],
+    g5w: ['Selecciona el archivo y pulsa <kbd>Supr</kbd> (va a la Papelera de reciclaje)', 'Select the file and press <kbd>Delete</kbd> (it goes to the Recycle Bin)'],
+    g5m: ['Selecciona el archivo y pulsa <kbd>Cmd</kbd>+<kbd>Borrar</kbd> (va a la Papelera)', 'Select the file and press <kbd>Cmd</kbd>+<kbd>Delete</kbd> (it goes to the Trash)'],
+    h2d: ['Lo que hay dentro del caso', 'What is inside the case'],
+    detCap: ['Elige en qué carpeta va cada archivo. Al acertar se revela su tipo y el nombre que debería tener.', 'Choose which folder each file goes in. When you get it right, its type and the name it should have are revealed.'],
+    reset: ['Reiniciar', 'Reset'],
+    reveal: ['Revelar respuestas', 'Reveal answers'], hide: ['Ocultar respuestas', 'Hide answers'],
+    revealed: ['Respuestas reveladas', 'Answers revealed'],
+    score: ['{n} de {m} correctos', '{n} of {m} correct'],
+    thFile: ['Archivo', 'File'], thType: ['Tipo', 'Type'], thIn: ['Va en', 'Goes in'], thName: ['Nombre sugerido', 'Suggested name'],
+    caseNote: ['', ''],
+    pickPh: ['Elige una carpeta…', 'Choose a folder…'],
+    pickLabel: ['Carpeta para {f}', 'Folder for {f}'],
+    fOk: ['Correcto', 'Correct'], fRev: ['Respuesta revelada', 'Answer revealed'], fBad: ['Todavía no. ', 'Not yet. '],
+    toFind: ['Por descubrir', 'To be discovered'], onHit: ['Se muestra al acertar', 'Shown when you get it right'], noName: ['No aplica, se elimina', 'Not applicable, delete it'],
+    solved: ['Caso resuelto. Ahora comparen con la solución de la sección 6.', 'Case solved. Now compare with the solution in section 6.'],
+    fo_documentos: ['Documentos', 'Documents'], fo_hojas: ['Hojas de cálculo', 'Spreadsheets'], fo_imagenes: ['Imágenes', 'Images'], fo_descargas: ['Descargas', 'Downloads'], fo_papelera: ['Papelera', 'Recycle Bin'],
+    ty_doc: ['Documento', 'Document'], ty_hoja: ['Hoja de cálculo', 'Spreadsheet'], ty_img: ['Imagen', 'Image'], ty_tmp: ['Temporal', 'Temporary'],
+    h1_hint: ['Mira la extensión .pdf: ¿qué tipo de archivo es?', 'Look at the .pdf extension: what type of file is it?'],
+    h2_hint: ['La extensión .docx es de Word. Piensa en qué se escribe ahí.', 'The .docx extension is for Word. Think about what is written there.'],
+    h3_hint: ['La extensión .xlsx es de Excel: filas, columnas y datos.', 'The .xlsx extension is for Excel: rows, columns and data.'],
+    h4_hint: ['Fíjate en la extensión .jpg: ¿qué se guarda en ese formato?', 'Look at the .jpg extension: what is saved in that format?'],
+    h5_hint: ['No parece un documento de trabajo. ¿De verdad hay que guardarlo?', 'It does not look like a work document. Do you really need to keep it?'],
+    fn1: ['Manual_Descargas_v1.pdf', 'Downloads_Manual_v1.pdf'],
+    fn2: ['Politica_Gestion_Documental_v1.docx', 'Document_Management_Policy_v1.docx'],
+    fn3: ['Inventario_Makerspace_v1_2026-02.xlsx', 'Makerspace_Inventory_v1_2026-02.xlsx'],
+    fn4: ['Infografia_Extensiones_v1.jpg', 'Extensions_Infographic_v1.jpg'],
+    h2e: ['Reglas de oro', 'Golden rules'],
+    rule1: ['Antes de descargar algo, revisen que la fuente sea confiable.', 'Before downloading something, check that the source is trustworthy.'],
+    rule2: ['Nombren cada archivo con un patrón claro: tema, versión y fecha.', 'Name each file with a clear pattern: topic, version and date.'],
+    rule3: ['Cada viernes, abran su carpeta de Descargas y limpien lo que ya no sirve.', 'Every Friday, open your Downloads folder and clean out what you no longer need.'],
+    rule4: ['Si un archivo no encaja en ninguna categoría útil, probablemente deba borrarse.', 'If a file does not fit any useful category, it should probably be deleted.'],
+    h2f: ['Así se ve una carpeta bien resuelta', 'What a well-solved folder looks like'],
+    solShow: ['Mostrar solución', 'Show solution'], solHide: ['Ocultar solución', 'Hide solution'],
+    solCap: ['Esta es la meta: el PDF y el DOCX en Documentos, la imagen en Imágenes, el Excel en Hojas de cálculo, y el archivo temporal en la Papelera, fuera del área de trabajo.', 'This is the goal: the PDF and the DOCX in Documents, the image in Images, the Excel file in Spreadsheets, and the temporary file in the Recycle Bin, outside the work area.'],
+    solTmp: ['Aquí sí debía terminar: es un archivo temporal, no un documento de trabajo.', 'It should end up here: it is a temporary file, not a work document.'],
+    caseId: ['Caso 2026-DC-01', 'Case 2026-DC-01'],
+    resetAll: ['Reiniciar todo mi avance', 'Reset all my progress'],
+    sure: ['¿Seguro? Toca otra vez para borrar', 'Sure? Tap again to erase']
+  };
+  const readLang = () => {
+    let s = null; try { s = localStorage.getItem(LANG_KEY); } catch (e) {}
+    if (s === 'es' || s === 'en') return s;
+    return String(navigator.language || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
+  };
+  let LANG = readLang();
+  const t = (k, v) => {
+    const p = TX[k];
+    let s = p ? p[LANG === 'en' ? 1 : 0] : k;
+    if (v) for (const x in v) s = s.split('{' + x + '}').join(v[x]);
+    return s;
+  };
+
+  /* ---------- Datos (la lógica usa ids, nunca el texto) ---------- */
+  const steps = [
+    { time: '1 min', min: 1, k: 's1' },
+    { time: '2 min', min: 2, k: 's2', extra: true },
+    { time: '5 min', min: 5, k: 's3' },
+    { time: '7 min', min: 7, k: 's4' },
+    { time: '4 min', min: 4, k: 's5' },
+    { time: '1 min', min: 1, k: 's6', answer: true },
+  ];
+  const fname = (f) => (LANG === 'en' && f.nameEn) || f.name;
+  const zipFile = () => (LANG === 'en' ? 'Detective_Case.zip' : 'Caso_Detective.zip');
+  const folders = ['documentos', 'hojas', 'imagenes', 'descargas', 'papelera'];
+  const files = [
+    { name: 'documento1.pdf', nameEn: 'document1.pdf', ty: 'ty_doc', answer: 'documentos', fn: 'fn1', hint: 'h1_hint' },
+    { name: 'sinnombre.docx', nameEn: 'untitled.docx', ty: 'ty_doc', answer: 'documentos', fn: 'fn2', hint: 'h2_hint' },
+    { name: 'Copia de Copia de informe.xlsx', nameEn: 'Copy of Copy of report.xlsx', ty: 'ty_hoja', answer: 'hojas', fn: 'fn3', hint: 'h3_hint' },
+    { name: 'IMG_final_v2.jpg', ty: 'ty_img', answer: 'imagenes', fn: 'fn4', hint: 'h4_hint' },
+    { name: 'archivo_temporal.txt', nameEn: 'temp_file.txt', ty: 'ty_tmp', answer: 'papelera', fn: null, hint: 'h5_hint' },
+  ];
+
+  /* ---------- Estado y guardado ---------- */
+  const fresh = () => ({
+    done: steps.map(() => false),
+    materials: [false, false, false, false],
+    picks: {},
+    revealed: false,
+    note: '',
+    solOpen: false,
+  });
+  let state = fresh();
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (saved && typeof saved === 'object') {
+      if (Array.isArray(saved.done) && saved.done.length === steps.length) state.done = saved.done.map(Boolean);
+      if (Array.isArray(saved.materials) && saved.materials.length === 4) state.materials = saved.materials.map(Boolean);
+      if (saved.picks && typeof saved.picks === 'object') state.picks = saved.picks;
+      state.revealed = !!saved.revealed;
+      state.note = typeof saved.note === 'string' ? saved.note : '';
+      state.solOpen = !!saved.solOpen;
+    }
+  } catch (e) { /* sin almacenamiento: la página funciona igual */ }
+
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+
+  const announce = (msg) => {
+    const live = $('live');
+    live.textContent = '';
+    setTimeout(() => { live.textContent = msg; }, 50);
+  };
+
+  const fmt = (sec) => {
+    sec = Math.max(0, Math.round(sec));
+    return String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0');
+  };
+
+  /* ---------- Materiales ---------- */
+  const matInputs = [...document.querySelectorAll('#materials input')];
+  const renderMaterials = () => {
+    matInputs.forEach((inp, i) => { inp.checked = state.materials[i]; });
+    const n = state.materials.filter(Boolean).length;
+    $('matHint').textContent = n === matInputs.length ? t('matAll') : t('matSome', { n, m: matInputs.length });
+  };
+  matInputs.forEach((inp, i) => {
+    inp.addEventListener('change', () => { state.materials[i] = inp.checked; save(); renderMaterials(); });
+  });
+
+  /* ---------- Pasos ---------- */
+  const timeline = $('timeline');
+  const stepEls = steps.map((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'step';
+    el.innerHTML = `
+      <div class="step-row">
+        <label class="step-check">
+          <input type="checkbox" class="tick-input">
+        </label>
+        <button type="button" class="step-head" id="step-head-${i}" aria-expanded="false" aria-controls="step-body-${i}">
+          <span class="step-clock">${s.time}</span>
+          <span class="step-title"></span>
+          <span class="step-status"></span>
+          <span class="step-caret" aria-hidden="true">▸</span>
+        </button>
+      </div>
+      <div class="step-body" id="step-body-${i}" role="region" aria-labelledby="step-head-${i}">
+        <div class="step-body-wrap">
+          <div class="step-body-inner">
+            <span class="sb"></span>
+            ${s.extra ? `<div><a class="btn small sx" href="${zipFile()}" download></a></div>` : ''}
+            ${s.answer ? `
+              <label class="answer-label" for="answer"></label>
+              <textarea class="answer" id="answer" rows="3"></textarea>
+              <p class="answer-note"></p>` : ''}
+          </div>
+        </div>
+      </div>`;
+    timeline.appendChild(el);
+    return el;
+  });
+  const paintSteps = () => {
+    steps.forEach((s, i) => {
+      const el = stepEls[i];
+      el.querySelector('.step-title').textContent = t(s.k + 't');
+      el.querySelector('.step-status').textContent = t('inProgress');
+      el.querySelector('input').setAttribute('aria-label', t('markDone', { t: t(s.k + 't') }));
+      el.querySelector('.sb').textContent = t(s.k + 'b');
+      if (s.extra) el.querySelector('.sx').textContent = t('s2x');
+      if (s.answer) {
+        el.querySelector('.answer-label').textContent = t('ansLabel');
+        el.querySelector('.answer').placeholder = t('ansPh');
+        el.querySelector('.answer-note').textContent = t('ansNote');
+      }
+    });
+  };
+
+  const setOpen = (i, open) => {
+    stepEls[i].classList.toggle('open', open);
+    stepEls[i].querySelector('.step-head').setAttribute('aria-expanded', String(open));
+  };
+  const updateToggleAllLabel = () => {
+    $('btnToggleAll').textContent = stepEls.every((el) => el.classList.contains('open')) ? t('collapseAll') : t('expandAll');
+  };
+
+  stepEls.forEach((el, i) => {
+    el.querySelector('.step-head').addEventListener('click', () => {
+      setOpen(i, !el.classList.contains('open'));
+      updateToggleAllLabel();
+    });
+    el.querySelector('input').addEventListener('change', (e) => {
+      state.done[i] = e.target.checked;
+      save();
+      syncTimer();
+      render();
+    });
+  });
+
+  $('btnToggleAll').addEventListener('click', () => {
+    const open = !stepEls.every((el) => el.classList.contains('open'));
+    stepEls.forEach((_, i) => setOpen(i, open));
+    updateToggleAllLabel();
+  });
+
+  const note = $('answer');
+  note.value = state.note;
+  note.addEventListener('input', () => { state.note = note.value; save(); });
+
+  /* ---------- Cronómetro ---------- */
+  let running = false, timerIdx = -2, remaining = 0, endAt = 0, tickId = null;
+  const pendingIdx = () => state.done.indexOf(false);
+
+  function stopTimer() {
+    if (running) remaining = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+    running = false;
+    clearInterval(tickId);
+    tickId = null;
+  }
+
+  function syncTimer() {
+    const i = pendingIdx();
+    if (i !== timerIdx) {
+      timerIdx = i;
+      remaining = i === -1 ? 0 : steps[i].min * 60;
+      if (running && i !== -1) endAt = Date.now() + remaining * 1000;
+    }
+    if (i === -1 && running) { stopTimer(); remaining = 0; }
+  }
+
+  function startTimer() {
+    if (pendingIdx() === -1) return;
+    running = true;
+    endAt = Date.now() + remaining * 1000;
+    tickId = setInterval(tick, 250);
+    render();
+  }
+
+  function tick() {
+    remaining = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+    if (remaining <= 0) completeStep(timerIdx);
+    else renderTimer();
+  }
+
+  function completeStep(i) {
+    state.done[i] = true;
+    save();
+    const next = pendingIdx();
+    setOpen(i, false);
+    if (next !== -1) setOpen(next, true);
+    updateToggleAllLabel();
+    announce(next === -1 ? t('annLast') : t('annNext', { n: i + 1, t: t(steps[next].k + 't') }));
+    syncTimer();
+    render();
+  }
+
+  $('btnStart').addEventListener('click', () => { running ? (stopTimer(), render()) : startTimer(); });
+  $('btnNext').addEventListener('click', () => { const i = pendingIdx(); if (i !== -1) completeStep(i); });
+  $('btnResetStep').addEventListener('click', () => {
+    const i = pendingIdx();
+    if (i === -1) return;
+    remaining = steps[i].min * 60;
+    if (running) endAt = Date.now() + remaining * 1000;
+    renderTimer();
+  });
+
+  function renderSteps() {
+    const cur = pendingIdx();
+    timeline.classList.toggle('running', running);
+    stepEls.forEach((el, i) => {
+      el.classList.toggle('done', state.done[i]);
+      el.classList.toggle('current', i === cur);
+      el.querySelector('input').checked = state.done[i];
+    });
+  }
+
+  function renderTimer() {
+    const cur = pendingIdx();
+    const doneCount = state.done.filter(Boolean).length;
+    const laterSec = steps.reduce((acc, s, j) => acc + (!state.done[j] && j !== cur ? s.min * 60 : 0), 0);
+
+    $('clock').textContent = fmt(remaining);
+    if (cur === -1) {
+      $('timerStep').textContent = t('closed');
+      $('timerTotal').textContent = t('closedSub');
+    } else {
+      $('timerStep').textContent = t('stepOf', { n: cur + 1, m: steps.length, t: t(steps[cur].k + 't') });
+      $('timerTotal').textContent = t('left', { t: fmt(remaining + laterSec) });
+    }
+
+    $('progressFill').style.width = (doneCount / steps.length * 100) + '%';
+    $('progress').setAttribute('aria-valuenow', String(doneCount));
+
+    const startBtn = $('btnStart');
+    if (cur === -1) startBtn.textContent = t('btnDone');
+    else if (running) startBtn.textContent = t('btnPause');
+    else startBtn.textContent = remaining < steps[cur].min * 60 ? t('btnResume') : t('btnStart');
+    startBtn.disabled = $('btnNext').disabled = $('btnResetStep').disabled = cur === -1;
+
+    $('timerBox').classList.toggle('warn', running && cur !== -1 && remaining <= 30);
+    document.title = running ? '⏱ ' + fmt(remaining) + ' · ' + t('titulo') : t('titulo');
+  }
+
+  function render() { renderSteps(); renderTimer(); }
+
+  /* ---------- Modo detective ---------- */
+  const tbody = $('caseBody');
+  const rowEls = files.map((f, i) => {
+    const tr = document.createElement('tr');
+    if (f.answer === 'papelera') tr.classList.add('is-discard');
+    tr.innerHTML = `
+      <td>${fname(f)}</td>
+      <td class="c-type"></td>
+      <td>
+        <select class="pick">
+          <option value="" class="ph"></option>
+          ${folders.map((o) => `<option value="${o}"></option>`).join('')}
+        </select>
+        <div class="fb" aria-live="polite"></div>
+      </td>
+      <td class="c-name"></td>`;
+    tr.querySelector('select').addEventListener('change', (e) => {
+      state.picks[i] = e.target.value;
+      save();
+      renderCase();
+    });
+    tbody.appendChild(tr);
+    return tr;
+  });
+
+  function renderCase() {
+    let correct = 0;
+    files.forEach((f, i) => {
+      const tr = rowEls[i];
+      const sel = tr.querySelector('select');
+      const fb = tr.querySelector('.fb');
+      const typeCell = tr.querySelector('.c-type');
+      const nameCell = tr.querySelector('.c-name');
+      sel.setAttribute('aria-label', t('pickLabel', { f: fname(f) }));
+      sel.querySelector('.ph').textContent = t('pickPh');
+      [...sel.options].forEach((o) => { if (o.value) o.textContent = t('fo_' + o.value); });
+      const pick = state.revealed ? f.answer : (state.picks[i] || '');
+      const solved = pick === f.answer;
+      const wrong = pick !== '' && !solved;
+
+      sel.value = pick;
+      sel.disabled = state.revealed;
+      if (solved && !state.revealed) correct++;
+
+      tr.classList.toggle('ok', solved && !state.revealed);
+      tr.classList.toggle('rev', solved && state.revealed);
+      tr.classList.toggle('bad', wrong);
+
+      fb.className = 'fb' + (solved ? (state.revealed ? ' rev' : ' ok') : wrong ? ' bad' : '');
+      fb.textContent = solved ? (state.revealed ? t('fRev') : t('fOk')) : wrong ? t('fBad') + t(f.hint) : '';
+
+      typeCell.className = 'c-type' + (solved ? '' : ' locked');
+      typeCell.textContent = solved ? t(f.ty) : t('toFind');
+      nameCell.className = 'c-name ' + (solved ? 'action' : 'locked');
+      nameCell.textContent = solved ? (f.fn ? t(f.fn) : t('noName')) : t('onHit');
+    });
+
+    $('score').textContent = state.revealed ? t('revealed') : t('score', { n: correct, m: files.length });
+    $('scoreFill').style.width = (state.revealed ? 100 : correct / files.length * 100) + '%';
+    $('btnReveal').textContent = state.revealed ? t('hide') : t('reveal');
+    $('caseMsg').textContent = !state.revealed && correct === files.length ? t('solved') : '';
+  }
+
+  $('btnReveal').addEventListener('click', () => { state.revealed = !state.revealed; save(); renderCase(); });
+  $('btnCaseReset').addEventListener('click', () => { state.picks = {}; state.revealed = false; save(); renderCase(); });
+
+  /* ---------- Solución (tarjetas HTML en lugar de una imagen, para poder traducirla) ---------- */
+  const SOL = [['documentos', '--c-doc'], ['imagenes', '--c-img'], ['hojas', '--c-xls'], ['papelera', '--c-bin']];
+  function renderSolution() {
+    $('solBody').hidden = !state.solOpen;
+    $('solToggle').setAttribute('aria-expanded', String(state.solOpen));
+    $('solToggle').textContent = state.solOpen ? t('solHide') : t('solShow');
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    $('solGrid').innerHTML = SOL.map(([fo, col]) => {
+      const list = files.filter((f) => f.answer === fo).map((f) => {
+        const nm = f.fn ? t(f.fn) : fname(f);
+        return `<div class="sol-file"><span>${esc(nm)}</span><span class="sol-badge">${esc(nm.split('.').pop().toUpperCase())}</span></div>`;
+      }).join('');
+      return `<div class="sol-card${fo === 'papelera' ? ' bin' : ''}" style="--fc:var(${col})"><div class="sol-head">${t('fo_' + fo)}</div>${list}${fo === 'papelera' ? `<p class="sol-note">${t('solTmp')}</p>` : ''}</div>`;
+    }).join('');
+  }
+  $('solToggle').addEventListener('click', () => { state.solOpen = !state.solOpen; save(); renderSolution(); });
+
+  /* ---------- Reiniciar todo ---------- */
+  const resetBtn = $('btnResetAll');
+  let armed = false, armTimer = null;
+  const paintReset = () => { resetBtn.textContent = armed ? t('sure') : t('resetAll'); };
+  const disarm = () => { armed = false; clearTimeout(armTimer); paintReset(); };
+  resetBtn.addEventListener('click', () => {
+    if (!armed) {
+      armed = true;
+      paintReset();
+      armTimer = setTimeout(disarm, 4000);
+      return;
+    }
+    disarm();
+    stopTimer();
+    state = fresh();
+    save();
+    note.value = '';
+    timerIdx = -2;
+    init();
+  });
+
+  /* ---------- Idioma: pintar y cambiar ---------- */
+  function applyLang() {
+    document.documentElement.lang = LANG;
+    document.title = t('titulo');
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', t('descripcion'));
+    document.querySelectorAll('[data-i18n]').forEach((e) => { e.innerHTML = t(e.getAttribute('data-i18n')); });
+    document.querySelectorAll('[data-i18n-attr]').forEach((e) => {
+      e.getAttribute('data-i18n-attr').split(';').forEach((par) => { const p = par.split(':'); if (p.length === 2) e.setAttribute(p[0].trim(), t(p[1].trim())); });
+    });
+    document.querySelectorAll('.lang button').forEach((b) => b.setAttribute('aria-pressed', String(b.getAttribute('data-l') === LANG)));
+    $('caseNote').hidden = !t('caseNote');
+    const zl = $('zipLink'); zl.href = zipFile(); zl.textContent = zipFile();
+    paintSteps(); paintReset(); updateToggleAllLabel(); renderMaterials(); renderCase(); renderSolution(); render();
+  }
+  const langBox = $('lang');
+  [['es', 'ES'], ['en', 'EN']].forEach(([k, txt]) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.setAttribute('data-l', k); b.textContent = txt;
+    b.addEventListener('click', () => {
+      if (k === LANG) return;
+      LANG = k;
+      try { localStorage.setItem(LANG_KEY, k); } catch (e) {}
+      applyLang();
+      b.focus();
+    });
+    langBox.appendChild(b);
+  });
+
+  /* ---------- Inicio ---------- */
+  function init() {
+    syncTimer();
+    stepEls.forEach((_, i) => setOpen(i, false));
+    setOpen(Math.max(0, pendingIdx()), true);
+    applyLang();
+  }
+  init();
+})();
+</script>
+
+</body>
+</html>

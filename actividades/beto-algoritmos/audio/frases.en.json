@@ -1,0 +1,294 @@
+[
+ {
+  "id": "hello-i-m-beto-the-robot-today-i-m-g-p9fmol",
+  "texto": "Hello! I'm Beto, the robot. Today I'm going to teach you a secret of robots and computers."
+ },
+ {
+  "id": "an-algorithm-is-a-list-of-steps-one-1i1fgyh",
+  "texto": "An algorithm is a list of steps, one after another, to do something."
+ },
+ {
+  "id": "it-s-like-a-cooking-recipe-first-we-146shws",
+  "texto": "It's like a cooking recipe. First we mix."
+ },
+ {
+  "id": "then-we-bake-1hw08tf",
+  "texto": "Then we bake."
+ },
+ {
+  "id": "and-in-the-end-we-have-a-cake-una9al",
+  "texto": "And in the end we have a cake!"
+ },
+ {
+  "id": "you-already-use-algorithms-every-day-16xb2hb",
+  "texto": "You already use algorithms every day. Look, to brush your teeth:"
+ },
+ {
+  "id": "first-you-take-the-toothbrush-16zto8c",
+  "texto": "First, you take the toothbrush."
+ },
+ {
+  "id": "then-you-put-on-the-toothpaste-0e1np3",
+  "texto": "Then, you put on the toothpaste."
+ },
+ {
+  "id": "after-that-you-brush-your-teeth-956ylc",
+  "texto": "After that, you brush your teeth."
+ },
+ {
+  "id": "and-at-the-end-you-rinse-your-mouth-un5c9v",
+  "texto": "And at the end, you rinse your mouth."
+ },
+ {
+  "id": "what-if-you-put-on-your-shoes-first-167uigh",
+  "texto": "What if you put on your shoes first and then your socks?"
+ },
+ {
+  "id": "how-funny-that-doesn-t-work-1p1tewa",
+  "texto": "How funny! That doesn't work."
+ },
+ {
+  "id": "socks-first-and-then-shoes-the-steps-t98tb7",
+  "texto": "Socks first, and then shoes. The steps must go in the right order."
+ },
+ {
+  "id": "robots-do-exactly-what-you-tell-them-lq63x8",
+  "texto": "Robots do exactly what you tell them, step by step."
+ },
+ {
+  "id": "i-can-move-forward-turn-right-and-tu-1x1i0sg",
+  "texto": "I can move forward, turn right and turn left."
+ },
+ {
+  "id": "you-will-be-the-programmer-and-i-wil-5klrzi",
+  "texto": "You will be the programmer, and I will follow your commands. Let's play!"
+ },
+ {
+  "id": "put-the-steps-in-order-to-brush-your-cp0jza",
+  "texto": "Put the steps in order to brush your teeth. Tap the first one!"
+ },
+ {
+  "id": "very-good-first-take-the-toothbrush-0r39wy",
+  "texto": "Very good! First, take the toothbrush. Then, put on the toothpaste. Then, brush your teeth. Finally, rinse your mouth"
+ },
+ {
+  "id": "help-the-seed-grow-what-do-you-do-fi-yg1l8t",
+  "texto": "Help the seed grow. What do you do first?"
+ },
+ {
+  "id": "very-good-first-dig-a-little-hole-th-71tutt",
+  "texto": "Very good! First, dig a little hole. Then, put in the seed. Then, add water. Finally, the flower grows"
+ },
+ {
+  "id": "i-m-hungry-put-the-steps-of-the-sand-1yuhxzp",
+  "texto": "I'm hungry! Put the steps of the sandwich in order."
+ },
+ {
+  "id": "very-good-first-put-on-the-bread-the-6zdvg6",
+  "texto": "Very good! First, put on the bread. Then, add the cheese. Then, cover with another bread. Finally, time to eat"
+ },
+ {
+  "id": "that-s-it-1yolv9m",
+  "texto": "That's it!"
+ },
+ {
+  "id": "very-good-j9sqyh",
+  "texto": "Very good!"
+ },
+ {
+  "id": "yes-1p6k14z",
+  "texto": "Yes!"
+ },
+ {
+  "id": "hmm-that-one-doesn-t-go-first-what-d-14djggu",
+  "texto": "Hmm, that one doesn't go first. What do you do at the start?"
+ },
+ {
+  "id": "not-that-one-yet-what-comes-next-160mm1a",
+  "texto": "Not that one yet. What comes next?"
+ },
+ {
+  "id": "beto-wants-to-reach-the-flag-tap-the-dmqbmn",
+  "texto": "Beto wants to reach the flag. Tap the arrow to make him move forward. He needs two steps!"
+ },
+ {
+  "id": "tap-forward-twice-and-then-the-green-1tgoul3",
+  "texto": "Tap forward twice and then the green button."
+ },
+ {
+  "id": "now-the-flag-is-farther-away-count-t-10hwhk5",
+  "texto": "Now the flag is farther away! Count the squares."
+ },
+ {
+  "id": "count-how-many-squares-there-are-to-1le0x2l",
+  "texto": "Count how many squares there are to the flag."
+ },
+ {
+  "id": "beto-passes-by-the-star-and-picks-it-1ol6bha",
+  "texto": "Beto passes by the star and picks it up. Then he goes to the flag!"
+ },
+ {
+  "id": "if-you-move-forward-to-the-flag-you-1898re5",
+  "texto": "If you move forward to the flag, you pass by the star."
+ },
+ {
+  "id": "now-beto-knows-how-to-turn-the-curve-sp9htj",
+  "texto": "Now Beto knows how to turn. The curved arrow button makes him turn to his right."
+ },
+ {
+  "id": "move-forward-twice-turn-right-and-mo-1q2f27q",
+  "texto": "Move forward twice, turn right and move forward two more times."
+ },
+ {
+  "id": "now-we-have-to-go-up-turn-left-29d7bd",
+  "texto": "Now we have to go up. Turn left."
+ },
+ {
+  "id": "move-forward-twice-turn-left-and-mov-1kz18ao",
+  "texto": "Move forward twice, turn left and move forward twice."
+ },
+ {
+  "id": "pick-up-the-star-in-the-corner-and-t-2n141z",
+  "texto": "Pick up the star in the corner and then go down to the flag."
+ },
+ {
+  "id": "first-go-right-all-the-way-to-the-en-1ii0bj8",
+  "texto": "First go right all the way to the end, then turn to go down."
+ },
+ {
+  "id": "there-is-a-rock-in-the-way-beto-cann-6lh44b",
+  "texto": "There is a rock in the way. Beto cannot go over it. Go around it!"
+ },
+ {
+  "id": "go-up-move-forward-and-go-down-after-8buyw0",
+  "texto": "Go up, move forward, and go down after passing the rock."
+ },
+ {
+  "id": "what-a-long-way-use-the-repeat-butto-x0nca6",
+  "texto": "What a long way. Use the repeat button! Tap repeat three, and then forward."
+ },
+ {
+  "id": "repeat-six-times-and-move-forward-ju-1yzwv9t",
+  "texto": "Repeat six times and move forward. Just one block!"
+ },
+ {
+  "id": "use-repeat-to-move-forward-a-lot-the-18458fd",
+  "texto": "Use repeat to move forward a lot, then turn and go down."
+ },
+ {
+  "id": "repeat-six-turn-right-repeat-two-150tro0",
+  "texto": "Repeat six, turn right, repeat two."
+ },
+ {
+  "id": "a-big-board-with-two-stars-you-can-d-qbw2u5",
+  "texto": "A big board with two stars. You can do it!"
+ },
+ {
+  "id": "repeat-four-turn-right-repeat-four-1adsn7m",
+  "texto": "Repeat four, turn right, repeat four."
+ },
+ {
+  "id": "go-up-and-down-like-on-a-staircase-m-zsveiv",
+  "texto": "Go up and down like on a staircase. Move forward, turn, move forward, turn."
+ },
+ {
+  "id": "forward-right-forward-left-the-patte-04ys4m",
+  "texto": "Forward, right, forward, left... the pattern repeats!"
+ },
+ {
+  "id": "the-last-challenge-there-is-a-wall-f-i5rw4v",
+  "texto": "The last challenge. There is a wall. Find the way underneath. You are a great programmer!"
+ },
+ {
+  "id": "go-down-pass-under-the-wall-and-go-b-pea6ja",
+  "texto": "Go down, pass under the wall and go back up."
+ },
+ {
+  "id": "first-give-beto-some-instructions-ta-59a1jt",
+  "texto": "First give Beto some instructions. Tap the arrows."
+ },
+ {
+  "id": "use-the-repeat-button-to-do-it-with-qxmq53",
+  "texto": "Use the repeat button to do it with fewer blocks!"
+ },
+ {
+  "id": "that-s-a-lot-of-steps-remove-some-v5nj9k",
+  "texto": "That's a lot of steps. Remove some."
+ },
+ {
+  "id": "oops-beto-bumped-into-something-chec-rlz52q",
+  "texto": "Oops! Beto bumped into something. Check the steps and try again."
+ },
+ {
+  "id": "you-made-it-but-you-missed-collectin-721xxa",
+  "texto": "You made it, but you missed collecting a star. Try again!"
+ },
+ {
+  "id": "beto-hasn-t-reached-the-flag-yet-alm-1ta2r3v",
+  "texto": "Beto hasn't reached the flag yet. Almost! Add more steps."
+ },
+ {
+  "id": "repeat-2-times-now-choose-what-to-re-1vd903h",
+  "texto": "Repeat 2 times. Now choose what to repeat."
+ },
+ {
+  "id": "repeat-3-times-now-choose-what-to-re-j7xnne",
+  "texto": "Repeat 3 times. Now choose what to repeat."
+ },
+ {
+  "id": "repeat-4-times-now-choose-what-to-re-1nqhhnv",
+  "texto": "Repeat 4 times. Now choose what to repeat."
+ },
+ {
+  "id": "repeat-5-times-now-choose-what-to-re-2xvi88",
+  "texto": "Repeat 5 times. Now choose what to repeat."
+ },
+ {
+  "id": "repeat-6-times-now-choose-what-to-re-1vg4ks1",
+  "texto": "Repeat 6 times. Now choose what to repeat."
+ },
+ {
+  "id": "hello-i-m-beto-tap-the-glowing-path-1ijpilg",
+  "texto": "Hello! I'm Beto. Tap the glowing path to start."
+ },
+ {
+  "id": "great-to-see-you-again-let-s-continu-1k4vv9s",
+  "texto": "Great to see you again! Let's continue where you left off."
+ },
+ {
+  "id": "you-completed-everything-you-are-a-g-15gh5o8",
+  "texto": "You completed everything! You are a great programmer. You can replay the levels."
+ },
+ {
+  "id": "choose-the-glowing-path-1cc1jyj",
+  "texto": "Choose the glowing path."
+ },
+ {
+  "id": "you-did-it-14s0ytt",
+  "texto": "You did it!"
+ },
+ {
+  "id": "awesome-eqgmvb",
+  "texto": "Awesome!"
+ },
+ {
+  "id": "you-are-a-great-programmer-xd9gob",
+  "texto": "You are a great programmer!"
+ },
+ {
+  "id": "wow-well-done-1h9mp03",
+  "texto": "Wow, well done!"
+ },
+ {
+  "id": "excellent-work-ba1rzp",
+  "texto": "Excellent work!"
+ },
+ {
+  "id": "fantastic-d67ka1",
+  "texto": "Fantastic!"
+ },
+ {
+  "id": "three-stars-1b5hz9d",
+  "texto": "Three stars!"
+ }
+]
