@@ -253,16 +253,45 @@ header.top{position:absolute;top:0;left:0;right:0;z-index:5;background:linear-gr
   </form>
 </dialog>
 <dialog id="dpin">
-  <form id="fpin" autocomplete="off">
+  <form id="fpin" autocomplete="on">
     <h4>Modo administración</h4>
-    <label for="pin">Contraseña</label>
-    <input id="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="20" aria-describedby="pinErr">
-    <div id="pinErr" style="min-height:20px;margin-top:8px;font-size:13px;color:#ffb4b4"></div>
-    <div class="acc"><button class="btn sec" type="button" id="pCan">Cancelar</button><button class="btn" type="submit">Entrar</button></div>
+    <label for="aCorreo">Correo</label>
+    <input id="aCorreo" type="email" autocomplete="username" required maxlength="100">
+    <label for="aPass">Contraseña</label>
+    <input id="aPass" type="password" autocomplete="current-password" required maxlength="100" aria-describedby="pinErr">
+    <div id="pinErr" role="alert" style="min-height:20px;margin-top:8px;font-size:13px;color:#ffb4b4"></div>
+    <div class="acc"><button class="btn sec" type="button" id="pCan">Cancelar</button><button class="btn" type="submit" id="pOk" disabled>Entrar</button></div>
+    <div class="acc"><button class="btn sec" type="button" id="pGoogle" disabled>Entrar con Google</button></div>
   </form>
 </dialog>
 <div class="aviso" id="aviso" role="status"></div>
 
+<script src="stem/firebase-config.js"></script>
+<script type="module">
+/* Acceso al modo administración: Firebase Auth (proyecto stem-labs-gi). Solo entra la cuenta del superadministrador. */
+const ADMIN='franksanlo@gmail.com', CONF=window.STEM_FIREBASE||{};
+const MSG={'auth/invalid-credential':'Correo o contraseña incorrectos.','auth/wrong-password':'Correo o contraseña incorrectos.','auth/user-not-found':'Correo o contraseña incorrectos.','auth/invalid-email':'Correo no válido.','auth/too-many-requests':'Demasiados intentos. Espera unos minutos.','auth/operation-not-allowed':'Este método no está habilitado en Firebase.','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/network-request-failed':'Sin conexión.'};
+const A={ok:false,fn:[],listo:false};
+const avisar=()=>A.fn.forEach(f=>{try{f()}catch(e){console.error(e)}});
+A.onCambio=f=>{A.fn.push(f);if(A.listo)f()};
+window.ADMIN_AUTH=A;
+try{
+  const [{initializeApp},M]=await Promise.all([import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js'),import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js')]);
+  const auth=M.getAuth(initializeApp(CONF,'labs-admin'));
+  const prov=new M.GoogleAuthProvider();prov.setCustomParameters({prompt:'select_account'});
+  const msg=e=>(e&&e.code in MSG)?MSG[e.code]:'No pude iniciar sesión ('+((e&&e.code)||'error')+').';
+  A.error='';
+  A.entrar=async(c,p)=>{A.error='';try{await M.signInWithEmailAndPassword(auth,c,p)}catch(e){A.error=msg(e);avisar()}};
+  A.google=async()=>{A.error='';try{await M.signInWithPopup(auth,prov)}catch(e){A.error=msg(e);avisar()}};
+  A.salir=()=>M.signOut(auth);
+  M.onAuthStateChanged(auth,u=>{
+    const mail=u?String(u.email||'').toLowerCase():'';
+    A.ok=!!u&&u.emailVerified===true&&mail===ADMIN;
+    if(u&&!A.ok){A.error='Esta cuenta no tiene acceso al modo administración.';M.signOut(auth)}
+    A.listo=true;avisar();
+  });
+}catch(e){console.error('Admin auth:',e);A.listo=false;A.error='No pude cargar el inicio de sesión.';avisar()}
+</script>
 <script>
 var PALETA=['#7ff0e4','#ffc27a','#c3a6ff','#8cc5ff','#ff9f9f','#8be8ae','#f5d97a','#f59ad6'];
 var GRIS='#9aa9b8';
@@ -543,36 +572,44 @@ $('bBajar').onclick=function(){
 };
 $('bNuevo').onclick=function(){abrir(null)};
 $('bReset').onclick=function(){if(confirm('¿Descartar el borrador y volver a la lista publicada?')){lsDel();datos=clonar(pub);pintar();aviso('Borrador descartado')}};
-$('bSalir').onclick=function(){admin=false;try{sessionStorage.removeItem('labs-adm')}catch(e){}datos=clonar(pub);pintar()};
+$('bSalir').onclick=function(){if(window.ADMIN_AUTH&&window.ADMIN_AUTH.salir)window.ADMIN_AUTH.salir();salirAdmin()};
 $('q').addEventListener('input',function(){consulta=this.value;pintar()});
 
-/* Contraseña */
-var PIN_HASH='de9409f559a1f66ac105b8ae412c0b7b343187fee898ccf3ad4b19b7e736b043';
-function sha256(t){
-  return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){
-    return Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
-  });
-}
+/* Acceso: sesión de Firebase Auth (ver el módulo de arriba); solo la cuenta del superadministrador */
+var quiere=false;
 function entrarAdmin(){
-  admin=true;try{sessionStorage.setItem('labs-adm','1')}catch(e){}
+  admin=true;
   var raw=lsGet(),b=leerBorrador();
   if(raw&&!b)aviso('Se descartó un borrador antiguo: ya hay una versión nueva publicada');
   datos=b||clonar(pub);
   pintar();$('proyectos').scrollIntoView({block:'start'});
 }
-function pedirPin(){
-  try{if(sessionStorage.getItem('labs-adm')==='1'){entrarAdmin();return}}catch(e){}
-  $('pin').value='';$('pinErr').textContent='';$('dpin').showModal();$('pin').focus();
+function salirAdmin(){admin=false;datos=clonar(pub);pintar()}
+function estadoAcceso(){
+  var A=window.ADMIN_AUTH;if(!A)return;
+  $('pOk').disabled=$('pGoogle').disabled=!A.entrar;
+  $('pinErr').textContent=A.error||'';
+  if(A.ok&&quiere&&!admin){quiere=false;$('dpin').close();entrarAdmin()}
+  else if(!A.ok&&admin)salirAdmin();
 }
-$('pCan').onclick=function(){$('dpin').close();if(location.hash==='#admin')history.replaceState(null,'',location.pathname)};
+function conectar(){
+  if(window.ADMIN_AUTH)window.ADMIN_AUTH.onCambio(estadoAcceso);
+  else setTimeout(conectar,150);
+}
+conectar();
+function pedirPin(){
+  quiere=true;
+  if(window.ADMIN_AUTH&&window.ADMIN_AUTH.ok&&!admin){quiere=false;entrarAdmin();return}
+  $('aPass').value='';$('pinErr').textContent=(window.ADMIN_AUTH&&window.ADMIN_AUTH.error)||'';$('dpin').showModal();$('aCorreo').focus();
+}
+$('pCan').onclick=function(){quiere=false;$('dpin').close();if(location.hash==='#admin')history.replaceState(null,'',location.pathname)};
 $('fpin').addEventListener('submit',function(e){
   e.preventDefault();
-  if(!(window.crypto&&crypto.subtle)){$('pinErr').textContent='Abre la página con https para usar esta función.';return}
-  sha256('labs-isco:'+$('pin').value.trim()).then(function(h){
-    if(h===PIN_HASH){$('dpin').close();entrarAdmin()}
-    else{$('pinErr').textContent='Contraseña incorrecta.';$('pin').select()}
-  });
+  if(!window.ADMIN_AUTH||!window.ADMIN_AUTH.entrar){$('pinErr').textContent='El inicio de sesión aún no está listo.';return}
+  $('pinErr').textContent='';
+  window.ADMIN_AUTH.entrar($('aCorreo').value.trim(),$('aPass').value);
 });
+$('pGoogle').onclick=function(){$('pinErr').textContent='';window.ADMIN_AUTH.google()};
 $('bAdm').onclick=pedirPin;
 
 function cargar(cb){
