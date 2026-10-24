@@ -30,7 +30,7 @@ const esc = (t) => t.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>
 
 function pagina(destino, error, estado = 401) {
   const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><title>Acceso · Labs</title>
+<meta name="robots" content="noindex,nofollow"><title>Acceso · Labs Isco Sanchez</title>
 <style>
 *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b1220;color:#e8eef6;font:16px/1.4 system-ui,sans-serif;padding:16px}
 form{width:100%;max-width:340px;background:#121c30;border:1px solid #243049;border-radius:14px;padding:28px}
@@ -41,7 +41,7 @@ button{width:100%;margin-top:14px;padding:11px;border:0;border-radius:8px;backgr
 .err{min-height:20px;margin-top:10px;color:#ffb4b4;font-size:13px}
 </style></head><body>
 <form method="POST" action="/__login">
-<h1>Labs · Gi School</h1><p>Escribe la contraseña para entrar.</p>
+<h1>Labs Isco Sanchez</h1><p>Escribe la contraseña para entrar.</p>
 <input type="hidden" name="next" value="${esc(destino)}">
 <label for="p">Contraseña</label><input id="p" name="password" type="password" autocomplete="current-password" required autofocus maxlength="200">
 <div class="err" role="alert">${error ? esc(error) : ''}</div>
