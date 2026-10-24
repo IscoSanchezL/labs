@@ -1,0 +1,4 @@
+name = "labs-candado"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+routes = [{ pattern = "labs.iscosanchez.com/*", zone_name = "iscosanchez.com" }]
