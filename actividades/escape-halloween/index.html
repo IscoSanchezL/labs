@@ -124,6 +124,11 @@ h1{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(2.7rem,
 /* Escena de la puerta: terror (fantasma, sangre y murciélagos) */
 .scare{position:fixed;inset:0;z-index:70;background:#030108;overflow:hidden;cursor:pointer;box-shadow:0 0 0 90px #030108}
 .scare[hidden]{display:none}
+.scare.three .sc-light,.scare.three .sc-frame,.scare.three .sc-ghost{display:none}
+.sc3d{position:absolute;inset:0}
+.sc3d canvas{display:block;width:100%;height:100%}
+.sc3-grain{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:overlay;opacity:.16;pointer-events:none}
+.sc3-fade{position:absolute;inset:0;background:#000;pointer-events:none}
 .sc-light{position:absolute;inset:0}
 .sc-light::before{content:"";position:absolute;inset:0;opacity:0;background:radial-gradient(circle at 50% 58%,#ff2a2a55 0,#5a0010aa 28%,transparent 62%)}
 .sc-light::after{content:"";position:absolute;inset:0;opacity:0;background:radial-gradient(circle at 50% 58%,#c8ff6a 0,#3dff7a66 24%,transparent 62%)}
@@ -1156,10 +1161,29 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
       tone('sawtooth', 300, 90, 4.8, 1.6, 0.12);
     } catch (e) { /* sin sonido */ }
   }
+  function loadScare() {
+    if (FASTMODE || NOSCARE || window.ScareScene) return;
+    function add(src, cb) { var s = document.createElement('script'); s.src = src; s.async = false; s.onload = cb; s.onerror = function () { /* se usa la escena 2D */ }; document.head.appendChild(s); }
+    var n = 0; function ready() { if (++n === 2) add('scare3d.js'); }
+    add('vendor/gsap.min.js', ready); add('vendor/three.min.js', ready);
+  }
+  window.addEventListener('load', function () { setTimeout(loadScare, 1200); });
   function scareThen(next) {
     var sc = $('#scare');
     var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (FASTMODE || calm || NOSCARE) { setTimeout(next, 700); return; }
+    if (window.ScareScene && window.THREE && window.gsap) {
+      sc.hidden = false; sc.classList.remove('go'); sc.classList.add('three');
+      var done = false, inst = null;
+      var finish = function () {
+        if (done) return; done = true; sc.onclick = null;
+        try { if (inst) inst.stop(); if (scareAudio.ctx) scareAudio.ctx.close(); scareAudio.ctx = null; } catch (e) { /* nada */ }
+        sc.hidden = true; sc.classList.remove('three'); next();
+      };
+      inst = window.ScareScene.play(sc, { onStart: scareAudio, onDone: finish });
+      if (inst) { sc.onclick = finish; return; }
+      sc.classList.remove('three'); sc.hidden = true;
+    }
     $$('.sc-bat', sc).forEach(function (b) { b.remove(); });
     for (var k = 0; k < 52; k++) {
       var b = h('span', 'sc-bat', '<i>🦇</i>'), up = k % 3 === 0;
