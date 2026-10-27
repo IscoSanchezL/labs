@@ -234,7 +234,27 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
 
 @media (max-width:820px){.hub{grid-template-columns:minmax(0,1fr)}.roof{height:120px}.moon{width:130px}}
 @media (max-width:420px){.windows{gap:44px 10px}.win{min-height:136px;padding:36px 8px 10px}.win strong{font-size:1rem}.digits input{width:2.9rem;height:3.6rem}.pad{grid-template-columns:repeat(4,1fr);width:100%}}
+@media (max-width:540px){.panel-head h2{order:3;flex:1 1 100%}.panel-head .tag{margin-left:auto}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ---------- Niveles, estrellas y ayudas ---------- */
+.lvl-title{margin:0 0 6px;font-family:var(--f-mono);font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--slime)}
+.hintrow{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;margin-top:18px}
+.hintbox{flex:1;min-width:200px;padding:8px 12px;border-radius:12px;background:var(--ink);border-left:5px solid var(--violet);color:var(--mute);font-size:.95rem}
+.passed{text-align:center;padding:10px 0 4px}
+.passed p{margin:0 0 12px;color:var(--mute)}
+.passed .stars{font-size:3rem;line-height:1;letter-spacing:.18em;color:#4a2d78}
+.passed .stars b{font-weight:400;color:var(--pumpkin);text-shadow:0 0 16px #ff7a1a99;animation:pop .5s cubic-bezier(.2,1.6,.4,1) backwards}
+.passed .stars b:nth-child(2){animation-delay:.12s}.passed .stars b:nth-child(3){animation-delay:.24s}
+#starCount{color:var(--pumpkin)}
+.code .ln{padding:4px 12px;font-family:var(--f-mono);font-size:1.02rem;white-space:pre-wrap}
+.placed{margin:0 0 12px;padding-left:1.6em;display:grid;gap:6px;font-weight:600}
+.placed:empty{display:none}
+.placed li{padding:8px 12px;border-radius:10px;background:#1a2a0c;border:2px solid var(--slime)}
+.cards{display:grid;gap:8px}
+.cards .opt{font-family:var(--f-body);font-size:1rem;text-align:left}
+.seg button:disabled{opacity:.45;cursor:not-allowed}
+.guide h3{margin:18px 0 8px;font-family:var(--f-mono);font-size:.9rem;letter-spacing:.14em;text-transform:uppercase;color:var(--slime);font-weight:400}
 </style>
 </head>
 <body>
@@ -258,9 +278,15 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
       <div class="hud">
         <div class="chip"><small>Tiempo</small><b id="time">40:00</b><button class="btn small" id="startBtn" type="button">Empezar</button></div>
         <div class="chip"><small>Pistas</small><b id="clueCount">0/4</b></div>
-        <div class="seg" role="group" aria-label="Grado">
+        <div class="chip"><small>Estrellas</small><b id="starCount">0</b></div>
+        <div class="seg" role="group" aria-label="Grado" id="gradeSeg">
           <button type="button" data-grade="3" aria-pressed="true">3°</button>
           <button type="button" data-grade="4" aria-pressed="false">4°</button>
+        </div>
+        <div class="seg" role="group" aria-label="Minutos de juego" id="minSeg">
+          <button type="button" data-min="30" aria-pressed="false">30 min</button>
+          <button type="button" data-min="40" aria-pressed="true">40 min</button>
+          <button type="button" data-min="50" aria-pressed="false">50 min</button>
         </div>
       </div>
     </div>
@@ -309,10 +335,11 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
         <div class="card">
           <h2>Resumen de la actividad</h2>
           <div class="facts">
-            <div class="fact"><small>Duración</small><b>40 a 50 minutos</b></div>
+            <div class="fact"><small>Duración</small><b>45 a 60 minutos con el reloj en 40. Puedes ponerlo en 30 o 50.</b></div>
             <div class="fact"><small>Equipos</small><b>4 estudiantes, un dispositivo por equipo</b></div>
             <div class="fact"><small>Código final</small><b>3 · 1 · 1 · 0 (31 de octubre)</b></div>
-            <div class="fact"><small>Niveles</small><b>3° con 3 retos de patrón y 1 palabra. 4° suma mapa más grande, 4 patrones, 2 palabras y 2 errores.</b></div>
+            <div class="fact"><small>Niveles</small><b>20 por grado, 5 por ventana. 3° trabaja bucles, depuración y lógica inicial. 4° trabaja condiciones, variables y Y / O / NO.</b></div>
+            <div class="fact"><small>Estrellas</small><b>Cada nivel da hasta 3. Equivocarse o pedir pista resta, y siempre queda al menos 1.</b></div>
           </div>
         </div>
 
@@ -345,25 +372,18 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
             <tbody>
               <tr><td>0 a 5</td><td>Apertura</td><td>Cuenta la historia: el fantasma de la casa guardó la salida con un candado de cuatro números.</td></tr>
               <tr><td>5 a 8</td><td>Reglas y roles</td><td>Reparte roles, nombra los equipos y explica que las ventanas se resuelven en cualquier orden.</td></tr>
-              <tr><td>8 a 38</td><td>Cuatro ventanas</td><td>Circula entre equipos. Responde con preguntas, no con soluciones: «¿qué pasaría si…?».</td></tr>
-              <tr><td>38 a 43</td><td>La puerta</td><td>Los equipos ingresan el código. Celebra cada puerta abierta.</td></tr>
-              <tr><td>43 a 50</td><td>Cierre</td><td>Conversación de reflexión con las preguntas de abajo.</td></tr>
+              <tr><td>8 a 48</td><td>Cuatro ventanas</td><td>Circula entre equipos. Responde con preguntas, no con soluciones: «¿qué pasaría si…?». Si un equipo se atasca, sugiere el botón de pista.</td></tr>
+              <tr><td>48 a 52</td><td>La puerta</td><td>Los equipos ingresan el código. Celebra cada puerta abierta.</td></tr>
+              <tr><td>52 a 60</td><td>Cierre</td><td>Conversación de reflexión con las preguntas de abajo.</td></tr>
             </tbody>
           </table></div>
         </div>
 
         <div class="card">
           <h2>Solucionario</h2>
-          <div class="scroll"><table>
-            <thead><tr><th>Ventana</th><th>Respuesta 3°</th><th>Respuesta 4°</th><th>Número</th></tr></thead>
-            <tbody>
-              <tr><td>1. La telaraña</td><td>Una solución: ↑ ↑ → → → ↑ ↑ (7 pasos, máximo permitido 11)</td><td>Una solución: ↑ ↑ ↑ ↑ ↑ → → → → (9 pasos, máximo permitido 13)</td><td><code>3</code></td></tr>
-              <tr><td>2. La poción</td><td>👻 · 🕷️ · 🎃🎃🎃🎃</td><td>🕷️ · 🎃🎃🎃🎃 · 32 · 48</td><td><code>1</code></td></tr>
-              <tr><td>3. El código del esqueleto</td><td>2-19-22-10-1 = <b>BRUJA</b></td><td>BRUJA y 27-16-13-2-9 = <b>ZOMBI</b></td><td><code>1</code></td></tr>
-              <tr><td>4. El error del murciélago</td><td>Mover «Servir la poción» al final</td><td>Lo anterior, y cambiar 45° por 90°</td><td><code>0</code></td></tr>
-            </tbody>
-          </table></div>
-          <p style="margin-top:12px;color:var(--mute)">La clave del esqueleto usa el abecedario español de 27 letras (A=1 … N=14, Ñ=15, O=16 … Z=27). Está visible dentro del reto.</p>
+          <p style="margin-bottom:6px;color:var(--mute)">Se genera con los mismos datos del juego, así que siempre coincide con lo que ven los estudiantes.</p>
+          <div id="answerKey"></div>
+          <p style="margin-top:14px;color:var(--mute)">La clave del esqueleto usa el abecedario español de 27 letras (A=1 … N=14, Ñ=15, O=16 … Z=27). Está visible dentro del reto.</p>
         </div>
 
         <div class="two">
@@ -419,129 +439,255 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
 
   var CODE = '3110';
-  var START_SECONDS = 40 * 60;
   var ALPHA = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
+  var DIR = { U: [-1, 0, '↑'], D: [1, 0, '↓'], L: [0, -1, '←'], R: [0, 1, '→'] };
   var ST = [
-    { id: 'web', name: 'La telaraña', digit: '3', story: 'Una <b>araña</b> quiere llegar a la <b>mosca</b>, pero las calabazas bloquean el camino. Arma una secuencia de flechas y toca <b>Ejecutar</b>. Cada flecha mueve a la araña una casilla.' },
-    { id: 'pocion', name: 'La poción', digit: '1', story: 'La bruja olvidó el orden de sus ingredientes. Descubre <b>qué sigue</b> en cada patrón para completar la receta.' },
-    { id: 'esqueleto', name: 'El código del esqueleto', digit: '1', story: 'El esqueleto dejó un mensaje con números. Usa la <b>clave</b> para convertir cada número en una letra y escribe la palabra secreta.' },
-    { id: 'murcielago', name: 'El error del murciélago', digit: '0', story: 'Un <b>bug</b> se coló en las instrucciones. Toca la línea que tiene el error y elige cómo arreglarla.' }
+    { id: 'web', name: 'La telaraña', digit: '3' },
+    { id: 'pocion', name: 'La poción', digit: '1' },
+    { id: 'esqueleto', name: 'El código del esqueleto', digit: '1' },
+    { id: 'murcielago', name: 'El error del murciélago', digit: '0' }
   ];
+
+  /* ---------- Constructores de nivel ---------- */
+  function maze(title, story, n, start, fly, walls, slack) { return { t: 'maze', title: title, story: story, n: n, start: start, fly: fly, walls: walls, slack: slack }; }
+  function pat(title, story, seq, ans, opts, hint) { return { t: 'pattern', title: title, story: story, seq: seq, ans: ans, opts: opts, hint: hint }; }
+  function ch(title, story, ans, opts, hint, code) { return { t: 'choice', title: title, story: story, ans: ans, opts: opts, hint: hint, code: code || null }; }
+  function cip(title, story, words) { return { t: 'cipher', title: title, story: story, words: words, hint: 'Busca cada número en la clave de arriba y escribe su letra.' }; }
+  function dbg(title, story, lines, bug, fixes, hint) { return { t: 'debug', title: title, story: story, lines: lines, bug: bug, fixes: fixes, hint: hint }; }
+  function ord(title, story, steps, hint) { return { t: 'order', title: title, story: story, steps: steps, hint: hint }; }
+
+  var SQUARE = dbg('El cuadrado perfecto', 'El murciélago debe volar en un cuadrado y volver a su cueva. Toca la línea con el error.',
+    ['repetir 4 veces:', '    avanzar 3 pasos', '    girar a la derecha 45°'], 2,
+    ['Cambiar 45° por 90°', 'Cambiar 4 veces por 8 veces', 'Cambiar 3 pasos por 1 paso'], 'Un cuadrado tiene las esquinas de 90°.');
+
+  /* ---------- 5 niveles por ventana y por grado ---------- */
   var LV = {
     3: {
-      grid: { n: 5, start: [4, 0], fly: [0, 3], walls: [[3, 1], [3, 2], [1, 1], [1, 2]], min: 7 },
-      patterns: [
-        { seq: ['🎃', '👻', '🎃', '👻', '🎃'], ans: '👻', opts: ['👻', '🎃', '🦇'] },
-        { seq: ['🦇', '🦇', '🕷️', '🦇', '🦇', '🕷️', '🦇', '🦇'], ans: '🕷️', opts: ['🦇', '🕷️', '💀'] },
-        { seq: ['🎃', '🎃🎃', '🎃🎃🎃'], ans: '🎃🎃🎃🎃', opts: ['🎃🎃🎃🎃', '🎃🎃🎃🎃🎃', '🎃🎃'] }
+      web: [
+        maze('Primeros hilos', 'Lleva a la araña hasta la mosca. Cada flecha mueve una casilla.', 5, [4, 0], [2, 2], [], 5),
+        maze('Calabazas en el camino', 'Las calabazas bloquean el paso. Busca otro camino.', 5, [4, 0], [0, 3], [[3, 1], [3, 2], [1, 1], [1, 2]], 4),
+        ch('Ahorra hilo', 'La araña teje seis hilos seguidos. ¿Qué bloque reemplaza los seis «tejer»?', 'repetir 6 veces: tejer',
+          ['repetir 3 veces: tejer', 'repetir 6 veces: tejer', 'girar 6 veces'], 'El número de repeticiones debe ser igual al número de hilos.',
+          ['tejer', 'tejer', 'tejer', 'tejer', 'tejer', 'tejer']),
+        ch('Cuenta los saltos', 'La araña salta así por el techo. ¿Cuántas casillas recorre en total?', '10',
+          ['7', '10', '12'], 'Suma 2 cinco veces: 2 + 2 + 2 + 2 + 2.', ['repetir 5 veces:', '    saltar 2 casillas']),
+        maze('La gran telaraña', 'Un laberinto de verdad. El máximo de pasos es corto, así que piensa antes de tocar.', 6, [5, 0], [0, 5],
+          [[2, 2], [1, 4], [3, 1], [3, 3], [2, 1], [3, 0], [4, 0], [5, 4], [1, 5]], 3)
       ],
-      words: ['BRUJA'],
-      rounds: ['A']
+      pocion: [
+        pat('Ritmo del caldero', 'Completa el patrón de ingredientes.', ['🎃', '👻', '🎃', '👻', '🎃'], '👻', ['👻', '🎃', '🦇'], 'Mira qué se repite: calabaza, fantasma, calabaza…'),
+        pat('Murciélagos y arañas', 'Dos murciélagos y una araña, una y otra vez.', ['🦇', '🦇', '🕷️', '🦇', '🦇', '🕷️', '🦇', '🦇'], '🕷️', ['🦇', '🕷️', '💀'], 'Cuenta cuántos murciélagos hay antes de cada araña.'),
+        pat('Calabazas que crecen', 'Cada paso suma una calabaza más.', ['🎃', '🎃🎃', '🎃🎃🎃'], '🎃🎃🎃🎃', ['🎃🎃🎃🎃', '🎃🎃🎃🎃🎃', '🎃🎃'], 'Cada grupo tiene una calabaza más que el anterior.'),
+        pat('Escalera de gotas', 'Los números suben de dos en dos.', ['2', '4', '6', '8'], '10', ['9', '10', '12'], '¿Cuánto se suma de un número al siguiente?'),
+        ord('La receta de la bruja', 'Toca los pasos en el orden correcto para preparar la poción.',
+          ['Encender el caldero', 'Echar el agua', 'Agregar los ojos de sapo', 'Revolver tres veces', 'Servir la poción'], 'La poción se sirve al final, cuando ya está lista.')
+      ],
+      esqueleto: [
+        cip('Mensaje en los huesos', 'Convierte cada número en una letra con la clave y escribe la palabra secreta.', ['BRUJA']),
+        ch('Huesos pares', 'Cada hueso del esqueleto tiene un número. ¿Cuál de estos números es par?', '8', ['7', '8', '9'], 'Un número par se puede repartir en dos grupos iguales.'),
+        ch('Si suena la campana', 'Regla: si suena la campana, aparece el fantasma. La campana está sonando. ¿Qué pasa?', 'Aparece el fantasma',
+          ['Aparece el fantasma', 'No pasa nada', 'El fantasma se va'], 'La regla se cumple porque la campana sí suena.'),
+        ch('Orden de llegada', 'El fantasma llegó antes que la momia. La momia llegó antes que el zombi. ¿Quién llegó primero?', 'El fantasma',
+          ['El fantasma', 'La momia', 'El zombi'], 'Junta las dos pistas en una sola fila.'),
+        cip('Mensaje doble', 'Hay dos palabras escondidas. Resuelve las dos.', ['ZOMBI', 'MOMIA'])
+      ],
+      murcielago: [
+        dbg('Un aleteo perdido', 'El murciélago debe aletear 4 veces. Toca la línea con el error.', ['repetir 3 veces:', '    aletear'], 0,
+          ['Cambiar 3 por 4', 'Cambiar «aletear» por «dormir»', 'Borrar «repetir»'], 'Cuenta cuántas veces debe aletear y compara con el número del bucle.'),
+        dbg('Contador al revés', 'Objetivo: contar de 1 a 5. Toca la línea que daña el programa.',
+          ['contador = 0', 'repetir 5 veces:', '    mostrar contador', '    sumar 1 a contador'], 0,
+          ['Cambiar 0 por 1', 'Cambiar 5 por 0', 'Borrar «mostrar contador»'], 'El conteo debe empezar en 1.'),
+        dbg('Condición imposible', 'El murciélago debe volar mientras contador sea menor que 4. Toca la línea con el error.',
+          ['contador = 0', 'mientras contador > 4:', '    volar', '    sumar 1 a contador'], 1,
+          ['Cambiar > por <', 'Cambiar 4 por 0', 'Borrar «volar»'], 'Con contador = 0, ¿es 0 mayor que 4?'),
+        dbg('Giro duplicado', 'El murciélago debe girar una vez a la derecha y avanzar, pero termina mirando hacia atrás.',
+          ['girar a la derecha', 'girar a la derecha', 'avanzar'], 1,
+          ['Borrar el segundo giro', 'Borrar «avanzar»', 'Cambiar «derecha» por «izquierda»'], 'Dos giros de 90° hacia el mismo lado lo hacen dar media vuelta.'),
+        SQUARE
+      ]
     },
     4: {
-      grid: { n: 6, start: [5, 0], fly: [0, 4], walls: [[4, 1], [4, 2], [3, 3], [2, 1], [2, 2], [1, 3], [1, 2]], min: 9 },
-      patterns: [
-        { seq: ['🦇', '🦇', '🕷️', '🦇', '🦇', '🕷️', '🦇', '🦇'], ans: '🕷️', opts: ['🦇', '🕷️', '💀'] },
-        { seq: ['🎃', '🎃🎃', '🎃🎃🎃'], ans: '🎃🎃🎃🎃', opts: ['🎃🎃🎃🎃', '🎃🎃🎃🎃🎃', '🎃🎃'] },
-        { seq: ['2', '4', '8', '16'], ans: '32', opts: ['24', '32', '20'] },
-        { seq: ['3', '6', '12', '24'], ans: '48', opts: ['36', '48', '30'] }
+      web: [
+        maze('Calabazas en el camino', 'Las calabazas bloquean el paso. Busca otro camino.', 6, [5, 0], [0, 4],
+          [[4, 1], [4, 2], [3, 3], [2, 1], [2, 2], [1, 3], [1, 2]], 4),
+        ch('Sensor de telaraña', 'Regla: si hay telaraña adelante, la araña gira. Ahora no hay telaraña adelante. ¿Qué hace?', 'Sigue avanzando',
+          ['Gira', 'Sigue avanzando', 'Vuelve al inicio'], 'La condición es falsa, así que la acción del «si» no ocurre.', ['si hay telaraña adelante:', '    girar']),
+        ch('Hasta llegar a la mosca', 'La araña repite «avanzar» hasta cumplir una condición. ¿Cuándo se detiene?', 'Al llegar a la mosca',
+          ['Después de 2 pasos', 'Al llegar a la mosca', 'Nunca se detiene'], 'Mira la condición que va después de «hasta».', ['repetir hasta llegar a la mosca:', '    avanzar']),
+        maze('Telaraña gigante', 'Cuidado: el camino da varias vueltas.', 7, [6, 0], [0, 6],
+          [[4, 3], [2, 1], [0, 5], [6, 1], [3, 0], [3, 6], [0, 2], [3, 4], [2, 4], [1, 2], [5, 3], [3, 2]], 3),
+        maze('El laberinto del fantasma', 'El último laberinto. Piensa antes de tocar las flechas.', 7, [6, 0], [0, 6],
+          [[0, 2], [0, 1], [2, 6], [4, 5], [6, 2], [2, 4], [3, 2], [5, 3], [4, 1], [1, 2], [5, 0], [3, 4], [0, 5], [1, 3]], 4)
       ],
-      words: ['BRUJA', 'ZOMBI'],
-      rounds: ['A', 'B']
+      pocion: [
+        pat('Murciélagos y arañas', 'Dos murciélagos y una araña, una y otra vez.', ['🦇', '🦇', '🕷️', '🦇', '🦇', '🕷️', '🦇', '🦇'], '🕷️', ['🦇', '🕷️', '💀'], 'Cuenta cuántos murciélagos hay antes de cada araña.'),
+        pat('Dobles del caldero', 'Cada número es el doble del anterior.', ['2', '4', '8', '16'], '32', ['24', '32', '20'], '¿Por cuánto se multiplica cada número para llegar al siguiente?'),
+        ch('Caja de gotas', 'En el caldero hay una caja llamada gotas que guarda el número 7. ¿Qué valor muestra gotas + 2?', '9',
+          ['7', '9', '72'], 'Toma el valor guardado y súmale 2.', ['gotas = 7', 'mostrar gotas + 2']),
+        ch('Dos cajas', 'Hay dos cajas con números. ¿Qué valor tiene ojos + alas?', '10',
+          ['2', '10', '46'], 'Usa los números guardados, no las letras.', ['ojos = 4', 'alas = 6', 'mostrar ojos + alas']),
+        pat('Triples del caldero', 'Cada número es el triple del anterior.', ['1', '3', '9', '27'], '81', ['54', '81', '30'], 'Mira cómo pasa de 3 a 9, y de 9 a 27.')
+      ],
+      esqueleto: [
+        cip('Mensaje en los huesos', 'Convierte cada número en una letra con la clave y escribe la palabra secreta.', ['BRUJA']),
+        ch('La puerta del castillo', 'La puerta se abre solo si tienes la llave Y la linterna. Tienes las dos cosas. ¿Qué pasa?', 'Se abre',
+          ['Se abre', 'No se abre', 'Falta la llave'], 'Con Y, las dos condiciones deben ser verdaderas.', ['si llave Y linterna:', '    abrir la puerta']),
+        ch('La alarma del cementerio', 'La alarma suena si abren la puerta O la ventana. Solo abrieron la ventana. ¿Suena?', 'La alarma suena',
+          ['La alarma suena', 'No suena', 'Se cierra la puerta'], 'Con O basta con que una condición sea verdadera.', ['si puerta O ventana:', '    sonar alarma']),
+        ch('Noche sin luna', 'Hoy no hay luna, así que luna = falso. ¿Qué valor tiene NO luna?', 'Verdadero',
+          ['Verdadero', 'Falso', 'No se sabe'], 'NO cambia verdadero por falso, y falso por verdadero.', ['luna = falso', 'mostrar NO luna']),
+        cip('Mensaje doble', 'Hay dos palabras escondidas. Resuelve las dos.', ['ZOMBI', 'FANTASMA'])
+      ],
+      murcielago: [
+        dbg('Sale de noche', 'El murciélago solo debe salir a volar de noche. Toca la línea con el error.', ['si es_de_dia:', '    salir a volar'], 0,
+          ['Cambiar es_de_dia por es_de_noche', 'Cambiar «salir» por «dormir»', 'Borrar «si»'], '¿Cuándo salen a volar los murciélagos?'),
+        dbg('Puntaje inicial', 'El puntaje debe empezar en 0 y sumar 10 por cada una de las 3 calabazas. Debe terminar en 30.',
+          ['puntaje = 10', 'repetir 3 veces:', '    sumar 10 a puntaje'], 0,
+          ['Cambiar 10 por 0', 'Cambiar 3 por 2', 'Borrar «sumar»'], 'Si empieza en 10 y suma 30, ¿en cuánto termina?'),
+        dbg('Llave y linterna', 'La puerta solo debe abrirse si hay llave Y linterna. Toca la línea con el error.', ['si llave O linterna:', '    abrir la puerta'], 0,
+          ['Cambiar O por Y', 'Cambiar «abrir» por «cerrar»', 'Borrar «llave»'], 'Con O basta una sola cosa. ¿Qué palabra exige las dos?'),
+        dbg('Energía que sube', 'El murciélago debe volar hasta quedarse sin energía y volver a su cueva, pero nunca se cansa.',
+          ['energía = 3', 'mientras energía > 0:', '    volar', '    sumar 1 a energía'], 3,
+          ['Cambiar «sumar» por «restar»', 'Cambiar 3 por 30', 'Cambiar > por <'], 'Para llegar a 0, la energía tiene que bajar.'),
+        SQUARE
+      ]
     }
   };
-  var ROUNDS = {
-    A: {
-      goal: 'Receta: la poción debe quedar <b>revuelta antes de servirse</b>.',
-      lines: ['Encender el caldero', 'Echar el agua', 'Servir la poción', 'Revolver tres veces', 'Apagar el fuego'],
-      bug: 2,
-      fixes: [
-        { t: 'Mover «Servir la poción» al final', ok: true },
-        { t: 'Borrar «Echar el agua»', ok: false },
-        { t: 'Repetir «Revolver» diez veces', ok: false }
-      ]
-    },
-    B: {
-      goal: 'Programa: el murciélago debe volar en un <b>cuadrado</b> y volver a su cueva.',
-      lines: ['Repetir 4 veces:', '    avanzar 3 pasos', '    girar a la derecha 45°'],
-      bug: 2,
-      fixes: [
-        { t: 'Cambiar 45° por 90°', ok: true },
-        { t: 'Cambiar «4 veces» por «8 veces»', ok: false },
-        { t: 'Cambiar «3 pasos» por «1 paso»', ok: false }
-      ]
+
+  /* ---------- Ruta más corta (valida cada laberinto y da las pistas) ---------- */
+  function solve(lv) {
+    var w = {}; lv.walls.forEach(function (x) { w[x[0] + ',' + x[1]] = 1; });
+    var k0 = lv.start[0] + ',' + lv.start[1], q = [lv.start], prev = {}; prev[k0] = null;
+    var keys = Object.keys(DIR);
+    while (q.length) {
+      var c = q.shift(), kc = c[0] + ',' + c[1];
+      if (c[0] === lv.fly[0] && c[1] === lv.fly[1]) {
+        var path = []; while (prev[kc]) { path.unshift(prev[kc].d); kc = prev[kc].k; } return path;
+      }
+      for (var i = 0; i < keys.length; i++) {
+        var d = DIR[keys[i]], r = c[0] + d[0], cc = c[1] + d[1], k = r + ',' + cc;
+        if (r < 0 || cc < 0 || r >= lv.n || cc >= lv.n || w[k] || (k in prev)) continue;
+        prev[k] = { k: kc, d: keys[i] }; q.push([r, cc]);
+      }
     }
-  };
-  var DIR = { U: [-1, 0, '↑'], D: [1, 0, '↓'], L: [0, -1, '←'], R: [0, 1, '→'] };
+    return null;
+  }
 
-  var S = { grade: 3, solved: {}, remaining: START_SECONDS, timer: null, started: false };
+  /* ---------- Estado ---------- */
+  var S = { grade: 3, minutes: 40, solved: {}, prog: {}, stars: {}, remaining: 40 * 60, timer: null, started: false, speed: 420 };
+  function resetProgress() { S.solved = {}; S.prog = {}; S.stars = {}; ST.forEach(function (s) { S.stars[s.id] = []; S.prog[s.id] = 0; }); }
+  resetProgress();
 
-  /* ---------- Timer ---------- */
+  /* ---------- Reloj ---------- */
   function fmt(t) { var m = Math.floor(t / 60), s = t % 60; return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s; }
   function drawTime() { $('#time').textContent = fmt(Math.max(S.remaining, 0)); $('#time').parentNode.classList.toggle('out', S.remaining <= 0); }
+  function lockMin(v) { $$('#minSeg button').forEach(function (b) { b.disabled = v; }); }
   function startTimer() {
     if (S.timer) return;
-    S.started = true;
+    S.started = true; lockMin(true);
     S.timer = setInterval(function () { if (S.remaining > 0) { S.remaining--; drawTime(); } }, 1000);
     $('#startBtn').textContent = 'Pausar';
   }
   function pauseTimer() { clearInterval(S.timer); S.timer = null; $('#startBtn').textContent = 'Seguir'; }
   $('#startBtn').addEventListener('click', function () { if (S.timer) pauseTimer(); else startTimer(); });
 
-  /* ---------- Hub ---------- */
+  /* ---------- Casa ---------- */
+  function totalStars() { var t = 0; ST.forEach(function (s) { S.stars[s.id].forEach(function (v) { t += v || 0; }); }); return t; }
+  function maxStars() { var t = 0; ST.forEach(function (s) { t += LV[S.grade][s.id].length * 3; }); return t; }
   function refresh() {
     var n = 0, clues = $('#clues');
     clues.innerHTML = '';
     ST.forEach(function (s, i) {
       var done = !!S.solved[s.id]; if (done) n++;
+      var total = LV[S.grade][s.id].length, p = Math.min(S.prog[s.id] || 0, total - 1);
       var w = $('.win[data-st="' + s.id + '"]');
       w.classList.toggle('done', done);
-      $('.state', w).textContent = done ? 'Resuelta' : 'Pendiente';
-      var c = h('div', 'clue' + (done ? ' got' : ''), '<small>Pista ' + (i + 1) + '</small><b>' + (done ? s.digit : '?') + '</b>');
-      clues.appendChild(c);
+      $('.state', w).textContent = done ? 'Resuelta' : ((S.prog[s.id] || 0) > 0 ? 'Nivel ' + (p + 1) + ' de ' + total : 'Pendiente');
+      clues.appendChild(h('div', 'clue' + (done ? ' got' : ''), '<small>Pista ' + (i + 1) + '</small><b>' + (done ? s.digit : '?') + '</b>'));
     });
     $('#clueCount').textContent = n + '/4';
+    $('#starCount').textContent = totalStars();
     $('#door').classList.toggle('ready', n === 4);
   }
+  function feedback(node, text, ok) { node.textContent = text; node.className = 'feedback ' + (ok ? 'good' : 'bad'); }
+  function scrollTop() { try { window.scrollTo(0, 0); } catch (e) { /* sin desplazamiento */ } }
+
+  /* ---------- Ventana abierta ---------- */
   function openStation(id) {
     if (!S.started) startTimer();
     var idx = ST.map(function (s) { return s.id; }).indexOf(id), s = ST[idx];
     var host = $('#station');
     $('#hub').hidden = true; host.hidden = false; host.innerHTML = '';
-    var p = h('div', 'panel');
-    var head = h('div', 'panel-head');
+    var p = h('div', 'panel'), head = h('div', 'panel-head');
     var back = h('button', 'btn ghost small', '← La casa'); back.type = 'button'; back.addEventListener('click', closeStation);
     head.appendChild(back); head.appendChild(h('h2', null, s.name)); head.appendChild(h('span', 'tag', 'Pista ' + (idx + 1) + ' de 4'));
-    p.appendChild(head); p.appendChild(h('p', 'story', s.story));
-    host.appendChild(p);
-    if (S.solved[id]) { showReveal(p, s, idx, true); }
-    else if (id === 'web') buildWeb(p, s, idx);
-    else if (id === 'pocion') buildPattern(p, s, idx);
-    else if (id === 'esqueleto') buildCipher(p, s, idx);
-    else buildDebug(p, s, idx);
-    window.scrollTo(0, 0);
+    p.appendChild(head); host.appendChild(p);
+    if (S.solved[id]) showReveal(p, s, idx, true); else drawLevel(p, s, idx);
+    scrollTop();
   }
-  function closeStation() {
-    $('#station').hidden = true; $('#hub').hidden = false; refresh();
-    window.scrollTo(0, 0);
+  function closeStation() { $('#station').hidden = true; $('#hub').hidden = false; refresh(); scrollTop(); }
+  function clearLvl(p) { $$('.lvl', p).forEach(function (n) { n.remove(); }); }
+
+  function hintText(lv) {
+    if (lv.t === 'maze') { var pth = solve(lv); return 'Empieza así: ' + pth.slice(0, 3).map(function (d) { return DIR[d][2]; }).join(' ') + ' … y sigue tú.'; }
+    return lv.hint;
   }
+
+  function drawLevel(p, s, idx) {
+    clearLvl(p);
+    var list = LV[S.grade][s.id], i = S.prog[s.id] || 0;
+    if (i >= list.length) { showReveal(p, s, idx, false); return; }
+    var lv = list[i], box = h('div', 'lvl');
+    var dots = h('div', 'dots');
+    list.forEach(function (_, k) { dots.appendChild(h('i', (k < i ? 'on' : '') + (k === i ? ' cur' : ''))); });
+    box.appendChild(dots);
+    var tt = h('p', 'lvl-title'); tt.textContent = 'Nivel ' + (i + 1) + ' de ' + list.length + ' · ' + lv.title; box.appendChild(tt);
+    var sy = h('p', 'story'); sy.textContent = lv.story; box.appendChild(sy);
+    var work = h('div', 'work'); box.appendChild(work);
+    var ctx = {
+      mist: 0, hints: 0, done: false,
+      wrong: function () { ctx.mist++; },
+      win: function () {
+        if (ctx.done) return; ctx.done = true;
+        var st = Math.max(1, 3 - Math.min(2, ctx.mist + ctx.hints));
+        S.stars[s.id][i] = st; S.prog[s.id] = i + 1;
+        if (i + 1 >= list.length) S.solved[s.id] = true;
+        refresh(); passed(p, box, s, idx, st, i + 1 >= list.length);
+      }
+    };
+    var row = h('div', 'hintrow'), hb = h('button', 'btn ghost small', 'Pista (−1 estrella)'), hx = h('div', 'hintbox'); hx.hidden = true; hb.type = 'button';
+    hb.addEventListener('click', function () { if (ctx.done) return; ctx.hints++; hx.textContent = hintText(lv); hx.hidden = false; hb.disabled = true; hb.textContent = 'Pista mostrada'; });
+    row.appendChild(hb); row.appendChild(hx); box.appendChild(row);
+    p.appendChild(box);
+    BUILD[lv.t](work, lv, ctx);
+  }
+
+  function passed(p, box, s, idx, st, last) {
+    box.innerHTML = '';
+    var stars = ''; for (var k = 0; k < 3; k++) stars += k < st ? '<b>★</b>' : '★';
+    var c = h('div', 'passed', '<p class="stars" role="img" aria-label="' + st + ' de 3 estrellas">' + stars + '</p><p>' + (last ? '¡Ventana resuelta!' : '¡Nivel superado!') + '</p>');
+    var nx = h('button', 'btn green', last ? 'Ver mi número' : 'Siguiente nivel →'); nx.type = 'button';
+    nx.addEventListener('click', function () { drawLevel(p, s, idx); });
+    c.appendChild(nx); box.appendChild(c); nx.focus();
+  }
+
   function showReveal(p, s, idx, again) {
-    S.solved[s.id] = true; refresh();
-    var old = $$('.work', p); old.forEach(function (n) { n.remove(); });
-    var r = h('div', 'reveal work', '<p>' + (again ? 'Ya resolviste esta ventana. Tu número es' : '¡Ventana resuelta! Tu número es') + '</p><div class="big">' + s.digit + '</div><p>Es el número <b>' + (idx + 1) + '</b> del candado. Anótalo.</p>');
+    S.solved[s.id] = true; refresh(); clearLvl(p);
+    var sum = S.stars[s.id].reduce(function (a, b) { return a + (b || 0); }, 0);
+    var r = h('div', 'reveal lvl', '<p>' + (again ? 'Ya resolviste esta ventana. Tu número es' : '¡Ventana resuelta! Tu número es') + '</p><div class="big">' + s.digit +
+      '</div><p>Es el número <b>' + (idx + 1) + '</b> del candado. Anótalo.<br>Estrellas de esta ventana: <b>' + sum + ' de ' + (LV[S.grade][s.id].length * 3) + '</b></p>');
     var b = h('button', 'btn green', 'Volver a la casa'); b.type = 'button'; b.addEventListener('click', closeStation);
     r.appendChild(b); p.appendChild(r);
   }
-  function feedback(node, text, ok) { node.textContent = text; node.className = 'feedback ' + (ok ? 'good' : 'bad'); }
   $$('.win').forEach(function (w) { w.addEventListener('click', function () { openStation(w.getAttribute('data-st')); }); });
 
-  /* ---------- 1. La telaraña ---------- */
-  function buildWeb(p, s, idx) {
-    var g = LV[S.grade].grid, cap = g.min + 4, seq = [], busy = false;
-    var work = h('div', 'work');
+  /* ---------- Tipos de reto ---------- */
+  var BUILD = {};
+
+  BUILD.maze = function (work, g, ctx) {
+    var min = solve(g).length, cap = min + g.slack, seq = [], busy = false;
     var board = h('div', 'board'); board.style.setProperty('--n', g.n);
-    var box = h('div', 'seq'); var count = h('span', 'count');
-    var fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
+    var box = h('div', 'seq'), count = h('span', 'count'), fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
     function isWall(r, c) { return g.walls.some(function (w) { return w[0] === r && w[1] === c; }); }
     function draw(pos, trail, bump) {
       board.innerHTML = '';
@@ -565,15 +711,20 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
     var pad = h('div', 'pad'), ctrl = h('div', 'row'), btns = [];
     Object.keys(DIR).forEach(function (k) {
       var b = h('button', 'btn', DIR[k][2]); b.type = 'button'; b.setAttribute('aria-label', 'Flecha ' + DIR[k][2]);
-      b.addEventListener('click', function () { if (busy) return; if (seq.length >= cap) { feedback(fb, 'Llegaste al máximo de pasos. Borra alguno y busca un camino más corto.', false); return; } seq.push(k); fb.textContent = ''; reset(); });
+      b.addEventListener('click', function () {
+        if (busy) return;
+        if (seq.length >= cap) { feedback(fb, 'Llegaste al máximo de pasos. Borra alguno y busca un camino más corto.', false); return; }
+        seq.push(k); fb.textContent = ''; reset();
+      });
       pad.appendChild(b); btns.push(b);
     });
     var undo = h('button', 'btn ghost small', 'Borrar último'), clear = h('button', 'btn ghost small', 'Limpiar'), go = h('button', 'btn green', 'Ejecutar');
-    undo.type = clear.type = go.type = 'button';
+    undo.type = clear.type = go.type = 'button'; go.setAttribute('data-act', 'run');
     undo.addEventListener('click', function () { if (busy) return; seq.pop(); fb.textContent = ''; reset(); });
     clear.addEventListener('click', function () { if (busy) return; seq = []; fb.textContent = ''; reset(); });
     [undo, clear, go].forEach(function (b) { btns.push(b); });
     function lock(v) { btns.forEach(function (b) { b.disabled = v; }); }
+    function fail(msg) { ctx.wrong(); feedback(fb, msg, false); }
     go.addEventListener('click', function () {
       if (busy) return;
       if (!seq.length) { feedback(fb, 'Primero arma una secuencia con las flechas.', false); return; }
@@ -584,9 +735,9 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
           drawSeq(-1, -1);
           if (pos[0] === g.fly[0] && pos[1] === g.fly[1]) {
             feedback(fb, '¡La araña atrapó a la mosca en ' + seq.length + ' pasos!', true);
-            setTimeout(function () { showReveal(p, s, idx); }, 900);
+            setTimeout(ctx.win, 700);
           } else {
-            feedback(fb, 'La araña se detuvo lejos de la mosca. Cambia la secuencia y prueba otra vez.', false);
+            fail('La araña se detuvo lejos de la mosca. Cambia la secuencia y prueba otra vez.');
             setTimeout(function () { draw(g.start, {}); busy = false; lock(false); }, 900);
           }
           return;
@@ -595,121 +746,150 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
         drawSeq(i, -1);
         if (nr < 0 || nc < 0 || nr >= g.n || nc >= g.n || isWall(nr, nc)) {
           draw(pos, trail, nr + ',' + nc); drawSeq(-1, i);
-          feedback(fb, 'La araña chocó en el paso ' + (i + 1) + '. Revisa esa flecha y corrígela.', false);
+          fail('La araña chocó en el paso ' + (i + 1) + '. Revisa esa flecha y corrígela.');
           busy = false; lock(false); return;
         }
         pos = [nr, nc]; trail[nr + ',' + nc] = 1; draw(pos, trail); i++;
-        setTimeout(step, 420);
+        setTimeout(step, S.speed);
       })();
     });
     ctrl.appendChild(undo); ctrl.appendChild(clear); ctrl.appendChild(go); ctrl.appendChild(count);
-    work.appendChild(board); work.appendChild(box); work.appendChild(pad);
-    var spacer = h('div'); spacer.style.height = '14px'; work.appendChild(spacer); work.appendChild(ctrl); work.appendChild(fb);
-    p.appendChild(work); reset();
-  }
+    var gap = h('div'); gap.style.height = '14px';
+    work.appendChild(board); work.appendChild(box); work.appendChild(pad); work.appendChild(gap); work.appendChild(ctrl); work.appendChild(fb);
+    reset();
+  };
 
-  /* ---------- 2. La poción ---------- */
-  function buildPattern(p, s, idx) {
-    var list = LV[S.grade].patterns, i = 0, work = h('div', 'work');
-    var dots = h('div', 'dots'), area = h('div'), fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
+  BUILD.pattern = function (work, lv, ctx) {
     function isNum(t) { return /^\d+$/.test(t); }
-    function draw() {
-      dots.innerHTML = ''; list.forEach(function (_, k) { dots.appendChild(h('i', (k < i ? 'on' : '') + (k === i ? ' cur' : ''))); });
-      var q = list[i]; area.innerHTML = '';
-      var pat = h('div', 'pattern');
-      q.seq.forEach(function (t) { pat.appendChild(h('span', 'tok' + (isNum(t) ? ' num' : ''), t)); });
-      pat.appendChild(h('span', 'tok q' + (isNum(q.ans) ? ' num' : ''), '?'));
-      var opts = h('div', 'opts');
-      shuffle(q.opts).forEach(function (o) {
-        var b = h('button', 'opt' + (isNum(o) ? ' num' : ''), o); b.type = 'button';
-        b.addEventListener('click', function () {
-          if (o === q.ans) {
-            feedback(fb, '¡Correcto! Ese es el ingrediente que sigue.', true);
-            $$('.opt', opts).forEach(function (x) { x.disabled = true; });
-            i++;
-            setTimeout(function () { fb.textContent = ''; if (i >= list.length) showReveal(p, s, idx); else draw(); }, 800);
-          } else {
-            b.classList.add('wrong'); feedback(fb, 'Mira cómo se repite o cambia el patrón. Prueba otra vez.', false);
-            setTimeout(function () { b.classList.remove('wrong'); }, 450);
-          }
-        });
-        opts.appendChild(b);
-      });
-      area.appendChild(pat); area.appendChild(opts);
-    }
-    work.appendChild(dots); work.appendChild(area); work.appendChild(fb); p.appendChild(work); draw();
-  }
-
-  /* ---------- 3. El código del esqueleto ---------- */
-  function buildCipher(p, s, idx) {
-    var words = LV[S.grade].words, work = h('div', 'work'), got = 0;
-    var key = h('div', 'key'); key.setAttribute('aria-label', 'Clave: cada letra con su número');
-    ALPHA.split('').forEach(function (ch, k) { key.appendChild(h('span', null, ch + '<b>' + (k + 1) + '</b>')); });
     var fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
+    var pat = h('div', 'pattern');
+    lv.seq.forEach(function (t) { pat.appendChild(h('span', 'tok' + (isNum(t) ? ' num' : ''), t)); });
+    pat.appendChild(h('span', 'tok q' + (isNum(lv.ans) ? ' num' : ''), '?'));
+    var opts = h('div', 'opts');
+    shuffle(lv.opts).forEach(function (o) {
+      var b = h('button', 'opt' + (isNum(o) ? ' num' : ''), o); b.type = 'button';
+      b.addEventListener('click', function () {
+        if (o === lv.ans) {
+          feedback(fb, '¡Correcto! Ese es el ingrediente que sigue.', true);
+          $$('.opt', opts).forEach(function (x) { x.disabled = true; }); setTimeout(ctx.win, 700);
+        } else {
+          ctx.wrong(); b.classList.add('wrong'); feedback(fb, 'Mira cómo se repite o cambia el patrón. Prueba otra vez.', false);
+          setTimeout(function () { b.classList.remove('wrong'); }, 450);
+        }
+      });
+      opts.appendChild(b);
+    });
+    work.appendChild(pat); work.appendChild(opts); work.appendChild(fb);
+  };
+
+  BUILD.choice = function (work, lv, ctx) {
+    var fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
+    if (lv.code) {
+      var code = h('div', 'code');
+      lv.code.forEach(function (t) { var ln = h('div', 'ln'); ln.textContent = t; code.appendChild(ln); });
+      work.appendChild(code);
+    }
+    var fixes = h('div', 'fixes');
+    shuffle(lv.opts).forEach(function (o) {
+      var b = h('button', 'opt'); b.type = 'button'; b.textContent = o;
+      b.addEventListener('click', function () {
+        if (o === lv.ans) {
+          feedback(fb, '¡Correcto!', true); $$('.opt', fixes).forEach(function (x) { x.disabled = true; }); setTimeout(ctx.win, 700);
+        } else {
+          ctx.wrong(); b.classList.add('wrong'); feedback(fb, 'Esa no es. Lee otra vez la regla y prueba con calma.', false);
+          setTimeout(function () { b.classList.remove('wrong'); }, 450);
+        }
+      });
+      fixes.appendChild(b);
+    });
+    work.appendChild(fixes); work.appendChild(fb);
+  };
+
+  BUILD.cipher = function (work, lv, ctx) {
+    var got = 0, fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
+    var key = h('div', 'key'); key.setAttribute('aria-label', 'Clave: cada letra con su número');
+    ALPHA.split('').forEach(function (c, k) { key.appendChild(h('span', null, c + '<b>' + (k + 1) + '</b>')); });
     work.appendChild(key);
-    words.forEach(function (w, wi) {
+    lv.words.forEach(function (w, wi) {
       var box = h('div', 'word'), nums = h('div', 'nums');
-      w.split('').forEach(function (ch) { nums.appendChild(h('span', null, String(ALPHA.indexOf(ch) + 1))); });
+      w.split('').forEach(function (c) { nums.appendChild(h('span', null, String(ALPHA.indexOf(c) + 1))); });
       var inp = document.createElement('input');
       inp.type = 'text'; inp.autocomplete = 'off'; inp.maxLength = w.length; inp.id = 'w' + wi;
-      inp.setAttribute('aria-label', 'Palabra ' + (wi + 1) + ' de ' + words.length); inp.placeholder = '· '.repeat(w.length).trim();
+      inp.setAttribute('aria-label', 'Palabra ' + (wi + 1) + ' de ' + lv.words.length);
       inp.addEventListener('input', function () {
         var v = inp.value.toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
         if (v === w) {
           box.classList.add('ok'); inp.value = w; inp.disabled = true; got++;
           feedback(fb, '¡Palabra descifrada: ' + w + '!', true);
-          if (got === words.length) setTimeout(function () { showReveal(p, s, idx); }, 900);
+          if (got === lv.words.length) setTimeout(ctx.win, 800);
         } else if (v.length >= w.length) {
-          feedback(fb, 'Revisa los números con la clave, letra por letra.', false);
+          ctx.wrong(); feedback(fb, 'Revisa los números con la clave, letra por letra.', false);
         } else { fb.textContent = ''; }
       });
       box.appendChild(nums); box.appendChild(inp); work.appendChild(box);
     });
-    work.appendChild(fb); p.appendChild(work);
-  }
+    work.appendChild(fb);
+  };
 
-  /* ---------- 4. El error del murciélago ---------- */
-  function buildDebug(p, s, idx) {
-    var keys = LV[S.grade].rounds, ri = 0, work = h('div', 'work');
-    var dots = h('div', 'dots'), area = h('div'), fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
-    function draw() {
-      dots.innerHTML = ''; keys.forEach(function (_, k) { dots.appendChild(h('i', (k < ri ? 'on' : '') + (k === ri ? ' cur' : ''))); });
-      var R = ROUNDS[keys[ri]]; area.innerHTML = ''; fb.textContent = '';
-      area.appendChild(h('div', 'goal', R.goal));
-      var code = h('div', 'code'), fixes = h('div', 'fixes'); fixes.hidden = true;
-      R.lines.forEach(function (t, li) {
-        var b = h('button'); b.type = 'button';
-        var num = h('i'); num.textContent = (li + 1); var txt = document.createElement('span'); txt.textContent = t;
-        b.appendChild(num); b.appendChild(txt);
-        b.addEventListener('click', function () {
-          if (li === R.bug) {
-            $$('button', code).forEach(function (x) { x.classList.remove('sel'); }); b.classList.add('sel');
-            feedback(fb, '¡Encontraste el error! Ahora elige cómo arreglarlo.', true); fixes.hidden = false;
-          } else {
-            b.classList.add('bad'); feedback(fb, 'Esa línea está bien. Sigue buscando el error.', false);
-            setTimeout(function () { b.classList.remove('bad'); }, 450);
-          }
-        });
-        code.appendChild(b);
+  BUILD.debug = function (work, lv, ctx) {
+    var fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
+    var code = h('div', 'code'), fixes = h('div', 'fixes'); fixes.hidden = true;
+    lv.lines.forEach(function (t, li) {
+      var b = h('button'); b.type = 'button';
+      var num = h('i'); num.textContent = li + 1; var txt = document.createElement('span'); txt.textContent = t;
+      b.appendChild(num); b.appendChild(txt);
+      b.addEventListener('click', function () {
+        if (li === lv.bug) {
+          $$('button', code).forEach(function (x) { x.classList.remove('sel'); }); b.classList.add('sel');
+          feedback(fb, '¡Encontraste el error! Ahora elige cómo arreglarlo.', true); fixes.hidden = false;
+        } else {
+          ctx.wrong(); b.classList.add('bad'); feedback(fb, 'Esa línea está bien. Sigue buscando el error.', false);
+          setTimeout(function () { b.classList.remove('bad'); }, 450);
+        }
       });
-      shuffle(R.fixes).forEach(function (f) {
-        var b = h('button', 'opt'); b.type = 'button'; b.textContent = f.t;
+      code.appendChild(b);
+    });
+    shuffle(lv.fixes.map(function (t, k) { return { t: t, ok: k === 0 }; })).forEach(function (f) {
+      var b = h('button', 'opt'); b.type = 'button'; b.textContent = f.t;
+      b.addEventListener('click', function () {
+        if (f.ok) {
+          feedback(fb, '¡Error corregido! El programa ya funciona.', true);
+          $$('button', work).forEach(function (x) { x.disabled = true; }); setTimeout(ctx.win, 800);
+        } else {
+          ctx.wrong(); b.classList.add('wrong'); feedback(fb, 'Esa corrección no arregla el problema. Piensa en el objetivo.', false);
+          setTimeout(function () { b.classList.remove('wrong'); }, 450);
+        }
+      });
+      fixes.appendChild(b);
+    });
+    work.appendChild(code); work.appendChild(fixes); work.appendChild(fb);
+  };
+
+  BUILD.order = function (work, lv, ctx) {
+    var steps = lv.steps, placed = [], deck = shuffle(steps), tries = 0;
+    while (deck.join('|') === steps.join('|') && tries++ < 10) deck = shuffle(steps);
+    var list = h('ol', 'placed'), cards = h('div', 'cards'), fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
+    function draw() {
+      list.innerHTML = ''; placed.forEach(function (t) { var li = h('li'); li.textContent = t; list.appendChild(li); });
+      cards.innerHTML = '';
+      deck.forEach(function (t) {
+        if (placed.indexOf(t) > -1) return;
+        var b = h('button', 'opt'); b.type = 'button'; b.textContent = t;
         b.addEventListener('click', function () {
-          if (f.ok) {
-            feedback(fb, '¡Error corregido! El programa ya funciona.', true);
-            $$('button', area).forEach(function (x) { x.disabled = true; });
-            ri++; setTimeout(function () { if (ri >= keys.length) showReveal(p, s, idx); else draw(); }, 900);
+          if (t === steps[placed.length]) {
+            placed.push(t); draw();
+            if (placed.length === steps.length) { feedback(fb, '¡Receta completa!', true); $$('button', cards).forEach(function (x) { x.disabled = true; }); setTimeout(ctx.win, 800); }
+            else feedback(fb, '¡Bien! Ese paso va ahí.', true);
           } else {
-            b.classList.add('wrong'); feedback(fb, 'Esa corrección no arregla el problema. Piensa en el objetivo.', false);
+            ctx.wrong(); b.classList.add('wrong'); feedback(fb, 'Ese paso todavía no. Piensa qué se hace primero.', false);
             setTimeout(function () { b.classList.remove('wrong'); }, 450);
           }
         });
-        fixes.appendChild(b);
+        cards.appendChild(b);
       });
-      area.appendChild(code); area.appendChild(fixes);
     }
-    work.appendChild(dots); work.appendChild(area); work.appendChild(fb); p.appendChild(work); draw();
-  }
+    work.appendChild(list); work.appendChild(cards); work.appendChild(fb); draw();
+  };
 
   /* ---------- Candado final ---------- */
   var inputs = $$('#digits input');
@@ -734,7 +914,7 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
     $('#door').classList.add('open'); $('#lockico').textContent = '🔓';
     lockMsg('¡Clic! La puerta se abre.', 'good');
     var left = S.started && S.remaining > 0 ? ' Les sobraron ' + fmt(S.remaining) + '.' : '';
-    $('#finalText').textContent = 'La puerta se abrió y el fantasma se quedó sin su juego.' + left;
+    $('#finalText').textContent = 'La puerta se abrió y el fantasma se quedó sin su juego.' + left + ' Estrellas: ' + totalStars() + ' de ' + maxStars() + '.';
     var fin = $('#final'), icons = ['🎃', '👻', '🦇', '🕷️', '🍬', '💀'];
     $$('.fall', fin).forEach(function (n) { n.remove(); });
     for (var k = 0; k < 30; k++) {
@@ -745,20 +925,27 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
     setTimeout(function () { fin.hidden = false; $('#againBtn').focus(); }, 700);
   }
   function resetAll() {
-    S.solved = {}; S.remaining = START_SECONDS; clearInterval(S.timer); S.timer = null; S.started = false;
-    $('#startBtn').textContent = 'Empezar'; drawTime();
+    resetProgress(); S.remaining = S.minutes * 60; clearInterval(S.timer); S.timer = null; S.started = false;
+    $('#startBtn').textContent = 'Empezar'; lockMin(false); drawTime();
     inputs.forEach(function (x) { x.value = ''; });
     $('#door').classList.remove('open', 'ready'); $('#lockico').textContent = '🔒'; lockMsg('');
     $('#final').hidden = true; closeStation();
   }
   $('#againBtn').addEventListener('click', resetAll);
 
-  /* ---------- Grado y pestañas ---------- */
-  $$('.seg button').forEach(function (b) {
+  /* ---------- Grado, minutos y pestañas ---------- */
+  $$('#gradeSeg button').forEach(function (b) {
     b.addEventListener('click', function () {
       var g = Number(b.getAttribute('data-grade')); if (g === S.grade) return;
-      S.grade = g; $$('.seg button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      S.grade = g; $$('#gradeSeg button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
       resetAll(); lockMsg('Nivel de ' + g + '° listo. El progreso se reinició.', 'good');
+    });
+  });
+  $$('#minSeg button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (S.started) return;
+      S.minutes = Number(b.getAttribute('data-min')); S.remaining = S.minutes * 60;
+      $$('#minSeg button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); drawTime();
     });
   });
   function tab(which) {
@@ -768,9 +955,41 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
   }
   $('#tab-play').addEventListener('click', function () { tab('play'); });
   $('#tab-guide').addEventListener('click', function () { tab('guide'); });
-
-  function docente() { $('#tabs').hidden = !(/[?&]docente\b/.test(location.search) || location.hash === '#docente'); if ($('#tabs').hidden) tab('play'); }
+  function docente() {
+    $('#tabs').hidden = !(/[?&]docente\b/.test(location.search) || location.hash === '#docente');
+    if ($('#tabs').hidden) tab('play');
+  }
   window.addEventListener('hashchange', docente); docente();
+
+  /* ---------- Solucionario (se genera desde los mismos datos del juego) ---------- */
+  function answerOf(lv) {
+    if (lv.t === 'maze') { var p = solve(lv); return 'Una solución: ' + p.map(function (d) { return DIR[d][2]; }).join(' ') + ' (' + p.length + ' pasos; máximo ' + (p.length + lv.slack) + ')'; }
+    if (lv.t === 'cipher') return lv.words.map(function (w) { return w + ' = ' + w.split('').map(function (c) { return ALPHA.indexOf(c) + 1; }).join('-'); }).join(' · ');
+    if (lv.t === 'debug') return 'Línea ' + (lv.bug + 1) + ': ' + lv.fixes[0];
+    if (lv.t === 'order') return lv.steps.join(' → ');
+    return lv.ans;
+  }
+  function buildKey() {
+    var host = $('#answerKey'); if (!host) return;
+    [3, 4].forEach(function (g) {
+      host.appendChild(h('h3', null, 'Grado ' + g + '°'));
+      var wrap = h('div', 'scroll'), tb = h('table'), th = h('thead'), tr = h('tr');
+      ['Ventana', 'Nivel', 'Respuesta'].forEach(function (t) { var c = h('th'); c.textContent = t; tr.appendChild(c); });
+      th.appendChild(tr); tb.appendChild(th);
+      var body = h('tbody');
+      ST.forEach(function (s) {
+        LV[g][s.id].forEach(function (lv, i) {
+          var r = h('tr');
+          [i === 0 ? s.name : '', (i + 1) + '. ' + lv.title, answerOf(lv)].forEach(function (t, k) { var c = h('td'); if (k === 2) { var code = h('code'); code.textContent = t; c.appendChild(code); } else c.textContent = t; r.appendChild(c); });
+          body.appendChild(r);
+        });
+      });
+      tb.appendChild(body); wrap.appendChild(tb); host.appendChild(wrap);
+    });
+  }
+  buildKey();
+
+  if (/[?&]test\b/.test(location.search)) window.__ER = { LV: LV, ST: ST, S: S, solve: solve, DIR: DIR };
 
   drawTime(); refresh();
 })();
