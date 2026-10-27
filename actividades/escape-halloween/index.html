@@ -120,6 +120,11 @@ h1{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(2.7rem,
 .door.ready{box-shadow:0 0 40px 10px #a8e63388;animation:pulse 1.6s ease-in-out infinite}
 .door.open{background:#0b0516;box-shadow:inset 0 0 50px #ffcf75,0 0 50px 14px #ffcf7566}
 @keyframes pulse{50%{box-shadow:0 0 56px 18px #a8e633aa}}
+body.adv .lock-card,body.adv .door-row{display:none}
+body.adv .hub{grid-template-columns:minmax(0,1fr);max-width:640px;margin:0 auto}
+body.adv .house{filter:hue-rotate(95deg) saturate(1.15)}
+.advbtn{margin-top:10px}
+.advbtn[hidden]{display:none}
 .lock-card{background:var(--ink-2);border:2px solid var(--line);border-radius:var(--r);padding:20px}
 .lock-card h2{margin:0 0 4px;font-family:var(--f-display);font-weight:400;font-size:1.9rem;color:var(--pumpkin);letter-spacing:.03em}
 .lock-card p{margin:0 0 14px;color:var(--mute);font-size:.95rem}
@@ -366,6 +371,8 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
         </div>
 
         <div class="card">
+          <h2>Modo avanzado (el sótano)</h2>
+          <p>Cuando un grupo abre la puerta aparece el botón «Modo avanzado». Son 8 retos más difíciles por ventana (laberintos de 7×7 a 9×9, bucles anidados, lógica Y/O/NO y depuración con variables), sin candado: gana el rango final según las estrellas. Para abrirlo directo usa <code>?avanzado</code> al final de la dirección. El reloj arranca solo al abrir la actividad y al reiniciar.</p>
           <h2>Guion de la sesión</h2>
           <div class="scroll"><table>
             <thead><tr><th>Minutos</th><th>Momento</th><th>Qué hace el docente</th></tr></thead>
@@ -427,7 +434,8 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
   <div class="final-card" role="dialog" aria-modal="true" aria-labelledby="finalTitle">
     <h2 id="finalTitle">¡Escaparon!</h2>
     <p id="finalText">La puerta se abrió y el fantasma se quedó sin su juego.</p>
-    <button type="button" class="btn" id="againBtn">Jugar otra vez</button>
+    <button type="button" class="btn green" id="advBtn" hidden>💀 Modo avanzado: el sótano</button>
+    <div><button type="button" class="btn ghost advbtn" id="againBtn">Jugar otra vez</button></div>
   </div>
 </div>
 <script>
@@ -554,6 +562,137 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
     }
   };
 
+  /* ---------- MODO AVANZADO: el sótano (8 niveles por ventana y por grado) ---------- */
+  var MZ = [
+    [[1,1],[0,1],[3,3],[5,4],[6,6],[6,2],[2,2],[5,1],[4,5],[6,5],[6,4],[1,5],[1,4],[5,3],[1,0],[1,6]],
+    [[2,2],[4,6],[4,3],[3,6],[2,5],[1,4],[6,6],[3,0],[5,0],[6,4],[1,5],[1,1],[0,2],[4,1],[2,4],[6,2],[3,2],[4,4]],
+    [[0,6],[6,3],[2,1],[3,1],[3,5],[4,4],[1,0],[6,0],[0,0],[7,3],[1,2],[1,6],[6,2],[0,1],[6,4],[3,2],[1,4],[5,0],[7,7],[2,4],[5,5],[4,2]],
+    [[1,1],[2,4],[7,4],[1,5],[5,4],[6,1],[6,4],[4,6],[4,0],[2,7],[0,3],[4,3],[5,3],[6,6],[0,4],[6,5],[1,7],[3,1],[3,0],[6,3],[6,0],[2,1],[2,3],[3,5]],
+    [[4,4],[6,6],[5,5],[7,3],[2,4],[0,4],[5,6],[4,5],[1,2],[0,5],[3,0],[6,7],[3,6],[5,1],[2,7],[2,5],[5,7],[7,2],[6,1],[1,1],[2,3],[1,7],[7,7],[3,7]],
+    [[4,1],[7,7],[0,2],[1,0],[2,1],[2,2],[6,4],[6,1],[4,2],[6,2],[2,4],[4,3],[5,4],[2,0],[1,4],[6,0],[1,7],[0,0],[1,3],[6,6],[0,3],[2,5],[4,4],[5,6],[4,6],[5,5]],
+    [[7,4],[6,6],[6,1],[2,6],[3,8],[7,3],[6,2],[3,7],[1,7],[7,6],[2,4],[0,3],[1,8],[8,8],[4,6],[5,4],[5,2],[3,1],[5,3],[3,4],[0,5],[4,1],[2,3],[2,8],[1,4],[7,0],[7,5],[3,6],[3,0],[6,7]],
+    [[6,5],[5,1],[6,7],[2,0],[4,4],[5,8],[3,7],[6,4],[1,8],[2,3],[4,5],[6,0],[7,2],[3,6],[2,6],[0,0],[0,5],[4,2],[7,8],[6,3],[3,4],[6,2],[4,0],[3,8],[2,1],[7,4],[1,7],[5,0],[0,3],[2,8],[7,3],[8,6]]
+  ];
+  function amz(title, story, n, k, slack) { return maze(title, story, n, [n - 1, 0], [0, n - 1], MZ[k], slack); }
+
+  var ADV = {
+    3: {
+      web: [
+        amz('Pasillo de cenizas', 'Siete por siete casillas y muchas paredes. Planea la ruta antes de tocar.', 7, 0, 2),
+        ch('Bucle dentro de bucle', 'Lee el programa de la araña. ¿Cuántas veces salta en total?', '8', ['6', '8', '12'], 'El bucle de afuera repite 4 veces al de adentro, que salta 2 veces.',
+          ['repetir 4 veces:', '    repetir 2 veces:', '        saltar', '    girar']),
+        amz('Sótano de telarañas', 'Otro laberinto de 7 × 7. Casi no sobran pasos.', 7, 1, 2),
+        ch('Camino largo', 'La araña repite este programa. ¿Cuántas casillas avanza en total?', '12', ['7', '12', '16'], 'Multiplica: 4 veces × 3 casillas.',
+          ['repetir 4 veces:', '    avanzar 3 casillas', '    girar a la derecha']),
+        amz('La gran caza', 'Un tablero de 8 × 8. Cada paso cuenta.', 8, 2, 2),
+        ch('Menos bloques', 'La araña hace: avanzar, girar, avanzar, girar, avanzar, girar, avanzar, girar. ¿Qué programa hace lo mismo?', 'repetir 4 veces: avanzar, girar',
+          ['repetir 2 veces: avanzar, girar', 'repetir 4 veces: avanzar, girar', 'repetir 8 veces: avanzar'], 'Cuenta cuántas parejas «avanzar, girar» hay.'),
+        ch('La figura de la bruja', 'Este programa dibuja una figura. ¿Cuál?', 'Un triángulo', ['Un cuadrado', 'Un triángulo', 'Una línea recta'], 'Tres lados y tres giros.',
+          ['repetir 3 veces:', '    avanzar 5 pasos', '    girar 120°']),
+        amz('El corazón del sótano', 'El laberinto más grande de la ventana. Casi no hay margen.', 8, 3, 1)
+      ],
+      pocion: [
+        pat('Dos y una', 'Dos calabazas y un fantasma, una y otra vez.', ['🎃', '🎃', '👻', '🎃', '🎃', '👻', '🎃', '🎃'], '👻', ['👻', '🎃', '🦇'], 'Mira cuántas calabazas hay antes de cada fantasma.'),
+        pat('De tres en tres', 'Las gotas suben de tres en tres.', ['3', '6', '9', '12'], '15', ['14', '15', '18'], 'Suma 3 cada vez.'),
+        pat('Se duplica', 'Cada número es el doble del anterior.', ['1', '2', '4', '8'], '16', ['10', '12', '16'], 'Multiplica por 2.'),
+        pat('Alas y patas', 'Un murciélago y dos arañas, una y otra vez.', ['🦇', '🕷️', '🕷️', '🦇', '🕷️', '🕷️', '🦇', '🕷️'], '🕷️', ['🦇', '🕷️', '💀'], 'Cuenta cuántas arañas hay después de cada murciélago.'),
+        pat('Cuadrados mágicos', 'Estos números son 1×1, 2×2, 3×3…', ['1', '4', '9', '16'], '25', ['20', '25', '36'], '¿Cuánto es 5 × 5?'),
+        pat('La suma de los dos', 'Cada número es la suma de los dos anteriores.', ['2', '3', '5', '8'], '13', ['11', '12', '13'], '5 + 8 = ?'),
+        pat('Cuenta regresiva', 'El conjuro baja de tres en tres.', ['20', '17', '14', '11'], '8', ['7', '8', '9'], 'Resta 3 cada vez.'),
+        ord('La poción de medianoche', 'Ordena los siete pasos de la receta más difícil.',
+          ['Encender el caldero', 'Echar el agua', 'Agregar los ojos de sapo', 'Revolver tres veces', 'Esperar a que hierva', 'Apagar el fuego', 'Servir la poción'], 'Primero hay que hervir, después se apaga y al final se sirve.')
+      ],
+      esqueleto: [
+        cip('Mensaje de ultratumba', 'Convierte los números en letras.', ['FANTASMA']),
+        ch('Baila y brilla', 'Regla: si el esqueleto baila Y la luna está llena, la puerta se abre. El esqueleto baila, pero la luna no está llena. ¿Qué pasa?', 'La puerta no se abre',
+          ['La puerta se abre', 'La puerta no se abre', 'Aparece la luna'], 'Con «Y» tienen que cumplirse las dos condiciones.'),
+        cip('Palabra de huesos', 'Otro mensaje escondido.', ['ESQUELETO']),
+        ch('Impar y grande', '¿Cuál de estos números es impar y además mayor que 10?', '15', ['12', '15', '9'], 'Tiene que cumplir las dos cosas.'),
+        ch('Tres monstruos', 'El zombi no es el más alto. La momia es más alta que el zombi. El fantasma es más alto que la momia. ¿Quién es el más alto?', 'El fantasma',
+          ['El zombi', 'La momia', 'El fantasma'], 'Ordena de menor a mayor: zombi, momia, fantasma.'),
+        cip('Mensaje doble', 'Dos palabras escondidas.', ['CALABAZA', 'HUESOS']),
+        ch('Cuenta huesos', 'Hay 4 esqueletos y cada uno tiene 5 huesos. ¿Cuántos huesos hay en total?', '20', ['9', '20', '45'], 'Multiplica 4 × 5.'),
+        cip('El gran secreto', 'Las dos palabras más largas.', ['MEDIANOCHE', 'ESCAPE'])
+      ],
+      murcielago: [
+        dbg('Aterrizaje temprano', 'El murciélago debe aletear 5 veces y aterrizar solo una vez al final.',
+          ['repetir 5 veces:', '    aletear', '    aterrizar'], 2, ['Sacar «aterrizar» del bucle', 'Cambiar 5 por 1', 'Borrar «aletear»'], 'Aterrizar debe pasar una sola vez, fuera del bucle.'),
+        dbg('Puntos en la cueva', 'Debe terminar con 16 puntos, pero se queda en 4.',
+          ['puntos = 10', 'repetir 3 veces:', '    puntos = puntos - 2', 'mostrar puntos  (debe mostrar 16)'], 2, ['Cambiar − por +', 'Cambiar 3 por 30', 'Borrar «mostrar puntos»'], 'Los puntos tienen que subir, no bajar.'),
+        dbg('De noche y de día', 'De noche debe volar a la torre y de día debe dormir en la cueva.',
+          ['si es de noche:', '    volar a la torre', 'si no:', '    volar a la torre'], 3, ['Cambiar por «dormir en la cueva»', 'Cambiar «de noche» por «de día»', 'Borrar la primera línea'], 'En la parte «si no» pasa lo contrario.'),
+        dbg('El vuelo sin fin', 'El murciélago nunca se detiene.',
+          ['vidas = 3', 'mientras vidas > 0:', '    volar', '    vidas = vidas + 1'], 3, ['Cambiar + por −', 'Cambiar 3 por 30', 'Borrar «volar»'], 'Las vidas deben bajar hasta llegar a 0.'),
+        dbg('Contando calabazas', 'Hay 6 calabazas, pero el programa muestra 12.',
+          ['contar = 0', 'repetir 6 veces:', '    contar = contar + 2', 'mostrar contar  (debe mostrar 6)'], 2, ['Cambiar 2 por 1', 'Cambiar 6 por 3', 'Cambiar 0 por 1'], 'Cada calabaza suma solamente 1.'),
+        dbg('Energía o alas', 'Debe volar si tiene energía O alas de repuesto, pero ahora casi nunca vuela.',
+          ['si energía > 5 Y alas de repuesto:', '    volar', 'si no:', '    descansar'], 0, ['Cambiar Y por O', 'Cambiar 5 por 50', 'Borrar «descansar»'], '«O» solo necesita que se cumpla una de las dos.'),
+        dbg('El triángulo roto', 'El murciélago debe volar en triángulo.',
+          ['repetir 3 veces:', '    avanzar 4 pasos', '    girar a la derecha 90°'], 2, ['Cambiar 90° por 120°', 'Cambiar 3 por 4', 'Cambiar 4 pasos por 1 paso'], 'Los giros de un triángulo suman 360° entre 3 esquinas.'),
+        dbg('El doble del doble', 'Empieza en 1 y debe duplicarse 4 veces para llegar a 16.',
+          ['n = 1', 'repetir 3 veces:', '    n = n * 2', 'mostrar n  (debe mostrar 16)'], 1, ['Cambiar 3 por 4', 'Cambiar * por +', 'Cambiar 1 por 2'], 'Cuenta: 1, 2, 4, 8, 16. ¿Cuántos saltos hay?')
+      ]
+    },
+    4: {
+      web: [
+        amz('Telaraña profunda', 'Un tablero de 8 × 8 con muchas paredes. Piensa la ruta completa.', 8, 4, 1),
+        ch('Sensor de pared', 'Lee el programa. La araña está frente a una pared. ¿Qué hace primero?', 'Girar a la derecha', ['Avanzar', 'Girar a la derecha', 'Tejer'], 'Mira la condición «si hay pared adelante».',
+          ['repetir hasta llegar a la mosca:', '    si hay pared adelante:', '        girar a la derecha', '    si no:', '        avanzar']),
+        amz('Los pasillos torcidos', 'Otro 8 × 8. Solo una ruta es la más corta.', 8, 5, 1),
+        ch('Hilos que se multiplican', '¿Cuántos hilos tiene la araña al final del programa?', '32', ['12', '24', '32'], 'Empieza en 4 y se duplica tres veces: 4, 8, 16, …',
+          ['hilos = 4', 'repetir 3 veces:', '    hilos = hilos * 2']),
+        amz('El nido gigante', 'Un tablero de 9 × 9. Mucha atención.', 9, 6, 1),
+        ch('Tejer en cuadrícula', '¿Cuántas veces teje la araña en total?', '12', ['7', '12', '16'], 'Son 3 filas con 4 hilos cada una.',
+          ['repetir 3 veces:', '    repetir 4 veces:', '        tejer']),
+        ch('Mosca y pared', 'Regla: si hay mosca a la izquierda Y NO hay pared, ir a la izquierda. Hay mosca a la izquierda, pero también hay pared. ¿Qué hace la araña?', 'No va a la izquierda',
+          ['Va a la izquierda', 'No va a la izquierda', 'Teje dos veces'], 'Con «Y» deben cumplirse las dos partes.',
+          ['si mosca a la izquierda Y NO pared:', '    ir a la izquierda']),
+        amz('La trampa final', 'El laberinto más difícil de la ventana, sin ningún paso de sobra.', 9, 7, 1)
+      ],
+      pocion: [
+        pat('Se triplica', 'Cada número es el triple del anterior.', ['2', '6', '18', '54'], '162', ['108', '162', '72'], 'Multiplica por 3.'),
+        pat('Números triangulares', 'Se suma 2, luego 3, luego 4…', ['1', '3', '6', '10'], '15', ['14', '15', '16'], 'Ahora hay que sumar 5.'),
+        pat('Fantasmas que crecen', 'Cada paso agrega un fantasma.', ['🎃', '🎃👻', '🎃👻👻'], '🎃👻👻👻', ['🎃👻👻👻', '🎃👻👻', '🎃🎃👻👻'], 'Hay una calabaza y un fantasma más cada vez.'),
+        pat('La mitad', 'Cada número es la mitad del anterior.', ['64', '32', '16', '8'], '4', ['2', '4', '6'], 'Divide entre 2.'),
+        pat('El conjuro de Fibonacci', 'Cada número es la suma de los dos anteriores.', ['1', '1', '2', '3', '5'], '8', ['7', '8', '10'], '3 + 5 = ?'),
+        pat('Saltos que crecen', 'Los saltos entre números son cada vez más grandes.', ['2', '5', '10', '17'], '26', ['24', '26', '27'], 'Los saltos son 3, 5, 7… el siguiente es 9.'),
+        pat('Letras en fila', 'El hechizo salta una letra cada vez.', ['A', 'C', 'E', 'G'], 'I', ['H', 'I', 'J'], 'Después de G saltas la H.'),
+        ord('La poción prohibida', 'Ordena los ocho pasos. Hay que pensar en las dependencias.',
+          ['Llenar el caldero', 'Encender el fuego', 'Esperar a que hierva', 'Agregar la baba de sapo', 'Agregar las alas de murciélago', 'Revolver siete veces', 'Apagar el fuego', 'Servir la poción'], 'Primero agua, luego fuego; los ingredientes van al hervir.')
+      ],
+      esqueleto: [
+        cip('Mensaje de la calavera', 'Convierte los números en letras.', ['CALAVERA']),
+        ch('Llave sin alarma', 'La puerta se abre si hay llave Y NO suena la alarma. Hay llave, pero la alarma está sonando. ¿Qué pasa?', 'Se queda cerrada', ['Se abre', 'Se queda cerrada', 'Se rompe'], 'NO suena la alarma es falso, entonces no se cumplen las dos.'),
+        ch('Variables del esqueleto', '¿Cuánto vale z al final?', '7', ['5', '7', '10'], 'Primero x, luego y, luego z.', ['x = 5', 'y = x * 2', 'z = y - 3']),
+        cip('Escalofrío', 'Otro mensaje escondido.', ['ESCALOFRIO']),
+        ch('Luna o vela', 'La puerta se abre si hay luna O hay vela. Es de día, no hay luna, pero sí hay vela. ¿Qué pasa?', 'Se abre', ['Se abre', 'Se queda cerrada', 'Sale el sol'], 'Con «O» basta que se cumpla una.'),
+        ch('El contador de huesos', '¿Cuánto vale n al final?', '7', ['6', '7', '8'], 'Sigue cada vuelta: 2 → 4 → 8 → ?',
+          ['n = 2', 'repetir 3 veces:', '    si n > 5:', '        n = n - 1', '    si no:', '        n = n * 2']),
+        cip('Dos secretos', 'Hay dos palabras escondidas.', ['LABERINTO', 'TELARAÑA']),
+        ch('Lógica al revés', 'A es verdadero y B es falso. ¿Cuánto vale NO (A Y B)?', 'Verdadero', ['Verdadero', 'Falso', 'No se sabe'], 'Primero resuelve A Y B y después cámbialo con NO.')
+      ],
+      murcielago: [
+        dbg('Puntos de caza', 'Debe mostrar 15 puntos, pero muestra 12.',
+          ['puntos = 0', 'repetir 4 veces:', '    puntos = puntos + 3', 'mostrar puntos  (debe mostrar 15)'], 1, ['Cambiar 4 por 5', 'Cambiar 3 por 4', 'Cambiar 0 por 3'], '15 dividido entre 3 es…'),
+        dbg('Noche y luz', 'Debe volar solo si es de noche Y tiene luz, pero vuela de día.',
+          ['si es de noche O tiene luz:', '    volar', 'si no:', '    dormir'], 0, ['Cambiar O por Y', 'Cambiar volar por dormir', 'Borrar «si no»'], 'Con «Y» tienen que cumplirse las dos.'),
+        dbg('Sube nivel', 'Empieza en nivel 1 y debe subir hasta 5, pero nunca termina.',
+          ['nivel = 1', 'mientras nivel < 5:', '    volar', '    nivel = nivel - 1'], 3, ['Cambiar − por +', 'Cambiar 5 por 0', 'Borrar «volar»'], 'El nivel tiene que acercarse a 5.'),
+        dbg('Giro fuera del bucle', 'Debe girar después de cada 2 aleteos, 3 veces. Hoy gira una sola vez.',
+          ['repetir 3 veces:', '    repetir 2 veces:', '        aletear', 'girar 90°'], 3, ['Meter «girar 90°» dentro del primer bucle', 'Cambiar 3 por 6', 'Borrar «aletear»'], 'Mira la sangría: «girar» está pegado al borde.'),
+        dbg('El cuadrado perfecto', 'El murciélago debe volar en un cuadrado y volver a su cueva.',
+          ['repetir 4 veces:', '    avanzar 3 pasos', '    girar a la derecha 45°'], 2, ['Cambiar 45° por 90°', 'Cambiar 4 veces por 8 veces', 'Cambiar 3 pasos por 1 paso'], 'Un cuadrado tiene esquinas de 90°.'),
+        dbg('Saludo de más', 'Son 7 murciélagos y el programa muestra 8 saludos.',
+          ['saludos = 1', 'repetir 7 veces:', '    saludos = saludos + 1', 'mostrar saludos  (debe mostrar 7)'], 0, ['Cambiar 1 por 0', 'Cambiar 7 por 6', 'Cambiar + por −'], 'Antes de saludar, el contador debe valer 0.'),
+        dbg('Cueva y caza', 'De noche debe cazar y de día debe volver a la cueva, pero hace lo contrario.',
+          ['si es de noche:', '    volar a la cueva', 'si no:', '    volar a cazar'], 1, ['Intercambiar «a la cueva» y «a cazar»', 'Cambiar «de noche» por «de luna»', 'Borrar «si no»'], 'Los dos destinos están cambiados.'),
+        dbg('La suma torcida', 'El programa debe mostrar 12, pero muestra 4.',
+          ['a = 4', 'b = a * 2', 'a = b - a', 'mostrar a  (debe mostrar 12)'], 2, ['Cambiar − por +', 'Cambiar * por +', 'Cambiar 4 por 6'], 'b vale 8. ¿Cómo llegas a 12 con 8 y 4?')
+      ]
+    }
+  };
+  var ADVSYM = { web: '🕸️', pocion: '🧪', esqueleto: '💀', murcielago: '🦇' };
+
   /* ---------- Ruta más corta (valida cada laberinto y da las pistas) ---------- */
   function solve(lv) {
     var w = {}; lv.walls.forEach(function (x) { w[x[0] + ',' + x[1]] = 1; });
@@ -574,7 +713,8 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
   }
 
   /* ---------- Estado ---------- */
-  var S = { grade: 3, minutes: 40, solved: {}, prog: {}, stars: {}, remaining: 40 * 60, timer: null, started: false, speed: 420 };
+  function LVS(id) { return (S.adv ? ADV : LV)[S.grade][id]; }
+  var S = { adv: false, paused: false, grade: 3, minutes: 40, solved: {}, prog: {}, stars: {}, remaining: 40 * 60, timer: null, started: false, speed: 420 };
   function resetProgress() { S.solved = {}; S.prog = {}; S.stars = {}; ST.forEach(function (s) { S.stars[s.id] = []; S.prog[s.id] = 0; }); }
   resetProgress();
 
@@ -584,48 +724,52 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
   function lockMin(v) { $$('#minSeg button').forEach(function (b) { b.disabled = v; }); }
   function startTimer() {
     if (S.timer) return;
-    S.started = true; lockMin(true);
+    S.started = true;
     S.timer = setInterval(function () { if (S.remaining > 0) { S.remaining--; drawTime(); } }, 1000);
     $('#startBtn').textContent = 'Pausar';
   }
-  function pauseTimer() { clearInterval(S.timer); S.timer = null; $('#startBtn').textContent = 'Seguir'; }
-  $('#startBtn').addEventListener('click', function () { if (S.timer) pauseTimer(); else startTimer(); });
+  function pauseTimer() { clearInterval(S.timer); S.timer = null; S.paused = true; $('#startBtn').textContent = 'Seguir'; }
+  $('#startBtn').addEventListener('click', function () { if (S.timer) pauseTimer(); else { S.paused = false; startTimer(); } });
 
   /* ---------- Casa ---------- */
   function totalStars() { var t = 0; ST.forEach(function (s) { S.stars[s.id].forEach(function (v) { t += v || 0; }); }); return t; }
-  function maxStars() { var t = 0; ST.forEach(function (s) { t += LV[S.grade][s.id].length * 3; }); return t; }
+  function maxStars() { var t = 0; ST.forEach(function (s) { t += LVS(s.id).length * 3; }); return t; }
   function refresh() {
     var n = 0, clues = $('#clues');
     clues.innerHTML = '';
     ST.forEach(function (s, i) {
       var done = !!S.solved[s.id]; if (done) n++;
-      var total = LV[S.grade][s.id].length, p = Math.min(S.prog[s.id] || 0, total - 1);
+      var total = LVS(s.id).length, p = Math.min(S.prog[s.id] || 0, total - 1);
       var w = $('.win[data-st="' + s.id + '"]');
       w.classList.toggle('done', done);
       $('.state', w).textContent = done ? 'Resuelta' : ((S.prog[s.id] || 0) > 0 ? 'Nivel ' + (p + 1) + ' de ' + total : 'Pendiente');
-      clues.appendChild(h('div', 'clue' + (done ? ' got' : ''), '<small>Pista ' + (i + 1) + '</small><b>' + (done ? s.digit : '?') + '</b>'));
+      clues.appendChild(h('div', 'clue' + (done ? ' got' : ''), '<small>Pista ' + (i + 1) + '</small><b>' + (done ? (S.adv ? ADVSYM[s.id] : s.digit) : '?') + '</b>'));
     });
     $('#clueCount').textContent = n + '/4';
     $('#starCount').textContent = totalStars();
-    $('#door').classList.toggle('ready', n === 4);
+    $('#door').classList.toggle('ready', n === 4 && !S.adv);
   }
   function feedback(node, text, ok) { node.textContent = text; node.className = 'feedback ' + (ok ? 'good' : 'bad'); }
   function scrollTop() { try { window.scrollTo(0, 0); } catch (e) { /* sin desplazamiento */ } }
 
   /* ---------- Ventana abierta ---------- */
   function openStation(id) {
-    if (!S.started) startTimer();
+    if (!S.timer && S.remaining > 0 && !S.paused) startTimer();
+    lockMin(true);
     var idx = ST.map(function (s) { return s.id; }).indexOf(id), s = ST[idx];
     var host = $('#station');
     $('#hub').hidden = true; host.hidden = false; host.innerHTML = '';
     var p = h('div', 'panel'), head = h('div', 'panel-head');
     var back = h('button', 'btn ghost small', '← La casa'); back.type = 'button'; back.addEventListener('click', closeStation);
-    head.appendChild(back); head.appendChild(h('h2', null, s.name)); head.appendChild(h('span', 'tag', 'Pista ' + (idx + 1) + ' de 4'));
+    head.appendChild(back); head.appendChild(h('h2', null, s.name)); head.appendChild(h('span', 'tag', (S.adv ? 'Runa ' : 'Pista ') + (idx + 1) + ' de 4'));
     p.appendChild(head); host.appendChild(p);
     if (S.solved[id]) showReveal(p, s, idx, true); else drawLevel(p, s, idx);
     scrollTop();
   }
-  function closeStation() { $('#station').hidden = true; $('#hub').hidden = false; refresh(); scrollTop(); }
+  function closeStation() {
+    $('#station').hidden = true; $('#hub').hidden = false; refresh(); scrollTop();
+    if (S.adv && ST.every(function (s) { return S.solved[s.id]; })) advFinish();
+  }
   function clearLvl(p) { $$('.lvl', p).forEach(function (n) { n.remove(); }); }
 
   function hintText(lv) {
@@ -635,7 +779,7 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
 
   function drawLevel(p, s, idx) {
     clearLvl(p);
-    var list = LV[S.grade][s.id], i = S.prog[s.id] || 0;
+    var list = LVS(s.id), i = S.prog[s.id] || 0;
     if (i >= list.length) { showReveal(p, s, idx, false); return; }
     var lv = list[i], box = h('div', 'lvl');
     var dots = h('div', 'dots');
@@ -666,7 +810,7 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
     box.innerHTML = '';
     var stars = ''; for (var k = 0; k < 3; k++) stars += k < st ? '<b>★</b>' : '★';
     var c = h('div', 'passed', '<p class="stars" role="img" aria-label="' + st + ' de 3 estrellas">' + stars + '</p><p>' + (last ? '¡Ventana resuelta!' : '¡Nivel superado!') + '</p>');
-    var nx = h('button', 'btn green', last ? 'Ver mi número' : 'Siguiente nivel →'); nx.type = 'button';
+    var nx = h('button', 'btn green', last ? (S.adv ? 'Ver mi runa' : 'Ver mi número') : 'Siguiente nivel →'); nx.type = 'button';
     nx.addEventListener('click', function () { drawLevel(p, s, idx); });
     c.appendChild(nx); box.appendChild(c); nx.focus();
   }
@@ -674,8 +818,8 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
   function showReveal(p, s, idx, again) {
     S.solved[s.id] = true; refresh(); clearLvl(p);
     var sum = S.stars[s.id].reduce(function (a, b) { return a + (b || 0); }, 0);
-    var r = h('div', 'reveal lvl', '<p>' + (again ? 'Ya resolviste esta ventana. Tu número es' : '¡Ventana resuelta! Tu número es') + '</p><div class="big">' + s.digit +
-      '</div><p>Es el número <b>' + (idx + 1) + '</b> del candado. Anótalo.<br>Estrellas de esta ventana: <b>' + sum + ' de ' + (LV[S.grade][s.id].length * 3) + '</b></p>');
+    var r = h('div', 'reveal lvl', '<p>' + (again ? 'Ya resolviste esta ventana. Tu ' + (S.adv ? 'runa' : 'número') + ' es' : '¡Ventana resuelta! Tu ' + (S.adv ? 'runa' : 'número') + ' es') + '</p><div class="big">' + (S.adv ? ADVSYM[s.id] : s.digit) +
+      '</div><p>' + (S.adv ? 'Es la runa <b>' + (idx + 1) + '</b> del sótano.' : 'Es el número <b>' + (idx + 1) + '</b> del candado. Anótalo.') + '<br>Estrellas de esta ventana: <b>' + sum + ' de ' + (LVS(s.id).length * 3) + '</b></p>');
     var b = h('button', 'btn green', 'Volver a la casa'); b.type = 'button'; b.addEventListener('click', closeStation);
     r.appendChild(b); p.appendChild(r);
   }
@@ -818,7 +962,7 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
       inp.setAttribute('aria-label', 'Palabra ' + (wi + 1) + ' de ' + lv.words.length);
       inp.addEventListener('input', function () {
         var v = inp.value.toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-        if (v === w) {
+        if (v === w.replace(/Ñ/g, 'N')) {
           box.classList.add('ok'); inp.value = w; inp.disabled = true; got++;
           feedback(fb, '¡Palabra descifrada: ' + w + '!', true);
           if (got === lv.words.length) setTimeout(ctx.win, 800);
@@ -922,11 +1066,37 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
       f.style.left = (Math.random() * 100) + '%'; f.style.animationDuration = (3 + Math.random() * 3) + 's'; f.style.animationDelay = (Math.random() * 2) + 's';
       fin.appendChild(f);
     }
-    setTimeout(function () { fin.hidden = false; $('#againBtn').focus(); }, 700);
+    $('#finalTitle').textContent = '¡Escaparon!'; $('#advBtn').hidden = false;
+    setTimeout(function () { fin.hidden = false; $('#advBtn').focus(); }, 700);
   }
+  function setAdv(on) {
+    S.adv = on; document.body.classList.toggle('adv', on);
+    $('#advBtn').hidden = true;
+    $$('.win .num').forEach(function (n, i) { n.textContent = (on ? 'Runa ' : 'Pista ') + (i + 1) + ' de 4'; });
+    $('h1').textContent = on ? 'El sótano del fantasma' : 'Escape de la Casa Embrujada';
+    $('.lede').textContent = on
+      ? 'Modo avanzado: ocho retos difíciles en cada ventana. Junta las cuatro runas para vencer al fantasma del sótano.'
+      : 'Hay un fantasma en el pasillo. Resuelve los cuatro retos, junta las pistas y abre la puerta antes de que se acabe el tiempo.';
+  }
+  function enterAdv() {
+    $('#final').hidden = true; closeStation();
+    setAdv(true); resetProgress(); S.remaining = S.minutes * 60; clearInterval(S.timer); S.timer = null; S.paused = false;
+    drawTime(); refresh(); startTimer(); scrollTop();
+  }
+  function advFinish() {
+    clearInterval(S.timer); S.timer = null;
+    var tot = totalStars(), mx = maxStars(), pc = tot / mx;
+    var rank = pc >= 0.9 ? 'Maestro del terror 👑' : pc >= 0.7 ? 'Cazafantasmas 👻' : pc >= 0.5 ? 'Aprendiz de brujo 🧙' : 'Valiente del sótano 🕯️';
+    $('#finalTitle').textContent = '¡Sótano vencido!';
+    var left = S.remaining > 0 ? ' Les sobraron ' + fmt(S.remaining) + '.' : '';
+    $('#finalText').textContent = 'Rango: ' + rank + '. Estrellas: ' + tot + ' de ' + mx + '.' + left;
+    $('#advBtn').hidden = true;
+    var fin = $('#final'); setTimeout(function () { fin.hidden = false; $('#againBtn').focus(); }, 300);
+  }
+  $('#advBtn').addEventListener('click', enterAdv);
   function resetAll() {
-    resetProgress(); S.remaining = S.minutes * 60; clearInterval(S.timer); S.timer = null; S.started = false;
-    $('#startBtn').textContent = 'Empezar'; lockMin(false); drawTime();
+    setAdv(false); resetProgress(); S.remaining = S.minutes * 60; clearInterval(S.timer); S.timer = null; S.started = false;
+    S.paused = false; lockMin(false); drawTime(); startTimer();
     inputs.forEach(function (x) { x.value = ''; });
     $('#door').classList.remove('open', 'ready'); $('#lockico').textContent = '🔒'; lockMsg('');
     $('#final').hidden = true; closeStation();
@@ -943,7 +1113,7 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
   });
   $$('#minSeg button').forEach(function (b) {
     b.addEventListener('click', function () {
-      if (S.started) return;
+      if (b.disabled) return;
       S.minutes = Number(b.getAttribute('data-min')); S.remaining = S.minutes * 60;
       $$('#minSeg button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); drawTime();
     });
@@ -971,27 +1141,30 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
   }
   function buildKey() {
     var host = $('#answerKey'); if (!host) return;
-    [3, 4].forEach(function (g) {
-      host.appendChild(h('h3', null, 'Grado ' + g + '°'));
-      var wrap = h('div', 'scroll'), tb = h('table'), th = h('thead'), tr = h('tr');
-      ['Ventana', 'Nivel', 'Respuesta'].forEach(function (t) { var c = h('th'); c.textContent = t; tr.appendChild(c); });
-      th.appendChild(tr); tb.appendChild(th);
-      var body = h('tbody');
-      ST.forEach(function (s) {
-        LV[g][s.id].forEach(function (lv, i) {
-          var r = h('tr');
-          [i === 0 ? s.name : '', (i + 1) + '. ' + lv.title, answerOf(lv)].forEach(function (t, k) { var c = h('td'); if (k === 2) { var code = h('code'); code.textContent = t; c.appendChild(code); } else c.textContent = t; r.appendChild(c); });
-          body.appendChild(r);
+    [[LV, ''], [ADV, ' · Modo avanzado (sótano)']].forEach(function (set) {
+      [3, 4].forEach(function (g) {
+        host.appendChild(h('h3', null, 'Grado ' + g + '°' + set[1]));
+        var wrap = h('div', 'scroll'), tb = h('table'), th = h('thead'), tr = h('tr');
+        ['Ventana', 'Nivel', 'Respuesta'].forEach(function (t) { var c = h('th'); c.textContent = t; tr.appendChild(c); });
+        th.appendChild(tr); tb.appendChild(th);
+        var body = h('tbody');
+        ST.forEach(function (s) {
+          set[0][g][s.id].forEach(function (lv, i) {
+            var r = h('tr');
+            [i === 0 ? s.name : '', (i + 1) + '. ' + lv.title, answerOf(lv)].forEach(function (t, k) { var c = h('td'); if (k === 2) { var code = h('code'); code.textContent = t; c.appendChild(code); } else c.textContent = t; r.appendChild(c); });
+            body.appendChild(r);
+          });
         });
+        tb.appendChild(body); wrap.appendChild(tb); host.appendChild(wrap);
       });
-      tb.appendChild(body); wrap.appendChild(tb); host.appendChild(wrap);
     });
   }
   buildKey();
 
-  if (/[?&]test\b/.test(location.search)) window.__ER = { LV: LV, ST: ST, S: S, solve: solve, DIR: DIR };
+  if (/[?&]test\b/.test(location.search)) window.__ER = { LV: LV, ADV: ADV, enterAdv: enterAdv, ST: ST, S: S, solve: solve, DIR: DIR };
 
-  drawTime(); refresh();
+  drawTime(); refresh(); startTimer();
+  if (/[?&]avanzado\b/.test(location.search)) { enterAdv(); }
 })();
 </script>
 </body>
