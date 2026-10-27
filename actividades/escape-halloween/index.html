@@ -120,6 +120,33 @@ h1{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(2.7rem,
 .door.ready{box-shadow:0 0 40px 10px #a8e63388;animation:pulse 1.6s ease-in-out infinite}
 .door.open{background:#0b0516;box-shadow:inset 0 0 50px #ffcf75,0 0 50px 14px #ffcf7566}
 @keyframes pulse{50%{box-shadow:0 0 56px 18px #a8e633aa}}
+
+/* Escena de la puerta: fantasma gigante y murciélagos */
+.scare{position:fixed;inset:0;z-index:70;background:#05020c;overflow:hidden;cursor:pointer;box-shadow:0 0 0 80px #05020c}
+.scare[hidden]{display:none}
+.sc-light{position:absolute;inset:0;opacity:0;background:radial-gradient(circle at 50% 55%,#c8ff6a 0,#3dff7a66 24%,transparent 62%)}
+.sc-frame{position:absolute;left:50%;top:55%;width:min(52vw,250px);aspect-ratio:128/168;transform:translate(-50%,-50%);perspective:900px;border:7px solid #3a1d0e;border-bottom:0;border-radius:999px 999px 0 0;background:radial-gradient(ellipse at 50% 70%,#f0ffc0 0,#8dff5a 35%,#0b0516 100%);box-shadow:0 0 60px #6bff7a55}
+.sc-leaf{position:absolute;inset:0;border-radius:999px 999px 0 0;transform-origin:left center;background:repeating-linear-gradient(90deg,#6b3a1c 0 22px,#5a2f16 22px 24px);box-shadow:inset 0 0 30px #0008}
+.sc-leaf::after{content:"";position:absolute;right:14%;top:58%;width:12px;height:12px;border-radius:50%;background:#ffd36b;box-shadow:0 0 8px #ffd36b}
+.sc-ghost{position:absolute;left:50%;top:55%;width:30vmin;opacity:0;transform:translate(-50%,-50%) scale(.05);filter:drop-shadow(0 0 28px #c8ff6a)}
+.sc-ghost svg{display:block;width:100%;height:auto}
+.sc-boo{position:absolute;left:0;right:0;top:12%;text-align:center;font-family:var(--f-display);font-size:clamp(4rem,22vw,13rem);line-height:1;color:var(--pumpkin);text-shadow:0 0 30px #ff7a1a,6px 6px 0 #5a0a0a;opacity:0}
+.sc-skip{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-size:.85rem;color:#ffffff66}
+.sc-bat{position:absolute;left:50%;top:55%;font-size:var(--s);opacity:0;pointer-events:none}
+.sc-bat i{display:inline-block;font-style:normal;animation:scFlap .16s ease-in-out infinite alternate}
+.scare.go .sc-light{animation:scLight 4.4s ease-out .9s forwards}
+.scare.go .sc-leaf{animation:scLeaf 1.3s cubic-bezier(.4,0,.2,1) .4s forwards}
+.scare.go .sc-ghost{animation:scGhost 3.2s cubic-bezier(.2,.8,.3,1) 1.7s forwards}
+.scare.go .sc-boo{animation:scBoo 1.5s ease-out 2.7s forwards}
+.scare.go{animation:scShake .55s linear 2.7s}
+.scare.go .sc-bat{animation:scBat var(--t) cubic-bezier(.3,.6,.4,1) var(--d) forwards}
+@keyframes scLeaf{to{transform:rotateY(-112deg)}}
+@keyframes scLight{0%{opacity:0}25%{opacity:1}100%{opacity:.3}}
+@keyframes scGhost{0%{opacity:0;transform:translate(-50%,-50%) scale(.05)}16%{opacity:.95;transform:translate(-50%,-50%) scale(3.4)}60%{opacity:.95;transform:translate(-50%,-56%) scale(3.7)}100%{opacity:0;transform:translate(-50%,-190%) scale(4.4)}}
+@keyframes scBoo{0%{opacity:0;transform:scale(.4)}15%{opacity:1;transform:scale(1.15)}70%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.3)}}
+@keyframes scShake{10%{transform:translate(-14px,8px)}30%{transform:translate(12px,-10px)}50%{transform:translate(-10px,-6px)}70%{transform:translate(8px,10px)}90%{transform:translate(-4px,2px)}}
+@keyframes scBat{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}8%{opacity:1}100%{opacity:1;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(var(--k)) rotate(var(--r))}}
+@keyframes scFlap{from{transform:scaleY(1)}to{transform:scaleY(.45)}}
 body.adv .lock-card,body.adv .door-row{display:none}
 body.adv .hub{grid-template-columns:minmax(0,1fr);max-width:640px;margin:0 auto}
 body.adv .house{filter:hue-rotate(95deg) saturate(1.15)}
@@ -430,6 +457,13 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
   </main>
 </div>
 
+<div class="scare" id="scare" hidden aria-hidden="true">
+  <div class="sc-light"></div>
+  <div class="sc-frame"><div class="sc-leaf"></div></div>
+  <div class="sc-ghost"><svg viewBox="0 0 100 120" aria-hidden="true"><path d="M50 4C26 4 10 22 10 46v62c0 6 5 8 9 4l8-8 9 9c3 3 7 3 10 0l5-6 5 6c3 3 7 3 10 0l9-9 8 8c4 4 9 2 9-4V46C90 22 74 4 50 4z" fill="#f3ffe0"/><ellipse cx="36" cy="46" rx="8" ry="12" fill="#0b0516"/><ellipse cx="64" cy="46" rx="8" ry="12" fill="#0b0516"/><circle cx="38" cy="42" r="2.5" fill="#c8ff6a"/><circle cx="66" cy="42" r="2.5" fill="#c8ff6a"/><ellipse cx="50" cy="82" rx="13" ry="17" fill="#0b0516"/></svg></div>
+  <div class="sc-boo">¡BUUU!</div>
+  <div class="sc-skip">Toca para saltar</div>
+</div>
 <div class="final" id="final" hidden>
   <div class="final-card" role="dialog" aria-modal="true" aria-labelledby="finalTitle">
     <h2 id="finalTitle">¡Escaparon!</h2>
@@ -1067,8 +1101,52 @@ td code{font-family:var(--f-mono);color:var(--pumpkin)}
       fin.appendChild(f);
     }
     $('#finalTitle').textContent = '¡Escaparon!'; $('#advBtn').hidden = false;
-    setTimeout(function () { fin.hidden = false; $('#advBtn').focus(); }, 700);
+    scareThen(function () { fin.hidden = false; $('#advBtn').focus(); });
   }
+  /* ---------- Escena de la puerta ---------- */
+  var FASTMODE = /[?&]test\b/.test(location.search);
+  function sound(kind) {
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+      var c = sound.ctx || (sound.ctx = new AC()), o = c.createOscillator(), g = c.createGain(), n = c.currentTime;
+      if (kind === 'creak') {
+        o.type = 'sawtooth'; o.frequency.setValueAtTime(90, n); o.frequency.linearRampToValueAtTime(190, n + 1.1);
+        var lfo = c.createOscillator(), lg = c.createGain(); lfo.frequency.value = 22; lg.gain.value = 28; lfo.connect(lg); lg.connect(o.frequency); lfo.start(n); lfo.stop(n + 1.2);
+        g.gain.setValueAtTime(0.0001, n); g.gain.exponentialRampToValueAtTime(0.05, n + 0.2); g.gain.exponentialRampToValueAtTime(0.0001, n + 1.2);
+        o.start(n); o.stop(n + 1.25);
+      } else {
+        o.type = 'sawtooth'; o.frequency.setValueAtTime(130, n); o.frequency.exponentialRampToValueAtTime(38, n + 0.9);
+        g.gain.setValueAtTime(0.0001, n); g.gain.exponentialRampToValueAtTime(0.22, n + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, n + 1);
+        o.start(n); o.stop(n + 1.05);
+      }
+      o.connect(g); g.connect(c.destination);
+    } catch (e) { /* sin sonido */ }
+  }
+  function scareThen(next) {
+    var sc = $('#scare');
+    var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (FASTMODE || calm) { setTimeout(next, 700); return; }
+    $$('.sc-bat', sc).forEach(function (b) { b.remove(); });
+    for (var k = 0; k < 44; k++) {
+      var b = h('span', 'sc-bat', '<i>🦇</i>'), up = k % 3 === 0;
+      b.style.setProperty('--s', (1.6 + Math.random() * 3.2).toFixed(2) + 'rem');
+      b.style.setProperty('--dx', ((Math.random() * 2 - 1) * 95).toFixed(0) + 'vw');
+      b.style.setProperty('--dy', (up ? -(40 + Math.random() * 60) : (Math.random() * 2 - 1) * 85).toFixed(0) + 'vh');
+      b.style.setProperty('--r', ((Math.random() * 2 - 1) * 40).toFixed(0) + 'deg');
+      b.style.setProperty('--k', (1 + Math.random() * 2.5).toFixed(2));
+      b.style.setProperty('--d', (2.5 + Math.random() * 1.1).toFixed(2) + 's');
+      b.style.setProperty('--t', (1.2 + Math.random() * 1.1).toFixed(2) + 's');
+      sc.appendChild(b);
+    }
+    sc.hidden = false; sc.classList.remove('go'); void sc.offsetWidth; sc.classList.add('go');
+    var ended = false, timers = [setTimeout(function () { sound('creak'); }, 500), setTimeout(function () { sound('boo'); }, 2750), setTimeout(end, 5800)];
+    function end() {
+      if (ended) return; ended = true; timers.forEach(clearTimeout);
+      sc.hidden = true; sc.classList.remove('go'); sc.onclick = null; next();
+    }
+    sc.onclick = end;
+  }
+
   function setAdv(on) {
     S.adv = on; document.body.classList.toggle('adv', on);
     $('#advBtn').hidden = true;
