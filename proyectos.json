@@ -89,6 +89,16 @@
       "nombre_en": "Rube Goldberg machine"
     },
     {
+      "id": "escape-halloween",
+      "nombre": "Escape de Halloween",
+      "grupos": [
+        "3",
+        "4"
+      ],
+      "url": "actividades/escape-halloween/",
+      "nombre_en": "Halloween Escape"
+    },
+    {
       "id": "kody",
       "nombre": "Kody",
       "grupos": [

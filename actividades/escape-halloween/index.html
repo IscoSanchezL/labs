@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Escape de la Casa Embrujada. Escape room de Halloween con retos de pensamiento computacional para 3° y 4°.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cellipse cx='16' cy='19' rx='12' ry='10' fill='%23FF7A1A'/%3E%3Cpath d='M16 9c0-3 1-5 4-6' fill='none' stroke='%23A8E633' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M10 17l3 3 3-3 3 3 3-3' fill='none' stroke='%23140B24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<title>Escape de la Casa Embrujada</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fredoka:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: the haunted house is the hub. Four lit windows open the four stations; the front door takes the 4-digit code. Single dark look, chosen on purpose. */
+:root{
+  color-scheme:dark;
+  --ink:#140b24; --ink-2:#1e1233; --ink-3:#2b1a49; --line:#4a2d78;
+  --bone:#f4ecd8; --mute:#bcaedb;
+  --pumpkin:#ff7a1a; --pumpkin-d:#b84a05; --slime:#a8e633; --slime-d:#5f8a0c; --violet:#8a5cff; --blood:#ff5a73;
+  --wood:#5a3319; --wood-d:#3b200e;
+  --f-display:'Creepster','Chewy',system-ui,cursive;
+  --f-body:'Fredoka',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'Share Tech Mono',ui-monospace,Menlo,Consolas,monospace;
+  --r:18px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--ink)}
+body{
+  margin:0;color:var(--bone);font-family:var(--f-body);font-size:17px;line-height:1.5;
+  padding-block:0 56px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  overflow-x:hidden;
+  background:
+    radial-gradient(1.6px 1.6px at 8% 14%,#fff9 50%,#0000 52%),
+    radial-gradient(1.2px 1.2px at 22% 6%,#fff8 50%,#0000 52%),
+    radial-gradient(1.8px 1.8px at 37% 22%,#fffa 50%,#0000 52%),
+    radial-gradient(1.2px 1.2px at 51% 9%,#fff8 50%,#0000 52%),
+    radial-gradient(1.6px 1.6px at 63% 27%,#fff9 50%,#0000 52%),
+    radial-gradient(1.2px 1.2px at 74% 12%,#fff8 50%,#0000 52%),
+    radial-gradient(1.8px 1.8px at 90% 31%,#fffa 50%,#0000 52%),
+    radial-gradient(1.2px 1.2px at 15% 44%,#fff7 50%,#0000 52%),
+    radial-gradient(ellipse 70% 40% at 85% 0%,#5a2ea866,#0000 70%),
+    radial-gradient(ellipse 90% 45% at 5% 100%,#ff7a1a22,#0000 70%),
+    var(--ink);
+  background-attachment:fixed;
+}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--slime);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;text-align:center;padding:40px 0 20px;overflow:hidden}
+.moon{position:absolute;top:-46px;right:-34px;width:180px;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 36% 34%,#fff7dc,#f4dc8e 58%,#d6ae55);
+  box-shadow:0 0 60px 22px #ffd97a44,0 0 150px 70px #ff7a1a1f;opacity:.92}
+.moon::after{content:"";position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 62% 30%,#c9a24a66 0 9%,#0000 10%),radial-gradient(circle at 40% 66%,#c9a24a55 0 12%,#0000 13%),radial-gradient(circle at 72% 62%,#c9a24a55 0 6%,#0000 7%)}
+.bat{position:absolute;left:0;width:46px;fill:#0b0516;opacity:.85;animation:fly 14s linear infinite}
+.bat:nth-of-type(2){top:60px;width:34px;animation-duration:19s;animation-delay:-7s}
+.bat:nth-of-type(3){top:130px;width:28px;animation-duration:24s;animation-delay:-13s}
+.bat:nth-of-type(1){top:24px}
+@keyframes fly{0%{transform:translateX(-12vw) translateY(0) scaleY(1)}25%{transform:translateX(22vw) translateY(14px) scaleY(.8)}50%{transform:translateX(55vw) translateY(-6px) scaleY(1)}75%{transform:translateX(82vw) translateY(16px) scaleY(.8)}100%{transform:translateX(112vw) translateY(0) scaleY(1)}}
+.hero-in{position:relative;z-index:1}
+.kicker{margin:0 0 6px;font-family:var(--f-mono);font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;color:var(--slime)}
+h1{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(2.7rem,10vw,5.6rem);line-height:.98;letter-spacing:.03em;color:var(--pumpkin);text-wrap:balance;
+  text-shadow:0 0 22px #ff7a1a88,0 5px 0 #6b2700,0 10px 24px #000a}
+.lede{max-width:34em;margin:14px auto 0;color:var(--mute);font-size:1.08rem;text-wrap:balance}
+.hud{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px}
+.chip{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;background:var(--ink-2);border:2px solid var(--line)}
+.chip small{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.chip b{font-family:var(--f-mono);font-size:1.35rem;font-weight:400;font-variant-numeric:tabular-nums}
+.chip.out{border-color:var(--blood)}.chip.out b{color:var(--blood)}
+.seg{display:inline-flex;border-radius:999px;border:2px solid var(--line);background:var(--ink-2);padding:3px}
+.seg button{border:0;background:none;padding:6px 16px;border-radius:999px;font-weight:600;color:var(--mute)}
+.seg button[aria-pressed="true"]{background:var(--pumpkin);color:#1c0a00}
+
+/* ---------- Buttons ---------- */
+.btn{border:0;background:var(--pumpkin);color:#1c0a00;font-weight:700;padding:11px 22px;border-radius:14px;box-shadow:0 5px 0 var(--pumpkin-d);transition:transform .08s,box-shadow .08s}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--pumpkin-d)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.green{background:var(--slime);box-shadow:0 5px 0 var(--slime-d)}
+.btn.ghost{background:transparent;color:var(--bone);border:2px solid var(--line);box-shadow:none}
+.btn.small{padding:7px 14px;font-size:.92rem;border-radius:12px;box-shadow:0 3px 0 var(--pumpkin-d)}
+.btn.ghost.small{box-shadow:none}
+
+/* ---------- Tabs ---------- */
+.tabs{display:flex;gap:8px;justify-content:center;margin:18px 0 26px}
+.tabs button{padding:9px 22px;border-radius:12px;border:2px solid var(--line);background:var(--ink-2);font-weight:600;color:var(--mute)}
+.tabs button[aria-selected="true"]{background:var(--ink-3);border-color:var(--pumpkin);color:var(--bone)}
+
+/* ---------- Hub: house + lock ---------- */
+.hub{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:28px;align-items:start}
+.house{position:relative;max-width:560px;width:100%;margin:0 auto}
+.roof{position:relative;height:150px;background:linear-gradient(#34194f,#1b0d2e);clip-path:polygon(50% 0,100% 100%,0 100%);filter:drop-shadow(0 0 0 #000)}
+.roof::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,#0000 0 17px,#0006 17px 19px)}
+.house-body{position:relative;background:linear-gradient(#26153f,#170b27);border:3px solid var(--line);border-top:0;padding:22px 20px 0;border-radius:0 0 10px 10px;box-shadow:0 20px 60px #0009}
+.windows{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.win{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:6px;text-align:left;min-height:132px;padding:12px 12px 10px;border-radius:12px 12px 4px 4px;
+  border:5px solid var(--wood);color:#1c0a00;
+  background:radial-gradient(circle at 50% 35%,#ffcf75,#ff9a2e 52%,#c25400);box-shadow:inset 0 0 22px #fff6,0 0 26px #ff7a1a66;animation:flicker 3.4s ease-in-out infinite}
+.win:nth-child(2){animation-delay:-1.1s}.win:nth-child(3){animation-delay:-2.2s}.win:nth-child(4){animation-delay:-.6s}
+.win .num{font-family:var(--f-mono);font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.win strong{font-size:1.12rem;line-height:1.15}
+.win .skill{font-size:.9rem;font-weight:500}
+.win .state{align-self:flex-start;font-size:.78rem;font-weight:700;padding:2px 10px;border-radius:999px;background:#1c0a00;color:var(--bone)}
+.win.done{background:radial-gradient(circle at 50% 35%,#e4ff9a,#a8e633 55%,#5f8a0c);box-shadow:inset 0 0 22px #fff7,0 0 26px #a8e63366;animation:none}
+.win.done .state{background:#12220a;color:var(--slime)}
+@keyframes flicker{0%,100%{filter:brightness(1)}42%{filter:brightness(1.12)}48%{filter:brightness(.9)}55%{filter:brightness(1.08)}}
+.door-row{display:flex;justify-content:center;margin-top:22px}
+.door{position:relative;width:128px;height:168px;border-radius:64px 64px 0 0;border:5px solid var(--wood-d);border-bottom:0;
+  background:linear-gradient(90deg,#0003,#0000 20%,#0000 80%,#0003),repeating-linear-gradient(90deg,#6b3d1f 0 22px,#5a3319 22px 24px);display:grid;place-items:center}
+.door .knob{position:absolute;right:16px;top:98px;width:14px;height:14px;border-radius:50%;background:#ffd36b;box-shadow:0 0 8px #ffd36b}
+.door .lockico{font-size:2rem;filter:drop-shadow(0 2px 2px #000)}
+.door.ready{box-shadow:0 0 40px 10px #a8e63388;animation:pulse 1.6s ease-in-out infinite}
+.door.open{background:#0b0516;box-shadow:inset 0 0 50px #ffcf75,0 0 50px 14px #ffcf7566}
+@keyframes pulse{50%{box-shadow:0 0 56px 18px #a8e633aa}}
+.lock-card{background:var(--ink-2);border:2px solid var(--line);border-radius:var(--r);padding:20px}
+.lock-card h2{margin:0 0 4px;font-family:var(--f-display);font-weight:400;font-size:1.9rem;color:var(--pumpkin);letter-spacing:.03em}
+.lock-card p{margin:0 0 14px;color:var(--mute);font-size:.95rem}
+.clues{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+.clue{display:grid;place-items:center;gap:2px;padding:10px 4px;border-radius:12px;background:var(--ink);border:2px dashed var(--line);font-family:var(--f-mono)}
+.clue small{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.clue b{font-weight:400;font-size:2rem;line-height:1;color:var(--mute)}
+.clue.got{border:2px solid var(--slime);background:#1a2a0c}.clue.got b{color:var(--slime)}
+.digits{display:flex;gap:10px;justify-content:center;margin-bottom:14px}
+.digits input{width:3.3rem;height:4rem;text-align:center;font-family:var(--f-mono);font-size:2.2rem;color:var(--bone);background:var(--ink);border:3px solid var(--line);border-radius:12px}
+.digits input:focus{border-color:var(--pumpkin);outline:none;box-shadow:0 0 0 3px #ff7a1a55}
+.digits.shake{animation:shake .45s}
+@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(5px)}}
+.msg{min-height:1.6em;margin:10px 0 0;font-weight:600;text-align:center}
+.msg.bad{color:var(--blood)}.msg.good{color:var(--slime)}
+
+/* ---------- Station panel ---------- */
+.panel{max-width:760px;margin:0 auto;background:var(--ink-2);border:2px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:0 20px 60px #0008}
+.panel-head{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:6px}
+.panel-head h2{margin:0;flex:1;min-width:0;font-family:var(--f-display);font-weight:400;font-size:clamp(1.8rem,6vw,2.5rem);color:var(--pumpkin);letter-spacing:.03em;line-height:1.05}
+.tag{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:999px;border:1.5px solid var(--slime);color:var(--slime)}
+.story{margin:6px 0 18px;color:var(--mute)}
+.story b{color:var(--bone)}
+.feedback{min-height:1.7em;margin:12px 0 0;font-weight:600}
+.feedback.bad{color:var(--blood)}.feedback.good{color:var(--slime)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.row.center{justify-content:center}
+
+/* Telaraña */
+.board{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:4px;max-width:360px;margin:0 auto 16px;padding:8px;border-radius:14px;background:var(--ink);border:2px solid var(--line)}
+.cell{position:relative;aspect-ratio:1;display:grid;place-items:center;border-radius:8px;background:#2a1a45;font-size:clamp(1.1rem,5.5vw,1.8rem);line-height:1;
+  background-image:linear-gradient(135deg,#ffffff0d 25%,#0000 25%)}
+.cell.trail{background-color:#5b3a99}
+.cell.wall{background-color:#3a1f12}
+.cell.fly{box-shadow:inset 0 0 0 2px var(--slime)}
+.cell.bump{background-color:#6b1d2c}
+.seq{display:flex;flex-wrap:wrap;gap:6px;min-height:46px;padding:8px;margin-bottom:12px;border-radius:12px;background:var(--ink);border:2px dashed var(--line)}
+.seq .step{width:38px;height:38px;display:grid;place-items:center;border-radius:10px;background:var(--ink-3);font-size:1.2rem;font-weight:700}
+.seq .step.now{background:var(--pumpkin);color:#1c0a00}.seq .step.err{background:var(--blood);color:#1c0a00}
+.seq .hint{align-self:center;color:var(--mute);font-size:.92rem;padding-inline:6px}
+.pad{display:grid;grid-template-columns:repeat(4,56px);gap:8px}
+.pad .btn{padding:10px 0;font-size:1.4rem;box-shadow:0 4px 0 var(--pumpkin-d)}
+.count{font-family:var(--f-mono);color:var(--mute);font-size:.9rem}
+
+/* Poción */
+.pattern{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;padding:18px 10px;margin-bottom:16px;border-radius:14px;background:var(--ink);border:2px solid var(--line)}
+.tok{min-width:52px;padding:6px 8px;text-align:center;border-radius:12px;background:var(--ink-3);font-size:1.9rem;line-height:1.2}
+.tok.num{font-family:var(--f-mono);font-size:1.7rem}
+.tok.q{background:transparent;border:3px dashed var(--pumpkin);color:var(--pumpkin);font-family:var(--f-mono)}
+.opts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.opt{min-width:84px;padding:12px 16px;border-radius:14px;border:3px solid var(--line);background:var(--ink-3);font-size:1.7rem;line-height:1.1}
+.opt.num{font-family:var(--f-mono)}
+.opt:hover{border-color:var(--pumpkin)}
+.opt.wrong{border-color:var(--blood);animation:shake .4s}
+.dots{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--ink-3);border:2px solid var(--line)}
+.dots i.on{background:var(--slime);border-color:var(--slime)}.dots i.cur{border-color:var(--pumpkin)}
+
+/* Esqueleto */
+.key{display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:4px;margin-bottom:18px;padding:10px;border-radius:14px;background:var(--ink);border:2px solid var(--line)}
+.key span{display:flex;justify-content:space-between;align-items:baseline;gap:4px;padding:3px 8px;border-radius:8px;background:var(--ink-3);font-family:var(--f-mono);font-size:.86rem}
+.key b{font-weight:400;color:var(--pumpkin)}
+.word{margin-bottom:16px;padding:14px;border-radius:14px;background:var(--ink);border:2px solid var(--line)}
+.word.ok{border-color:var(--slime)}
+.nums{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.nums span{min-width:46px;padding:6px 8px;text-align:center;border-radius:10px;background:var(--ink-3);font-family:var(--f-mono);font-size:1.4rem}
+.word input{width:100%;max-width:300px;padding:10px 14px;border-radius:12px;border:3px solid var(--line);background:var(--ink-2);color:var(--bone);font-family:var(--f-mono);font-size:1.5rem;letter-spacing:.3em;text-transform:uppercase}
+.word input:focus{border-color:var(--pumpkin);outline:none}
+
+/* Murciélago */
+.code{margin:0 0 14px;padding:10px;border-radius:14px;background:#0b0516;border:2px solid var(--line);display:grid;gap:4px}
+.code button{display:flex;gap:14px;align-items:baseline;text-align:left;width:100%;padding:8px 12px;border-radius:8px;border:2px solid transparent;background:none;font-family:var(--f-mono);font-size:1.02rem;white-space:pre-wrap}
+.code button i{font-style:normal;color:var(--mute);min-width:1.4em}
+.code button:hover{background:var(--ink-3)}
+.code button.sel{border-color:var(--pumpkin);background:#2c1a49}
+.code button.bad{border-color:var(--blood);animation:shake .4s}
+.fixes{display:grid;gap:8px}
+.fixes .opt{font-size:1rem;font-family:var(--f-body);text-align:left}
+.goal{padding:10px 14px;margin-bottom:12px;border-radius:12px;background:var(--ink);border-left:5px solid var(--violet)}
+
+/* Pista revelada */
+.reveal{text-align:center;padding:10px 0 4px}
+.reveal p{margin:0 0 6px;color:var(--mute)}
+.reveal .big{display:inline-grid;place-items:center;width:120px;height:140px;margin:6px 0 16px;border-radius:16px;background:var(--ink);border:4px solid var(--slime);font-family:var(--f-mono);font-size:5rem;color:var(--slime);box-shadow:0 0 40px #a8e63355;animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{transform:scale(.3) rotate(-12deg);opacity:0}100%{transform:none;opacity:1}}
+
+/* Pantalla final */
+.final{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:20px;background:#0b0516ee;overflow:hidden}
+.final[hidden]{display:none}
+.final-card{position:relative;z-index:2;text-align:center;max-width:520px;padding:30px 24px;border-radius:24px;background:var(--ink-2);border:3px solid var(--pumpkin);box-shadow:0 0 80px #ff7a1a66}
+.final-card h2{margin:0 0 8px;font-family:var(--f-display);font-weight:400;font-size:clamp(2.4rem,9vw,3.6rem);color:var(--pumpkin);line-height:1}
+.final-card p{margin:0 0 18px;color:var(--mute)}
+.fall{position:absolute;top:-60px;font-size:2rem;animation:fall linear forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(112vh) rotate(360deg)}}
+
+/* ---------- Guía del docente ---------- */
+.guide{display:grid;gap:22px}
+.guide h2{margin:0 0 10px;font-family:var(--f-display);font-weight:400;font-size:2rem;letter-spacing:.03em;color:var(--pumpkin)}
+.card{background:var(--ink-2);border:2px solid var(--line);border-radius:var(--r);padding:20px;min-width:0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.fact{padding:14px;border-radius:14px;background:var(--ink);border:2px solid var(--line)}
+.fact small{display:block;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--slime)}
+.fact b{display:block;margin-top:4px;font-weight:600}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--slime);font-weight:400;white-space:nowrap}
+td code{font-family:var(--f-mono);color:var(--pumpkin)}
+.guide ul{margin:0;padding-left:1.2em;display:grid;gap:6px}
+.guide p{margin:0 0 10px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+
+@media (max-width:820px){.hub{grid-template-columns:minmax(0,1fr)}.roof{height:120px}.moon{width:130px}}
+@media (max-width:420px){.windows{gap:10px}.win{min-height:120px;padding:10px 8px 8px}.win strong{font-size:1rem}.digits input{width:2.9rem;height:3.6rem}.pad{grid-template-columns:repeat(4,1fr);width:100%}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="bat" viewBox="0 0 60 30">
+    <path id="batwing" d="M30 12 C26 4 24 3 24 3 L24 9 C18 6 10 6 1 10 C7 11 9 14 9 19 C12 16 16 16 19 19 C22 17 26 18 30 25 Z"/>
+    <use href="#batwing" transform="translate(60 0) scale(-1 1)"/>
+  </symbol>
+</svg>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="moon" aria-hidden="true"></div>
+    <svg class="bat" viewBox="0 0 60 30" aria-hidden="true"><use href="#bat"/></svg>
+    <svg class="bat" viewBox="0 0 60 30" aria-hidden="true"><use href="#bat"/></svg>
+    <svg class="bat" viewBox="0 0 60 30" aria-hidden="true"><use href="#bat"/></svg>
+    <div class="hero-in">
+      <p class="kicker">Tecnología · Grados 3° y 4° · Pensamiento computacional</p>
+      <h1>Escape de la Casa Embrujada</h1>
+      <p class="lede">Hay un fantasma en el pasillo. Resuelve los cuatro retos, junta las pistas y abre la puerta antes de que se acabe el tiempo.</p>
+      <div class="hud">
+        <div class="chip"><small>Tiempo</small><b id="time">40:00</b><button class="btn small" id="startBtn" type="button">Empezar</button></div>
+        <div class="chip"><small>Pistas</small><b id="clueCount">0/4</b></div>
+        <div class="seg" role="group" aria-label="Grado">
+          <button type="button" data-grade="3" aria-pressed="true">3°</button>
+          <button type="button" data-grade="4" aria-pressed="false">4°</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist" id="tabs" hidden>
+    <button type="button" role="tab" id="tab-play" aria-selected="true" aria-controls="play">Jugar</button>
+    <button type="button" role="tab" id="tab-guide" aria-selected="false" aria-controls="guide">Guía del docente</button>
+  </div>
+
+  <main>
+    <section id="play" role="tabpanel" aria-labelledby="tab-play">
+      <div id="hub" class="hub">
+        <div class="house" aria-label="La casa embrujada con cuatro ventanas encendidas">
+          <div class="roof"></div>
+          <div class="house-body">
+            <div class="windows">
+              <button type="button" class="win" data-st="web"><span class="num">Pista 1 de 4</span><strong>La telaraña</strong><span class="skill">Algoritmos</span><span class="state">Pendiente</span></button>
+              <button type="button" class="win" data-st="pocion"><span class="num">Pista 2 de 4</span><strong>La poción</strong><span class="skill">Patrones</span><span class="state">Pendiente</span></button>
+              <button type="button" class="win" data-st="esqueleto"><span class="num">Pista 3 de 4</span><strong>El código del esqueleto</strong><span class="skill">Decodificación</span><span class="state">Pendiente</span></button>
+              <button type="button" class="win" data-st="murcielago"><span class="num">Pista 4 de 4</span><strong>El error del murciélago</strong><span class="skill">Depuración</span><span class="state">Pendiente</span></button>
+            </div>
+            <div class="door-row"><div class="door" id="door"><span class="knob"></span><span class="lockico" id="lockico">🔒</span></div></div>
+          </div>
+        </div>
+
+        <aside class="lock-card">
+          <h2>La puerta</h2>
+          <p>Cada ventana entrega un número. Escríbelos en orden para abrir el candado.</p>
+          <div class="clues" id="clues"></div>
+          <div class="digits" id="digits">
+            <input type="text" inputmode="numeric" maxlength="1" aria-label="Número 1" autocomplete="off">
+            <input type="text" inputmode="numeric" maxlength="1" aria-label="Número 2" autocomplete="off">
+            <input type="text" inputmode="numeric" maxlength="1" aria-label="Número 3" autocomplete="off">
+            <input type="text" inputmode="numeric" maxlength="1" aria-label="Número 4" autocomplete="off">
+          </div>
+          <div class="row center"><button type="button" class="btn green" id="openBtn">Abrir la puerta</button></div>
+          <p class="msg" id="lockMsg" aria-live="polite"></p>
+        </aside>
+      </div>
+      <div id="station" hidden></div>
+    </section>
+
+    <section id="guide" role="tabpanel" aria-labelledby="tab-guide" hidden>
+      <div class="guide">
+        <div class="card">
+          <h2>Resumen de la actividad</h2>
+          <div class="facts">
+            <div class="fact"><small>Duración</small><b>40 a 50 minutos</b></div>
+            <div class="fact"><small>Equipos</small><b>4 estudiantes, un dispositivo por equipo</b></div>
+            <div class="fact"><small>Código final</small><b>3 · 1 · 1 · 0 (31 de octubre)</b></div>
+            <div class="fact"><small>Niveles</small><b>3° con 3 retos de patrón y 1 palabra. 4° suma mapa más grande, 4 patrones, 2 palabras y 2 errores.</b></div>
+          </div>
+        </div>
+
+        <div class="two">
+          <div class="card">
+            <h2>Roles del equipo</h2>
+            <ul>
+              <li><b>Capitán o capitana:</b> toca la pantalla y escribe las respuestas.</li>
+              <li><b>Detective:</b> lee en voz alta el reto y las pistas.</li>
+              <li><b>Programador o programadora:</b> propone las secuencias y revisa cada paso.</li>
+              <li><b>Vigía del tiempo:</b> controla el reloj y avisa cuándo pasar a otra ventana.</li>
+            </ul>
+            <p style="margin-top:10px;color:var(--mute)">Rotar los roles cada ventana permite que todos prueben cada habilidad.</p>
+          </div>
+          <div class="card">
+            <h2>Ambientación</h2>
+            <ul>
+              <li>Luces bajas o linternas, música suave de misterio.</li>
+              <li>Telarañas de lana en la puerta del aula.</li>
+              <li>Un candado de números con el código 3110 como premio físico opcional.</li>
+              <li>Cada equipo toma un nombre de monstruo antes de empezar.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Guion de la sesión</h2>
+          <div class="scroll"><table>
+            <thead><tr><th>Minutos</th><th>Momento</th><th>Qué hace el docente</th></tr></thead>
+            <tbody>
+              <tr><td>0 a 5</td><td>Apertura</td><td>Cuenta la historia: el fantasma de la casa guardó la salida con un candado de cuatro números.</td></tr>
+              <tr><td>5 a 8</td><td>Reglas y roles</td><td>Reparte roles, nombra los equipos y explica que las ventanas se resuelven en cualquier orden.</td></tr>
+              <tr><td>8 a 38</td><td>Cuatro ventanas</td><td>Circula entre equipos. Responde con preguntas, no con soluciones: «¿qué pasaría si…?».</td></tr>
+              <tr><td>38 a 43</td><td>La puerta</td><td>Los equipos ingresan el código. Celebra cada puerta abierta.</td></tr>
+              <tr><td>43 a 50</td><td>Cierre</td><td>Conversación de reflexión con las preguntas de abajo.</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+
+        <div class="card">
+          <h2>Solucionario</h2>
+          <div class="scroll"><table>
+            <thead><tr><th>Ventana</th><th>Respuesta 3°</th><th>Respuesta 4°</th><th>Número</th></tr></thead>
+            <tbody>
+              <tr><td>1. La telaraña</td><td>Una solución: ↑ ↑ → → → ↑ ↑ (7 pasos, máximo permitido 11)</td><td>Una solución: ↑ ↑ ↑ ↑ ↑ → → → → (9 pasos, máximo permitido 13)</td><td><code>3</code></td></tr>
+              <tr><td>2. La poción</td><td>👻 · 🕷️ · 🎃🎃🎃🎃</td><td>🕷️ · 🎃🎃🎃🎃 · 32 · 48</td><td><code>1</code></td></tr>
+              <tr><td>3. El código del esqueleto</td><td>2-19-22-10-1 = <b>BRUJA</b></td><td>BRUJA y 27-16-13-2-9 = <b>ZOMBI</b></td><td><code>1</code></td></tr>
+              <tr><td>4. El error del murciélago</td><td>Mover «Servir la poción» al final</td><td>Lo anterior, y cambiar 45° por 90°</td><td><code>0</code></td></tr>
+            </tbody>
+          </table></div>
+          <p style="margin-top:12px;color:var(--mute)">La clave del esqueleto usa el abecedario español de 27 letras (A=1 … N=14, Ñ=15, O=16 … Z=27). Está visible dentro del reto.</p>
+        </div>
+
+        <div class="two">
+          <div class="card">
+            <h2>Conexión con el PYP</h2>
+            <ul>
+              <li><b>Enfoques de aprendizaje:</b> pensamiento (resolución de problemas), social (colaboración) y autogestión (manejo del tiempo).</li>
+              <li><b>Perfil de la comunidad de aprendizaje:</b> pensadores, indagadores y colaboradores.</li>
+              <li><b>Conceptos clave posibles:</b> función y causa (cada instrucción produce un efecto).</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h2>Preguntas de cierre</h2>
+            <ul>
+              <li>¿Qué ventana les costó más y qué hicieron para avanzar?</li>
+              <li>¿Cuándo un error les ayudó a descubrir algo?</li>
+              <li>¿Qué hizo cada rol para que el equipo ganara?</li>
+              <li>¿Dónde usarían una secuencia de pasos fuera del colegio?</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Rúbrica rápida</h2>
+          <div class="scroll"><table>
+            <thead><tr><th>Criterio</th><th>En desarrollo</th><th>Logrado</th><th>Destacado</th></tr></thead>
+            <tbody>
+              <tr><td>Pensamiento computacional</td><td>Resuelve con ayuda frecuente.</td><td>Crea secuencias y detecta patrones por su cuenta.</td><td>Optimiza y explica por qué funciona su solución.</td></tr>
+              <tr><td>Colaboración</td><td>Trabaja casi solo.</td><td>Cumple su rol y escucha al equipo.</td><td>Ayuda a otros y rota roles sin que se lo pidan.</td></tr>
+              <tr><td>Persistencia</td><td>Se detiene al primer error.</td><td>Vuelve a intentar con otra idea.</td><td>Convierte los errores en pistas para el equipo.</td></tr>
+              <tr><td>Comunicación</td><td>Responde con una palabra.</td><td>Explica sus pasos.</td><td>Usa vocabulario del reto: secuencia, patrón, error.</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="final" id="final" hidden>
+  <div class="final-card" role="dialog" aria-modal="true" aria-labelledby="finalTitle">
+    <h2 id="finalTitle">¡Escaparon!</h2>
+    <p id="finalText">La puerta se abrió y el fantasma se quedó sin su juego.</p>
+    <button type="button" class="btn" id="againBtn">Jugar otra vez</button>
+  </div>
+</div>
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+
+  var CODE = '3110';
+  var START_SECONDS = 40 * 60;
+  var ALPHA = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
+  var ST = [
+    { id: 'web', name: 'La telaraña', digit: '3', story: 'Una <b>araña</b> quiere llegar a la <b>mosca</b>, pero las calabazas bloquean el camino. Arma una secuencia de flechas y toca <b>Ejecutar</b>. Cada flecha mueve a la araña una casilla.' },
+    { id: 'pocion', name: 'La poción', digit: '1', story: 'La bruja olvidó el orden de sus ingredientes. Descubre <b>qué sigue</b> en cada patrón para completar la receta.' },
+    { id: 'esqueleto', name: 'El código del esqueleto', digit: '1', story: 'El esqueleto dejó un mensaje con números. Usa la <b>clave</b> para convertir cada número en una letra y escribe la palabra secreta.' },
+    { id: 'murcielago', name: 'El error del murciélago', digit: '0', story: 'Un <b>bug</b> se coló en las instrucciones. Toca la línea que tiene el error y elige cómo arreglarla.' }
+  ];
+  var LV = {
+    3: {
+      grid: { n: 5, start: [4, 0], fly: [0, 3], walls: [[3, 1], [3, 2], [1, 1], [1, 2]], min: 7 },
+      patterns: [
+        { seq: ['🎃', '👻', '🎃', '👻', '🎃'], ans: '👻', opts: ['👻', '🎃', '🦇'] },
+        { seq: ['🦇', '🦇', '🕷️', '🦇', '🦇', '🕷️', '🦇', '🦇'], ans: '🕷️', opts: ['🦇', '🕷️', '💀'] },
+        { seq: ['🎃', '🎃🎃', '🎃🎃🎃'], ans: '🎃🎃🎃🎃', opts: ['🎃🎃🎃🎃', '🎃🎃🎃🎃🎃', '🎃🎃'] }
+      ],
+      words: ['BRUJA'],
+      rounds: ['A']
+    },
+    4: {
+      grid: { n: 6, start: [5, 0], fly: [0, 4], walls: [[4, 1], [4, 2], [3, 3], [2, 1], [2, 2], [1, 3], [1, 2]], min: 9 },
+      patterns: [
+        { seq: ['🦇', '🦇', '🕷️', '🦇', '🦇', '🕷️', '🦇', '🦇'], ans: '🕷️', opts: ['🦇', '🕷️', '💀'] },
+        { seq: ['🎃', '🎃🎃', '🎃🎃🎃'], ans: '🎃🎃🎃🎃', opts: ['🎃🎃🎃🎃', '🎃🎃🎃🎃🎃', '🎃🎃'] },
+        { seq: ['2', '4', '8', '16'], ans: '32', opts: ['24', '32', '20'] },
+        { seq: ['3', '6', '12', '24'], ans: '48', opts: ['36', '48', '30'] }
+      ],
+      words: ['BRUJA', 'ZOMBI'],
+      rounds: ['A', 'B']
+    }
+  };
+  var ROUNDS = {
+    A: {
+      goal: 'Receta: la poción debe quedar <b>revuelta antes de servirse</b>.',
+      lines: ['Encender el caldero', 'Echar el agua', 'Servir la poción', 'Revolver tres veces', 'Apagar el fuego'],
+      bug: 2,
+      fixes: [
+        { t: 'Mover «Servir la poción» al final', ok: true },
+        { t: 'Borrar «Echar el agua»', ok: false },
+        { t: 'Repetir «Revolver» diez veces', ok: false }
+      ]
+    },
+    B: {
+      goal: 'Programa: el murciélago debe volar en un <b>cuadrado</b> y volver a su cueva.',
+      lines: ['Repetir 4 veces:', '    avanzar 3 pasos', '    girar a la derecha 45°'],
+      bug: 2,
+      fixes: [
+        { t: 'Cambiar 45° por 90°', ok: true },
+        { t: 'Cambiar «4 veces» por «8 veces»', ok: false },
+        { t: 'Cambiar «3 pasos» por «1 paso»', ok: false }
+      ]
+    }
+  };
+  var DIR = { U: [-1, 0, '↑'], D: [1, 0, '↓'], L: [0, -1, '←'], R: [0, 1, '→'] };
+
+  var S = { grade: 3, solved: {}, remaining: START_SECONDS, timer: null, started: false };
+
+  /* ---------- Timer ---------- */
+  function fmt(t) { var m = Math.floor(t / 60), s = t % 60; return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s; }
+  function drawTime() { $('#time').textContent = fmt(Math.max(S.remaining, 0)); $('#time').parentNode.classList.toggle('out', S.remaining <= 0); }
+  function startTimer() {
+    if (S.timer) return;
+    S.started = true;
+    S.timer = setInterval(function () { if (S.remaining > 0) { S.remaining--; drawTime(); } }, 1000);
+    $('#startBtn').textContent = 'Pausar';
+  }
+  function pauseTimer() { clearInterval(S.timer); S.timer = null; $('#startBtn').textContent = 'Seguir'; }
+  $('#startBtn').addEventListener('click', function () { if (S.timer) pauseTimer(); else startTimer(); });
+
+  /* ---------- Hub ---------- */
+  function refresh() {
+    var n = 0, clues = $('#clues');
+    clues.innerHTML = '';
+    ST.forEach(function (s, i) {
+      var done = !!S.solved[s.id]; if (done) n++;
+      var w = $('.win[data-st="' + s.id + '"]');
+      w.classList.toggle('done', done);
+      $('.state', w).textContent = done ? 'Resuelta' : 'Pendiente';
+      var c = h('div', 'clue' + (done ? ' got' : ''), '<small>Pista ' + (i + 1) + '</small><b>' + (done ? s.digit : '?') + '</b>');
+      clues.appendChild(c);
+    });
+    $('#clueCount').textContent = n + '/4';
+    $('#door').classList.toggle('ready', n === 4);
+  }
+  function openStation(id) {
+    if (!S.started) startTimer();
+    var idx = ST.map(function (s) { return s.id; }).indexOf(id), s = ST[idx];
+    var host = $('#station');
+    $('#hub').hidden = true; host.hidden = false; host.innerHTML = '';
+    var p = h('div', 'panel');
+    var head = h('div', 'panel-head');
+    var back = h('button', 'btn ghost small', '← La casa'); back.type = 'button'; back.addEventListener('click', closeStation);
+    head.appendChild(back); head.appendChild(h('h2', null, s.name)); head.appendChild(h('span', 'tag', 'Pista ' + (idx + 1) + ' de 4'));
+    p.appendChild(head); p.appendChild(h('p', 'story', s.story));
+    host.appendChild(p);
+    if (S.solved[id]) { showReveal(p, s, idx, true); }
+    else if (id === 'web') buildWeb(p, s, idx);
+    else if (id === 'pocion') buildPattern(p, s, idx);
+    else if (id === 'esqueleto') buildCipher(p, s, idx);
+    else buildDebug(p, s, idx);
+    window.scrollTo(0, 0);
+  }
+  function closeStation() {
+    $('#station').hidden = true; $('#hub').hidden = false; refresh();
+    window.scrollTo(0, 0);
+  }
+  function showReveal(p, s, idx, again) {
+    S.solved[s.id] = true; refresh();
+    var old = $$('.work', p); old.forEach(function (n) { n.remove(); });
+    var r = h('div', 'reveal work', '<p>' + (again ? 'Ya resolviste esta ventana. Tu número es' : '¡Ventana resuelta! Tu número es') + '</p><div class="big">' + s.digit + '</div><p>Es el número <b>' + (idx + 1) + '</b> del candado. Anótalo.</p>');
+    var b = h('button', 'btn green', 'Volver a la casa'); b.type = 'button'; b.addEventListener('click', closeStation);
+    r.appendChild(b); p.appendChild(r);
+  }
+  function feedback(node, text, ok) { node.textContent = text; node.className = 'feedback ' + (ok ? 'good' : 'bad'); }
+  $$('.win').forEach(function (w) { w.addEventListener('click', function () { openStation(w.getAttribute('data-st')); }); });
+
+  /* ---------- 1. La telaraña ---------- */
+  function buildWeb(p, s, idx) {
+    var g = LV[S.grade].grid, cap = g.min + 4, seq = [], busy = false;
+    var work = h('div', 'work');
+    var board = h('div', 'board'); board.style.setProperty('--n', g.n);
+    var box = h('div', 'seq'); var count = h('span', 'count');
+    var fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
+    function isWall(r, c) { return g.walls.some(function (w) { return w[0] === r && w[1] === c; }); }
+    function draw(pos, trail, bump) {
+      board.innerHTML = '';
+      for (var r = 0; r < g.n; r++) for (var c = 0; c < g.n; c++) {
+        var k = r + ',' + c, cell = h('div', 'cell'), t = '';
+        if (isWall(r, c)) { cell.classList.add('wall'); t = '🎃'; }
+        if (r === g.fly[0] && c === g.fly[1]) { cell.classList.add('fly'); t = '🪰'; }
+        if (trail && trail[k]) cell.classList.add('trail');
+        if (bump === k) cell.classList.add('bump');
+        if (r === pos[0] && c === pos[1]) t = '🕷️';
+        cell.textContent = t; board.appendChild(cell);
+      }
+    }
+    function drawSeq(now, err) {
+      box.innerHTML = '';
+      if (!seq.length) box.appendChild(h('span', 'hint', 'Toca las flechas para armar el camino.'));
+      seq.forEach(function (d, i) { box.appendChild(h('span', 'step' + (i === now ? ' now' : '') + (i === err ? ' err' : ''), DIR[d][2])); });
+      count.textContent = seq.length + ' de ' + cap + ' pasos';
+    }
+    function reset() { draw(g.start, {}); drawSeq(-1, -1); }
+    var pad = h('div', 'pad'), ctrl = h('div', 'row'), btns = [];
+    Object.keys(DIR).forEach(function (k) {
+      var b = h('button', 'btn', DIR[k][2]); b.type = 'button'; b.setAttribute('aria-label', 'Flecha ' + DIR[k][2]);
+      b.addEventListener('click', function () { if (busy) return; if (seq.length >= cap) { feedback(fb, 'Llegaste al máximo de pasos. Borra alguno y busca un camino más corto.', false); return; } seq.push(k); fb.textContent = ''; reset(); });
+      pad.appendChild(b); btns.push(b);
+    });
+    var undo = h('button', 'btn ghost small', 'Borrar último'), clear = h('button', 'btn ghost small', 'Limpiar'), go = h('button', 'btn green', 'Ejecutar');
+    undo.type = clear.type = go.type = 'button';
+    undo.addEventListener('click', function () { if (busy) return; seq.pop(); fb.textContent = ''; reset(); });
+    clear.addEventListener('click', function () { if (busy) return; seq = []; fb.textContent = ''; reset(); });
+    [undo, clear, go].forEach(function (b) { btns.push(b); });
+    function lock(v) { btns.forEach(function (b) { b.disabled = v; }); }
+    go.addEventListener('click', function () {
+      if (busy) return;
+      if (!seq.length) { feedback(fb, 'Primero arma una secuencia con las flechas.', false); return; }
+      busy = true; lock(true); fb.textContent = '';
+      var pos = g.start.slice(), trail = {}, i = 0; trail[pos[0] + ',' + pos[1]] = 1;
+      (function step() {
+        if (i >= seq.length) {
+          drawSeq(-1, -1);
+          if (pos[0] === g.fly[0] && pos[1] === g.fly[1]) {
+            feedback(fb, '¡La araña atrapó a la mosca en ' + seq.length + ' pasos!', true);
+            setTimeout(function () { showReveal(p, s, idx); }, 900);
+          } else {
+            feedback(fb, 'La araña se detuvo lejos de la mosca. Cambia la secuencia y prueba otra vez.', false);
+            setTimeout(function () { draw(g.start, {}); busy = false; lock(false); }, 900);
+          }
+          return;
+        }
+        var d = DIR[seq[i]], nr = pos[0] + d[0], nc = pos[1] + d[1];
+        drawSeq(i, -1);
+        if (nr < 0 || nc < 0 || nr >= g.n || nc >= g.n || isWall(nr, nc)) {
+          draw(pos, trail, nr + ',' + nc); drawSeq(-1, i);
+          feedback(fb, 'La araña chocó en el paso ' + (i + 1) + '. Revisa esa flecha y corrígela.', false);
+          busy = false; lock(false); return;
+        }
+        pos = [nr, nc]; trail[nr + ',' + nc] = 1; draw(pos, trail); i++;
+        setTimeout(step, 420);
+      })();
+    });
+    ctrl.appendChild(undo); ctrl.appendChild(clear); ctrl.appendChild(go); ctrl.appendChild(count);
+    work.appendChild(board); work.appendChild(box); work.appendChild(pad);
+    var spacer = h('div'); spacer.style.height = '14px'; work.appendChild(spacer); work.appendChild(ctrl); work.appendChild(fb);
+    p.appendChild(work); reset();
+  }
+
+  /* ---------- 2. La poción ---------- */
+  function buildPattern(p, s, idx) {
+    var list = LV[S.grade].patterns, i = 0, work = h('div', 'work');
+    var dots = h('div', 'dots'), area = h('div'), fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
+    function isNum(t) { return /^\d+$/.test(t); }
+    function draw() {
+      dots.innerHTML = ''; list.forEach(function (_, k) { dots.appendChild(h('i', (k < i ? 'on' : '') + (k === i ? ' cur' : ''))); });
+      var q = list[i]; area.innerHTML = '';
+      var pat = h('div', 'pattern');
+      q.seq.forEach(function (t) { pat.appendChild(h('span', 'tok' + (isNum(t) ? ' num' : ''), t)); });
+      pat.appendChild(h('span', 'tok q' + (isNum(q.ans) ? ' num' : ''), '?'));
+      var opts = h('div', 'opts');
+      shuffle(q.opts).forEach(function (o) {
+        var b = h('button', 'opt' + (isNum(o) ? ' num' : ''), o); b.type = 'button';
+        b.addEventListener('click', function () {
+          if (o === q.ans) {
+            feedback(fb, '¡Correcto! Ese es el ingrediente que sigue.', true);
+            $$('.opt', opts).forEach(function (x) { x.disabled = true; });
+            i++;
+            setTimeout(function () { fb.textContent = ''; if (i >= list.length) showReveal(p, s, idx); else draw(); }, 800);
+          } else {
+            b.classList.add('wrong'); feedback(fb, 'Mira cómo se repite o cambia el patrón. Prueba otra vez.', false);
+            setTimeout(function () { b.classList.remove('wrong'); }, 450);
+          }
+        });
+        opts.appendChild(b);
+      });
+      area.appendChild(pat); area.appendChild(opts);
+    }
+    work.appendChild(dots); work.appendChild(area); work.appendChild(fb); p.appendChild(work); draw();
+  }
+
+  /* ---------- 3. El código del esqueleto ---------- */
+  function buildCipher(p, s, idx) {
+    var words = LV[S.grade].words, work = h('div', 'work'), got = 0;
+    var key = h('div', 'key'); key.setAttribute('aria-label', 'Clave: cada letra con su número');
+    ALPHA.split('').forEach(function (ch, k) { key.appendChild(h('span', null, ch + '<b>' + (k + 1) + '</b>')); });
+    var fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
+    work.appendChild(key);
+    words.forEach(function (w, wi) {
+      var box = h('div', 'word'), nums = h('div', 'nums');
+      w.split('').forEach(function (ch) { nums.appendChild(h('span', null, String(ALPHA.indexOf(ch) + 1))); });
+      var inp = document.createElement('input');
+      inp.type = 'text'; inp.autocomplete = 'off'; inp.maxLength = w.length; inp.id = 'w' + wi;
+      inp.setAttribute('aria-label', 'Palabra ' + (wi + 1) + ' de ' + words.length); inp.placeholder = '· '.repeat(w.length).trim();
+      inp.addEventListener('input', function () {
+        var v = inp.value.toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+        if (v === w) {
+          box.classList.add('ok'); inp.value = w; inp.disabled = true; got++;
+          feedback(fb, '¡Palabra descifrada: ' + w + '!', true);
+          if (got === words.length) setTimeout(function () { showReveal(p, s, idx); }, 900);
+        } else if (v.length >= w.length) {
+          feedback(fb, 'Revisa los números con la clave, letra por letra.', false);
+        } else { fb.textContent = ''; }
+      });
+      box.appendChild(nums); box.appendChild(inp); work.appendChild(box);
+    });
+    work.appendChild(fb); p.appendChild(work);
+  }
+
+  /* ---------- 4. El error del murciélago ---------- */
+  function buildDebug(p, s, idx) {
+    var keys = LV[S.grade].rounds, ri = 0, work = h('div', 'work');
+    var dots = h('div', 'dots'), area = h('div'), fb = h('p', 'feedback'); fb.setAttribute('aria-live', 'polite');
+    function draw() {
+      dots.innerHTML = ''; keys.forEach(function (_, k) { dots.appendChild(h('i', (k < ri ? 'on' : '') + (k === ri ? ' cur' : ''))); });
+      var R = ROUNDS[keys[ri]]; area.innerHTML = ''; fb.textContent = '';
+      area.appendChild(h('div', 'goal', R.goal));
+      var code = h('div', 'code'), fixes = h('div', 'fixes'); fixes.hidden = true;
+      R.lines.forEach(function (t, li) {
+        var b = h('button'); b.type = 'button';
+        var num = h('i'); num.textContent = (li + 1); var txt = document.createElement('span'); txt.textContent = t;
+        b.appendChild(num); b.appendChild(txt);
+        b.addEventListener('click', function () {
+          if (li === R.bug) {
+            $$('button', code).forEach(function (x) { x.classList.remove('sel'); }); b.classList.add('sel');
+            feedback(fb, '¡Encontraste el error! Ahora elige cómo arreglarlo.', true); fixes.hidden = false;
+          } else {
+            b.classList.add('bad'); feedback(fb, 'Esa línea está bien. Sigue buscando el error.', false);
+            setTimeout(function () { b.classList.remove('bad'); }, 450);
+          }
+        });
+        code.appendChild(b);
+      });
+      shuffle(R.fixes).forEach(function (f) {
+        var b = h('button', 'opt'); b.type = 'button'; b.textContent = f.t;
+        b.addEventListener('click', function () {
+          if (f.ok) {
+            feedback(fb, '¡Error corregido! El programa ya funciona.', true);
+            $$('button', area).forEach(function (x) { x.disabled = true; });
+            ri++; setTimeout(function () { if (ri >= keys.length) showReveal(p, s, idx); else draw(); }, 900);
+          } else {
+            b.classList.add('wrong'); feedback(fb, 'Esa corrección no arregla el problema. Piensa en el objetivo.', false);
+            setTimeout(function () { b.classList.remove('wrong'); }, 450);
+          }
+        });
+        fixes.appendChild(b);
+      });
+      area.appendChild(code); area.appendChild(fixes);
+    }
+    work.appendChild(dots); work.appendChild(area); work.appendChild(fb); p.appendChild(work); draw();
+  }
+
+  /* ---------- Candado final ---------- */
+  var inputs = $$('#digits input');
+  function lockMsg(t, kind) { var m = $('#lockMsg'); m.textContent = t; m.className = 'msg ' + (kind || ''); }
+  inputs.forEach(function (inp, i) {
+    inp.addEventListener('input', function () { inp.value = inp.value.replace(/\D/g, '').slice(0, 1); if (inp.value && i < 3) inputs[i + 1].focus(); });
+    inp.addEventListener('keydown', function (e) {
+      if (e.key === 'Backspace' && !inp.value && i > 0) inputs[i - 1].focus();
+      if (e.key === 'Enter') tryOpen();
+    });
+  });
+  function tryOpen() {
+    var v = inputs.map(function (x) { return x.value; }).join('');
+    if (v.length < 4) { lockMsg('Escribe los cuatro números.', 'bad'); return; }
+    if (v === CODE) { win(); return; }
+    lockMsg('El candado no se abre. Revisa el orden de tus pistas.', 'bad');
+    var d = $('#digits'); d.classList.remove('shake'); void d.offsetWidth; d.classList.add('shake');
+  }
+  $('#openBtn').addEventListener('click', tryOpen);
+  function win() {
+    clearInterval(S.timer); S.timer = null;
+    $('#door').classList.add('open'); $('#lockico').textContent = '🔓';
+    lockMsg('¡Clic! La puerta se abre.', 'good');
+    var left = S.started && S.remaining > 0 ? ' Les sobraron ' + fmt(S.remaining) + '.' : '';
+    $('#finalText').textContent = 'La puerta se abrió y el fantasma se quedó sin su juego.' + left;
+    var fin = $('#final'), icons = ['🎃', '👻', '🦇', '🕷️', '🍬', '💀'];
+    $$('.fall', fin).forEach(function (n) { n.remove(); });
+    for (var k = 0; k < 30; k++) {
+      var f = h('span', 'fall', icons[k % icons.length]);
+      f.style.left = (Math.random() * 100) + '%'; f.style.animationDuration = (3 + Math.random() * 3) + 's'; f.style.animationDelay = (Math.random() * 2) + 's';
+      fin.appendChild(f);
+    }
+    setTimeout(function () { fin.hidden = false; $('#againBtn').focus(); }, 700);
+  }
+  function resetAll() {
+    S.solved = {}; S.remaining = START_SECONDS; clearInterval(S.timer); S.timer = null; S.started = false;
+    $('#startBtn').textContent = 'Empezar'; drawTime();
+    inputs.forEach(function (x) { x.value = ''; });
+    $('#door').classList.remove('open', 'ready'); $('#lockico').textContent = '🔒'; lockMsg('');
+    $('#final').hidden = true; closeStation();
+  }
+  $('#againBtn').addEventListener('click', resetAll);
+
+  /* ---------- Grado y pestañas ---------- */
+  $$('.seg button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var g = Number(b.getAttribute('data-grade')); if (g === S.grade) return;
+      S.grade = g; $$('.seg button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      resetAll(); lockMsg('Nivel de ' + g + '° listo. El progreso se reinició.', 'good');
+    });
+  });
+  function tab(which) {
+    var play = which === 'play';
+    $('#play').hidden = !play; $('#guide').hidden = play;
+    $('#tab-play').setAttribute('aria-selected', String(play)); $('#tab-guide').setAttribute('aria-selected', String(!play));
+  }
+  $('#tab-play').addEventListener('click', function () { tab('play'); });
+  $('#tab-guide').addEventListener('click', function () { tab('guide'); });
+
+  function docente() { $('#tabs').hidden = !(/[?&]docente\b/.test(location.search) || location.hash === '#docente'); if ($('#tabs').hidden) tab('play'); }
+  window.addEventListener('hashchange', docente); docente();
+
+  drawTime(); refresh();
+})();
+</script>
+</body>
+</html>
