@@ -209,6 +209,15 @@
       "nombre_en": "RedNexo"
     },
     {
+      "id": "motortrack",
+      "nombre": "Iskonex MotorTrack",
+      "grupos": [
+        "proyectos-personales"
+      ],
+      "url": "https://motortrack.iskonex.com",
+      "nombre_en": "Iskonex MotorTrack"
+    },
+    {
       "id": "estructuras",
       "nombre": "Ingeniero de estructuras",
       "grupos": [
