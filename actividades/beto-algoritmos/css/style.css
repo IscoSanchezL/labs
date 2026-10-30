@@ -41,7 +41,7 @@ button{font:inherit;color:inherit;cursor:pointer;border:0}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:64px;padding:12px 28px;border-radius:22px;font-weight:700;font-size:1.15em;background:var(--morado);color:#fff;box-shadow:0 8px 0 var(--morado-osc);transition:transform .1s,box-shadow .1s;position:relative}
 .btn:hover{filter:brightness(1.07)}
 .btn:active{transform:translateY(7px);box-shadow:0 1px 0 var(--morado-osc)}
-.btn.verde{background:var(--verde);box-shadow:0 8px 0 var(--verde-osc)}.btn.verde:active{box-shadow:0 1px 0 var(--verde-osc)}
+.btn.verde{background:#15803d;box-shadow:0 8px 0 #0f5c2a}.btn.verde:active{box-shadow:0 1px 0 var(--verde-osc)}
 .btn.rosa{background:var(--rosa);box-shadow:0 8px 0 #c93a69}.btn.rosa:active{box-shadow:0 1px 0 #c93a69}
 .btn.amarillo{background:var(--amarillo);color:var(--tinta);box-shadow:0 8px 0 #d9a900}.btn.amarillo:active{box-shadow:0 1px 0 #d9a900}
 .btn[disabled]{filter:grayscale(.8);opacity:.6;cursor:not-allowed}

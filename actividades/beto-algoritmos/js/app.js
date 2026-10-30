@@ -283,7 +283,7 @@
         <div class="avatares" role="group" aria-label="${tx('eligeAmigo')}"></div>
         <button class="btn verde pulsa" type="submit">${tx('empezar')}</button>
       </form>
-      <div id="recientes" class="recientes" aria-label="${tx('ninosAqui')}"></div>
+      <div id="recientes" class="recientes" role="group" aria-label="${tx('ninosAqui')}"></div>
       <button class="chip" id="profe" type="button">${tx('paraProfe')}</button>
     </section>`);
     el.insertBefore(selectorIdioma(), el.firstChild);
