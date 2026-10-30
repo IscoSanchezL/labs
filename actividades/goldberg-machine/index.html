@@ -1,4 +1,8 @@
+<!doctype html>
+<html lang="es">
+<head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Máquinas Locas de Chispa</title>
 <meta name="description" content="Juego para aprender reacciones en cadena y las máquinas simples construyendo máquinas de Rube Goldberg con física real.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,14 +23,14 @@
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#060b2a; --bg2:#0e1650; --panel:#0f1754; --panel2:#17206e; --ink:#f3f7ff; --muted:#a3b3f2; --line:#2b3a9c;
-  --ui:#8b5cff; --ui-d:#5a2fe0; --ui-soft:#251d78; --go:#12b886; --go-d:#0a7a59; --stop:#ff5c7a; --stop-d:#b81f48; --star:#ffd23f;
+  --ui:#7d4cf5; --ui-d:#5a2fe0; --ui-soft:#251d78; --go:#12b886; --go-d:#0a7a59; --stop:#ff5c7a; --stop-d:#b81f48; --star:#ffd23f;
   --sky1:#040820; --sky2:#1b2f7a; --hill1:#2a1b6e; --hill2:#123e72; --grass:#c6ff3d; --grass-d:#7ed321; --dirt:#0b1a4c; --dirt-d:#17306a;
   --metal-l:#eaeeff; --cloud:rgba(255,255,255,.1); --grid:rgba(180,210,255,.16); --accent:#2de2e6; --night:1;
   --shadow:0 10px 34px rgba(0,0,0,.5), 0 0 40px rgba(139,92,255,.18); --shadow-s:0 3px 10px rgba(0,0,0,.35); color-scheme:dark;
 }}
 :root[data-theme="dark"]{
   --bg:#060b2a; --bg2:#0e1650; --panel:#0f1754; --panel2:#17206e; --ink:#f3f7ff; --muted:#a3b3f2; --line:#2b3a9c;
-  --ui:#8b5cff; --ui-d:#5a2fe0; --ui-soft:#251d78; --go:#12b886; --go-d:#0a7a59; --stop:#ff5c7a; --stop-d:#b81f48; --star:#ffd23f;
+  --ui:#7d4cf5; --ui-d:#5a2fe0; --ui-soft:#251d78; --go:#12b886; --go-d:#0a7a59; --stop:#ff5c7a; --stop-d:#b81f48; --star:#ffd23f;
   --sky1:#040820; --sky2:#1b2f7a; --hill1:#2a1b6e; --hill2:#123e72; --grass:#c6ff3d; --grass-d:#7ed321; --dirt:#0b1a4c; --dirt-d:#17306a;
   --metal-l:#eaeeff; --cloud:rgba(255,255,255,.1); --grid:rgba(180,210,255,.16); --accent:#2de2e6; --night:1;
   --shadow:0 10px 34px rgba(0,0,0,.5), 0 0 40px rgba(139,92,255,.18); --shadow-s:0 3px 10px rgba(0,0,0,.35); color-scheme:dark;
@@ -81,6 +85,8 @@ main{max-width:1240px;margin:0 auto;padding:18px 16px 40px}
 .pill{display:inline-flex;align-items:center;gap:6px;font-family:Fredoka,sans-serif;font-weight:600;font-size:14px;padding:6px 12px;border-radius:999px;background:var(--ui-soft);color:var(--ui-d)}
 :root[data-theme="dark"] .pill{color:#D9CEFF}
 .eyebrow{font-family:Fredoka,sans-serif;font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ui)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .eyebrow{color:#a98bff}}
+:root[data-theme="dark"] .eyebrow{color:#a98bff}
 
 /* chispa globo */
 .chispa-row{display:flex;gap:14px;align-items:flex-start}
@@ -222,6 +228,8 @@ body.teacher-on .teacherlock{opacity:1;color:var(--go-d)}
 footer{text-align:center;color:var(--muted);font-size:14px;padding:18px 16px 26px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+</head>
+<body>
 
 <header class="appbar">
   <button class="iconbtn back" id="backBtn" data-i18n-attr="aria-label:back">← <span data-i18n="back">Atrás</span></button>
@@ -354,7 +362,9 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:18px 16px 26p
 <div class="modal" id="modal" hidden><div class="mbox" id="mbox"></div></div>
 <canvas id="confetti" aria-hidden="true"></canvas>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<script src="matter.min.js"></script>
 <script src="engine.js"></script>
 <script src="i18n.js"></script>
 <script src="app.js"></script>
+</body>
+</html>
