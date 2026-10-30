@@ -25,8 +25,9 @@ async function sesionValida(request, env) {
   if (!m || Number(m[1]) < Date.now() / 1000) return false;
   return iguales(env.COOKIE_SECRET, m[2], await firmar(env.COOKIE_SECRET, 'sesion:' + m[1]));
 }
-// Rutas abiertas sin contraseña: la sección STEM (por enlace) y los estilos compartidos que ella necesita
-const esPublica = (ruta) => /^\/(stem|assets)(\/|$)/.test(ruta);
+// Rutas abiertas sin contraseña: la sección STEM (por enlace), los estilos compartidos que ella necesita
+// y la actividad de Halloween (los estudiantes entran directo por su enlace; el portal sigue protegido)
+const esPublica = (ruta) => /^\/(stem|assets)(\/|$)/.test(ruta) || /^\/actividades\/escape-halloween(\/|$)/.test(ruta);
 // Solo rutas internas del sitio: evita redirigir a otro dominio tras entrar
 const destinoSeguro = (d) => (typeof d === 'string' && /^\/(?!\/|\\)/.test(d) ? d : '/');
 const esc = (t) => t.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));

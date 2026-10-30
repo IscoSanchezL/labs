@@ -5,7 +5,7 @@ Así GitHub Pages deja de ser necesario y los repos pueden ser **privados**.
 
 - `wrangler.toml` (raíz): nombre, ruta `labs.iscosanchez.com/*`, comando de build y carpeta de archivos.
 - `scripts/construir.mjs`: arma `dist/` con SOLO lo público (portada, `actividades/`, `stem/`, `assets/`). Nunca `fuentes/`, `tools/`, `docs/`, `cloudflare/`.
-- `cloudflare/worker.js`: la lógica de la contraseña. Abierto sin contraseña: `/stem/…` y `/assets/…` (ver `esPublica`).
+- `cloudflare/worker.js`: la lógica de la contraseña. Abierto sin contraseña: `/stem/…`, `/assets/…` y `/actividades/escape-halloween/…` (ver `esPublica`).
 - Secretos `PASSWORD` y `COOKIE_SECRET`: viven en Cloudflare (Configuración → Variables y secretos). No están en el repo.
 
 ## Conectar el repo a Cloudflare (una vez)

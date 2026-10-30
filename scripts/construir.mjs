@@ -20,7 +20,7 @@ console.log('dist/ lista: ' + PUBLICO.join(', '));
    - Páginas con assets/lab.css: tema claro nativo en lab.css; sin elección se ven oscuras como siempre.
    - El resto se invierte (los colores se invierten y se protegen imágenes y canvas); BASE_CLARA dice cuáles se ven claras sin tocar. */
 const SISTEMA = ['hardware-software', 'partes-del-computador', 'puzzles', 'correos-4to'];
-const PROPIO = ['typing', 'goldberg-machine'];
+const PROPIO = ['typing', 'goldberg-machine', 'escape-halloween'];
 const BASE_CLARA = ['beto-algoritmos', 'detectives-de-carpetas', 'proyecto-paint-2do'];
 function etiqueta(ruta, html) {
   const partes = ruta.split('/');
