@@ -218,6 +218,42 @@
       "nombre_en": "Iskonex MotorTrack"
     },
     {
+      "id": "iskonex-booking",
+      "nombre": "Iskonex Booking",
+      "grupos": [
+        "proyectos-personales"
+      ],
+      "url": "https://booking.iskonex.com",
+      "nombre_en": "Iskonex Booking"
+    },
+    {
+      "id": "iskonex-store",
+      "nombre": "Iskonex Store",
+      "grupos": [
+        "proyectos-personales"
+      ],
+      "url": "https://store.iskonex.com",
+      "nombre_en": "Iskonex Store"
+    },
+    {
+      "id": "iskonex-scrum",
+      "nombre": "Iskonex Scrum",
+      "grupos": [
+        "proyectos-personales"
+      ],
+      "url": "https://scrum.iskonex.com",
+      "nombre_en": "Iskonex Scrum"
+    },
+    {
+      "id": "hotel-iskonex",
+      "nombre": "Hotel Iskonex (panel)",
+      "grupos": [
+        "proyectos-personales"
+      ],
+      "url": "https://booking.iskonex.com/admin/",
+      "nombre_en": "Hotel Iskonex (admin panel)"
+    },
+    {
       "id": "estructuras",
       "nombre": "Ingeniero de estructuras",
       "grupos": [
