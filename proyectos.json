@@ -299,7 +299,9 @@
       "id": "nexora",
       "nombre": "NEXORA",
       "grupos": [
-        "apps-escolares"
+        "4",
+        "5",
+        "6"
       ],
       "url": "https://nexora.iskonex.com",
       "nombre_en": "NEXORA"
