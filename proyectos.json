@@ -294,6 +294,15 @@
       ],
       "url": "https://labsnexo.iscosanchez.com",
       "nombre_en": "LabsNexo"
+    },
+    {
+      "id": "nexora",
+      "nombre": "NEXORA",
+      "grupos": [
+        "apps-escolares"
+      ],
+      "url": "https://nexora.iskonex.com",
+      "nombre_en": "NEXORA"
     }
   ]
 }
